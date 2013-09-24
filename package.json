@@ -1,0 +1,17 @@
+{
+  "name": "skynet",
+  "version": "0.0.1",
+  "dependencies": {
+    "mongojs": "*",
+    "redis": "*",
+    "socket.io": "*",
+    "restify": "*"
+  },
+  "engines": {
+    "node": ">=0.6"
+  },
+  "subdomain": "skynet",
+  "domains": [
+    "e2e.io"
+  ]
+}

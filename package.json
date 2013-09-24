@@ -5,7 +5,8 @@
     "mongojs": "*",
     "redis": "*",
     "socket.io": "*",
-    "restify": "*"
+    "restify": "*",
+    "node-uuid": "*"
   },
   "engines": {
     "node": ">=0.6"

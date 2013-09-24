@@ -1,4 +1,4 @@
 module.exports = {
-  databaseUrl: "mongodb://user:pass@ana.mongohq.com:10044/xyz",
+  databaseUrl: "mongodb://twelephone:hellohello@paulo.mongohq.com:10043/skynet",
   port: 3000
 }

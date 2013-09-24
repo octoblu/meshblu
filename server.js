@@ -9,26 +9,29 @@ server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
-// curl -X GET http://localhost:3000/status
-server.get('/status', require('./lib/getStatus'));
+// curl http://localhost:3000/status
+server.get('/status', require('./lib/getSystemStatus'));
 
-// server.get('/', function indexHTML(req, res, next) {
-//     fs.readFile(__dirname + '/index.html', function (err, data) {
-//         if (err) {
-//             next(err);
-//             return;
-//         }
+// curl http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
+server.get('/devices', require('./lib/getDevices'));
 
-//         res.setHeader('Content-Type', 'text/html');
-//         res.writeHead(200);
-//         res.end(data);
-//         next();
-// });
+// curl http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
+server.get('/devices/:uuid', require('./lib/whoami'));
+
+// curl -X POST -d "name=arduino&description=this+is+a+test" http://localhost:3000/devices
+server.post('/devices', require('./lib/register'));
+
+// curl -d "online=true" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
+server.put('/devices/:uuid', require('./lib/updateDevice'));
+
+// curl -X DELETE http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
+server.del('/devices/:uuid', require('./lib/unregister'));
+
 
 
 io.sockets.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
+    socket.emit('identify', { socketid: socket.id.toString() });
+    socket.on('register', function (data) {
             console.log(data);
     });
 });

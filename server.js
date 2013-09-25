@@ -30,10 +30,11 @@ server.del('/devices/:uuid', require('./lib/unregister'));
 
 
 io.sockets.on('connection', function (socket) {
-    socket.emit('identify', { socketid: socket.id.toString() });
-    socket.on('register', function (data) {
-            console.log(data);
-    });
+  console.log('websocket connection detected');
+  socket.emit('identify', { socketid: socket.id.toString() });
+  socket.on('register', function (data) {
+          console.log(data);
+  });
 });
 
 // server.listen(8080, function () {

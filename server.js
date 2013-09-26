@@ -10,13 +10,12 @@ server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
 io.sockets.on('connection', function (socket) {
-  // var sockets = require('./lib/sockets')(socket);
 
-  console.log('websocket connection detected');
+  console.log('Websocket connection detected - requesting identification');
   
   socket.emit('identify', { socketid: socket.id.toString() });
   socket.on('identity', function (data) {
-          console.log(data);
+          console.log('Identity received: ' + JSON.stringify(data));
           require('./lib/updateSocketId')(data)
   });
 
@@ -44,6 +43,10 @@ io.sockets.on('connection', function (socket) {
   // curl -X DELETE http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
   server.del('/devices/:uuid', require('./lib/unregister'));
 
+  // curl -X POST -d '{"blink":"start"}' http://localhost:3000/messages/ad698900-2546-11e3-87fb-c560cb0ca47b
+  // curl -X POST -d '{"blink":"stop"}' http://localhost:3000/messages/ad698900-2546-11e3-87fb-c560cb0ca47b
+  // curl -X POST -d '{"blink":"start"}' http://localhost:3000/messages/all
+  // curl -X POST -d '{"blink":"stop"}' http://localhost:3000/messages/all
   server.post('/messages/:uuid', function(req, res, next){
 
       if(req.params.uuid = "all"){
@@ -71,49 +74,6 @@ io.sockets.on('connection', function (socket) {
 
 });
 
-
-// // curl http://localhost:3000/status
-// server.get('/status', require('./lib/getSystemStatus'));
-
-// // curl http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
-// server.get('/devices', require('./lib/getDevices'));
-
-// // curl http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
-// server.get('/devices/:uuid', require('./lib/whoami'));
-
-// // curl -X POST -d "name=arduino&description=this+is+a+test" http://localhost:3000/devices
-// server.post('/devices', require('./lib/register'));
-
-// // curl -d "online=true" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
-// server.put('/devices/:uuid', require('./lib/updateDevice'));
-
-// // curl -X DELETE http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
-// server.del('/devices/:uuid', require('./lib/unregister'));
-
-// server.post('/messages/:uuid', require('./lib/sendMessage'));
-
-
-
-// io.sockets.on('connection', function (socket) {
-//   console.log('websocket connection detected');
-  
-//   socket.emit('identify', { socketid: socket.id.toString() });
-//   socket.on('identity', function (data) {
-//           console.log(data);
-//           require('./lib/updateSocketId')(data)
-//   });
-
-//   socket.on('disconnect', function (data) {
-//           console.log(data);
-//           require('./lib/updatePresence')(socket.id.toString())
-//   });
-
-
-// });
-
-// server.listen(8080, function () {
-//     console.log('socket.io server listening at %s', server.url);
-// });
 server.listen(process.env.PORT || config.port, function() {
   console.log('%s listening at %s', server.name, server.url);
 });

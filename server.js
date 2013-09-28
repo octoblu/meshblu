@@ -31,7 +31,9 @@ io.sockets.on('connection', function (socket) {
 // curl http://localhost:3000/status
 server.get('/status', require('./lib/getSystemStatus'));
 
-// curl http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
+// curl http://localhost:3000/devices
+// curl http://localhost:3000/devices?key=123
+// curl http://localhost:3000/devices?online=true
 server.get('/devices', require('./lib/getDevices'));
 
 // curl http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
@@ -62,8 +64,6 @@ server.post('/messages/:uuid', function(req, res, next){
   } else {
 
     require('./lib/getSocketId')(req.params.uuid, function(data){
-      // console.log('callback = ' + data);
-      // var body = req.body.gsub("'", '"');
       var body = req.body;
       console.log('message: ' + body);
       io.sockets.socket(data).emit('message', JSON.parse(body));
@@ -71,11 +71,7 @@ server.post('/messages/:uuid', function(req, res, next){
     });
 
   }
-
-
 });
-
-
 
 server.listen(process.env.PORT || config.port, function() {
   console.log('%s listening at %s', server.name, server.url);

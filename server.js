@@ -12,10 +12,13 @@ server.use(restify.bodyParser());
 io.sockets.on('connection', function (socket) {
 
   console.log('Websocket connection detected. Requesting identification from socket id: ' + socket.id.toString());
+  require('./lib/logEvent')(100, {"socketId": socket.id.toString(), "protocol": "websocket"});
   
   socket.emit('identify', { socketid: socket.id.toString() });
   socket.on('identity', function (data) {
           console.log('Identity received: ' + JSON.stringify(data));
+          require('./lib/logEvent')(101, data);
+
           require('./lib/updateSocketId')(data, function(auth){
             socket.emit('authentication', { status: auth.status });
           });
@@ -23,6 +26,8 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('disconnect', function (data) {
           console.log('Presence offline for socket id: ' + socket.id.toString());
+          require('./lib/logEvent')(102, data);
+
           require('./lib/updatePresence')(socket.id.toString());
   });
 
@@ -69,6 +74,7 @@ server.post('/messages/:uuid', function(req, res, next){
       io.sockets.socket(data).emit('message', JSON.parse(body));
       res.json({socketid: data, body: JSON.parse(body)});
     });
+    require('./lib/logEvent')(300, body);
 
   }
 });

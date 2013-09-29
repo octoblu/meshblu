@@ -59,28 +59,31 @@ server.del('/devices/:uuid', require('./lib/unregister'));
 // curl -X POST -d '{"blink":"stop"}' http://localhost:3000/messages/all
 server.post('/messages/:uuid', function(req, res, next){
 
-  if(req.params.uuid == "all"){
+  var body = JSON.parse(req.body);
+  var eventData = {uuid: req.params.uuid, body: body}
 
-      var body = req.body;
-      console.log('message: ' + body);
-      io.sockets.emit('message', JSON.parse(body));
-      res.json({socketid: "all", body: JSON.parse(body)});
+  console.log('uuid: ' + req.params.uuid);
+  console.log('message: ' + JSON.stringify(body));
+
+  if(req.params.uuid == "all"){
+      io.sockets.emit('message', body);
+      require('./lib/logEvent')(300, eventData);
+      res.json({socketid: "all", body: body});
 
   } else {
 
     require('./lib/getSocketId')(req.params.uuid, function(data){
-      var body = req.body;
       console.log('data: ' + data);
-      console.log('message: ' + body);
-      io.sockets.socket(data).emit('message', JSON.parse(body));
+      io.sockets.socket(data).emit('message', body);
       if(data == undefined){
         data = "not found"
       }
-      res.json({socketid: data, body: JSON.parse(body)});
+      eventData["socketId"] = data;
+      require('./lib/logEvent')(300, eventData);
+      res.json(eventData);
     });
 
   }
-  require('./lib/logEvent')(300, req.body);
 
 });
 

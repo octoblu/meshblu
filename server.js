@@ -59,7 +59,7 @@ server.del('/devices/:uuid', require('./lib/unregister'));
 // curl -X POST -d '{"blink":"stop"}' http://localhost:3000/messages/all
 server.post('/messages/:uuid', function(req, res, next){
 
-  if(req.params.uuid = "all"){
+  if(req.params.uuid == "all"){
 
       var body = req.body;
       console.log('message: ' + body);
@@ -70,13 +70,18 @@ server.post('/messages/:uuid', function(req, res, next){
 
     require('./lib/getSocketId')(req.params.uuid, function(data){
       var body = req.body;
+      console.log('data: ' + data);
       console.log('message: ' + body);
       io.sockets.socket(data).emit('message', JSON.parse(body));
+      if(data == undefined){
+        data = "not found"
+      }
       res.json({socketid: data, body: JSON.parse(body)});
     });
-    require('./lib/logEvent')(300, body);
 
   }
+  require('./lib/logEvent')(300, req.body);
+
 });
 
 server.listen(process.env.PORT || config.port, function() {

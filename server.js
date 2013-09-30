@@ -29,27 +29,169 @@ io.sockets.on('connection', function (socket) {
     require('./lib/updatePresence')(socket.id.toString());
   });
 
+  // APIs
+  socket.on('status', function (data) {
+    require('./lib/getSystemStatus')(function(results){
+      console.log(results);
+      socket.emit('status', results);
+    });
+  });
+
+  socket.on('devices', function (data) {
+    if(data == undefined){
+      var data = {};
+    }
+    require('./lib/getDevices')(data, function(results){
+      console.log(results);
+      socket.emit('devices', results);
+    });
+  });
+
+  socket.on('whoami', function (data) {
+    if(data == undefined){
+      var data = "";
+    } else {
+      data = data.uuid
+    }
+    require('./lib/whoami')(data, function(results){
+      console.log(results);
+      socket.emit('whoami', results);
+    });
+  });
+
+  socket.on('register', function (data) {
+    if(data == undefined){
+      var data = {};
+    }
+    require('./lib/register')(data, function(results){
+      console.log(results);
+      socket.emit('register', results);
+    });
+  });
+
+  socket.on('update', function (data) {
+    if(data == undefined){
+      var data = {};
+    }
+    require('./lib/updateDevice')(data.uuid, data, function(results){
+      console.log(results);
+      socket.emit('update', results);
+    });
+  });
+
+  socket.on('unregister', function (data) {
+    if(data == undefined){
+      var data = {};
+    }
+    require('./lib/unregister')(data.uuid, data, function(results){
+      console.log(results);
+      socket.emit('unregister', results);
+    });
+  });
+
+  socket.on('message', function (data) {
+    if(data == undefined){
+      var data = {};
+    }
+    // require('./lib/unregister')(data.uuid, data, function(results){
+    //   console.log(results);
+    //   socket.emit('unregister', results);
+    // });
+
+    var eventData = data
+
+    console.log('uuid: ' + data.uuid);
+    console.log('message: ' + JSON.stringify(data.body));
+
+    if(data.uuid == "all"){
+
+        io.sockets.emit('message', data.body);
+        require('./lib/logEvent')(300, eventData);
+
+    } else {
+
+      require('./lib/getSocketId')(data.uuid, function(result){
+        console.log('data: ' + result);
+        io.sockets.socket(result).emit('message', data.body);
+        if(result == undefined){
+          result = "not found"
+        }
+        eventData["socketId"] = result;
+        require('./lib/logEvent')(300, eventData);
+      });
+
+    }
+
+
+  });
+
+
+
 });
 
 // curl http://localhost:3000/status
-server.get('/status', require('./lib/getSystemStatus'));
+// server.get('/status', require('./lib/getSystemStatus'));
+server.get('/status', function(req, res){
+  require('./lib/getSystemStatus')(function(data){
+    console.log(data);
+    res.json(data);
+  });
+});
+
 
 // curl http://localhost:3000/devices
 // curl http://localhost:3000/devices?key=123
 // curl http://localhost:3000/devices?online=true
-server.get('/devices', require('./lib/getDevices'));
+// server.get('/devices', require('./lib/getDevices'));
+server.get('/devices', function(req, res){
+  query = req.query
+  require('./lib/getDevices')(query, function(data){
+    console.log(data);
+    res.json(data);
+  });
+});
+
 
 // curl http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
-server.get('/devices/:uuid', require('./lib/whoami'));
+// server.get('/devices/:uuid', require('./lib/whoami'));
+server.get('/devices/:uuid', function(req, res){
+  require('./lib/whoami')(req.params.uuid, function(data){
+    console.log(data);
+    res.json(data);
+  });
+});
+
 
 // curl -X POST -d "name=arduino&description=this+is+a+test" http://localhost:3000/devices
-server.post('/devices', require('./lib/register'));
+// server.post('/devices', require('./lib/register'));
+server.post('/devices', function(req, res){
+  params = req.params
+  require('./lib/register')(params, function(data){
+    console.log(data);
+    res.json(data);
+  });
+});
+
 
 // curl -d "token=123&online=true" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
-server.put('/devices/:uuid', require('./lib/updateDevice'));
+// server.put('/devices/:uuid', require('./lib/updateDevice'));
+server.put('/devices/:uuid', function(req, res){
+  params = req.params
+  require('./lib/updateDevice')(req.params.uuid, params, function(data){
+    console.log(data);
+    res.json(data);
+  });
+});
 
 // curl -X DELETE -d "token=123" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
-server.del('/devices/:uuid', require('./lib/unregister'));
+// server.del('/devices/:uuid', require('./lib/unregister'));
+server.del('/devices/:uuid', function(req, res){
+  params = req.params
+  require('./lib/unregister')(req.params.uuid, params, function(data){
+    console.log(data);
+    res.json(data);
+  });
+});
 
 // curl -X POST -d '{"blink":"start"}' http://localhost:3000/messages/ad698900-2546-11e3-87fb-c560cb0ca47b
 // curl -X POST -d '{"blink":"stop"}' http://localhost:3000/messages/ad698900-2546-11e3-87fb-c560cb0ca47b
@@ -64,6 +206,7 @@ server.post('/messages/:uuid', function(req, res, next){
   console.log('message: ' + JSON.stringify(body));
 
   if(req.params.uuid == "all"){
+
       io.sockets.emit('message', body);
       require('./lib/logEvent')(300, eventData);
       res.json({socketid: "all", body: body});
@@ -86,5 +229,11 @@ server.post('/messages/:uuid', function(req, res, next){
 });
 
 server.listen(process.env.PORT || config.port, function() {
-  console.log('%s listening at %s', server.name, server.url);
+  console.log("\n SSSSS  kk                            tt    ");
+  console.log("SS      kk  kk yy   yy nn nnn    eee  tt    ");
+  console.log(" SSSSS  kkkkk  yy   yy nnn  nn ee   e tttt  ");
+  console.log("     SS kk kk   yyyyyy nn   nn eeeee  tt    ");
+  console.log(" SSSSS  kk  kk      yy nn   nn  eeeee  tttt ");
+  console.log("                yyyyy                         ");
+  console.log('\nSkynet listening at %s', server.url);  
 });

@@ -144,8 +144,7 @@ server.get('/status', function(req, res){
 // curl http://localhost:3000/devices?online=true
 // server.get('/devices', require('./lib/getDevices'));
 server.get('/devices', function(req, res){
-  query = req.query
-  require('./lib/getDevices')(query, function(data){
+  require('./lib/getDevices')(req.query, function(data){
     console.log(data);
     res.json(data);
   });
@@ -165,8 +164,7 @@ server.get('/devices/:uuid', function(req, res){
 // curl -X POST -d "name=arduino&description=this+is+a+test" http://localhost:3000/devices
 // server.post('/devices', require('./lib/register'));
 server.post('/devices', function(req, res){
-  params = req.params
-  require('./lib/register')(params, function(data){
+  require('./lib/register')(req.params, function(data){
     console.log(data);
     res.json(data);
   });
@@ -176,8 +174,7 @@ server.post('/devices', function(req, res){
 // curl -d "token=123&online=true" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
 // server.put('/devices/:uuid', require('./lib/updateDevice'));
 server.put('/devices/:uuid', function(req, res){
-  params = req.params
-  require('./lib/updateDevice')(req.params.uuid, params, function(data){
+  require('./lib/updateDevice')(req.params.uuid, req.params, function(data){
     console.log(data);
     res.json(data);
   });
@@ -186,8 +183,7 @@ server.put('/devices/:uuid', function(req, res){
 // curl -X DELETE -d "token=123" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
 // server.del('/devices/:uuid', require('./lib/unregister'));
 server.del('/devices/:uuid', function(req, res){
-  params = req.params
-  require('./lib/unregister')(req.params.uuid, params, function(data){
+  require('./lib/unregister')(req.params.uuid, req.params, function(data){
     console.log(data);
     res.json(data);
   });

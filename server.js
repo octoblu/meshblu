@@ -16,19 +16,17 @@ io.sockets.on('connection', function (socket) {
   
   socket.emit('identify', { socketid: socket.id.toString() });
   socket.on('identity', function (data) {
-          console.log('Identity received: ' + JSON.stringify(data));
-          require('./lib/logEvent')(101, data);
-
-          require('./lib/updateSocketId')(data, function(auth){
-            socket.emit('authentication', { status: auth.status });
-          });
+    console.log('Identity received: ' + JSON.stringify(data));
+    require('./lib/logEvent')(101, data);
+    require('./lib/updateSocketId')(data, function(auth){
+      socket.emit('authentication', { status: auth.status });
+    });
   });
 
   socket.on('disconnect', function (data) {
-          console.log('Presence offline for socket id: ' + socket.id.toString());
-          require('./lib/logEvent')(102, data);
-
-          require('./lib/updatePresence')(socket.id.toString());
+    console.log('Presence offline for socket id: ' + socket.id.toString());
+    require('./lib/logEvent')(102, data);
+    require('./lib/updatePresence')(socket.id.toString());
   });
 
 });

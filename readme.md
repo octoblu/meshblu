@@ -3,8 +3,8 @@ skynet
 
 Phase 1 - Build a network and realtime API for enabling machine-to-machine communications.
 
-API
----
+HTTP(S) API
+-----------
 
 GET /status
 
@@ -70,28 +70,100 @@ curl -X DELETE -d "token=123" http://localhost:3000/devices/01404680-2539-11e3-b
 => {"uuid":"8220cff0-2939-11e3-88cd-0b8e5fdfd7d4","timestamp":1380481567799}
 ```
 
-POST /messages/all
+POST /messages
 
-Sends a JSON message to all devices on the Skynet network. 
-
-```
-curl -X POST -d '{"blink":"start"}' http://localhost:3000/messages/all
-
-curl -X POST -d '{"blink":"stop"}' http://localhost:3000/messages/all
-
-=> {"socketid":"all","body":{"blink":"start"}
-```
-
-POST /messages/uuid
-
-Sends a JSON message to a specific device on the Skynet network. 
+Sends a JSON message to all devices or an array of devices or a specific device on the Skynet network. 
 
 ```
-curl -X POST -d '{"blink":"start"}' http://localhost:3000/messages/ad698900-2546-11e3-87fb-c560cb0ca47b
+curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://localhost:3000/messages
 
-curl -X POST -d '{"blink":"stop"}' http://localhost:3000/messages/ad698900-2546-11e3-87fb-c560cb0ca47b
+curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"], "message": {"yellow":"off"}}' http://localhost:3000/messages
 
-=> {"socketid":"pG5UAhaZa_xXlvrItvTd","body":{"blink":"start"}}
+curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' http://localhost:3000/messages
+
+
+=> { devices: [ 'ad698900-2546-11e3-87fb-c560cb0ca47b', '2f3113d0-2796-11e3-95ef-e3081976e170' ],
+  message: { armed: true },
+  timestamp: 1380928019603,
+  eventCode: 300,
+  _id: '524f4a1376ebc9b3ab00000c' }
+
+```
+
+WEBSOCKET API
+-------------
+
+Request and receive system status
+
+```
+socket.emit('status');
+socket.on('status', function(data){
+  console.log('status received');
+  console.log(data);
+});
+```
+
+Request and receive an array of devices matching a specific criteria
+
+```
+socket.emit('devices', {"key":"123"});
+socket.on('devices', function(data){
+  console.log('devices received');
+  console.log(data);
+});
+```
+
+Request and receive information about a specific device
+
+```
+socket.emit('whoami', {"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"});
+socket.on('whoami', function(data){
+  console.log('whoami received');
+  console.log(data);
+});
+```
+
+Request and receive a device registration
+
+```
+socket.emit('register', {"key":"123"});
+socket.on('register', function(data){
+  console.log('register received');
+  console.log(data);
+});
+```
+
+Request and receive a device update
+
+```
+socket.emit('update', {"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b", "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9", "key":"777"});
+socket.on('update', function(data){
+  console.log('update received');
+  console.log(data);
+});
+```
+
+Request and receive a device unregistration
+
+```
+socket.emit('unregister', {"uuid":"b5535950-29fd-11e3-9113-0bd381f0b5ef", "token": "2ls40jx80s9bpgb9w2g0vi2li72v5cdi"});
+socket.on('unregister', function(data){
+  console.log('unregister received');
+  console.log(data);
+});
+```
+
+Request and receive a message broadcast
+
+```
+// sending message to all devices
+socket.emit('message', {"devices": "all", "message": {"yellow":"on"}});
+
+// sending message to a specific devices
+socket.emit('message', {"devices": "b5535950-29fd-11e3-9113-0bd381f0b5ef", "message": {"yellow":"on"}});
+
+// sending message to an array of devices
+socket.emit('message', {"devices": ["b5535950-29fd-11e3-9113-0bd381f0b5ef", "ad698900-2546-11e3-87fb-c560cb0ca47b"], "message": {"yellow":"on"}});
 ```
 
 Event Codes

@@ -10,8 +10,8 @@ SS      kk  kk yy   yy nn nnn    eee  tt
 
 Phase 1 - Build a network and realtime API for enabling machine-to-machine communications.
 
-HTTP(S) API
------------
+HTTP(S) REST API
+----------------
 
 GET /status
 
@@ -89,7 +89,6 @@ curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://localho
 curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"], "message": {"yellow":"off"}}' http://localhost:3000/messages
 
 curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' http://localhost:3000/messages
-
 
 => {"devices":"ad698900-2546-11e3-87fb-c560cb0ca47b","message":{"yellow":"off"},"timestamp":1380930482043,"eventCode":300}
 ```

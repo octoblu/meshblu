@@ -91,12 +91,7 @@ curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2
 curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' http://localhost:3000/messages
 
 
-=> { devices: [ 'ad698900-2546-11e3-87fb-c560cb0ca47b', '2f3113d0-2796-11e3-95ef-e3081976e170' ],
-  message: { armed: true },
-  timestamp: 1380928019603,
-  eventCode: 300,
-  _id: '524f4a1376ebc9b3ab00000c' }
-
+=> {"devices":"ad698900-2546-11e3-87fb-c560cb0ca47b","message":{"yellow":"off"},"timestamp":1380930482043,"eventCode":300}
 ```
 
 WEBSOCKET API

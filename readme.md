@@ -53,8 +53,12 @@ POST /devices
 
 Registers a device on the Skynet network. You can add as many properties to the device object as desired. Skynet returns a device UUID and token which needs to be used with future updates to the device object
 
+Note: You can pass in a token parameter to overide skynet issuing you one
+
 ```
 curl -X POST -d "name=arduino&description=this+is+a+test" http://localhost:3000/devices
+
+curl -X POST -d "name=arduino&token=123" http://localhost:3000/devices
 
 => {"name":"arduino","description":"this is a test","uuid":"8220cff0-2939-11e3-88cd-0b8e5fdfd7d4","timestamp":1380481272431,"token":"1yw0nfc54okcsor2tfqqsuvnrcf2yb9","online":false,"_id":"524878f8cc12f0877f000003"}
 ```

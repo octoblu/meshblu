@@ -193,6 +193,9 @@ server.del('/devices/:uuid', function(req, res){
 // curl -X POST -d '{"blink":"stop"}' http://localhost:3000/messages/ad698900-2546-11e3-87fb-c560cb0ca47b
 // curl -X POST -d '{"blink":"start"}' http://localhost:3000/messages/all
 // curl -X POST -d '{"blink":"stop"}' http://localhost:3000/messages/all
+
+// curl -X POST -d '{devices: [], message: {"blink":"start"}}' http://localhost:3000/messages/ad698900-2546-11e3-87fb-c560cb0ca47b
+
 server.post('/messages/:uuid', function(req, res, next){
 
   var body = JSON.parse(req.body);

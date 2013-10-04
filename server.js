@@ -187,13 +187,9 @@ server.del('/devices/:uuid', function(req, res){
   });
 });
 
-// curl -X POST -d '{"blink":"start"}' http://localhost:3000/messages/ad698900-2546-11e3-87fb-c560cb0ca47b
-// curl -X POST -d '{"blink":"stop"}' http://localhost:3000/messages/ad698900-2546-11e3-87fb-c560cb0ca47b
-// curl -X POST -d '{"blink":"start"}' http://localhost:3000/messages/all
-// curl -X POST -d '{"blink":"stop"}' http://localhost:3000/messages/all
-
 // curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://localhost:3000/messages
 // curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"], "message": {"yellow":"off"}}' http://localhost:3000/messages
+// curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' http://localhost:3000/messages
 server.post('/messages', function(req, res, next){
   try {
     var body = JSON.parse(req.body);

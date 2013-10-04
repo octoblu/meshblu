@@ -18,7 +18,7 @@ curl http://localhost:3000/status
 
 GET /devices
 
-Returns all devices available to you on Skynet. Notice you can query against custom properties i.e. all drones or light switches or online/office etc.
+Returns all devices available to you on Skynet. Notice you can query against custom properties i.e. all drones or light switches and online/offline etc.
 
 ```
 curl http://localhost:3000/devices
@@ -26,6 +26,8 @@ curl http://localhost:3000/devices
 curl http://localhost:3000/devices?key=123
 
 curl http://localhost:3000/devices?online=true
+
+curl http://localhost:3000/devices?key=123&online=true
 
 => [{"_id":"5241d9140345450000000001","channel":"main","deviceDescription":"this is a test","deviceName":"hackboard","key":"123","online":true,"socketId":"pG5UAhaZa_xXlvrItvTd","timestamp":1380340661522,"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"},{"uuid":"2f3113d0-2796-11e3-95ef-e3081976e170","timestamp":1380301174157,"online":false,"_id":"5245b977f1eef01357000001"}]
 ```

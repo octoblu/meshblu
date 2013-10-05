@@ -12,11 +12,11 @@ Phase 1 - Build a network and realtime API for enabling machine-to-machine commu
 
 Here are several quick screencasts that demostrate what you can do with Skynet:
 
-[POC 1](http://www.youtube.com/watch?v=cPs1JNFyXjk)
+[POC Video 1](http://www.youtube.com/watch?v=cPs1JNFyXjk)
 
-[POC 2](http://www.youtube.com/watch?v=SzaTPiaDDQI)
+[POC Video 2](http://www.youtube.com/watch?v=SzaTPiaDDQI)
 
-[POC 3](http://www.youtube.com/watch?v=TB6RyzT10EA)
+[POC Video 3](http://www.youtube.com/watch?v=TB6RyzT10EA)
 
 
 HTTP(S) REST API

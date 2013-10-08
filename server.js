@@ -18,7 +18,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('identity', function (data) {
     console.log('Identity received: ' + JSON.stringify(data));
     require('./lib/logEvent')(101, data);
-    require('./lib/updateSocketId')(data, function(auth){
+    require('./lib/updateSocketId')({uuid: data.uuid, token: data.token, socketid: socket.id.toString()}, function(auth){
       socket.emit('authentication', { status: auth.status });
     });
   });

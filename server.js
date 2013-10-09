@@ -181,7 +181,7 @@ server.post('/devices', function(req, res){
 });
 
 
-// curl -d "token=123&online=true" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
+// curl -X PUT -d "token=123&online=true" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
 // server.put('/devices/:uuid', require('./lib/updateDevice'));
 server.put('/devices/:uuid', function(req, res){
   require('./lib/updateDevice')(req.params.uuid, req.params, function(data){

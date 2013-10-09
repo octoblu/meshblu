@@ -18,6 +18,8 @@ Here are several quick screencasts that demostrate what you can do with Skynet:
 
 [POC Video 3](http://www.youtube.com/watch?v=TB6RyzT10EA)
 
+[POC Video 4](http://www.youtube.com/watch?v=0WjNG6AOcXM)
+
 
 HTTP(S) REST API
 ----------------

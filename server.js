@@ -32,8 +32,10 @@ io.sockets.on('connection', function (socket) {
   // APIs
   socket.on('status', function (data) {
     require('./lib/getSystemStatus')(function(results){
+      results["request"] = "status";
       console.log(results);
-      socket.emit('status', results);
+      // socket.emit('status', results);
+      socket.emit('message', results);
     });
   });
 
@@ -42,8 +44,10 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     require('./lib/getDevices')(data, function(results){
+      results["request"] = "getDevices";
       console.log(results);
-      socket.emit('devices', results);
+      // socket.emit('devices', results);
+      socket.emit('message', results);
     });
   });
 
@@ -54,8 +58,10 @@ io.sockets.on('connection', function (socket) {
       data = data.uuid
     }
     require('./lib/whoami')(data, function(results){
+      results["request"] = "whoAmI";
       console.log(results);
-      socket.emit('whoami', results);
+      // socket.emit('whoami', results);
+      socket.emit('message', results);
     });
   });
 
@@ -64,8 +70,10 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     require('./lib/register')(data, function(results){
+      results["request"] = "register";
       console.log(results);
-      socket.emit('register', results);
+      // socket.emit('register', results);
+      socket.emit('message', results);
     });
   });
 
@@ -74,8 +82,10 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     require('./lib/updateDevice')(data.uuid, data, function(results){
+      results["request"] = "updateDevice";
       console.log(results);
-      socket.emit('update', results);
+      // socket.emit('update', results);
+      socket.emit('message', results);
     });
   });
 
@@ -84,8 +94,10 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     require('./lib/unregister')(data.uuid, data, function(results){
+      results["request"] = "unregister";
       console.log(results);
-      socket.emit('unregister', results);
+      // socket.emit('unregister', results);
+      socket.emit('message', results);
     });
   });
 

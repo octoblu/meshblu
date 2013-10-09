@@ -111,44 +111,52 @@ curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": 
 WEBSOCKET API
 -------------
 
-All websocket API requests return one of the following "request" properties onMessage: 
-register, unregister, getDevices, updateDevice, whoAmI, and status
-
-
 Request and receive system status
 
 ```
-socket.emit('status');
+socket.emit('status', function (data) {
+  console.log(data); 
+});
 ```
 
 Request and receive an array of devices matching a specific criteria
 
 ```
-socket.emit('devices', {"key":"123"});
+socket.emit('devices', {"key":"123"}, function (data) {
+  console.log(data); 
+});
 ```
 
 Request and receive information about a specific device
 
 ```
-socket.emit('whoami', {"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"});
+socket.emit('whoami', {"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}, function (data) {
+  console.log(data); 
+});
 ```
 
 Request and receive a device registration
 
 ```
-socket.emit('register', {"key":"123"});
+socket.emit('register', {"key":"123"}, function (data) {
+  console.log(data); 
+});
 ```
 
 Request and receive a device update
 
 ```
-socket.emit('update', {"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b", "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9", "key":"777"});
+socket.emit('update', {"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b", "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9", "key":"777"}, function (data) {
+  console.log(data); 
+});
 ```
 
 Request and receive a device unregistration
 
 ```
-socket.emit('unregister', {"uuid":"b5535950-29fd-11e3-9113-0bd381f0b5ef", "token": "2ls40jx80s9bpgb9w2g0vi2li72v5cdi"});
+socket.emit('unregister', {"uuid":"b5535950-29fd-11e3-9113-0bd381f0b5ef", "token": "2ls40jx80s9bpgb9w2g0vi2li72v5cdi"}, function (data) {
+  console.log(data); 
+});
 ```
 
 Request and receive a message broadcast

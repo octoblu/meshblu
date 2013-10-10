@@ -20,6 +20,10 @@ io.sockets.on('connection', function (socket) {
     require('./lib/logEvent')(101, data);
     require('./lib/updateSocketId')({uuid: data.uuid, token: data.token, socketid: socket.id.toString()}, function(auth){
       socket.emit('authentication', { status: auth.status });
+      if (auth.status == 201){
+        console.log('subscribe: ' + data.uuid);
+        socket.join(data.uuid);
+      }
     });
   });
 
@@ -29,13 +33,15 @@ io.sockets.on('connection', function (socket) {
     require('./lib/updatePresence')(socket.id.toString());
   });
 
+  socket.on('subscribe', function(room) { 
+      console.log('joining room', room);
+      socket.join(room); 
+  })  
+
   // APIs
   socket.on('status', function (fn) {
     require('./lib/getSystemStatus')(function(results){
-      results["request"] = "status";
       console.log(results);
-      // socket.emit('status', results);
-      // socket.emit('message', results);
       fn(results);
     });
   });
@@ -45,10 +51,7 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     require('./lib/getDevices')(data, function(results){
-      results["request"] = "getDevices";
       console.log(results);
-      // socket.emit('devices', results);
-      // socket.emit('message', results);
       fn(results);
     });
   });
@@ -60,10 +63,7 @@ io.sockets.on('connection', function (socket) {
       data = data.uuid
     }
     require('./lib/whoami')(data, function(results){
-      results["request"] = "whoAmI";
       console.log(results);
-      // socket.emit('whoami', results);
-      // socket.emit('message', results);
       fn(results);
     });
   });
@@ -73,10 +73,7 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     require('./lib/register')(data, function(results){
-      results["request"] = "register";
       console.log(results);
-      // socket.emit('register', results);
-      // socket.emit('message', results);
       fn(results);
     });
   });
@@ -86,10 +83,7 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     require('./lib/updateDevice')(data.uuid, data, function(results){
-      results["request"] = "updateDevice";
       console.log(results);
-      // socket.emit('update', results);
-      // socket.emit('message', results);
       fn(results);
     });
   });
@@ -99,10 +93,7 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     require('./lib/unregister')(data.uuid, data, function(results){
-      results["request"] = "unregister";
       console.log(results);
-      // socket.emit('unregister', results);
-      // socket.emit('message', results);
       fn(results);
     });
   });
@@ -111,12 +102,13 @@ io.sockets.on('connection', function (socket) {
     if(data == undefined){
       var data = {};
     }
-    // require('./lib/unregister')(data.uuid, data, function(results){
-    //   console.log(results);
-    //   socket.emit('unregister', results);
-    // });
 
     var eventData = data
+
+    // Broadcast to room for pubsub
+    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+      socket.broadcast.to(uuid).emit('message', eventData)  
+    });
 
     console.log('devices: ' + data.devices);
     console.log('message: ' + JSON.stringify(data.message));
@@ -128,20 +120,34 @@ io.sockets.on('connection', function (socket) {
 
     } else {
 
-      for (var i=0;i<devices.length;i++)
-      { 
-        require('./lib/getSocketId')(devices[i], function(data){
-          io.sockets.socket(data).emit('message', message);
-        });
-      }      
+      // for (var i=0;i<devices.length;i++)
+      // { 
+      //   require('./lib/getSocketId')(devices[i], function(data){
+      //     io.sockets.socket(data.socketid).emit('message', message);
+      //   });
+      // }      
+
+      // if string convert to array
+      if( typeof devices === 'string' ) {
+          devices = [ devices ];
+      };
+
+      devices.forEach( function(device) { 
+        // require('./lib/getSocketId')(device, function(data){
+        //   io.sockets.socket(data).emit('message', message);
+        // });
+
+        // Broadcast to room for pubsub
+        console.log('sending message to room: ' + device);
+        io.sockets.in(device).emit('message', message)
+
+      });
+
       require('./lib/logEvent')(300, eventData);
 
     }
 
-
   });
-
-
 
 });
 
@@ -233,17 +239,24 @@ server.post('/messages', function(req, res, next){
 
   } else {
 
+    // if string convert to array
+    if( typeof devices === 'string' ) {
+        devices = [ devices ];
+    };
 
-    for (var i=0;i<devices.length;i++)
-    { 
-      require('./lib/getSocketId')(devices[i], function(data){
-        io.sockets.socket(data).emit('message', message);
-      });
-    }      
+    devices.forEach( function(device) { 
+      // require('./lib/getSocketId')(device, function(data){
+      //   io.sockets.socket(data).emit('message', message);
+      // });
+
+      // Broadcast to room for pubsub
+      console.log('sending message to room: ' + device);
+      io.sockets.in(device).emit('message', message)
+
+    });
 
     require('./lib/logEvent')(300, eventData);
     res.json(eventData);
-
 
   }
 

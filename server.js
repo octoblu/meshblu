@@ -32,41 +32,76 @@ io.sockets.on('connection', function (socket) {
     console.log('Presence offline for socket id: ' + socket.id.toString());
     require('./lib/logEvent')(102, data);
     require('./lib/updatePresence')(socket.id.toString());
+    // Emit API request from device to room for subscribers
+    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+      socket.broadcast.to(uuid.uuid).emit('message', {"api": "disconnect"});
+    });      
+
   });
 
   socket.on('subscribe', function(room) { 
       console.log('joining room ', room);
       socket.join(room); 
+      // Emit API request from device to room for subscribers
+      require('./lib/getUuid')(socket.id.toString(), function(uuid){
+        socket.broadcast.to(uuid.uuid).emit('message', {"api": "subscribe"});
+      });      
   })  
 
   socket.on('unsubscribe', function(room) { 
       console.log('leaving room ', room);
       socket.leave(room); 
+      // Emit API request from device to room for subscribers
+      require('./lib/getUuid')(socket.id.toString(), function(uuid){
+        socket.broadcast.to(uuid.uuid).emit('message', {"api": "unsubscribe"});
+      });      
   })  
 
   // APIs
   socket.on('status', function (fn) {
-    require('./lib/getSystemStatus')(function(results){
-      console.log(results);
-      try{
-        fn(results);
-      } catch (e){
-        console.log(e);
-      }
+
+    // Emit API request from device to room for subscribers
+    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+      socket.broadcast.to(uuid.uuid).emit('message', {"api": "status"});
+
+      require('./lib/getSystemStatus')(function(results){
+        console.log(results);
+        try{
+          fn(results);
+          
+          // Emit API request from device to room for subscribers
+          socket.broadcast.to(uuid.uuid).emit('message', results);
+
+        } catch (e){
+          console.log(e);
+        }
+      });
+
     });
+
   });
 
   socket.on('devices', function (data, fn) {
     if(data == undefined){
       var data = {};
     }
-    require('./lib/getDevices')(data, function(results){
-      console.log(results);
-      try{
-        fn(results);
-      } catch (e){
-        console.log(e);
-      }
+    // Emit API request from device to room for subscribers
+    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+      data["api"] = "devices";      
+      socket.broadcast.to(uuid.uuid).emit('message', data);
+
+      require('./lib/getDevices')(data, function(results){
+        console.log(results);
+        try{
+          fn(results);
+
+          // Emit API request from device to room for subscribers
+          socket.broadcast.to(uuid.uuid).emit('message', results);
+
+        } catch (e){
+          console.log(e);
+        }
+      });
     });
   });
 
@@ -76,13 +111,23 @@ io.sockets.on('connection', function (socket) {
     } else {
       data = data.uuid
     }
-    require('./lib/whoami')(data, function(results){
-      console.log(results);
-      try{
-        fn(results);
-      } catch (e){
-        console.log(e);
-      }
+    // Emit API request from device to room for subscribers
+    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+      data["api"] = "whoami";      
+      socket.broadcast.to(uuid.uuid).emit('message', data);
+
+      require('./lib/whoami')(data, function(results){
+        console.log(results);
+        try{
+          fn(results);
+
+          // Emit API request from device to room for subscribers
+          socket.broadcast.to(uuid.uuid).emit('message', results);
+
+        } catch (e){
+          console.log(e);
+        }
+      });
     });
   });
 
@@ -90,13 +135,23 @@ io.sockets.on('connection', function (socket) {
     if(data == undefined){
       var data = {};
     }
-    require('./lib/register')(data, function(results){
-      console.log(results);
-      try{
-        fn(results);
-      } catch (e){
-        console.log(e);
-      }
+    // Emit API request from device to room for subscribers
+    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+      data["api"] = "register";
+      socket.broadcast.to(uuid.uuid).emit('message', data);
+
+      require('./lib/register')(data, function(results){
+        console.log(results);
+        try{
+          fn(results);
+
+          // Emit API request from device to room for subscribers
+          socket.broadcast.to(uuid.uuid).emit('message', results);
+
+        } catch (e){
+          console.log(e);
+        }
+      });
     });
   });
 
@@ -104,13 +159,23 @@ io.sockets.on('connection', function (socket) {
     if(data == undefined){
       var data = {};
     };
-    require('./lib/updateDevice')(data.uuid, data, function(results){
-      console.log(results);
-      try{
-        fn(results);
-      } catch (e){
-        console.log(e);
-      }
+    // Emit API request from device to room for subscribers
+    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+      data["api"] = "update";
+      socket.broadcast.to(uuid.uuid).emit('message', data);
+
+      require('./lib/updateDevice')(data.uuid, data, function(results){
+        console.log(results);
+        try{
+          fn(results);
+
+          // Emit API request from device to room for subscribers
+          socket.broadcast.to(uuid.uuid).emit('message', results);
+
+        } catch (e){
+          console.log(e);
+        }
+      });
     });
   });
 
@@ -118,13 +183,23 @@ io.sockets.on('connection', function (socket) {
     if(data == undefined){
       var data = {};
     }
-    require('./lib/unregister')(data.uuid, data, function(results){
-      console.log(results);
-      try{
-        fn(results);
-      } catch (e){
-        console.log(e);
-      }
+    // Emit API request from device to room for subscribers
+    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+      data["api"] = "unregister";
+      socket.broadcast.to(uuid.uuid).emit('message', data);
+
+      require('./lib/unregister')(data.uuid, data, function(results){
+        console.log(results);
+        try{
+          fn(results);
+
+          // Emit API request from device to room for subscribers
+          socket.broadcast.to(uuid.uuid).emit('message', results);
+
+        } catch (e){
+          console.log(e);
+        }
+      });
     });
   });
 
@@ -137,8 +212,9 @@ io.sockets.on('connection', function (socket) {
 
     // Broadcast to room for pubsub
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
-      // socket.broadcast.to(uuid).emit('message', eventData)  
-      io.sockets.in(uuid.uuid).emit('message', eventData)
+      eventData["api"] = "message";
+      socket.broadcast.to(uuid.uuid).emit('message', eventData)  
+      // io.sockets.in(uuid.uuid).emit('message', eventData)
     });
 
     console.log('devices: ' + data.devices);

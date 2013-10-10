@@ -20,6 +20,7 @@ io.sockets.on('connection', function (socket) {
     require('./lib/logEvent')(101, data);
     require('./lib/updateSocketId')({uuid: data.uuid, token: data.token, socketid: socket.id.toString()}, function(auth){
       socket.emit('authentication', { status: auth.status });
+      // Have device join its uuid room name so that others can subscribe to it
       if (auth.status == 201){
         console.log('subscribe: ' + data.uuid);
         socket.join(data.uuid);
@@ -34,15 +35,24 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('subscribe', function(room) { 
-      console.log('joining room', room);
+      console.log('joining room ', room);
       socket.join(room); 
+  })  
+
+  socket.on('unsubscribe', function(room) { 
+      console.log('leaving room ', room);
+      socket.leave(room); 
   })  
 
   // APIs
   socket.on('status', function (fn) {
     require('./lib/getSystemStatus')(function(results){
       console.log(results);
-      fn(results);
+      try{
+        fn(results);
+      } catch (e){
+        console.log(e);
+      }
     });
   });
 
@@ -52,7 +62,11 @@ io.sockets.on('connection', function (socket) {
     }
     require('./lib/getDevices')(data, function(results){
       console.log(results);
-      fn(results);
+      try{
+        fn(results);
+      } catch (e){
+        console.log(e);
+      }
     });
   });
 
@@ -64,7 +78,11 @@ io.sockets.on('connection', function (socket) {
     }
     require('./lib/whoami')(data, function(results){
       console.log(results);
-      fn(results);
+      try{
+        fn(results);
+      } catch (e){
+        console.log(e);
+      }
     });
   });
 
@@ -74,17 +92,25 @@ io.sockets.on('connection', function (socket) {
     }
     require('./lib/register')(data, function(results){
       console.log(results);
-      fn(results);
+      try{
+        fn(results);
+      } catch (e){
+        console.log(e);
+      }
     });
   });
 
   socket.on('update', function (data, fn) {
     if(data == undefined){
       var data = {};
-    }
+    };
     require('./lib/updateDevice')(data.uuid, data, function(results){
       console.log(results);
-      fn(results);
+      try{
+        fn(results);
+      } catch (e){
+        console.log(e);
+      }
     });
   });
 
@@ -94,7 +120,11 @@ io.sockets.on('connection', function (socket) {
     }
     require('./lib/unregister')(data.uuid, data, function(results){
       console.log(results);
-      fn(results);
+      try{
+        fn(results);
+      } catch (e){
+        console.log(e);
+      }
     });
   });
 

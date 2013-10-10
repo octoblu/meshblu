@@ -107,7 +107,8 @@ io.sockets.on('connection', function (socket) {
 
     // Broadcast to room for pubsub
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
-      socket.broadcast.to(uuid).emit('message', eventData)  
+      // socket.broadcast.to(uuid).emit('message', eventData)  
+      io.sockets.in(uuid.uuid).emit('message', eventData)
     });
 
     console.log('devices: ' + data.devices);
@@ -126,6 +127,8 @@ io.sockets.on('connection', function (socket) {
       //     io.sockets.socket(data.socketid).emit('message', message);
       //   });
       // }      
+
+      var devices = data.devices;
 
       // if string convert to array
       if( typeof devices === 'string' ) {

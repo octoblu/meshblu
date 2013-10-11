@@ -16,14 +16,18 @@ io.sockets.on('connection', function (socket) {
   
   socket.emit('identify', { socketid: socket.id.toString() });
   socket.on('identity', function (data) {
+    data["socketid"] = socket.id.toString();
     console.log('Identity received: ' + JSON.stringify(data));
     require('./lib/logEvent')(101, data);
-    require('./lib/updateSocketId')({uuid: data.uuid, token: data.token, socketid: socket.id.toString()}, function(auth){
-      socket.emit('authentication', { status: auth.status });
+    require('./lib/updateSocketId')(data, function(auth){
+      // socket.emit('authentication', { status: auth.status });
       // Have device join its uuid room name so that others can subscribe to it
       if (auth.status == 201){
+        socket.emit('ready', { status: auth.status });
         console.log('subscribe: ' + data.uuid);
         socket.join(data.uuid);
+      } else {
+        socket.emit('notReady', { status: auth.status });
       }
     });
   });
@@ -87,8 +91,9 @@ io.sockets.on('connection', function (socket) {
     }
     // Emit API request from device to room for subscribers
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
-      data["api"] = "devices";      
-      socket.broadcast.to(uuid.uuid).emit('message', data);
+      var reqData = data;
+      reqData["api"] = "devices";      
+      socket.broadcast.to(uuid.uuid).emit('message', reqData);
 
       require('./lib/getDevices')(data, function(results){
         console.log(results);
@@ -113,8 +118,9 @@ io.sockets.on('connection', function (socket) {
     }
     // Emit API request from device to room for subscribers
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
-      data["api"] = "whoami";      
-      socket.broadcast.to(uuid.uuid).emit('message', data);
+      var reqData = data;
+      reqData["api"] = "whoami";      
+      socket.broadcast.to(uuid.uuid).emit('message', reqData);
 
       require('./lib/whoami')(data, function(results){
         console.log(results);
@@ -137,8 +143,9 @@ io.sockets.on('connection', function (socket) {
     }
     // Emit API request from device to room for subscribers
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
-      data["api"] = "register";
-      socket.broadcast.to(uuid.uuid).emit('message', data);
+      var reqData = data;
+      reqData["api"] = "register";      
+      socket.broadcast.to(uuid.uuid).emit('message', reqData);
 
       require('./lib/register')(data, function(results){
         console.log(results);
@@ -161,8 +168,9 @@ io.sockets.on('connection', function (socket) {
     };
     // Emit API request from device to room for subscribers
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
-      data["api"] = "update";
-      socket.broadcast.to(uuid.uuid).emit('message', data);
+      var reqData = data;
+      reqData["api"] = "update";      
+      socket.broadcast.to(uuid.uuid).emit('message', reqData);
 
       require('./lib/updateDevice')(data.uuid, data, function(results){
         console.log(results);
@@ -185,8 +193,9 @@ io.sockets.on('connection', function (socket) {
     }
     // Emit API request from device to room for subscribers
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
-      data["api"] = "unregister";
-      socket.broadcast.to(uuid.uuid).emit('message', data);
+      var reqData = data;
+      reqData["api"] = "unregister";      
+      socket.broadcast.to(uuid.uuid).emit('message', reqData);
 
       require('./lib/unregister')(data.uuid, data, function(results){
         console.log(results);

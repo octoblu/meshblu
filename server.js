@@ -1,6 +1,7 @@
 var config = require('./config');
 var restify = require('restify');
 var socketio = require('socket.io');
+var nstatic = require('node-static');
 
 var server = restify.createServer();
 var io = socketio.listen(server);
@@ -257,7 +258,7 @@ io.sockets.on('connection', function (socket) {
 
         // Broadcast to room for pubsub
         console.log('sending message to room: ' + device);
-        io.sockets.in(device).emit('message', message)
+        io.sockets.in(device).emit('message', data.message)
 
       });
 
@@ -379,6 +380,20 @@ server.post('/messages', function(req, res, next){
   }
 
 });
+
+
+// Serve static website
+var file = new nstatic.Server('');
+server.get('/', function redirect(req, res, next) {
+    res.header('Location', '/index.html');
+    res.send(302);
+    return next(false);
+});
+
+server.get(/^\/.*/, function(req, res, next) {
+    file.serve(req, res, next);
+});
+
 
 server.listen(process.env.PORT || config.port, function() {
   console.log("\n SSSSS  kk                            tt    ");

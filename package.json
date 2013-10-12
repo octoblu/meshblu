@@ -1,18 +1,30 @@
 {
   "name": "skynet",
+  "description": "communications platform and api for iot",
   "version": "0.0.1",
+  "author": "Twelephone",
+  "private": true,
+  "engines": {
+    "node": ">= 0.6.0"
+  },  
   "dependencies": {
     "mongojs": "*",
     "redis": "*",
     "socket.io": "*",
     "restify": "*",
-    "node-uuid": "*"
+    "node-uuid": "*",
+    "node-static": "*"
   },
   "engines": {
     "node": ">=0.6"
   },
   "subdomain": "skynet",
   "domains": [
-    "e2e.io"
-  ]
+    "e2e.io",
+    "skynet.im",
+    "skynetim.com"
+  ],
+  "scripts": {
+    "start": "node server.js"
+  }
 }

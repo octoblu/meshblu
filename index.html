@@ -171,7 +171,7 @@
                     <br />
                     <code>curl -X GET http://skynet.com/status</code>
                     <br />                                      
-                    <code>{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</code>
+                    <textarea class="input-xxlarge">{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</textarea>
                   </td>
                 </tr>
 
@@ -187,7 +187,7 @@
                     <br />
                     <code>curl -X GET http://skynet.com/devices?type=drone</code>
                     <br />
-                    <code>{"devices":["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"]}b</code>
+                    <textarea class="input-xxlarge">{"devices":["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"]}b</textarea>
                     <br />                                      
                   </td>
                 </tr>
@@ -203,7 +203,7 @@
                     <br />
                     <code>curl -X GET http://skynet.com/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
                     <br />
-                    <code>{"_id":"5241d9140345450000000001","api":"update","armed":true,"channel":"main","deviceDescription":"this is a test","deviceName":"hackboard","key":"777","online":true,"socketId":"fO8dxKEwARUH9Ea--p2C","timestamp":1381536277933,"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}</code>
+                    <textarea class="input-xxlarge">{"_id":"5241d9140345450000000001","api":"update","armed":true,"channel":"main","deviceDescription":"this is a test","deviceName":"hackboard","key":"777","online":true,"socketId":"fO8dxKEwARUH9Ea--p2C","timestamp":1381536277933,"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}</textarea>
                     <br />                                      
                   </td>
                 </tr>
@@ -219,7 +219,7 @@
                     <br />
                     <code>curl -X POST -d "type=drone&color=black" http://skynet.com/devices</code>
                     <br />
-                    <code>{"type":"drone","color":"black","uuid":"6f72bc60-32d5-11e3-92e2-e94f95fc16a6","timestamp":1381537803046,"token":"4bbd2jm242dl5wmimbwz4rvlu77m0a4i","channel":"main","online":false,"_id":"5258980b56330f7dd000000d"}</code>
+                    <textarea class="input-xxlarge">{"type":"drone","color":"black","uuid":"6f72bc60-32d5-11e3-92e2-e94f95fc16a6","timestamp":1381537803046,"token":"4bbd2jm242dl5wmimbwz4rvlu77m0a4i","channel":"main","online":false,"_id":"5258980b56330f7dd000000d"}</textarea>
                     <br />                                      
                   </td>
                 </tr>
@@ -235,7 +235,7 @@
                     <br />
                     <code>curl -X PUT -d "token=123&color=blue" http://skynet.com/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
                     <br />
-                    <code>{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","color":"blue","timestamp":1381537750462}</code>
+                    <textarea class="input-xxlarge">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","color":"blue","timestamp":1381537750462}</textarea>
                     <br />                                      
                   </td>
                 </tr>
@@ -251,7 +251,7 @@
                     <br />
                     <code>curl -X DELETE -d "token=123" http://skynet.com/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
                     <br />
-                    <code>{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","timestamp":1381537971074}</code>
+                    <textarea class="input-xxlarge">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","timestamp":1381537971074}</textarea>
                     <br />                                      
                   </td>
                 </tr>
@@ -275,7 +275,8 @@
                     <br />                                      
                     <code>{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</code>
                     <br />
-                    <code>{"devices":"all","message":{"yellow":"off"}</code>
+                    <textarea class="input-xxlarge">{"devices":"all","message":{"yellow":"off"}</textarea>
+                    <!-- <code>{"devices":"all","message":{"yellow":"off"}</code> -->
                   </td>
                 </tr>
 

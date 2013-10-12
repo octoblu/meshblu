@@ -1,12 +1,12 @@
 {
   "name": "skynet",
   "description": "communications platform and api for iot",
-  "version": "0.0.1",
+  "version": "0.0.1-2",
   "author": "Twelephone",
   "private": true,
   "engines": {
-    "node": ">= 0.6.0"
-  },  
+    "node": ">=0.6"
+  },
   "dependencies": {
     "mongojs": "*",
     "redis": "*",
@@ -14,9 +14,6 @@
     "restify": "*",
     "node-uuid": "*",
     "node-static": "*"
-  },
-  "engines": {
-    "node": ">=0.6"
   },
   "subdomain": "skynet",
   "domains": [

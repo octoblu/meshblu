@@ -127,7 +127,7 @@ io.sockets.on('connection', function (socket) {
       reqData["api"] = "whoami";      
       socket.broadcast.to(uuid.uuid).emit('message', reqData);
 
-      require('./lib/whoami')(data, function(results){
+      require('./lib/whoAmI')(data, function(results){
         console.log(results);
         try{
           fn(results);
@@ -299,7 +299,7 @@ server.get('/devices', function(req, res){
 // curl http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
 // server.get('/devices/:uuid', require('./lib/whoami'));
 server.get('/devices/:uuid', function(req, res){
-  require('./lib/whoami')(req.params.uuid, function(data){
+  require('./lib/whoAmI')(req.params.uuid, function(data){
     console.log(data);
     res.json(data);
   });

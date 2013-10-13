@@ -10,6 +10,10 @@ server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
+process.on("uncaughtException", function(error) {
+  return console.log(error.stack);
+});
+
 io.sockets.on('connection', function (socket) {
 
   console.log('Websocket connection detected. Requesting identification from socket id: ' + socket.id.toString());

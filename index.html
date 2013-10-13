@@ -81,7 +81,7 @@
         <div class="hero-content">
           <!-- <h1>I AM A <span>DESIGNER</span> / <span>DEVELOPER</span><br />living in Paris.</h1> -->
           <h1>REALTIME <span>IOT</span> NETWORK & <span>API</span></h1>
-          <a href="#about" class="btn btn-large scroll">Tell me more!</a>
+          <a href="#about" class="btn btn-large scroll assimilate">Assimilate!</a>
         </div>
 
       </section>
@@ -530,6 +530,16 @@ script.
     <script src="js/custom.js"></script>
 
     <!--<script src="js/less-1.3.3.min.js"></script>-->
+    <script>
+      var jiggle,
+        _this = this;
+
+      jiggle = function() {
+        return _this.$(".assimilate").addClass("animated tada");
+      };
+
+      setTimeout(jiggle, 2000);
+    </script>
 
   
   </body>

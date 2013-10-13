@@ -1113,13 +1113,13 @@ section#projects p {
   font-weight: 300;
   line-height: 1.8em;
 }
-section#testimonials {
+section#restapi {
   background: #f0eee8;
   color: #464542;
 }
 section#pricing,
 section#team,
-section#hobbies {
+section#websockets {
   background-color: #dbbea1;
   padding: 4em 0 8em;
 }
@@ -1283,7 +1283,7 @@ section#footer-cta .location .btn {
   margin: 0;
   padding: 0;
 }
-#testimonials blockquote {
+#restapi blockquote {
   padding: 15px;
   background: #fff;
   border-radius: 5px;
@@ -1291,7 +1291,7 @@ section#footer-cta .location .btn {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-#testimonials blockquote p {
+#restapi blockquote p {
   padding-bottom: 15px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;

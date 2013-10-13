@@ -56,7 +56,7 @@
         <h1><a href="#home"><span>SKY</span>NET</a></h1>
       </div>
 
-<a href="https://github.com/chrismatthieu"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>    
+<a href="https://github.com/chrismatthieu/skynet"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>    
 
 <!--       <div class="span3 pull-right header-cta">
         <a href="#contact-form" class="modal-form contact btn cta pull-right">Get in touch</a>
@@ -68,9 +68,9 @@
         <ul>
           <li class="current"><a href="#home">Home</a></li>
           <li><a href="#about">About</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#testimonials">Favourite tweets</a></li>
-          <li><a href="#hobbies">Hobbies</a></li>
+          <li><a href="#projects">Screencasts</a></li>
+          <li><a href="#restapi">REST API</a></li>
+          <li><a href="#websockets">Websocket API</a></li>
           <li><a href="#footer-cta">Contact</a></li>
         </ul>
       </nav>
@@ -90,22 +90,22 @@
         <div class="container">
           <div class="row">
 
-            <div class="span12">
+            <div class="col-md-12">
               <h1>Open communications platform & API for the <span class="underline">Internet of Things</span>.</h1>
             </div>
-            <div class="feature span4">
+            <div class="feature col-md-4">
               <div aria-hidden="true" class="icon icon-cloudy-2"></div>
               <h3>Mesh Network</h3>
               <p class="hidden-phone">Skynet is a cloud-based mesh network that scales to meet any needs whether the nodes are smart home devices, sensors, cloud resources, drones, bots, etc.</p>
             </div>
 
-            <div class="feature span4">
+            <div class="feature col-md-4">
               <div aria-hidden="true" class="icon icon-cog-2"></div>
               <h3>REST & WebSocket API</h3>
               <p class="hidden-phone">Skynet is powered by Node.JS and based entirely on its integrated REST API and realtime Websocket API with extensible JSON device & messaging docs.</p>
             </div>
 
-            <div class="feature span4">
+            <div class="feature col-md-4">
               <div aria-hidden="true" class="icon icon-code"></div>
               <h3>Node.JS NPM Module</h3>
               <p class="hidden-phone">Node.JS is known for fast, event-driven operations perfect for nodes and devices such as RaspberryPi, Arduino, and Tessel. Our NPM module gets your app up & running quickly!</p>
@@ -118,11 +118,11 @@
       <section id="projects">
         <div class="container">
           <div class="row">
-            <div class="span12">
+            <div class="col-md-12">
               <h1>Skynet in Action</h1>
             </div>
 
-            <div class="span12 featured-image">
+            <div class="col-md-12 featured-image">
               <ul class="featuredSlider">
                 <li>
                   <p class="animated bounceInDown">Screencast 1: What is Skynet?</p>
@@ -148,141 +148,142 @@
         </div>
       </section>
 
-      <section id="testimonials">
+      <section id="restapi">
         <div class="container">
-          <div class="row text-center">
+          <div class="row">
 
-            <div class="span12">
+            <div class="col-md-12 text-center">
               <h1>REST API</h1>
             </div>
 
-            <table class="table table-bordered">
-            <div id="resources">  
-            
-                <tr><td colspan="2"><h1>Status</h1></td></tr>
-            
-                <tr>
-                  <td width="20%">
-                    <button class="btn btn-large btn-info disabled"> GET</button>
-                  </td>
-                  <td width="80%">
-                    <b>/status</b>  
-                    <br />Returns the Skynet platform status
-                    <br />
-                    <code>curl -X GET http://skynet.com/status</code>
-                    <br />                                      
-                    <textarea class="input-xxlarge">{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</textarea>
-                  </td>
-                </tr>
+            <div class="col-md-12">
+              <h1>Base URI: http://skynet.jit.su</h1>
+            </div>
 
-                <tr><td colspan="2"><h1>Devices</h1></td></tr>
-            
-                <tr>
-                  <td width="20%">
-                    <button class="btn btn-large btn-info disabled"> GET</button>
-                  </td>
-                  <td width="80%">
-                    <b>/devices?key=value&key=value</b>  
-                    <br />Returns an array of device UUIDs based on key/value query criteria
-                    <br />
-                    <code>curl -X GET http://skynet.com/devices?type=drone</code>
-                    <br />
-                    <textarea class="input-xxlarge">{"devices":["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"]}b</textarea>
-                    <br />                                      
-                  </td>
-                </tr>
-
-
-                <tr>
-                  <td width="20%">
-                    <button class="btn btn-large btn-info disabled"> GET</button>
-                  </td>
-                  <td width="80%">
-                    <b>/devices/{uuid}</b>  
-                    <br />Returns all information (except the token) of a specific device or node
-                    <br />
-                    <code>curl -X GET http://skynet.com/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
-                    <br />
-                    <textarea class="input-xxlarge">{"_id":"5241d9140345450000000001","api":"update","armed":true,"channel":"main","deviceDescription":"this is a test","deviceName":"hackboard","key":"777","online":true,"socketId":"fO8dxKEwARUH9Ea--p2C","timestamp":1381536277933,"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}</textarea>
-                    <br />                                      
-                  </td>
-                </tr>
-
-                <tr>
-                  <td width="20%">
-                    <button class="btn btn-large btn-success disabled"> POST</button>
-                  </td>
-                  <td width="80%">
-                    <b>/devices</b><br />
-                    <b>Payload: key=value (i.e. type=drone&color=black)</b>
-                    <br />Registers a node or device with Skynet. Skynet returns a UUID device id and security token. You can pass any key/value pairs and even override Skynet's token by passing your own token in the payload i.e. token=123
-                    <br />
-                    <code>curl -X POST -d "type=drone&color=black" http://skynet.com/devices</code>
-                    <br />
-                    <textarea class="input-xxlarge">{"type":"drone","color":"black","uuid":"6f72bc60-32d5-11e3-92e2-e94f95fc16a6","timestamp":1381537803046,"token":"4bbd2jm242dl5wmimbwz4rvlu77m0a4i","channel":"main","online":false,"_id":"5258980b56330f7dd000000d"}</textarea>
-                    <br />                                      
-                  </td>
-                </tr>
-
-                <tr>
-                  <td width="20%">
-                    <button class="btn btn-large btn-warning disabled"> PUT</button>
-                  </td>
-                  <td width="80%">
-                    <b>/devices/{uuid}</b><br />
-                    <b>Payload: token=123&key=value (i.e. token=123&type=drone&color=blue)</b>
-                    <br />Updates a node or device currently registered with Skynet. You must pass the token for security but you can pass any key/value pairs to update object as well as null to remove a propery (i.e. color=null).
-                    <br />
-                    <code>curl -X PUT -d "token=123&color=blue" http://skynet.com/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
-                    <br />
-                    <textarea class="input-xxlarge">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","color":"blue","timestamp":1381537750462}</textarea>
-                    <br />                                      
-                  </td>
-                </tr>
-
-                <tr>
-                  <td width="20%">
-                    <button class="btn btn-large btn-danger disabled"> DELETE</button>
-                  </td>
-                  <td width="80%">
-                    <b>/devices/{uuid}</b><br />
-                    <b>Payload: token=123</b>
-                    <br />Deletes or unregisters a node or device currently registered with Skynet. You must pass the token for security .
-                    <br />
-                    <code>curl -X DELETE -d "token=123" http://skynet.com/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
-                    <br />
-                    <textarea class="input-xxlarge">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","timestamp":1381537971074}</textarea>
-                    <br />                                      
-                  </td>
-                </tr>
-
-                <tr><td colspan="2"><h1>Messages</h1></td></tr>
-            
-                <tr>
-                  <td width="20%">
-                    <button class="btn btn-large btn-success disabled"> POST</button>
-                  </td>
-                  <td width="80%">
-                    <b>/messages</b>  
-                    <br />Send a message to a specific device, array of devices, or all devices on the Skynet platform 
-                    <br />
-                    <code>curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://skynet.com/messages</code>
-                    <br />                                      
-                    <code>curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"], "message": {"yellow":"off"}}' http://skynet.com/messages</code>
-                    <br />                                      
-                    <code>curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' http://skynet.com/messages</code>
-
-                    <br />                                      
-                    <code>{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</code>
-                    <br />
-                    <textarea class="input-xxlarge">{"devices":"all","message":{"yellow":"off"}</textarea>
-                    <!-- <code>{"devices":"all","message":{"yellow":"off"}</code> -->
-                  </td>
-                </tr>
-
-            
+            <div class="col-md-12">
+              <h1>Status</h1>
+            </div>
+            <div class="col-md-12">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-info disabled"> GET</button>
               </div>
-            </table>
+              <div class="feature col-md-10">
+
+                <b>/status</b>  
+                <br />Returns the Skynet platform status
+                <br />
+                <code>curl -X GET http://skynet.jit.su/status</code>
+                <br />                                      
+                <textarea class="form-control">{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</textarea>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <h1>Devices</h1>
+            </div>
+            <div class="col-md-12">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-info disabled"> GET</button>
+              </div>
+              <div class="feature col-md-10">
+                <b>/devices?key=value&key=value</b>  
+                <br />Returns an array of device UUIDs based on key/value query criteria
+                <br />
+                <code>curl -X GET http://skynet.jit.su/devices?type=drone</code>
+                <br />
+                <textarea class="form-control">{"devices":["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"]}b</textarea>
+                <br />                                      
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-info disabled"> GET</button>
+              </div>
+              <div class="feature col-md-10">
+                <b>/devices/{uuid}</b>  
+                <br />Returns all information (except the token) of a specific device or node
+                <br />
+                <code>curl -X GET http://skynet.jit.su/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
+                <br />
+                <textarea class="form-control">{"_id":"5241d9140345450000000001","api":"update","armed":true,"channel":"main","deviceDescription":"this is a test","deviceName":"hackboard","key":"777","online":true,"socketId":"fO8dxKEwARUH9Ea--p2C","timestamp":1381536277933,"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}</textarea>
+                <br />                                      
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-success disabled"> POST</button>
+              </div>
+              <div class="feature col-md-10">
+                <b>/devices</b><br />
+                <b>Payload: key=value (i.e. type=drone&color=black)</b>
+                <br />Registers a node or device with Skynet. Skynet returns a UUID device id and security token. You can pass any key/value pairs and even override Skynet's token by passing your own token in the payload i.e. token=123
+                <br />
+                <code>curl -X POST -d "type=drone&color=black" http://skynet.jit.su/devices</code>
+                <br />
+                <textarea class="form-control">{"type":"drone","color":"black","uuid":"6f72bc60-32d5-11e3-92e2-e94f95fc16a6","timestamp":1381537803046,"token":"4bbd2jm242dl5wmimbwz4rvlu77m0a4i","channel":"main","online":false,"_id":"5258980b56330f7dd000000d"}</textarea>
+                <br />                                      
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-warning disabled"> PUT</button>
+              </div>
+              <div class="feature col-md-10">
+                <b>/devices/{uuid}</b><br />
+                <b>Payload: token=123&key=value (i.e. token=123&type=drone&color=blue)</b>
+                <br />Updates a node or device currently registered with Skynet. You must pass the token for security but you can pass any key/value pairs to update object as well as null to remove a propery (i.e. color=null).
+                <br />
+                <code>curl -X PUT -d "token=123&color=blue" http://skynet.jit.su/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
+                <br />
+                <textarea class="form-control">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","color":"blue","timestamp":1381537750462}</textarea>
+                <br />                                      
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-danger disabled"> DELETE</button>
+              </div>
+              <div class="feature col-md-10">
+                <b>/devices/{uuid}</b><br />
+                <b>Payload: token=123</b>
+                <br />Deletes or unregisters a node or device currently registered with Skynet. You must pass the token for security .
+                <br />
+                <code>curl -X DELETE -d "token=123" http://skynet.jit.su/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
+                <br />
+                <textarea class="form-control">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","timestamp":1381537971074}</textarea>
+                <br />                                      
+              </div>
+            </div>
+
+
+            <div class="col-md-12">
+              <h1>Messages</h1>
+            </div>
+            <div class="col-md-12">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-success disabled"> POST</button>
+              </div>
+              <div class="feature col-md-10">
+                <b>/messages</b>  
+                <br />Send a message to a specific device, array of devices, or all devices on the Skynet platform 
+                <br />
+                <code>curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://skynet.jit.su/messages</code>
+                <br />                                      
+                <code>curl -X POST -d '{"devices": ["ad6...47b","2f3...170"], "message": {"yellow":"off"}}' http://skynet.jit.su/messages</code>
+                <br />                                      
+                <code>curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' http://skynet.jit.su/messages</code>
+
+                <br />                                      
+                <code>{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</code>
+                <br />
+                <textarea class="form-control">{"devices":"all","message":{"yellow":"off"}</textarea>
+                <!-- <code>{"devices":"all","message":{"yellow":"off"}</code> -->
+              </div>
+            </div>
 
 
           </div>
@@ -290,7 +291,7 @@
        </div>
       </section>
 
-      <section id="hobbies">
+      <section id="websockets">
         <div class="container">
 
           <div class="page-header text-center">
@@ -299,12 +300,176 @@
 
           <div class="row">
 
+            <div class="col-md-12">
+              <h2>
+                Skynet offers a realtime websocket API as well as a Node.JS NPM module to make event-driven IoT development fast and easy. 
+                When nodes and devices register with Skynet, they are assigned a unique id known as a UUID along with a security token. (Note: tokens can be provided by the request rather than having Skynet assign one for you.)
+              </h2>
+              <h2>
+                Upon connecting your node or device to Skynet, you can query and update devices on the network and send machine-to-machine (M2M) messages in an RPC-style fashion.  
+                Here are the basics for a socket.io implementation of using native websockets:
+              </h2>
+            </div>
+
+            <pre>
+var io = require('socket.io-client')
+socket = io.connect('http://skynet.jit.su', {
+    port: 80
+});
+
+socket.on('connect', function(){
+  console.log('Requesting websocket connection to Skynet');
+
+  socket.on('identify', function(data){
+    console.log('Websocket connecting to Skynet with socket id: ' + data.socketid);
+    console.log('Sending device uuid: ad698900-2546-11e3-87fb-c560cb0ca47b');
+    socket.emit('identity', {uuid: 'ad698900-2546-11e3-87fb-c560cb0ca47b', socketid: data.socketid, token: 'zh4p7as90pt1q0k98fzvwmc9rmjkyb9'});
+  });
+
+  socket.on('authentication', function(data){
+    if (data.status == 201){
+      console.log('Device authenticated with Skynet');
+    } else { // 401
+      console.log('Device not authenticated with Skynet');
+    }
+  });
+
+  // test APIs
+  socket.on('status', function(data){
+    console.log('status received');
+    console.log(data);
+  });
+
+});
+
+            </pre>
+
+            <h2>Websocket API commands include: status, register, unregister, update, whoami, devices, and send. You can send a message to a specific UUID or an array of UUIDs or all nodes on Skynet. </h2>
+
+            <h1>Node.JS NPM Module</h1>
+            <h2>Skynet now offers a Node.JS NPM module for making event-driven IoT development fast and easy. You can install the skynet module by running:</h2>
+            <code>npm install skynet</code>
+            
+            <h2>Here's a sample Node.JS app using the Skynet NPM module:</h2>
+
+            <pre>
+var skynet = require('skynet');
+
+var conn = skynet.createConnection({
+  "host":"localhost",
+  "port": 3000,
+  "uuid": "ad698900-2546-11e3-87fb-c560cb0ca47b",
+  "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9"
+});
+
+conn.on('notReady', function(data){
+  console.log('UUID FAILED AUTHENTICATION!');
+  console.log(data);
+});
+
+conn.on('ready', function(data){
+  console.log('UUID AUTHENTICATED!');
+  console.log(data);
+
+  // Send and receive messages
+  conn.send({
+    "devices": "all",
+    "message": {
+      "skynet":"online"
+    }
+  });
+
+  conn.on('message', function(data){
+    console.log('status received');
+    console.log(data);
+  });
+
+  // Event triggered when device loses connection to skynet
+  conn.on('disconnect', function(data){
+    console.log('disconnected from skynet');
+  });
+
+  // Register a device
+  conn.register({
+    "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9", 
+    "type": "drone"
+  }, function (data) {
+    console.log(data); 
+  });
+
+  // UnRegister a device
+  conn.unregister({
+    "uuid": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9", 
+    "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9"
+  }, function (data) {
+    console.log(data); 
+  });
+
+  // Update device
+  conn.update({
+    "uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b", 
+    "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9", 
+    "armed":true
+  }, function (data) {
+    console.log(data); 
+  });
+
+  // WhoAmI?
+  conn.whoami({"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}, function (data) {
+    console.log(data); 
+  });
+
+  // Receive an array of device UUIDs based on user defined search criteria
+  conn.devices({
+    "type":"drone"
+  }, function (data) {
+    console.log(data); 
+
+    // Send hello world to the array of device uuids
+    conn.send({
+      "devices": data.devices,
+      "message": {
+        "hello":"world"
+      }
+    });
+
+  });
+
+  // Skynet status
+  conn.status(function (data) {
+    console.log(data); 
+  });
+
+});
 
 
+            </pre>
 
+            <h2>
+              Skynet automatically creates a websocket room for each connect device. This allows apps and other nodes and devices to connect and monitor events and commands. 
+              Here's a sample Node.JS device monitoring script:
+            </h2>
 
+            <pre>
+script(src="http://code.jquery.com/jquery-1.10.1.min.js")
+script(src="/socket.io/socket.io.js")
+script.
+  // Connect to Skynet server & port
+  var socket = io.connect('http://skynet.jit.su:80');
 
+  // subscribe to uuid
+  socket.emit('subscribe', "ad698900-2546-11e3-87fb-c560cb0ca47b");
+  // socket.emit('unsubscribe', "ad698900-2546-11e3-87fb-c560cb0ca47b");
 
+  socket.on('identify', function (data) {
+    console.log(data);
+    $(".activity").prepend(JSON.stringify(data) + '<br />');
+  });
+  socket.on('message', function (data) {
+    console.log(data);
+    $(".activity").prepend(JSON.stringify(data) + '<br />');
+  });
+            </pre>
 
           </div>
 
@@ -317,13 +482,13 @@
         <div class="container">
           <div class="row">
 
-            <div class="span12 location">
+            <div class="col-md-12 location">
               <h1>Skynet is connected to <span class="colorHighlight2">social networks</span></h1>
               <p></p>
               <!-- <a href="#contact-form" class="modal-form btn cta">Contact Me</a> -->
             </div>
 
-            <div class="span12 social">
+            <div class="col-md-12 social">
               <a href="#" target="_blank"><img src="img/sm-facebook.png" alt="" /></a>
               <a href="https://twitter.com/skynetim" target="_blank"><img src="img/sm-twitter.png" alt="" /></a>
             </div>

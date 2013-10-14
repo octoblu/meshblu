@@ -31,8 +31,11 @@ io.sockets.on('connection', function (socket) {
         socket.emit('ready', { status: auth.status });
         console.log('subscribe: ' + data.uuid);
         socket.join(data.uuid);
+        socket.broadcast.to(data.uuid).emit('message', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});
+        // io.sockets.in(data.uuid).emit('message', {"api": "connect", "socketid": socket.id.toString(), "uuid": data.uuid})
       } else {
         socket.emit('notReady', { status: auth.status });
+        socket.broadcast.to(data.uuid).emit('message', {"api": "connect", "status": auth.status, "uuid": data.uuid});
       }
     });
   });
@@ -43,7 +46,7 @@ io.sockets.on('connection', function (socket) {
     require('./lib/updatePresence')(socket.id.toString());
     // Emit API request from device to room for subscribers
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
-      socket.broadcast.to(uuid.uuid).emit('message', {"api": "disconnect"});
+      socket.broadcast.to(uuid.uuid).emit('message', {"api": "disconnect", "socketid": socket.id.toString(), "uuid": uuid.uuid});
     });      
 
   });
@@ -53,7 +56,7 @@ io.sockets.on('connection', function (socket) {
       socket.join(room); 
       // Emit API request from device to room for subscribers
       require('./lib/getUuid')(socket.id.toString(), function(uuid){
-        socket.broadcast.to(uuid.uuid).emit('message', {"api": "subscribe"});
+        socket.broadcast.to(uuid.uuid).emit('message', {"api": "subscribe", "socketid": socket.id.toString()});
       });      
   })  
 
@@ -62,7 +65,7 @@ io.sockets.on('connection', function (socket) {
       socket.leave(room); 
       // Emit API request from device to room for subscribers
       require('./lib/getUuid')(socket.id.toString(), function(uuid){
-        socket.broadcast.to(uuid.uuid).emit('message', {"api": "unsubscribe"});
+        socket.broadcast.to(uuid.uuid).emit('message', {"api": "unsubscribe", "socketid": socket.id.toString()});
       });      
   })  
 
@@ -100,6 +103,8 @@ io.sockets.on('connection', function (socket) {
       reqData["api"] = "devices";      
       socket.broadcast.to(uuid.uuid).emit('message', reqData);
 
+      // Why is "api" still in the data object?
+      delete data["api"];
       require('./lib/getDevices')(data, function(results){
         console.log(results);
         try{

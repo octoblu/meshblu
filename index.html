@@ -53,7 +53,10 @@
 
     <header class="clearfix">
       <div class="span3 logo featured">
-        <h1><a href="#home"><span>SKY</span>NET</a></h1>
+        <h1>
+          <a href="#home"><span>SKY</span>NET</a>
+          <!-- <a href="#home">Meshines</a> -->
+        </h1>
       </div>
 
 <a href="https://github.com/chrismatthieu/skynet"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>    
@@ -250,7 +253,7 @@
               <div class="feature col-md-10">
                 <b>/devices/{uuid}</b><br />
                 <b>Payload: token=123</b>
-                <br />Deletes or unregisters a node or device currently registered with Skynet. You must pass the token for security .
+                <br />Deletes or unregisters a node or device currently registered with Skynet. You must pass the token for security.
                 <br />
                 <code>curl -X DELETE -d "token=123" http://skynet.jit.su/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
                 <br />

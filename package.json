@@ -1,7 +1,7 @@
 {
   "name": "skynet",
   "description": "communications platform and api for iot",
-  "version": "0.0.1-11",
+  "version": "0.0.1-12",
   "author": "Twelephone",
   "private": true,
   "engines": {

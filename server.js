@@ -396,10 +396,8 @@ server.post('/messages', function(req, res, next){
 
 // Serve static website
 var file = new nstatic.Server('');
-server.get('/', function redirect(req, res, next) {
-    res.header('Location', '/index.html');
-    res.send(302);
-    return next(false);
+server.get('/', function(req, res, next) {
+    file.serveFile('/index.html', 200, {}, req, res);
 });
 
 server.get(/^\/.*/, function(req, res, next) {

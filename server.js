@@ -82,7 +82,7 @@ io.sockets.on('connection', function (socket) {
           fn(results);
           
           // Emit API request from device to room for subscribers
-          socket.broadcast.to(uuid.uuid).emit('message', results);
+          socket.broadcast.to(uuid).emit('message', results);
 
         } catch (e){
           console.log(e);
@@ -138,7 +138,7 @@ io.sockets.on('connection', function (socket) {
           fn(results);
 
           // Emit API request from device to room for subscribers
-          socket.broadcast.to(uuid.uuid).emit('message', results);
+          socket.broadcast.to(uuid).emit('message', results);
 
         } catch (e){
           console.log(e);
@@ -163,7 +163,7 @@ io.sockets.on('connection', function (socket) {
           fn(results);
 
           // Emit API request from device to room for subscribers
-          socket.broadcast.to(uuid.uuid).emit('message', results);
+          socket.broadcast.to(uuid).emit('message', results);
 
         } catch (e){
           console.log(e);
@@ -188,7 +188,7 @@ io.sockets.on('connection', function (socket) {
           fn(results);
 
           // Emit API request from device to room for subscribers
-          socket.broadcast.to(uuid.uuid).emit('message', results);
+          socket.broadcast.to(uuid).emit('message', results);
 
         } catch (e){
           console.log(e);
@@ -213,7 +213,7 @@ io.sockets.on('connection', function (socket) {
           fn(results);
 
           // Emit API request from device to room for subscribers
-          socket.broadcast.to(uuid.uuid).emit('message', results);
+          socket.broadcast.to(uuid).emit('message', results);
 
         } catch (e){
           console.log(e);

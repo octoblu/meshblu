@@ -261,9 +261,6 @@ io.sockets.on('connection', function (socket) {
       };
 
       devices.forEach( function(device) { 
-        // require('./lib/getSocketId')(device, function(data){
-        //   io.sockets.socket(data).emit('message', message);
-        // });
 
         // Broadcast to room for pubsub
         console.log('sending message to room: ' + device);
@@ -284,6 +281,7 @@ io.sockets.on('connection', function (socket) {
 server.get('/status', function(req, res){
   require('./lib/getSystemStatus')(function(data){
     console.log(data);
+    // io.sockets.in(req.params.uuid).emit('message', data)
     res.json(data);
   });
 });
@@ -296,6 +294,7 @@ server.get('/status', function(req, res){
 server.get('/devices', function(req, res){
   require('./lib/getDevices')(req.query, function(data){
     console.log(data);
+    // io.sockets.in(req.params.uuid).emit('message', data)
     res.json(data);
   });
 });
@@ -306,6 +305,7 @@ server.get('/devices', function(req, res){
 server.get('/devices/:uuid', function(req, res){
   require('./lib/whoAmI')(req.params.uuid, function(data){
     console.log(data);
+    io.sockets.in(req.params.uuid).emit('message', data)
     res.json(data);
   });
 });
@@ -316,6 +316,7 @@ server.get('/devices/:uuid', function(req, res){
 server.post('/devices', function(req, res){
   require('./lib/register')(req.params, function(data){
     console.log(data);
+    // io.sockets.in(req.params.uuid).emit('message', data)    
     res.json(data);
   });
 });
@@ -330,6 +331,7 @@ server.post('/devices', function(req, res){
 server.put('/devices/:uuid', function(req, res){
   require('./lib/updateDevice')(req.params.uuid, req.params, function(data){
     console.log(data);
+    io.sockets.in(req.params.uuid).emit('message', data)
     res.json(data);
   });
 });
@@ -339,6 +341,7 @@ server.put('/devices/:uuid', function(req, res){
 server.del('/devices/:uuid', function(req, res){
   require('./lib/unregister')(req.params.uuid, req.params, function(data){
     console.log(data);
+    io.sockets.in(req.params.uuid).emit('message', data)
     res.json(data);
   });
 });

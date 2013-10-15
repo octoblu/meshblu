@@ -1,7 +1,7 @@
 {
   "name": "skynet",
   "description": "communications platform and api for iot",
-  "version": "0.0.1-12",
+  "version": "0.0.1-14",
   "author": "Twelephone",
   "private": true,
   "engines": {
@@ -19,7 +19,8 @@
   "domains": [
     "e2e.io",
     "skynet.im",
-    "skynetim.com"
+    "skynetim.com",
+    "meshines.com"
   ],
   "scripts": {
     "start": "node server.js"

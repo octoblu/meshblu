@@ -144,6 +144,10 @@
                   <p class="animated bounceInDown">Screencast 4: Node.JS NPM module released!</p>
                   <iframe width="960" height="720" src="//www.youtube.com/embed/0WjNG6AOcXM" frameborder="0" allowfullscreen class="animated bounceInUp"></iframe>
                 </li>
+                <li>
+                  <p class="animated bounceInDown">Screencast 5: PubSub feature added to device UUID channels!</p>
+                  <iframe width="960" height="720" src="//www.youtube.com/embed/SL_c1MSgMaw" frameborder="0" allowfullscreen class="animated bounceInUp"></iframe>
+                </li>
               </ul>
             </div>
 
@@ -347,7 +351,7 @@ socket.on('connect', function(){
 
             </pre>
 
-            <h2>Websocket API commands include: status, register, unregister, update, whoami, devices, and send. You can send a message to a specific UUID or an array of UUIDs or all nodes on Skynet. </h2>
+            <h2>Websocket API commands include: status, register, unregister, update, whoami, devices, subscribe, unsubscribe, and send. You can send a message to a specific UUID or an array of UUIDs or all nodes on Skynet. </h2>
 
             <h1>Node.JS NPM Module</h1>
             <h2>Skynet now offers a Node.JS NPM module for making event-driven IoT development fast and easy. You can install the skynet module by running:</h2>
@@ -380,6 +384,21 @@ conn.on('ready', function(data){
     "message": {
       "skynet":"online"
     }
+  });
+
+  // Subscribe to device/node i/o
+  conn.subscribe({
+    "uuid": "f828ef20-29f7-11e3-9604-b360d462c699",
+    "token": "syep2lu2d0io1or305llz5u9ijrwwmi"
+  }, function (data) {
+    console.log(data); 
+  });
+
+  // Unsubscribe to device/node i/o
+  conn.unsubscribe({
+    "uuid": "f828ef20-29f7-11e3-9604-b360d462c699"
+  }, function (data) {
+    console.log(data); 
   });
 
   conn.on('message', function(data){
@@ -449,7 +468,7 @@ conn.on('ready', function(data){
             </pre>
 
             <h2>
-              Skynet automatically creates a websocket room for each connect device. This allows apps and other nodes and devices to connect and monitor events and commands. 
+              Skynet automatically creates a websocket room for each connect device. This allows apps and other nodes and devices to connect and monitor events and commands. Note: UUID and Token are required to subscribe to device/node events.
               Here's a sample Node.JS device monitoring script:
             </h2>
 
@@ -461,16 +480,26 @@ script.
   var socket = io.connect('http://skynet.jit.su:80');
 
   // subscribe to uuid
-  socket.emit('subscribe', "ad698900-2546-11e3-87fb-c560cb0ca47b");
-  // socket.emit('unsubscribe', "ad698900-2546-11e3-87fb-c560cb0ca47b");
+  socket.emit('subscribe', {  
+    "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
+    "token": "qirqglm6yb1vpldixflopnux4phtcsor"
+  }, function (data) {
+    console.log(data);
+  });
+
+  // unsubscribe to uuid
+  socket.emit('unsubscribe', {"uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"}, function (data) {
+    console.log(data);
+  });
 
   socket.on('identify', function (data) {
     console.log(data);
-    $(".activity").prepend(JSON.stringify(data) + '<br />');
+    $(".activity").prepend(JSON.stringify(data) + '&lt;br /&gt;');
   });
+
   socket.on('message', function (data) {
     console.log(data);
-    $(".activity").prepend(JSON.stringify(data) + '<br />');
+    $(".activity").prepend(JSON.stringify(data) + '&lt;br /&gt;');
   });
             </pre>
 

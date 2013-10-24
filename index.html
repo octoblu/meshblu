@@ -54,7 +54,7 @@
     <header class="clearfix">
       <div class="span3 logo featured">
         <h1>
-          <a href="#home"><span>SKY</span>NET</a>
+          <a href="#home"><span>SKYNET</span>.im</a>
           <!-- <a href="#home">Meshines</a> -->
         </h1>
       </div>
@@ -105,7 +105,7 @@
             <div class="feature col-md-4">
               <div aria-hidden="true" class="icon icon-cog-2"></div>
               <h3>REST & WebSocket API</h3>
-              <p class="hidden-phone">Skynet is powered by Node.JS and based entirely on its integrated REST API and realtime Websocket API with extensible JSON device & messaging docs.</p>
+              <p class="hidden-phone">Skynet is powered by Node.JS and based entirely on its integrated REST API and realtime Websocket API with extensible JSON device & messaging.</p>
             </div>
 
             <div class="feature col-md-4">
@@ -164,7 +164,7 @@
             </div>
 
             <div class="col-md-12">
-              <h1>Base URI: http://skynet.jit.su</h1>
+              <h1>Base URI: http://skynet.im</h1>
             </div>
 
             <div class="col-md-12">
@@ -179,7 +179,7 @@
                 <b>/status</b>  
                 <br />Returns the Skynet platform status
                 <br />
-                <code>curl -X GET http://skynet.jit.su/status</code>
+                <code>curl -X GET http://skynet.im/status</code>
                 <br />                                      
                 <textarea class="form-control">{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</textarea>
               </div>
@@ -196,7 +196,7 @@
                 <b>/devices?key=value&key=value</b>  
                 <br />Returns an array of device UUIDs based on key/value query criteria
                 <br />
-                <code>curl -X GET http://skynet.jit.su/devices?type=drone</code>
+                <code>curl -X GET http://skynet.im/devices?type=drone</code>
                 <br />
                 <textarea class="form-control">{"devices":["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"]}b</textarea>
                 <br />                                      
@@ -211,7 +211,7 @@
                 <b>/devices/{uuid}</b>  
                 <br />Returns all information (except the token) of a specific device or node
                 <br />
-                <code>curl -X GET http://skynet.jit.su/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
+                <code>curl -X GET http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
                 <br />
                 <textarea class="form-control">{"_id":"5241d9140345450000000001","api":"update","armed":true,"channel":"main","deviceDescription":"this is a test","deviceName":"hackboard","key":"777","online":true,"socketId":"fO8dxKEwARUH9Ea--p2C","timestamp":1381536277933,"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}</textarea>
                 <br />                                      
@@ -227,7 +227,7 @@
                 <b>Payload: key=value (i.e. type=drone&color=black)</b>
                 <br />Registers a node or device with Skynet. Skynet returns a UUID device id and security token. You can pass any key/value pairs and even override Skynet's token by passing your own token in the payload i.e. token=123
                 <br />
-                <code>curl -X POST -d "type=drone&color=black" http://skynet.jit.su/devices</code>
+                <code>curl -X POST -d "type=drone&color=black" http://skynet.im/devices</code>
                 <br />
                 <textarea class="form-control">{"type":"drone","color":"black","uuid":"6f72bc60-32d5-11e3-92e2-e94f95fc16a6","timestamp":1381537803046,"token":"4bbd2jm242dl5wmimbwz4rvlu77m0a4i","channel":"main","online":false,"_id":"5258980b56330f7dd000000d"}</textarea>
                 <br />                                      
@@ -243,7 +243,7 @@
                 <b>Payload: token=123&key=value (i.e. token=123&type=drone&color=blue)</b>
                 <br />Updates a node or device currently registered with Skynet. You must pass the token for security but you can pass any key/value pairs to update object as well as null to remove a propery (i.e. color=null).
                 <br />
-                <code>curl -X PUT -d "token=123&color=blue" http://skynet.jit.su/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
+                <code>curl -X PUT -d "token=123&color=blue" http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
                 <br />
                 <textarea class="form-control">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","color":"blue","timestamp":1381537750462}</textarea>
                 <br />                                      
@@ -259,7 +259,7 @@
                 <b>Payload: token=123</b>
                 <br />Deletes or unregisters a node or device currently registered with Skynet. You must pass the token for security.
                 <br />
-                <code>curl -X DELETE -d "token=123" http://skynet.jit.su/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
+                <code>curl -X DELETE -d "token=123" http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
                 <br />
                 <textarea class="form-control">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","timestamp":1381537971074}</textarea>
                 <br />                                      
@@ -278,11 +278,11 @@
                 <b>/messages</b>  
                 <br />Send a message to a specific device, array of devices, or all devices on the Skynet platform 
                 <br />
-                <code>curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://skynet.jit.su/messages</code>
+                <code>curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://skynet.im/messages</code>
                 <br />                                      
-                <code>curl -X POST -d '{"devices": ["ad6...47b","2f3...170"], "message": {"yellow":"off"}}' http://skynet.jit.su/messages</code>
+                <code>curl -X POST -d '{"devices": ["ad6...47b","2f3...170"], "message": {"yellow":"off"}}' http://skynet.im/messages</code>
                 <br />                                      
-                <code>curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' http://skynet.jit.su/messages</code>
+                <code>curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' http://skynet.im/messages</code>
 
                 <br />                                      
                 <code>{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</code>
@@ -320,7 +320,7 @@
 
             <pre>
 var io = require('socket.io-client')
-socket = io.connect('http://skynet.jit.su', {
+socket = io.connect('http://skynet.im', {
     port: 80
 });
 
@@ -363,7 +363,7 @@ socket.on('connect', function(){
 var skynet = require('skynet');
 
 var conn = skynet.createConnection({
-  "host":"http://skynet.jit.su",
+  "host":"http://skynet.im",
   "port": 80,
   "uuid": "ad698900-2546-11e3-87fb-c560cb0ca47b",
   "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9"
@@ -477,7 +477,7 @@ script(src="http://code.jquery.com/jquery-1.10.1.min.js")
 script(src="/socket.io/socket.io.js")
 script.
   // Connect to Skynet server & port
-  var socket = io.connect('http://skynet.jit.su:80');
+  var socket = io.connect('http://skynet.im:80');
 
   // subscribe to uuid
   socket.emit('subscribe', {  

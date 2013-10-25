@@ -4,7 +4,7 @@
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
   <head>
     <meta charset="utf-8">
-    <title>Skynet - open communications platform & API for the internet of things.</title>
+    <title>Skynet - Machine-to-machine instant messaging (M2M IM) open communications platform & API for the internet of things.</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -59,7 +59,7 @@
         </h1>
       </div>
 
-<a href="https://github.com/chrismatthieu/skynet"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>    
+<a href="https://github.com/skynetim/skynet"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>    
 
 <!--       <div class="span3 pull-right header-cta">
         <a href="#contact-form" class="modal-form contact btn cta pull-right">Get in touch</a>
@@ -83,7 +83,8 @@
         <div class="helper"></div>
         <div class="hero-content">
           <!-- <h1>I AM A <span>DESIGNER</span> / <span>DEVELOPER</span><br />living in Paris.</h1> -->
-          <h1>REALTIME <span>IOT</span> NETWORK & <span>API</span></h1>
+          <!-- <h1>REALTIME <span>IOT</span> NETWORK & <span>API</span></h1> -->
+          <h1><span>Machine-to-machine</span> instant messaging</h1>
           <a href="#about" class="btn btn-large scroll assimilate">Assimilate!</a>
         </div>
 
@@ -109,7 +110,7 @@
             </div>
 
             <div class="feature col-md-4">
-              <div aria-hidden="true" class="icon icon-code"></div>
+              <div aria-hidden="true" ><br /><img src="/img/npm.png" width="150px"/></div><br />
               <h3>Node.JS NPM Module</h3>
               <p class="hidden-phone">Node.JS is known for fast, event-driven operations perfect for nodes and devices such as RaspberryPi, Arduino, and Tessel. Our NPM module gets your app up & running quickly!</p>
             </div>
@@ -172,7 +173,7 @@
             </div>
             <div class="col-md-12">
               <div class="feature col-md-2 text-center">
-                <button class="btn btn-large btn-info disabled"> GET</button>
+                <button class="btn btn-large btn-info" disabled> GET</button>
               </div>
               <div class="feature col-md-10">
 
@@ -190,7 +191,7 @@
             </div>
             <div class="col-md-12">
               <div class="feature col-md-2 text-center">
-                <button class="btn btn-large btn-info disabled"> GET</button>
+                <button class="btn btn-large btn-info" disabled> GET</button>
               </div>
               <div class="feature col-md-10">
                 <b>/devices?key=value&key=value</b>  
@@ -205,7 +206,7 @@
 
             <div class="col-md-12">
               <div class="feature col-md-2 text-center">
-                <button class="btn btn-large btn-info disabled"> GET</button>
+                <button class="btn btn-large btn-info" disabled> GET</button>
               </div>
               <div class="feature col-md-10">
                 <b>/devices/{uuid}</b>  
@@ -220,7 +221,7 @@
 
             <div class="col-md-12">
               <div class="feature col-md-2 text-center">
-                <button class="btn btn-large btn-success disabled"> POST</button>
+                <button class="btn btn-large btn-success" disabled> POST</button>
               </div>
               <div class="feature col-md-10">
                 <b>/devices</b><br />
@@ -236,14 +237,14 @@
 
             <div class="col-md-12">
               <div class="feature col-md-2 text-center">
-                <button class="btn btn-large btn-warning disabled"> PUT</button>
+                <button class="btn btn-large btn-warning" disabled> PUT</button>
               </div>
               <div class="feature col-md-10">
                 <b>/devices/{uuid}</b><br />
-                <b>Payload: token=123&key=value (i.e. token=123&type=drone&color=blue)</b>
+                <b>Payload: token=123&key=value (i.e. token=123&type=drone&color=blue&online=true)</b>
                 <br />Updates a node or device currently registered with Skynet. You must pass the token for security but you can pass any key/value pairs to update object as well as null to remove a propery (i.e. color=null).
                 <br />
-                <code>curl -X PUT -d "token=123&color=blue" http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
+                <code>curl -X PUT -d "token=123&color=blue&online=true" http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
                 <br />
                 <textarea class="form-control">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","color":"blue","timestamp":1381537750462}</textarea>
                 <br />                                      
@@ -252,7 +253,7 @@
 
             <div class="col-md-12">
               <div class="feature col-md-2 text-center">
-                <button class="btn btn-large btn-danger disabled"> DELETE</button>
+                <button class="btn btn-large btn-danger" disabled> DELETE</button>
               </div>
               <div class="feature col-md-10">
                 <b>/devices/{uuid}</b><br />
@@ -272,7 +273,7 @@
             </div>
             <div class="col-md-12">
               <div class="feature col-md-2 text-center">
-                <button class="btn btn-large btn-success disabled"> POST</button>
+                <button class="btn btn-large btn-success" disabled> POST</button>
               </div>
               <div class="feature col-md-10">
                 <b>/messages</b>  
@@ -557,6 +558,7 @@ script.
     <script src="js/jquery.waypoints.min.js"></script>
     <script src="js/jquery.debouncedresize.js"></script>
     <script src="js/jquery.bxslider.min.js"></script>
+    <script src="js/jquery.fitvids.js"></script>
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/jquery.smooth-scroll.min.js"></script>
     <script src="js/custom.js"></script>
@@ -572,6 +574,12 @@ script.
 
       setTimeout(jiggle, 2000);
     </script>
+    <script>
+      $(document).ready(function(){
+        // Target your .container, .wrapper, .post, etc.
+        $(".featuredSlider").fitVids();
+      });
+    </script>    
 
   
   </body>

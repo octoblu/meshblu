@@ -29,7 +29,7 @@
 		tickerHover: false,
 		adaptiveHeight: false,
 		adaptiveHeightSpeed: 500,
-		video: false,
+		video: true,
 		useCSS: true,
 		preloadImages: 'visible',
 

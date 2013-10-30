@@ -293,6 +293,23 @@
               </div>
             </div>
 
+            <div class="col-md-12">
+              <h1>Events</h1>
+            </div>
+            <div class="col-md-12">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-info" disabled> GET</button>
+              </div>
+              <div class="feature col-md-10">
+                <b>/events/{uuid}?token={token}</b>  
+                <br />Returns last 10 events related to a specific device or node
+                <br />
+                <code>curl -X GET http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123</code>
+                <br />
+                <textarea class="form-control">{"events":[{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"lnHHS06ijWUXEzb01ZRy","timestamp":1382632438785,"eventCode":101,"_id":"52694bf6ad11379eec00003f"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"BuwnWQ_oLmpk5R3m1ZRv","timestamp":1382561240563,"eventCode":101,"_id":"526835d8ad11379eec000017"}]}</textarea>
+              </div>
+            </div>
+
 
           </div>
 

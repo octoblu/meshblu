@@ -271,6 +271,47 @@ io.sockets.on('connection', function (socket) {
     });
   });
 
+  socket.on('events', function(data, fn) { 
+    require('./lib/authDevice')(data.uuid, data.token, function(auth){
+      if (auth.authenticate == true){
+
+        require('./lib/getEvents')(data.uuid, function(results){
+          console.log(results);
+
+          try{
+            fn(results);
+
+            // Emit API request from device to room for subscribers
+            socket.broadcast.to(data.uuid).emit('message', results);
+
+          } catch (e){
+            console.log(e);
+          }
+
+        });
+
+      } else {
+        console.log('UUID not found or invalid token ', data.uuid);
+
+        var results = {"api": "events", "result": false};
+
+        console.log(results);
+        try{
+          fn(results);
+
+          // Emit API request from device to room for subscribers
+          socket.broadcast.to(data.uuid).emit('message', results);
+
+        } catch (e){
+          console.log(e);
+        }
+
+      }
+
+    });
+  });  
+
+
   socket.on('message', function (data) {
     if(data == undefined){
       var data = {};
@@ -381,7 +422,6 @@ server.post('/devices', function(req, res){
   });
 });
 
-
 // curl -X PUT -d "token=123&online=true&temp=hello&temp2=world" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
 // curl -X PUT -d "token=123&online=true&temp=hello&temp2=null" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
 // curl -X PUT -d "token=123&online=true&temp=hello&temp2=" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
@@ -405,6 +445,31 @@ server.del('/devices/:uuid', function(req, res){
     res.json(data);
   });
 });
+
+// curl -X GET http://localhost:3000/events/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
+server.get('/events/:uuid', function(req, res){
+  console.log(req.query);
+  require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
+    if (auth.authenticate == true){  
+      require('./lib/getEvents')(req.params.uuid, function(data){
+        console.log(data);
+        io.sockets.in(req.params.uuid).emit('message', data)
+        res.json(data);
+      });
+    } else {
+      console.log("Device not found or token not valid");
+      regdata = {
+        "errors": [{
+          "message": "Device not found or token not valid",
+          "code": 404
+        }]
+      };
+      res.json(regdata);
+    }
+  });
+});
+
+
 
 // curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://localhost:3000/messages
 // curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"], "message": {"yellow":"off"}}' http://localhost:3000/messages

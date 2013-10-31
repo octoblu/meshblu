@@ -22,6 +22,7 @@ Here are several quick screencasts that demostrate what you can do with Skynet:
 
 [Screencast 5: PubSub feature added to device UUID channels](https://www.youtube.com/watch?v=SL_c1MSgMaw)
 
+[Screencast 6: Events endpoint added to APIs](https://www.youtube.com/watch?v=GJqSabO1EUA)
 
 HTTP(S) REST API
 ----------------

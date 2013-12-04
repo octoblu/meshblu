@@ -467,6 +467,7 @@ conn.on('ready', function(data){
 
   // Register a device
   conn.register({
+    // token is optional. skynet will assign one for your device uuid if not present
     "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9", 
     "type": "drone"
   }, function (data) {
@@ -475,7 +476,7 @@ conn.on('ready', function(data){
 
   // UnRegister a device
   conn.unregister({
-    "uuid": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9", 
+    "uuid": "ad698900-2546-11e3-87fb-c560cb0ca47b", 
     "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9"
   }, function (data) {
     console.log(data); 

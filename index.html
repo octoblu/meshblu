@@ -176,9 +176,12 @@
               <h1>Status</h1>
             </div>
             <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
               <div class="feature col-md-2 text-center">
                 <button class="btn btn-large btn-info" disabled> GET</button>
               </div>
+              </td>
+              <td>
               <div class="feature col-md-10">
 
                 <b>/status</b>  
@@ -188,15 +191,19 @@
                 <br />                                      
                 <textarea class="form-control">{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</textarea>
               </div>
+              </td></tr></table>
             </div>
 
             <div class="col-md-12">
               <h1>Devices</h1>
             </div>
             <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
               <div class="feature col-md-2 text-center">
                 <button class="btn btn-large btn-info" disabled> GET</button>
               </div>
+              </td>
+              <td>
               <div class="feature col-md-10">
                 <b>/devices?key=value&key=value</b>  
                 <br />Returns an array of device UUIDs based on key/value query criteria
@@ -206,12 +213,16 @@
                 <textarea class="form-control">{"devices":["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"]}b</textarea>
                 <br />                                      
               </div>
+              </td></tr></table>
             </div>
 
             <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
               <div class="feature col-md-2 text-center">
                 <button class="btn btn-large btn-info" disabled> GET</button>
               </div>
+              </td>
+              <td>
               <div class="feature col-md-10">
                 <b>/devices/{uuid}</b>  
                 <br />Returns all information (except the token) of a specific device or node
@@ -221,12 +232,16 @@
                 <textarea class="form-control">{"_id":"5241d9140345450000000001","api":"update","armed":true,"channel":"main","deviceDescription":"this is a test","deviceName":"hackboard","key":"777","online":true,"socketId":"fO8dxKEwARUH9Ea--p2C","timestamp":1381536277933,"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}</textarea>
                 <br />                                      
               </div>
+              </td></tr></table>
             </div>
 
             <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
               <div class="feature col-md-2 text-center">
                 <button class="btn btn-large btn-success" disabled> POST</button>
               </div>
+              </td>
+              <td>
               <div class="feature col-md-10">
                 <b>/devices</b><br />
                 <b>Payload: key=value (i.e. type=drone&color=black)</b>
@@ -237,12 +252,16 @@
                 <textarea class="form-control">{"type":"drone","color":"black","uuid":"6f72bc60-32d5-11e3-92e2-e94f95fc16a6","timestamp":1381537803046,"token":"4bbd2jm242dl5wmimbwz4rvlu77m0a4i","channel":"main","online":false,"_id":"5258980b56330f7dd000000d"}</textarea>
                 <br />                                      
               </div>
+              </td></tr></table>
             </div>
 
             <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
               <div class="feature col-md-2 text-center">
                 <button class="btn btn-large btn-warning" disabled> PUT</button>
               </div>
+              </td>
+              <td>
               <div class="feature col-md-10">
                 <b>/devices/{uuid}</b><br />
                 <b>Payload: token=123&key=value (i.e. token=123&type=drone&color=blue&online=true)</b>
@@ -253,12 +272,16 @@
                 <textarea class="form-control">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","color":"blue","timestamp":1381537750462}</textarea>
                 <br />                                      
               </div>
+              </td></tr></table>
             </div>
 
             <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
               <div class="feature col-md-2 text-center">
                 <button class="btn btn-large btn-danger" disabled> DELETE</button>
               </div>
+              </td>
+              <td>
               <div class="feature col-md-10">
                 <b>/devices/{uuid}</b><br />
                 <b>Payload: token=123</b>
@@ -269,6 +292,7 @@
                 <textarea class="form-control">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","timestamp":1381537971074}</textarea>
                 <br />                                      
               </div>
+              </td></tr></table>
             </div>
 
 
@@ -276,9 +300,12 @@
               <h1>Messages</h1>
             </div>
             <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
               <div class="feature col-md-2 text-center">
                 <button class="btn btn-large btn-success" disabled> POST</button>
               </div>
+              </td>
+              <td>
               <div class="feature col-md-10">
                 <b>/messages</b>  
                 <br />Send a message to a specific device, array of devices, or all devices on the Skynet platform 
@@ -295,15 +322,19 @@
                 <textarea class="form-control">{"devices":"all","message":{"yellow":"off"}</textarea>
                 <!-- <code>{"devices":"all","message":{"yellow":"off"}</code> -->
               </div>
+              </td></tr></table>
             </div>
 
             <div class="col-md-12">
               <h1>Events</h1>
             </div>
             <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
               <div class="feature col-md-2 text-center">
                 <button class="btn btn-large btn-info" disabled> GET</button>
               </div>
+              </td>
+              <td>
               <div class="feature col-md-10">
                 <b>/events/{uuid}?token={token}</b>  
                 <br />Returns last 10 events related to a specific device or node
@@ -312,6 +343,7 @@
                 <br />
                 <textarea class="form-control">{"events":[{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"lnHHS06ijWUXEzb01ZRy","timestamp":1382632438785,"eventCode":101,"_id":"52694bf6ad11379eec00003f"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"BuwnWQ_oLmpk5R3m1ZRv","timestamp":1382561240563,"eventCode":101,"_id":"526835d8ad11379eec000017"}]}</textarea>
               </div>
+              </td></tr></table>
             </div>
 
 

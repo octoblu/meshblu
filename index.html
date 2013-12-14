@@ -387,11 +387,14 @@ socket.on('connect', function(){
     socket.emit('identity', {uuid: 'ad698900-2546-11e3-87fb-c560cb0ca47b', socketid: data.socketid, token: 'zh4p7as90pt1q0k98fzvwmc9rmjkyb9'});
   });
 
-  socket.on('authentication', function(data){
+  socket.on('notReady', function(data){
+    if (data.status == 401){
+      console.log('Device not authenticated with Skynet');
+    }
+  });
+  socket.on('ready', function(data){
     if (data.status == 201){
       console.log('Device authenticated with Skynet');
-    } else { // 401
-      console.log('Device not authenticated with Skynet');
     }
   });
 

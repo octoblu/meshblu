@@ -1030,7 +1030,7 @@ section#home.featured p {
   color: white;
 }
 section#home.freelancer {
-  background: #f0eee8 url('../img/iot_blue_opacity.jpg') top center no-repeat;
+  background: #f0eee8 url('../img/iot_teal_opacity.jpg') top center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1041,7 +1041,7 @@ section#home.freelancer {
 section#home.freelancer h1,
 section#home.freelancer p {
   /*color: #2980B9;*/
-  color: white;
+  color: black;
   font-weight: 900;
 }
 section#home.freelancer span {

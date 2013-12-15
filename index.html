@@ -119,6 +119,7 @@
         </div>
       </section>
 
+      <a name="videos"></a>
       <section id="projects">
         <div class="container">
           <div class="row">
@@ -153,6 +154,10 @@
                   <p class="animated bounceInDown">Screencast 6: Events endpoint added to APIs</p>
                   <iframe width="960" height="720" src="//www.youtube.com/embed/GJqSabO1EUA" frameborder="0" allowfullscreen class="animated bounceInUp"></iframe>
                 </li>
+                <li>
+                  <p class="animated bounceInDown">Screencast 7: Demo of NodeRed connected to Skynet</p>
+                  <iframe width="960" height="720" src="//www.youtube.com/embed/r5nk7YWAzPs" frameborder="0" allowfullscreen class="animated bounceInUp"></iframe>
+                </li>
               </ul>
             </div>
 
@@ -160,6 +165,7 @@
         </div>
       </section>
 
+      <a name="api"></a>
       <section id="restapi">
         <div class="container">
           <div class="row">
@@ -410,6 +416,103 @@ socket.on('connect', function(){
 
             <h2>Websocket API commands include: status, register, unregister, update, whoami, devices, subscribe, unsubscribe, and send. You can send a message to a specific UUID or an array of UUIDs or all nodes on Skynet. </h2>
 
+            <a name="javascript"></a>
+            <h2>
+              For your convenience, we also have a <a href="/js/skynet.js">skynet.js</a> javascript include file that you can use for client-side Web and/or mobile apps. Here are the basics:
+            </h2>
+
+            <pre>
+
+&lt;html&gt;
+&lt;head&gt;
+  &lt;script src="http://skynet.im/js/skynet.js"&gt;&lt;/script&gt;
+  &lt;script&gt;
+    var skynetConfig = {
+      "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
+      "token": "qirqglm6yb1vpldixflopnux4phtcsor"
+    }
+    function skynetNotReady() {
+      console.log('UUID/token not authorized');
+    };          
+    function skynetReady() {
+      skynet.emit('status', function(data){
+        console.log('status received');
+        console.log(data);
+      });   
+
+      // Subscribe and unsubscribe to a device's messages and events
+      skynet.emit('subscribe', {
+        "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
+        "token": "qirqglm6yb1vpldixflopnux4phtcsor"
+      }, function (data) {
+        console.log(data); 
+      });
+
+      skynet.emit('unsubscribe', {"uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"}, function (data) {
+        console.log(data);
+      });  
+
+      // Send and receive messages
+      skynet.emit('send', {
+        "devices": "all",
+        "message": {
+        "skynet":"online"
+      }}, function(data){
+        console.log(data);
+      }); 
+      skynet.on('message', function(data){
+        console.log('message received');
+        console.log(data);
+      });
+
+      // Get the status of the Skynet network
+      skynet.emit('status', function(data){
+        console.log('status received');
+        console.log(data);
+      });          
+
+      // Register device
+      skynet.emit('register', {
+        "type":"drone"
+      }, function (data) {
+        console.log(data); 
+      });
+
+
+      // Update device
+      skynet.emit('update', {
+        "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
+        "token": "qirqglm6yb1vpldixflopnux4phtcsor",
+        "armed":true
+      }, function (data) {
+        console.log(data); 
+      });
+
+      // WhoAmI?
+      skynet.emit('whoami', {"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"}, function (data) {
+        console.log(data); 
+      });      
+
+      // Receive last 10 device events
+      skynet.emit('events', {
+        "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
+        "token": "qirqglm6yb1vpldixflopnux4phtcsor"
+      }, function (data) {
+        console.log(data); 
+      });      
+
+    }
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  Skynet client-side app
+&lt;/body&gt;
+&lt;/html&gt;
+
+            </pre>
+
+
+            <a name="npm"></a>
             <h1>Node.JS NPM Module</h1>
             <h2>Skynet now offers a Node.JS NPM module for making event-driven IoT development fast and easy. You can install the skynet module by running:</h2>
             <code>npm install skynet</code>
@@ -593,6 +696,8 @@ script.
             </div>
 
           </div>
+          <br/><br/><br/>
+          <p class="pull-right">cover image by <a href="http://www.flickr.com/photos/dmje/5159177886/sizes/l/in/photostream/">dmje</a></p>
         </div>
       </section>
 

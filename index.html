@@ -414,7 +414,7 @@ socket.on('connect', function(){
 
             </pre>
 
-            <h2>Websocket API commands include: status, register, unregister, update, whoami, devices, subscribe, unsubscribe, and send. You can send a message to a specific UUID or an array of UUIDs or all nodes on Skynet. </h2>
+            <h2>Websocket API commands include: status, register, unregister, update, whoami, devices, subscribe, unsubscribe, and message. You can send a message to a specific UUID or an array of UUIDs or all nodes on Skynet. </h2>
 
             <a name="javascript"></a>
             <h2>
@@ -453,7 +453,7 @@ socket.on('connect', function(){
       });  
 
       // Send and receive messages
-      skynet.emit('send', {
+      skynet.emit('message', {
         "devices": "all",
         "message": {
         "skynet":"online"

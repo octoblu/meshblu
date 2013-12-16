@@ -1,0 +1,3 @@
+{"skynet":"online","timestamp":1387218453924,"eventCode":200}
+{"type":"drone","color":"black","uuid":"c03f71f0-667f-11e3-9c32-dd1163f79060","timestamp":1387218462351,"token":"w110c7mh40au4n29ncnt8b4rjt5r8uxr","channel":"main","online":false,"_id":"52af461e95cd78521a000002","eventCode":400}
+{"skynet":"online","timestamp":1387218466125,"eventCode":200}

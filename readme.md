@@ -184,13 +184,20 @@ Event Codes
 
 200 = System status API call
 
-201 = 
+201 = Get events
 
 202 =
 
 203 =
 
 300 = Incoming message
+
+400 = Register device
+401 = Update device
+402 = Delete device
+403 = Query devices
+
+500 = WhoAmI
 
 LICENSE
 -------

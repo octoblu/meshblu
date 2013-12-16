@@ -413,9 +413,9 @@ io.sockets.on('connection', function (socket) {
       console.log('devices: ' + data.devices);
       console.log('message: ' + JSON.stringify(dataMessage));
 
-      if(data.devices == "all"){
+      if(data.devices == "all" || data.devices == "*"){
 
-          io.sockets.emit('message', dataMessage);
+          socket.broadcast.emit('message', dataMessage);
           require('./lib/logEvent')(300, eventData);
 
       } else {

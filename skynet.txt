@@ -1,3 +1,6 @@
 {"skynet":"online","timestamp":1387218453924,"eventCode":200}
 {"type":"drone","color":"black","uuid":"c03f71f0-667f-11e3-9c32-dd1163f79060","timestamp":1387218462351,"token":"w110c7mh40au4n29ncnt8b4rjt5r8uxr","channel":"main","online":false,"_id":"52af461e95cd78521a000002","eventCode":400}
 {"skynet":"online","timestamp":1387218466125,"eventCode":200}
+{"skynet":"online","timestamp":1387218823524,"eventCode":200}
+{"type":"drone","color":"black","uuid":"a348c870-6680-11e3-9cf0-538af5cdc256","timestamp":1387218843255,"token":"s14sdtz0lmnm6lxr17y0znvmojn61or","channel":"main","online":false,"_id":"52af479b5c9a5b771a000002","eventCode":400}
+{"skynet":"online","timestamp":1387226623923,"eventCode":200}

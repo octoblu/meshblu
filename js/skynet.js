@@ -1,55 +1,56 @@
-function loadScript(url, callback)
-{
-    // Adding the script tag to the head as suggested before
-    var head = document.getElementsByTagName('head')[0];
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = url;
+function skynet (config, cb) {
+  if (!cb && typeof config === 'function') {
+    cb = config
+    config = {}
+  }
 
-    // Then bind the event to the callback function.
-    // There are several events for cross browser compatibility.
-    script.onreadystatechange = callback;
-    script.onload = callback;
+  function loadScript(url, callback)
+  {
+      // Adding the script tag to the head as suggested before
+      var head = document.getElementsByTagName('head')[0];
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = url;
 
-    // Fire the loading
-    head.appendChild(script);
-}
+      // Then bind the event to the callback function.
+      // There are several events for cross browser compatibility.
+      script.onreadystatechange = callback;
+      script.onload = callback;
 
-var authenticate = function() {
+      // Fire the loading
+      head.appendChild(script);
+  }
 
-    skynet = io.connect('http://skynet.im', {
-        port: 80
-    });
+  var authenticate = function() {
 
-    skynet.on('connect', function(){
-      console.log('Requesting websocket connection to Skynet');
-
-      skynet.on('identify', function(data){
-        console.log('Websocket connecting to Skynet with socket id: ' + data.socketid);
-        console.log('Sending device uuid: ' + skynetConfig.uuid);
-        skynet.emit('identity', {uuid: skynetConfig.uuid, socketid: data.socketid, token: skynetConfig.token});
-      });      
-
-      skynet.on('notReady', function(data){
-        console.log('Device not authenticated with Skynet');
-        try {
-          skynetNotReady();
-        } catch(e){
-          console.log('App not handling unauthorized access');
-        }
-      });
-      skynet.on('ready', function(data){
-        console.log('Device authenticated with Skynet');
-        try {
-          skynetReady();
-        } catch(e){
-          console.log('App not handling authorized access');
-        }
-
+      var socket = io.connect('http://skynet.im', {
+          port: 80
       });
 
-    });
+      socket.on('connect', function(){
+        console.log('Requesting websocket connection to Skynet');
 
+        socket.on('identify', function(data){
+          console.log('Websocket connecting to Skynet with socket id: ' + data.socketid);
+          //console.log('Sending device uuid: ' + config.uuid);
+          if (config.uuid && config.token) socket.emit('identity', {uuid: config.uuid, socketid: data.socketid, token: config.token});
+          else socket.emit('register', config, function (ident) {
+            config = ident
+            socket.emit('identity', {uuid: config.uuid, socketid: data.socketid, token: config.token});
+            console.log(config)
+          })
+        });      
+
+        socket.on('notReady', function(data){
+          cb(new Error('Authentication Error'));
+        });
+        socket.on('ready', function(data){
+          cb(null, socket);
+        });
+
+      });
+
+  };
+
+  loadScript("http://skynet.im/socket.io/socket.io.js", authenticate);
 };
-
-loadScript("http://skynet.im/socket.io/socket.io.js", authenticate);

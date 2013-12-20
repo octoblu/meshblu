@@ -1,10 +1,10 @@
 ```
- SSSSS  kk                            tt    
-SS      kk  kk yy   yy nn nnn    eee  tt    
- SSSSS  kkkkk  yy   yy nnn  nn ee   e tttt  
-     SS kk kk   yyyyyy nn   nn eeeee  tt    
- SSSSS  kk  kk      yy nn   nn  eeeee  tttt 
-                yyyyy                         
+ SSSSS  kk                            tt
+SS      kk  kk yy   yy nn nnn    eee  tt
+ SSSSS  kkkkk  yy   yy nnn  nn ee   e tttt
+     SS kk kk   yyyyyy nn   nn eeeee  tt
+ SSSSS  kk  kk      yy nn   nn  eeeee  tttt
+                yyyyy
 ```
 ======
 
@@ -23,6 +23,18 @@ Here are several quick screencasts that demostrate what you can do with Skynet:
 [Screencast 5: PubSub feature added to device UUID channels](https://www.youtube.com/watch?v=SL_c1MSgMaw)
 
 [Screencast 6: Events endpoint added to APIs](https://www.youtube.com/watch?v=GJqSabO1EUA)
+
+Installing
+----------
+
+Clone the git repository, then:
+
+```bash
+$ npm install
+$ cp config.js.sample config.js
+```
+
+Modify `config.js` with you MongoDB connection string. If you have MongoDB running locally use `mongodb://localhost:27017/skynet`.
 
 HTTP(S) REST API
 ----------------
@@ -99,7 +111,7 @@ curl -X DELETE -d "token=123" http://localhost:3000/devices/01404680-2539-11e3-b
 
 POST /messages
 
-Sends a JSON message to all devices or an array of devices or a specific device on the Skynet network. 
+Sends a JSON message to all devices or an array of devices or a specific device on the Skynet network.
 
 ```
 curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://localhost:3000/messages
@@ -118,7 +130,7 @@ Request and receive system status
 
 ```
 socket.emit('status', function (data) {
-  console.log(data); 
+  console.log(data);
 });
 ```
 
@@ -126,7 +138,7 @@ Request and receive an array of devices matching a specific criteria
 
 ```
 socket.emit('devices', {"key":"123"}, function (data) {
-  console.log(data); 
+  console.log(data);
 });
 ```
 
@@ -134,7 +146,7 @@ Request and receive information about a specific device
 
 ```
 socket.emit('whoami', {"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}, function (data) {
-  console.log(data); 
+  console.log(data);
 });
 ```
 
@@ -142,7 +154,7 @@ Request and receive a device registration
 
 ```
 socket.emit('register', {"key":"123"}, function (data) {
-  console.log(data); 
+  console.log(data);
 });
 ```
 
@@ -150,7 +162,7 @@ Request and receive a device update
 
 ```
 socket.emit('update', {"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b", "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9", "key":"777"}, function (data) {
-  console.log(data); 
+  console.log(data);
 });
 ```
 
@@ -158,7 +170,7 @@ Request and receive a device unregistration
 
 ```
 socket.emit('unregister', {"uuid":"b5535950-29fd-11e3-9113-0bd381f0b5ef", "token": "2ls40jx80s9bpgb9w2g0vi2li72v5cdi"}, function (data) {
-  console.log(data); 
+  console.log(data);
 });
 ```
 

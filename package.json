@@ -13,7 +13,8 @@
     "socket.io": "*",
     "restify": "*",
     "node-uuid": "*",
-    "node-static": "*"
+    "node-static": "*",
+    "mqtt": "*"
   },
   "subdomain": "skynet",
   "domains": [

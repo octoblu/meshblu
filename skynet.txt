@@ -4,3 +4,429 @@
 {"skynet":"online","timestamp":1387218823524,"eventCode":200}
 {"type":"drone","color":"black","uuid":"a348c870-6680-11e3-9cf0-538af5cdc256","timestamp":1387218843255,"token":"s14sdtz0lmnm6lxr17y0znvmojn61or","channel":"main","online":false,"_id":"52af479b5c9a5b771a000002","eventCode":400}
 {"skynet":"online","timestamp":1387226623923,"eventCode":200}
+{"devices":"1234567890","message":{"red":"on"},"timestamp":1388083387240,"eventCode":300}
+{"devices":"1234567890","message":{"red":"on"},"timestamp":1388083562419,"eventCode":300}
+{"socketId":"zyVaKrj-C3QqkmXPOge_","protocol":"websocket","timestamp":1388085649710,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"zyVaKrj-C3QqkmXPOge_","timestamp":1388085649713,"eventCode":101}
+{"devices":"1234567890","message":{"test":"123","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388085650909,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"zyVaKrj-C3QqkmXPOge_","uuid":"1234567890","timestamp":1388085652252,"eventCode":102}
+{"socketId":"RJB9U6YVsRgfOevVOgfA","protocol":"websocket","timestamp":1388085722003,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"RJB9U6YVsRgfOevVOgfA","timestamp":1388085722007,"eventCode":101}
+{"devices":"1234567890","message":{"test":"123","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388085722263,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"RJB9U6YVsRgfOevVOgfA","uuid":"1234567890","timestamp":1388085744126,"eventCode":102}
+{"socketId":"Wlh19tBRNz0RmKcsOgfB","protocol":"websocket","timestamp":1388085744606,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"Wlh19tBRNz0RmKcsOgfB","timestamp":1388085744610,"eventCode":101}
+{"devices":"1234567890","message":{"test":"123","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388085744790,"eventCode":300}
+{"api":"disconnect","socketid":"Wlh19tBRNz0RmKcsOgfB","uuid":"1234567890","timestamp":1388085754948,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"snk6RhzZUkVV3ezUOgfC","protocol":"websocket","timestamp":1388085764224,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"snk6RhzZUkVV3ezUOgfC","timestamp":1388085764228,"eventCode":101}
+{"devices":"1234567890","message":{"test":"123","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388085764429,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"snk6RhzZUkVV3ezUOgfC","uuid":"1234567890","timestamp":1388085845398,"eventCode":102}
+{"socketId":"F32YxEgW9Kf9y4wgOgfD","protocol":"websocket","timestamp":1388085899236,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"F32YxEgW9Kf9y4wgOgfD","timestamp":1388085899240,"eventCode":101}
+{"devices":"1234567890","message":{"test":"123","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388085899441,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"F32YxEgW9Kf9y4wgOgfD","uuid":"1234567890","timestamp":1388085907686,"eventCode":102}
+{"socketId":"D9pD_P1sBTKUyT8WOgfE","protocol":"websocket","timestamp":1388085933404,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"D9pD_P1sBTKUyT8WOgfE","timestamp":1388085933408,"eventCode":101}
+{"devices":"1234567890","message":{"test":"1234","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388085933668,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"D9pD_P1sBTKUyT8WOgfE","uuid":"1234567890","timestamp":1388086037101,"eventCode":102}
+{"socketId":"Lrohl5IsqzgI0MFZOgfF","protocol":"websocket","timestamp":1388086038234,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"Lrohl5IsqzgI0MFZOgfF","timestamp":1388086038238,"eventCode":101}
+{"devices":"1234567890","message":{"test":"1234","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388086038474,"eventCode":300}
+{"socketId":"2vq6_3D7f954PZt5YzHk","protocol":"websocket","timestamp":1388086245787,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"2vq6_3D7f954PZt5YzHk","timestamp":1388086245792,"eventCode":101}
+{"devices":"1234567890","message":{"test":"1234","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388086247394,"eventCode":300}
+{"api":"disconnect","socketid":"2vq6_3D7f954PZt5YzHk","uuid":"1234567890","timestamp":1388086265751,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"Jw-LivJwABTgDf8HYzHl","protocol":"websocket","timestamp":1388086266365,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"Jw-LivJwABTgDf8HYzHl","timestamp":1388086266368,"eventCode":101}
+{"devices":"1234567890","message":{"test":"1234","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388086266630,"eventCode":300}
+{"socketId":"yoifAi3nqsI3xkN3ZE3N","protocol":"websocket","timestamp":1388086318147,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"yoifAi3nqsI3xkN3ZE3N","timestamp":1388086318153,"eventCode":101}
+{"devices":"1234567890","message":{"test":"1234","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388086319395,"eventCode":300}
+{"api":"disconnect","socketid":"yoifAi3nqsI3xkN3ZE3N","uuid":"1234567890","timestamp":1388086526682,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"c-6JDHPwzrfTzKCJZE3O","protocol":"websocket","timestamp":1388086527721,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"c-6JDHPwzrfTzKCJZE3O","timestamp":1388086527725,"eventCode":101}
+{"devices":"1234567890","message":{"test":"1234","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388086527989,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"c-6JDHPwzrfTzKCJZE3O","uuid":"1234567890","timestamp":1388086538541,"eventCode":102}
+{"socketId":"lHrlGbGLTpBDa3WmZE3P","protocol":"websocket","timestamp":1388086539383,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"lHrlGbGLTpBDa3WmZE3P","timestamp":1388086539387,"eventCode":101}
+{"devices":"1234567890","message":{"test":"1234","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388086539562,"eventCode":300}
+{"api":"disconnect","socketid":"lHrlGbGLTpBDa3WmZE3P","uuid":"1234567890","timestamp":1388086719838,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"VsLh0HtuuenzYYhvZE3Q","protocol":"websocket","timestamp":1388086720713,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"VsLh0HtuuenzYYhvZE3Q","timestamp":1388086720717,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388086720930,"eventCode":300}
+{"socketId":"QP7rIbV933JYTfJpa1H1","protocol":"websocket","timestamp":1388086778330,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"QP7rIbV933JYTfJpa1H1","timestamp":1388086778336,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388086781973,"eventCode":300}
+{"api":"disconnect","socketid":"QP7rIbV933JYTfJpa1H1","uuid":"1234567890","timestamp":1388087132745,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"2_8NfaW94yyNqx2ta1H2","protocol":"websocket","timestamp":1388087135311,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"2_8NfaW94yyNqx2ta1H2","timestamp":1388087135314,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388087135502,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"2_8NfaW94yyNqx2ta1H2","uuid":"1234567890","timestamp":1388087386189,"eventCode":102}
+{"socketId":"ppFoq_rVYjAjFJAWa1H3","protocol":"websocket","timestamp":1388087388148,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"ppFoq_rVYjAjFJAWa1H3","timestamp":1388087388152,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388087388377,"eventCode":300}
+{"api":"disconnect","socketid":"ppFoq_rVYjAjFJAWa1H3","uuid":"1234567890","timestamp":1388087512973,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"gvfz9JYtt5UOHTvta1H4","protocol":"websocket","timestamp":1388087515022,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"gvfz9JYtt5UOHTvta1H4","timestamp":1388087515025,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388087515197,"eventCode":300}
+{"socketId":"50Qg3rVBRJZNVbC8ldiu","protocol":"websocket","timestamp":1388089564404,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"50Qg3rVBRJZNVbC8ldiu","timestamp":1388089564410,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388089565955,"eventCode":300}
+{"api":"disconnect","socketid":"50Qg3rVBRJZNVbC8ldiu","uuid":"1234567890","timestamp":1388089573167,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"2DC9Tsop7WRLysijldiv","protocol":"websocket","timestamp":1388089575066,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"2DC9Tsop7WRLysijldiv","timestamp":1388089575069,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388089575270,"eventCode":300}
+{"socketId":"uN8AnfTY5LpyVFotl63r","protocol":"websocket","timestamp":1388089684718,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"uN8AnfTY5LpyVFotl63r","timestamp":1388089684724,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388089686346,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"uN8AnfTY5LpyVFotl63r","uuid":"1234567890","timestamp":1388089698180,"eventCode":102}
+{"socketId":"TcfEzJpXpoDpbQsUl63s","protocol":"websocket","timestamp":1388089700187,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"TcfEzJpXpoDpbQsUl63s","timestamp":1388089700191,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388089700397,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"TcfEzJpXpoDpbQsUl63s","uuid":"1234567890","timestamp":1388089794062,"eventCode":102}
+{"socketId":"tHym8g06PS0hYcYHl63t","protocol":"websocket","timestamp":1388089796690,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"tHym8g06PS0hYcYHl63t","timestamp":1388089796693,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388089796901,"eventCode":300}
+{"socketId":"pKhNKoj_3ggGhJvsnD_y","protocol":"websocket","timestamp":1388089984658,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"pKhNKoj_3ggGhJvsnD_y","timestamp":1388089984665,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388089986560,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"pKhNKoj_3ggGhJvsnD_y","uuid":"1234567890","timestamp":1388089989177,"eventCode":102}
+{"socketId":"aYD8_vT0T_OLEPuhnD_z","protocol":"websocket","timestamp":1388089990055,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"aYD8_vT0T_OLEPuhnD_z","timestamp":1388089990058,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388089990248,"eventCode":300}
+{"socketId":"zLn-6oKZU4SPxymrneM6","protocol":"websocket","timestamp":1388090090884,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"zLn-6oKZU4SPxymrneM6","timestamp":1388090090891,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388090092534,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"zLn-6oKZU4SPxymrneM6","uuid":"1234567890","timestamp":1388090391771,"eventCode":102}
+{"socketId":"08oAcnqhy2qx9PZOneM7","protocol":"websocket","timestamp":1388090392646,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"08oAcnqhy2qx9PZOneM7","timestamp":1388090392650,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388090392819,"eventCode":300}
+{"socketId":"D00k9cIjDcq872bhowDL","protocol":"websocket","timestamp":1388090426064,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"D00k9cIjDcq872bhowDL","timestamp":1388090426070,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388090427598,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"D00k9cIjDcq872bhowDL","uuid":"1234567890","timestamp":1388090436587,"eventCode":102}
+{"socketId":"9htMEU4vlaUwpGDzowDM","protocol":"websocket","timestamp":1388090437323,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"9htMEU4vlaUwpGDzowDM","timestamp":1388090437326,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388090437527,"eventCode":300}
+{"socketId":"ZwVuVpvPevSPWGUxp9qz","protocol":"websocket","timestamp":1388090743564,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"ZwVuVpvPevSPWGUxp9qz","timestamp":1388090743571,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388090745745,"eventCode":300}
+{"api":"disconnect","socketid":"ZwVuVpvPevSPWGUxp9qz","uuid":"1234567890","timestamp":1388090758727,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"FJlszHHH7t0c_lLdp9q0","protocol":"websocket","timestamp":1388090759597,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"FJlszHHH7t0c_lLdp9q0","timestamp":1388090759600,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388090759819,"eventCode":300}
+{"socketId":"aB7L3o-B9yMO1x0Pq5yA","protocol":"websocket","timestamp":1388091042323,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"aB7L3o-B9yMO1x0Pq5yA","timestamp":1388091042331,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388091043928,"eventCode":300}
+{"socketId":"-FGzUFD_V4zGw-dcroWB","protocol":"websocket","timestamp":1388091181410,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"-FGzUFD_V4zGw-dcroWB","timestamp":1388091181416,"eventCode":101}
+{"devices":"1234567890","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388091182980,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"-FGzUFD_V4zGw-dcroWB","uuid":"1234567890","timestamp":1388091185868,"eventCode":102}
+{"socketId":"iZ-fKS4A2uchldCvroWC","protocol":"websocket","timestamp":1388091191765,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"iZ-fKS4A2uchldCvroWC","timestamp":1388091191768,"eventCode":101}
+{"devices":"0000","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388091191957,"eventCode":300}
+{"socketId":"xCTcX9T0LrJzbZ2J6zlw","protocol":"websocket","timestamp":1388095165256,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"xCTcX9T0LrJzbZ2J6zlw","timestamp":1388095165263,"eventCode":101}
+{"devices":"0000","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388095166765,"eventCode":300}
+{"devices":"1234567890","message":{"yellow":"off"},"timestamp":1388095364652,"eventCode":300}
+{"devices":"0000","message":{"yellow":"off"},"timestamp":1388095382296,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"xCTcX9T0LrJzbZ2J6zlw","uuid":"1234567890","timestamp":1388095903962,"eventCode":102}
+{"socketId":"or3LbCrKSzu5WWie9rVr","protocol":"websocket","timestamp":1388096003436,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"or3LbCrKSzu5WWie9rVr","timestamp":1388096003442,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388096004902,"eventCode":300}
+{"api":"disconnect","socketid":"or3LbCrKSzu5WWie9rVr","uuid":"1234567890","timestamp":1388096004918,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"Q_wk1NVlVuz2B58H9rVs","protocol":"websocket","timestamp":1388096103271,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"Q_wk1NVlVuz2B58H9rVs","timestamp":1388096103274,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388096103461,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"Q_wk1NVlVuz2B58H9rVs","uuid":"1234567890","timestamp":1388096103893,"eventCode":102}
+{"socketId":"xGpRcP6DD_kynIx49rVt","protocol":"websocket","timestamp":1388096172411,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"xGpRcP6DD_kynIx49rVt","timestamp":1388096172415,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388096172591,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"xGpRcP6DD_kynIx49rVt","uuid":"1234567890","timestamp":1388096172595,"eventCode":102}
+{"socketId":"WSi8hwX9UYzQlwdH9rVu","protocol":"websocket","timestamp":1388096203059,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"WSi8hwX9UYzQlwdH9rVu","timestamp":1388096203063,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388096203234,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"WSi8hwX9UYzQlwdH9rVu","uuid":"1234567890","timestamp":1388096203241,"eventCode":102}
+{"socketId":"FJHASP713ZpRr6P49rVv","protocol":"websocket","timestamp":1388096416219,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"FJHASP713ZpRr6P49rVv","timestamp":1388096416223,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388096416391,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"FJHASP713ZpRr6P49rVv","uuid":"1234567890","timestamp":1388096416697,"eventCode":102}
+{"socketId":"lnm9XKdFUU7vGK2T9rVw","protocol":"websocket","timestamp":1388096471349,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"lnm9XKdFUU7vGK2T9rVw","timestamp":1388096471352,"eventCode":101}
+{"devices":"0000","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388096471530,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"lnm9XKdFUU7vGK2T9rVw","uuid":"1234567890","timestamp":1388096471540,"eventCode":102}
+{"socketId":"K0WQxcp4P5zCdlMq9rVx","protocol":"websocket","timestamp":1388096588666,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"K0WQxcp4P5zCdlMq9rVx","timestamp":1388096588670,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388096588853,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"K0WQxcp4P5zCdlMq9rVx","uuid":"1234567890","timestamp":1388096589138,"eventCode":102}
+{"socketId":"D72cTw-kJVrkgU0l9rVy","protocol":"websocket","timestamp":1388096651336,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"D72cTw-kJVrkgU0l9rVy","timestamp":1388096651340,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388096651514,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"D72cTw-kJVrkgU0l9rVy","uuid":"1234567890","timestamp":1388096651527,"eventCode":102}
+{"socketId":"s8DqkwGdaYx75FU-9rVz","protocol":"websocket","timestamp":1388096762062,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"s8DqkwGdaYx75FU-9rVz","timestamp":1388096762066,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388096762238,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"s8DqkwGdaYx75FU-9rVz","uuid":"1234567890","timestamp":1388096762537,"eventCode":102}
+{"socketId":"wtMU_Evj-rj64guG9rV0","protocol":"websocket","timestamp":1388096932669,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"wtMU_Evj-rj64guG9rV0","timestamp":1388096932673,"eventCode":101}
+{"api":"disconnect","socketid":"wtMU_Evj-rj64guG9rV0","uuid":"1234567890","timestamp":1388096932858,"eventCode":102}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388096932859,"eventCode":300}
+"{socketid: socket, online: false}"
+{"socketId":"tgkVAzDZIou9aXq99rV1","protocol":"websocket","timestamp":1388097278386,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"tgkVAzDZIou9aXq99rV1","timestamp":1388097278390,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388097278566,"eventCode":300}
+{"api":"disconnect","socketid":"tgkVAzDZIou9aXq99rV1","uuid":"1234567890","timestamp":1388097279007,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"BVs7YpLIH0Yo4ijr9rV2","protocol":"websocket","timestamp":1388097784549,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"BVs7YpLIH0Yo4ijr9rV2","timestamp":1388097784553,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388097784728,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"BVs7YpLIH0Yo4ijr9rV2","uuid":"1234567890","timestamp":1388097785067,"eventCode":102}
+{"socketId":"BZ8Oyn1-_sOOpVPt9rV3","protocol":"websocket","timestamp":1388097872126,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"BZ8Oyn1-_sOOpVPt9rV3","timestamp":1388097872129,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388097872558,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"BZ8Oyn1-_sOOpVPt9rV3","uuid":"1234567890","timestamp":1388097872602,"eventCode":102}
+{"socketId":"1jMv10pTkOefFzkk9rV4","protocol":"websocket","timestamp":1388098019564,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"1jMv10pTkOefFzkk9rV4","timestamp":1388098019567,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388098019724,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"1jMv10pTkOefFzkk9rV4","uuid":"1234567890","timestamp":1388098020029,"eventCode":102}
+{"socketId":"XOxydtHYVz9oADgr9rV5","protocol":"websocket","timestamp":1388098092104,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"XOxydtHYVz9oADgr9rV5","timestamp":1388098092108,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388098092265,"eventCode":300}
+{"api":"disconnect","socketid":"XOxydtHYVz9oADgr9rV5","uuid":"1234567890","timestamp":1388098092572,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"pci3-sor3ZXzZb6rJt5Y","protocol":"websocket","timestamp":1388099320106,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"pci3-sor3ZXzZb6rJt5Y","timestamp":1388099320112,"eventCode":101}
+{"devices":"0000","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099321534,"eventCode":300}
+{"api":"disconnect","socketid":"pci3-sor3ZXzZb6rJt5Y","uuid":"1234567890","timestamp":1388099340046,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"2TvWRioUSUmSZ9c_Jt5Z","protocol":"websocket","timestamp":1388099340588,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"2TvWRioUSUmSZ9c_Jt5Z","timestamp":1388099340592,"eventCode":101}
+{"devices":"*","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099340801,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"2TvWRioUSUmSZ9c_Jt5Z","uuid":"1234567890","timestamp":1388099468197,"eventCode":102}
+{"socketId":"jhnvMMBqEq1ImuUQJt5a","protocol":"websocket","timestamp":1388099469133,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"jhnvMMBqEq1ImuUQJt5a","timestamp":1388099469137,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099469570,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"jhnvMMBqEq1ImuUQJt5a","uuid":"1234567890","timestamp":1388099500928,"eventCode":102}
+{"socketId":"3EaF4IbVAq9ND3-ZJt5b","protocol":"websocket","timestamp":1388099501914,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"3EaF4IbVAq9ND3-ZJt5b","timestamp":1388099501918,"eventCode":101}
+{"devices":"*","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099502078,"eventCode":300}
+{"api":"disconnect","socketid":"3EaF4IbVAq9ND3-ZJt5b","uuid":"1234567890","timestamp":1388099530864,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"pGtDQQx_wt5HaqsnJt5c","protocol":"websocket","timestamp":1388099531512,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"pGtDQQx_wt5HaqsnJt5c","timestamp":1388099531516,"eventCode":101}
+{"devices":"*","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099531672,"eventCode":300}
+{"api":"disconnect","socketid":"pGtDQQx_wt5HaqsnJt5c","uuid":"1234567890","timestamp":1388099552462,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"viiTH8MGTAm7JQFEJt5d","protocol":"websocket","timestamp":1388099553748,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"viiTH8MGTAm7JQFEJt5d","timestamp":1388099553752,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099553910,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"viiTH8MGTAm7JQFEJt5d","uuid":"1234567890","timestamp":1388099628793,"eventCode":102}
+{"socketId":"yptmQwp6_6zBOp7TJt5e","protocol":"websocket","timestamp":1388099630552,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"yptmQwp6_6zBOp7TJt5e","timestamp":1388099630556,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099630933,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"yptmQwp6_6zBOp7TJt5e","uuid":"1234567890","timestamp":1388099646706,"eventCode":102}
+{"socketId":"A_cH-8HWtDEf8v8SJt5f","protocol":"websocket","timestamp":1388099648223,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"A_cH-8HWtDEf8v8SJt5f","timestamp":1388099648227,"eventCode":101}
+{"devices":"*","message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099648384,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"A_cH-8HWtDEf8v8SJt5f","uuid":"1234567890","timestamp":1388099810489,"eventCode":102}
+{"socketId":"tGy_oiJoFrYRgvecJt5g","protocol":"websocket","timestamp":1388099813030,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"tGy_oiJoFrYRgvecJt5g","timestamp":1388099813034,"eventCode":101}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099813532,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099813533,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099813534,"eventCode":300}
+{"api":"disconnect","socketid":"tGy_oiJoFrYRgvecJt5g","uuid":"1234567890","timestamp":1388099849807,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"KhYS-l3xznEiTQteJt5h","protocol":"websocket","timestamp":1388099850817,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"KhYS-l3xznEiTQteJt5h","timestamp":1388099850821,"eventCode":101}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099850975,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099850978,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099850980,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"KhYS-l3xznEiTQteJt5h","uuid":"1234567890","timestamp":1388099908862,"eventCode":102}
+{"socketId":"fMaXlidDIKXHNe6WJt5i","protocol":"websocket","timestamp":1388099910537,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"fMaXlidDIKXHNe6WJt5i","timestamp":1388099910541,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099910697,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099910698,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099910703,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"fMaXlidDIKXHNe6WJt5i","uuid":"1234567890","timestamp":1388099974060,"eventCode":102}
+{"socketId":"1fA0nBZvRzbjawY5Jt5j","protocol":"websocket","timestamp":1388099975982,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"1fA0nBZvRzbjawY5Jt5j","timestamp":1388099975990,"eventCode":101}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099976151,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099976153,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388099976153,"eventCode":300}
+{"devices":"0000","message":{"yellow":"off"},"timestamp":1388100067460,"eventCode":300}
+{"devices":"1234567890","message":{"red":"off"},"timestamp":1388100098408,"eventCode":300}
+{"socketId":"1CR154RUIUKbzLauOWBL","protocol":"websocket","timestamp":1388100282021,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"1CR154RUIUKbzLauOWBL","timestamp":1388100282028,"eventCode":101}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100283418,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100283419,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100283421,"eventCode":300}
+{"devices":"1234567890","message":{"red":"off"},"timestamp":1388100306557,"eventCode":300}
+{"socketId":"GPQAU9h_B4PFWcfvPCjz","protocol":"websocket","timestamp":1388100462975,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"GPQAU9h_B4PFWcfvPCjz","timestamp":1388100462981,"eventCode":101}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100464576,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100464576,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100464578,"eventCode":300}
+{"devices":"1234567890","message":{"red":"off"},"timestamp":1388100472516,"eventCode":300}
+{"socketId":"HDME-GfTcY52gQ1HPZG1","protocol":"websocket","timestamp":1388100556900,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"HDME-GfTcY52gQ1HPZG1","timestamp":1388100556907,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100558428,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100558429,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100558430,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"HDME-GfTcY52gQ1HPZG1","uuid":"1234567890","timestamp":1388100563361,"eventCode":102}
+{"socketId":"FxRUzeV52U-GlFTmPZG2","protocol":"websocket","timestamp":1388100563987,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"FxRUzeV52U-GlFTmPZG2","timestamp":1388100563991,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100564147,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100564148,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100564156,"eventCode":300}
+{"devices":"1234567890","message":{"red":"off"},"timestamp":1388100575595,"eventCode":300}
+{"socketId":"mNx_ll_FiD0budqGPuPu","protocol":"websocket","timestamp":1388100643169,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"mNx_ll_FiD0budqGPuPu","timestamp":1388100643174,"eventCode":101}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100644601,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100644604,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388100644605,"eventCode":300}
+{"devices":"1234567890","message":{"red":"off"},"timestamp":1388100661139,"eventCode":300}
+{"devices":"1234567890","message":{"red":"on"},"timestamp":1388100673827,"eventCode":300}
+{"devices":"1234567890","message":{"red":"blink"},"timestamp":1388100966451,"eventCode":300}
+{"devices":"0000","message":{"red":"blink"},"timestamp":1388101045360,"eventCode":300}
+{"api":"disconnect","socketid":"mNx_ll_FiD0budqGPuPu","uuid":"1234567890","timestamp":1388101362022,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"sK8wrYpCx2CXl6SPPuPv","protocol":"websocket","timestamp":1388101364266,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"sK8wrYpCx2CXl6SPPuPv","timestamp":1388101364269,"eventCode":101}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388101364424,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388101364426,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388101364429,"eventCode":300}
+{"devices":"0000","message":{"red":"blink"},"timestamp":1388101370165,"eventCode":300}
+{"devices":"1234567890","message":{"red":"blink"},"timestamp":1388101377158,"eventCode":300}
+{"socketId":"TIvpojVnqiy-HaqOcTk7","protocol":"websocket","timestamp":1388103942363,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"TIvpojVnqiy-HaqOcTk7","timestamp":1388103942370,"eventCode":101}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388103943999,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388103944002,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388103944004,"eventCode":300}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","type":"drone","color":"black","timestamp":1388104042158,"token":"96445x3v7dvon7b9oa94lrv9lpbq33di","channel":"main","online":false,"_id":"52bcc96acb7305d583000006","eventCode":400}
+{"socketId":"ep1JKF6NHSDY-sMVdHYK","protocol":"websocket","timestamp":1388104153174,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"ep1JKF6NHSDY-sMVdHYK","timestamp":1388104153181,"eventCode":101}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388104154787,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388104154788,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388104154790,"eventCode":300}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","type":"drone","color":"black","timestamp":1388104158570,"token":"x38a4b09ku01wcditmbkp3e3m2sjdcxr","channel":"main","online":false,"_id":"52bcc9deb069f7ef83000006","eventCode":400}
+{"socketId":"rD1-d096gjeNXv36dnqv","protocol":"websocket","timestamp":1388104286453,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"rD1-d096gjeNXv36dnqv","timestamp":1388104286458,"eventCode":101}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388104287845,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388104287846,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388104287846,"eventCode":300}
+{"type":"drone","color":"black","timestamp":1388104291848,"token":"phyllyulphlivn29xg3225pqzy7xecdi","channel":"main","online":false,"_id":"52bcca6382d5301184000006","eventCode":400}
+{"socketId":"0Wia9YO11G-yBtgGemzo","protocol":"websocket","timestamp":1388104544840,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"0Wia9YO11G-yBtgGemzo","timestamp":1388104544846,"eventCode":101}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388104546228,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388104546229,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388104546233,"eventCode":300}
+{"type":"drone","color":"black","uuid":"5216c711-6e8f-11e3-966f-2170275f3b56","timestamp":1388104758785,"token":"g7trdevpfuvj9k9rrswi0hox279cnmi","channel":"main","online":false,"_id":"52bccc3805ba817384000001","eventCode":400}
+{"uuid":"5c30fd60-6e8f-11e3-966f-2170275f3b56","type":"drone","color":"black","timestamp":1388104775658,"token":"6c73pfs2pz00be29xp9y1kkpapf7ds4i","channel":"main","online":false,"_id":"52bccc4705ba817384000002","eventCode":400}
+{"uuid":"64BB53EE-D0AD-59FA-9534-2C40B324C40C","type":"drone","color":"black","timestamp":1388104880844,"token":"u81jev1aodtv5cdif8vfv8pi0nhr529","channel":"main","online":false,"_id":"52bcccb105ba817384000003","eventCode":400}
+{"uuid":"9fd45bc0-6e8f-11e3-966f-2170275f3b56","type":"drone","color":"black","timestamp":1388104889031,"token":"j485m68isznz5mi4p7d602jc3wpzaor","channel":"main","online":false,"_id":"52bcccb905ba817384000004","eventCode":400}
+{"socketId":"RqKm58IzcOPsn0NzfaX-","protocol":"websocket","timestamp":1388105756575,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"RqKm58IzcOPsn0NzfaX-","timestamp":1388105756579,"eventCode":101}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388105756795,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388105756797,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388105756798,"eventCode":300}
+{"api":"disconnect","socketid":"RqKm58IzcOPsn0NzfaX-","uuid":"1234567890","timestamp":1388105788766,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"aJyAz_B5zmJwaAwIfaX_","protocol":"websocket","timestamp":1388105790620,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"aJyAz_B5zmJwaAwIfaX_","timestamp":1388105790623,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388105790956,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388105790957,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388105790958,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"aJyAz_B5zmJwaAwIfaX_","uuid":"1234567890","timestamp":1388105893137,"eventCode":102}
+{"socketId":"CfZOxPaaPSV6SXlMfaYA","protocol":"websocket","timestamp":1388105894414,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"CfZOxPaaPSV6SXlMfaYA","timestamp":1388105894417,"eventCode":101}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388105894685,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388105894687,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388105894688,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"CfZOxPaaPSV6SXlMfaYA","uuid":"1234567890","timestamp":1388105895048,"eventCode":102}
+{"socketId":"cmkbSl50P8f6zvAnfaYB","protocol":"websocket","timestamp":1388105979493,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"cmkbSl50P8f6zvAnfaYB","timestamp":1388105979497,"eventCode":101}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388105979673,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388105979674,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388105979676,"eventCode":300}
+{"api":"disconnect","socketid":"cmkbSl50P8f6zvAnfaYB","uuid":"1234567890","timestamp":1388105980123,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"QJ1UgEbgJRron_Y0faYC","protocol":"websocket","timestamp":1388106005934,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"QJ1UgEbgJRron_Y0faYC","timestamp":1388106005938,"eventCode":101}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388106006097,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388106006098,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388106006099,"eventCode":300}
+{"api":"disconnect","socketid":"QJ1UgEbgJRron_Y0faYC","uuid":"1234567890","timestamp":1388106006181,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"xI6c2mQHjMLaZXzQfaYD","protocol":"websocket","timestamp":1388106069327,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"xI6c2mQHjMLaZXzQfaYD","timestamp":1388106069331,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388106069506,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388106069506,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388106069507,"eventCode":300}
+{"api":"disconnect","socketid":"xI6c2mQHjMLaZXzQfaYD","uuid":"1234567890","timestamp":1388106069962,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"R5_pxGZ3wJKWaMeMfaYE","protocol":"websocket","timestamp":1388106087213,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"R5_pxGZ3wJKWaMeMfaYE","timestamp":1388106087217,"eventCode":101}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388106087373,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388106087374,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388106087374,"eventCode":300}
+{"api":"disconnect","socketid":"R5_pxGZ3wJKWaMeMfaYE","uuid":"1234567890","timestamp":1388107653320,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"JSg_zTR0tSzpmlCsfaYF","protocol":"websocket","timestamp":1388107656526,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"JSg_zTR0tSzpmlCsfaYF","timestamp":1388107656530,"eventCode":101}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388107656861,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388107656863,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388107656865,"eventCode":300}
+{"api":"disconnect","socketid":"JSg_zTR0tSzpmlCsfaYF","uuid":"1234567890","timestamp":1388107749041,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"CcC2Rr7q8oi-_Mn-faYG","protocol":"websocket","timestamp":1388107750420,"eventCode":100}
+{"uuid":"1234567890","token":"1234567890","socketid":"CcC2Rr7q8oi-_Mn-faYG","timestamp":1388107750423,"eventCode":101}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388107750887,"eventCode":300}
+{"devices":"*","message":{"test":"54321","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388107750888,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388107750891,"eventCode":300}
+{"api":"disconnect","socketid":"CcC2Rr7q8oi-_Mn-faYG","uuid":"1234567890","timestamp":1388107873619,"eventCode":102}
+"{socketid: socket, online: false}"

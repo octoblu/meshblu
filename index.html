@@ -99,19 +99,19 @@
             </div>
             <div class="feature col-md-4">
               <div aria-hidden="true" class="icon icon-cloudy-2"></div>
-              <h3>Mesh Network</h3>
-              <p class="hidden-phone">Skynet is a cloud-based mesh network that scales to meet any needs whether the nodes are smart home devices, sensors, cloud resources, drones, bots, etc.</p>
+              <h3>MQTT IoT NETWORK</h3>
+              <p class="hidden-phone">Skynet is a cloud-based MQTT-powered network that scales to meet any needs whether the nodes are smart home devices, sensors, cloud resources, drones, Arduinos, Raspberry Pis, etc.</p>
             </div>
 
             <div class="feature col-md-4">
               <div aria-hidden="true" class="icon icon-cog-2"></div>
-              <h3>REST & WebSocket API</h3>
+              <h3>REST & WEBSOCKET API</h3>
               <p class="hidden-phone">Skynet is powered by Node.JS and based entirely on its integrated REST API and realtime Websocket API with extensible JSON device & messaging.</p>
             </div>
 
             <div class="feature col-md-4">
               <div aria-hidden="true" ><br /><img src="/img/npm.png" width="150px"/></div><br />
-              <h3>Node.JS NPM Module</h3>
+              <h3>NODE.JS NPM MODULE</h3>
               <p class="hidden-phone">Node.JS is known for fast, event-driven operations perfect for nodes and devices such as RaspberryPi, Arduino, and Tessel. Our NPM module gets your app up & running quickly!</p>
             </div>
 
@@ -251,7 +251,7 @@
               <div class="feature col-md-10">
                 <b>/devices</b><br />
                 <b>Payload: key=value (i.e. type=drone&color=black)</b>
-                <br />Registers a node or device with Skynet. Skynet returns a UUID device id and security token. You can pass any key/value pairs and even override Skynet's token by passing your own token in the payload i.e. token=123
+                <br />Registers a node or device with Skynet. Skynet returns a UUID device id and security token. You can pass any key/value pairs and even override Skynet's auto-generated UUID and/or token by passing your own uuid and/or token in the payload i.e. uuid=123&token=456
                 <br />
                 <code>curl -X POST -d "type=drone&color=black" http://skynet.im/devices</code>
                 <br />
@@ -316,7 +316,7 @@
                 <b>/messages</b>  
                 <br />Send a message to a specific device, array of devices, or all devices on the Skynet platform 
                 <br />
-                <code>curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://skynet.im/messages</code>
+                <code>curl -X POST -d '{"devices": "*", "message": {"yellow":"off"}}' http://skynet.im/messages</code>
                 <br />                                      
                 <code>curl -X POST -d '{"devices": ["ad6...47b","2f3...170"], "message": {"yellow":"off"}}' http://skynet.im/messages</code>
                 <br />                                      
@@ -325,7 +325,7 @@
                 <br />                                      
                 <code>{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</code>
                 <br />
-                <textarea class="form-control">{"devices":"all","message":{"yellow":"off"}</textarea>
+                <textarea class="form-control">{"devices":"*","message":{"yellow":"off"}</textarea>
                 <!-- <code>{"devices":"all","message":{"yellow":"off"}</code> -->
               </div>
               </td></tr></table>
@@ -401,15 +401,20 @@ socket.on('connect', function(){
   socket.on('ready', function(data){
     if (data.status == 201){
       console.log('Device authenticated with Skynet');
+
+      // Send/Receive messages
+      socket.message({
+        "devices": ["0d3a53...847b2cc", "11123...44567"],
+        "message": {
+          "red":"on"
+        }
+      });
+      socket.on('message', function(channel, message){
+        console.log('message received', channel, message);
+      });
+
     }
   });
-
-  // test APIs
-  socket.on('status', function(data){
-    console.log('status received');
-    console.log(data);
-  });
-
 });
 
             </pre>
@@ -454,17 +459,17 @@ socket.on('connect', function(){
       });  
 
       // Send and receive messages
-      socket.emit('send', {
-        "devices": "all",
+      socket.emit('message', {
+        "devices": "*",
         "message": {
         "skynet":"online"
       }}, function(data){
         console.log(data);
       }); 
-      socket.on('message', function(data){
-        console.log('message received');
-        console.log(data);
+      socket.on('message', function(channel, message){
+        console.log('message received', channel, message);
       });
+
 
       // Get the status of the Skynet network
       socket.emit('status', function(data){
@@ -553,7 +558,8 @@ var conn = skynet.createConnection({
   "host":"http://skynet.im",
   "port": 80,
   "uuid": "ad698900-2546-11e3-87fb-c560cb0ca47b",
-  "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9"
+  "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9",
+  "qos": 0 // MQTT Quality of Service (0=no confirmation, 1=confirmation, 2=N/A)
 });
 
 conn.on('notReady', function(data){
@@ -566,10 +572,10 @@ conn.on('ready', function(data){
   console.log(data);
 
   // Send and receive messages
-  conn.send({
-    "devices": "all",
+  conn.message({
+    "devices": "*",
     "message": {
-      "skynet":"online"
+      "red":"on"
     }
   });
 
@@ -588,10 +594,10 @@ conn.on('ready', function(data){
     console.log(data); 
   });
 
-  conn.on('message', function(data){
-    console.log('status received');
-    console.log(data);
+  conn.on('message', function(channel, message){
+    console.log('message received', channel, message);
   });
+
 
   // Event triggered when device loses connection to skynet
   conn.on('disconnect', function(data){
@@ -636,7 +642,7 @@ conn.on('ready', function(data){
     console.log(data); 
 
     // Send hello world to the array of device uuids
-    conn.send({
+    conn.message({
       "devices": data.devices,
       "message": {
         "hello":"world"
@@ -694,10 +700,11 @@ script.
     $(".activity").prepend(JSON.stringify(data) + '&lt;br /&gt;');
   });
 
-  socket.on('message', function (data) {
-    console.log(data);
-    $(".activity").prepend(JSON.stringify(data) + '&lt;br /&gt;');
+  socket.on('message', function (channel, message) {
+    console.log('message received', channel, message);
+    $(".activity").prepend(JSON.stringify(message) + '&lt;br /&gt;');
   });
+
             </pre>
 
           </div>

@@ -3,6 +3,23 @@ var restify = require('restify');
 var socketio = require('socket.io');
 var nstatic = require('node-static');
 
+if(config.mqtt){
+
+  var mqtt = require('mqtt'),
+    qos = 0;
+  var mqttsettings = {
+    keepalive: 1000,
+    protocolId: 'MQIsdp',
+    protocolVersion: 3,
+    clientId: 'skynet'
+  }
+
+  // create mqtt connection
+  var mqttclient = mqtt.createClient(1883, 'mqtt.skynet.im', mqttsettings);
+  // var mqttclient = mqtt.createClient(1883, 'localhost', mqttsettings);
+}
+
+
 var server = restify.createServer();
 var io = socketio.listen(server);
 
@@ -25,17 +42,23 @@ io.sockets.on('connection', function (socket) {
     console.log('Identity received: ' + JSON.stringify(data));
     require('./lib/logEvent')(101, data);
     require('./lib/updateSocketId')(data, function(auth){
-      // socket.emit('authentication', { status: auth.status });
-      // Have device join its uuid room name so that others can subscribe to it
       if (auth.status == 201){
         socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});
         console.log('subscribe: ' + data.uuid);
-        socket.join(data.uuid);
-        socket.broadcast.to(data.uuid).emit('message', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});
-        // io.sockets.in(data.uuid).emit('message', {"api": "connect", "socketid": socket.id.toString(), "uuid": data.uuid})
+        if(config.mqtt){
+          mqttclient.publish(data.uuid, '{"api": "connect", "status": 201, "socketid": ' + socket.id.toString() + ', "uuid": ' + data.uuid + '}, {qos:' + qos + '}');
+        } else {
+          // Have device join its uuid room name so that others can subscribe to it
+          socket.join(data.uuid);
+          socket.broadcast.to(data.uuid).emit('message', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});          
+        }
       } else {
         socket.emit('notReady', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});
-        socket.broadcast.to(data.uuid).emit('message', {"api": "connect", "status": auth.status, "uuid": data.uuid});
+        if(config.mqtt){
+          mqttclient.publish(data.uuid, '{"api": "connect", "status": ' + auth.status + ', "socketid": ' + socket.id.toString() + ', "uuid": ' + data.uuid + '}, {qos:' + qos + '}');
+        } else {
+          socket.broadcast.to(data.uuid).emit('message', {"api": "connect", "status": auth.status, "uuid": data.uuid});
+        }
       }
     });
   });
@@ -46,11 +69,16 @@ io.sockets.on('connection', function (socket) {
     // Emit API request from device to room for subscribers
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
       require('./lib/logEvent')(102, {"api": "disconnect", "socketid": socket.id.toString(), "uuid": uuid});
-      socket.broadcast.to(uuid).emit('message', {"api": "disconnect", "socketid": socket.id.toString(), "uuid": uuid});
+      if(config.mqtt){
+        mqttclient.publish(uuid, '{"api": "disconnect", "socketid": ' + socket.id.toString() + ', "uuid": ' + uuid + '}, {qos:' + qos + '}');
+      } else {
+        socket.broadcast.to(uuid).emit('message', {"api": "disconnect", "socketid": socket.id.toString(), "uuid": uuid});
+      }
     });      
 
   });
 
+  // Is this API still needed with MQTT?
   socket.on('subscribe', function(data, fn) { 
     require('./lib/authDevice')(data.uuid, data.token, function(auth){
       if (auth.authenticate == true){
@@ -102,6 +130,7 @@ io.sockets.on('connection', function (socket) {
     });
   });  
 
+  // Is this API still needed with MQTT?
   socket.on('unsubscribe', function(data, fn) { 
       console.log('leaving room ', data.uuid);
       socket.leave(data.uuid); 
@@ -132,15 +161,15 @@ io.sockets.on('connection', function (socket) {
 
     // Emit API request from device to room for subscribers
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
-      socket.broadcast.to(uuid).emit('message', {"api": "status"});
+      // socket.broadcast.to(uuid).emit('message', {"api": "status"});
 
       require('./lib/getSystemStatus')(function(results){
         console.log(results);
         try{
           fn(results);
           
-          // Emit API request from device to room for subscribers
-          socket.broadcast.to(uuid).emit('message', results);
+          // // Emit API request from device to room for subscribers
+          // socket.broadcast.to(uuid).emit('message', results);
 
         } catch (e){
           console.log(e);
@@ -159,11 +188,10 @@ io.sockets.on('connection', function (socket) {
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
       var reqData = data;
       reqData["api"] = "devices";      
-      // socket.broadcast.to(uuid).emit('message', reqData);
-      socket.broadcast.to(data.uuid).emit('message', reqData);
-      if(uuid != data.uuid){
-        socket.broadcast.to(uuid).emit('message', reqData);                
-      }
+      // socket.broadcast.to(data.uuid).emit('message', reqData);
+      // if(uuid != data.uuid){
+      //   socket.broadcast.to(uuid).emit('message', reqData);                
+      // }
 
       // Why is "api" still in the data object?
       delete reqData["api"];
@@ -172,13 +200,11 @@ io.sockets.on('connection', function (socket) {
         try{
           fn(results);
 
-          // Emit API request from device to room for subscribers
-          // socket.broadcast.to(uuid).emit('message', results);
-          socket.broadcast.to(data.uuid).emit('message', results);
-          if(uuid != data.uuid){
-            socket.broadcast.to(uuid).emit('message', results);                
-          }
-
+          // // Emit API request from device to room for subscribers
+          // socket.broadcast.to(data.uuid).emit('message', results);
+          // if(uuid != data.uuid){
+          //   socket.broadcast.to(uuid).emit('message', results);                
+          // }
 
         } catch (e){
           console.log(e);
@@ -197,11 +223,10 @@ io.sockets.on('connection', function (socket) {
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
       var reqData = data;
       reqData["api"] = "whoami";      
-      // socket.broadcast.to(uuid).emit('message', reqData);
-      socket.broadcast.to(data.uuid).emit('message', reqData);
-      if(uuid != data.uuid){
-        socket.broadcast.to(uuid).emit('message', reqData);                
-      }
+      // socket.broadcast.to(data.uuid).emit('message', reqData);
+      // if(uuid != data.uuid){
+      //   socket.broadcast.to(uuid).emit('message', reqData);                
+      // }
 
       delete reqData["api"];
       require('./lib/whoAmI')(data, function(results){
@@ -209,12 +234,11 @@ io.sockets.on('connection', function (socket) {
         try{
           fn(results);
 
-          // Emit API request from device to room for subscribers
-          // socket.broadcast.to(uuid).emit('message', results);
-          socket.broadcast.to(data.uuid).emit('message', results);
-          if(uuid != data.uuid){
-            socket.broadcast.to(uuid).emit('message', results);                
-          }
+          // // Emit API request from device to room for subscribers
+          // socket.broadcast.to(data.uuid).emit('message', results);
+          // if(uuid != data.uuid){
+          //   socket.broadcast.to(uuid).emit('message', results);                
+          // }
 
         } catch (e){
           console.log(e);
@@ -231,11 +255,10 @@ io.sockets.on('connection', function (socket) {
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
       var reqData = data;
       reqData["api"] = "register";      
-      // socket.broadcast.to(uuid).emit('message', reqData);
-      socket.broadcast.to(data.uuid).emit('message', reqData);
-      if(uuid != data.uuid){
-        socket.broadcast.to(uuid).emit('message', reqData);                
-      }
+      // socket.broadcast.to(data.uuid).emit('message', reqData);
+      // if(uuid != data.uuid){
+      //   socket.broadcast.to(uuid).emit('message', reqData);                
+      // }
 
       delete reqData["api"];
       require('./lib/register')(data, function(results){
@@ -243,13 +266,11 @@ io.sockets.on('connection', function (socket) {
         try{
           fn(results);
 
-          // Emit API request from device to room for subscribers
-          // socket.broadcast.to(uuid).emit('message', results);
-          socket.broadcast.to(data.uuid).emit('message', results);
-          if(uuid != data.uuid){
-            socket.broadcast.to(uuid).emit('message', results);                
-          }
-
+          // // Emit API request from device to room for subscribers
+          // socket.broadcast.to(data.uuid).emit('message', results);
+          // if(uuid != data.uuid){
+          //   socket.broadcast.to(uuid).emit('message', results);                
+          // }
 
         } catch (e){
           console.log(e);
@@ -266,11 +287,10 @@ io.sockets.on('connection', function (socket) {
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
       var reqData = data;
       reqData["api"] = "update";      
-      // socket.broadcast.to(uuid).emit('message', reqData);
-      socket.broadcast.to(data.uuid).emit('message', reqData);
-      if(uuid != data.uuid){
-        socket.broadcast.to(uuid).emit('message', reqData);                
-      }
+      // socket.broadcast.to(data.uuid).emit('message', reqData);
+      // if(uuid != data.uuid){
+      //   socket.broadcast.to(uuid).emit('message', reqData);                
+      // }
 
       delete reqData["api"];
       require('./lib/updateDevice')(data.uuid, data, function(results){
@@ -278,13 +298,11 @@ io.sockets.on('connection', function (socket) {
         try{
           fn(results);
 
-          // Emit API request from device to room for subscribers
-          // socket.broadcast.to(uuid).emit('message', results);
-          socket.broadcast.to(data.uuid).emit('message', results);
-          if(uuid != data.uuid){
-            socket.broadcast.to(uuid).emit('message', results);                
-          }
-
+          // // Emit API request from device to room for subscribers
+          // socket.broadcast.to(data.uuid).emit('message', results);
+          // if(uuid != data.uuid){
+          //   socket.broadcast.to(uuid).emit('message', results);                
+          // }
 
         } catch (e){
           console.log(e);
@@ -301,11 +319,10 @@ io.sockets.on('connection', function (socket) {
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
       var reqData = data;
       reqData["api"] = "unregister";      
-      // socket.broadcast.to(uuid).emit('message', reqData);
-      socket.broadcast.to(data.uuid).emit('message', reqData);
-      if(uuid != data.uuid){
-        socket.broadcast.to(uuid).emit('message', reqData);                
-      }
+      // socket.broadcast.to(data.uuid).emit('message', reqData);
+      // if(uuid != data.uuid){
+      //   socket.broadcast.to(uuid).emit('message', reqData);                
+      // }
 
       delete reqData["api"];
       require('./lib/unregister')(data.uuid, data, function(results){
@@ -313,13 +330,11 @@ io.sockets.on('connection', function (socket) {
         try{
           fn(results);
 
-          // Emit API request from device to room for subscribers
-          // socket.broadcast.to(uuid).emit('message', results);
-          socket.broadcast.to(data.uuid).emit('message', results);
-          if(uuid != data.uuid){
-            socket.broadcast.to(uuid).emit('message', results);                
-          }
-
+          // // Emit API request from device to room for subscribers
+          // socket.broadcast.to(data.uuid).emit('message', results);
+          // if(uuid != data.uuid){
+          //   socket.broadcast.to(uuid).emit('message', results);                
+          // }
 
         } catch (e){
           console.log(e);
@@ -336,11 +351,10 @@ io.sockets.on('connection', function (socket) {
 
         var reqData = data;
         reqData["api"] = "events";      
-        // socket.broadcast.to(uuid).emit('message', reqData);
-        socket.broadcast.to(data.uuid).emit('message', reqData);
-        if(uuid != data.uuid){
-          socket.broadcast.to(uuid).emit('message', reqData);                
-        }
+        // socket.broadcast.to(data.uuid).emit('message', reqData);
+        // if(uuid != data.uuid){
+        //   socket.broadcast.to(uuid).emit('message', reqData);                
+        // }
 
 
         if (auth.authenticate == true){
@@ -351,12 +365,11 @@ io.sockets.on('connection', function (socket) {
             try{
               fn(results);
 
-              // Emit API request from device to room for subscribers
-              socket.broadcast.to(data.uuid).emit('message', results);
-              if(uuid != data.uuid){
-                socket.broadcast.to(uuid).emit('message', results);                
-              }
-
+              // // Emit API request from device to room for subscribers
+              // socket.broadcast.to(data.uuid).emit('message', results);
+              // if(uuid != data.uuid){
+              //   socket.broadcast.to(uuid).emit('message', results);                
+              // }
 
             } catch (e){
               console.log(e);
@@ -373,11 +386,11 @@ io.sockets.on('connection', function (socket) {
           try{
             fn(results);
 
-            // Emit API request from device to room for subscribers
-            socket.broadcast.to(data.uuid).emit('message', results);
-            if(uuid != data.uuid){
-              socket.broadcast.to(uuid).emit('message', results);                
-            }
+            // // Emit API request from device to room for subscribers
+            // socket.broadcast.to(data.uuid).emit('message', results);
+            // if(uuid != data.uuid){
+            //   socket.broadcast.to(uuid).emit('message', results);                
+            // }
 
           } catch (e){
             console.log(e);
@@ -402,10 +415,7 @@ io.sockets.on('connection', function (socket) {
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
       eventData["api"] = "message";
       eventData["fromUuid"] = uuid;
-      socket.broadcast.to(uuid).emit('message', eventData)  
-      // io.sockets.in(uuid.uuid).emit('message', eventData)
-
-      // var dataMessage = {"message": data.message};
+      // socket.broadcast.to(uuid).emit('message', eventData)  
 
       var dataMessage = data.message;
       dataMessage["fromUuid"] = uuid;
@@ -415,40 +425,37 @@ io.sockets.on('connection', function (socket) {
 
       if(data.devices == "all" || data.devices == "*"){
 
-          socket.broadcast.emit('message', dataMessage);
-          require('./lib/logEvent')(300, eventData);
+        if(config.mqtt){
+          // mqttclient.publish('broadcast', JSON.stringify(dataMessage), {qos:qos});
+        } else {
+          socket.broadcast.emit('message', 'broadcast', dataMessage);
+        }
+        require('./lib/logEvent')(300, eventData);
 
       } else {
 
-        // for (var i=0;i<devices.length;i++)
-        // { 
-        //   require('./lib/getSocketId')(devices[i], function(data){
-        //     io.sockets.socket(data.socketid).emit('message', message);
-        //   });
-        // }      
-
         var devices = data.devices;
 
-        // if string convert to array
         if( typeof devices === 'string' ) {
             devices = [ devices ];
         };
 
         devices.forEach( function(device) { 
 
-          // Broadcast to room for pubsub
-          console.log('sending message to room: ' + device);
-          // console.log('message: ' + JSON.stringify(dataMessage));
-          // io.sockets.in(device).emit('message', dataMessage);
-          socket.broadcast.to(device).emit('message', dataMessage);
-
+          if(config.mqtt){
+            // console.log("MQTT message sent to " + device);
+            // console.log("MQTT message: " + JSON.stringify(dataMessage));
+            // mqttclient.publish(device, JSON.stringify(dataMessage), {qos:qos});
+          } else {
+            // Broadcast to room for pubsub
+            console.log('sending message to room: ' + device);            
+            socket.broadcast.to(device).emit('message', device, dataMessage);
+          }
 
         });
 
         require('./lib/logEvent')(300, eventData);
-
       }
-
 
     });
 
@@ -457,7 +464,6 @@ io.sockets.on('connection', function (socket) {
 });
 
 // curl http://localhost:3000/status
-// server.get('/status', require('./lib/getSystemStatus'));
 server.get('/status', function(req, res){
   require('./lib/getSystemStatus')(function(data){
     console.log(data);
@@ -470,7 +476,6 @@ server.get('/status', function(req, res){
 // curl http://localhost:3000/devices
 // curl http://localhost:3000/devices?key=123
 // curl http://localhost:3000/devices?online=true
-// server.get('/devices', require('./lib/getDevices'));
 server.get('/devices', function(req, res){
   require('./lib/getDevices')(req.query, function(data){
     console.log(data);
@@ -481,22 +486,20 @@ server.get('/devices', function(req, res){
 
 
 // curl http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
-// server.get('/devices/:uuid', require('./lib/whoami'));
 server.get('/devices/:uuid', function(req, res){
   require('./lib/whoAmI')(req.params.uuid, function(data){
     console.log(data);
-    io.sockets.in(req.params.uuid).emit('message', data)
+    // io.sockets.in(req.params.uuid).emit('message', data)
     res.json(data);
   });
 });
 
 
 // curl -X POST -d "name=arduino&description=this+is+a+test" http://localhost:3000/devices
-// server.post('/devices', require('./lib/register'));
 server.post('/devices', function(req, res){
   require('./lib/register')(req.params, function(data){
     console.log(data);
-    io.sockets.in(data.uuid).emit('message', data)    
+    // io.sockets.in(data.uuid).emit('message', data)    
     res.json(data);
   });
 });
@@ -506,21 +509,19 @@ server.post('/devices', function(req, res){
 // curl -X PUT -d "token=123&online=true&temp=hello&temp2=" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
 // curl -X PUT -d "token=123&myArray=[1,2,3]" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
 // curl -X PUT -d "token=123&myArray=4&action=push" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
-// server.put('/devices/:uuid', require('./lib/updateDevice'));
 server.put('/devices/:uuid', function(req, res){
   require('./lib/updateDevice')(req.params.uuid, req.params, function(data){
     console.log(data);
-    io.sockets.in(req.params.uuid).emit('message', data)
+    // io.sockets.in(req.params.uuid).emit('message', data)
     res.json(data);
   });
 });
 
 // curl -X DELETE -d "token=123" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
-// server.del('/devices/:uuid', require('./lib/unregister'));
 server.del('/devices/:uuid', function(req, res){
   require('./lib/unregister')(req.params.uuid, req.params, function(data){
     console.log(data);
-    io.sockets.in(req.params.uuid).emit('message', data)
+    // io.sockets.in(req.params.uuid).emit('message', data)
     res.json(data);
   });
 });
@@ -532,7 +533,7 @@ server.get('/events/:uuid', function(req, res){
     if (auth.authenticate == true){  
       require('./lib/getEvents')(req.params.uuid, function(data){
         console.log(data);
-        io.sockets.in(req.params.uuid).emit('message', data)
+        // io.sockets.in(req.params.uuid).emit('message', data)
         res.json(data);
       });
     } else {
@@ -547,8 +548,6 @@ server.get('/events/:uuid', function(req, res){
     }
   });
 });
-
-
 
 // curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://localhost:3000/messages
 // curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"], "message": {"yellow":"off"}}' http://localhost:3000/messages
@@ -566,28 +565,32 @@ server.post('/messages', function(req, res, next){
   console.log('devices: ' + devices);
   console.log('message: ' + JSON.stringify(message));
 
-  if(devices == "all"){
-      
-      io.sockets.emit('message', message);
+  if(devices == "all" || devices == "*"){
+
+      if(config.mqtt){
+        mqttclient.publish('broadcast', JSON.stringify(message), {qos:qos});
+      } else {    
+        io.sockets.emit('message', 'broadcast', message);
+      }
       require('./lib/logEvent')(300, eventData);
       res.json(eventData);
 
   } else {
 
-    // if string convert to array
     if( typeof devices === 'string' ) {
         devices = [ devices ];
     };
 
     devices.forEach( function(device) { 
-      // require('./lib/getSocketId')(device, function(data){
-      //   io.sockets.socket(data).emit('message', message);
-      // });
-
       // Broadcast to room for pubsub
       console.log('sending message to room: ' + device);
-      io.sockets.in(device).emit('message', message)
 
+      if(config.mqtt){
+        mqttclient.publish(device, JSON.stringify(message), {qos:qos});
+      } else {
+        io.sockets.in(device).emit('message', device, message)
+      }
+      
     });
 
     require('./lib/logEvent')(300, eventData);

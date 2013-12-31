@@ -84,19 +84,16 @@ io.sockets.on('connection', function (socket) {
 
         // Emit API request from device to room for subscribers
         require('./lib/getUuid')(socket.id.toString(), function(uuid){
-          var results = {"api": "subscribe", "socketid": socket.id.toString()};
-          // socket.broadcast.to(uuid).emit('message', results);
-
+          var results = {"api": "subscribe", "socketid": socket.id.toString(), "uuid": uuid};
           console.log(results);
           try{
             fn(results);
 
-            // Emit API request from device to room for subscribers
-            // socket.broadcast.to(uuid).emit('message', results);
-            socket.broadcast.to(data.uuid).emit('message', results);
-            if(uuid != data.uuid){
-              socket.broadcast.to(uuid).emit('message', results);                
-            }
+            // // Emit API request from device to room for subscribers
+            // socket.broadcast.to(data.uuid).emit('message', results);
+            // if(uuid != data.uuid){
+            //   socket.broadcast.to(uuid).emit('message', results);                
+            // }
 
 
           } catch (e){
@@ -115,8 +112,8 @@ io.sockets.on('connection', function (socket) {
         try{
           fn(results);
 
-          // Emit API request from device to room for subscribers
-          socket.broadcast.to(data.uuid).emit('message', results);
+          // // Emit API request from device to room for subscribers
+          // socket.broadcast.to(data.uuid).emit('message', results);
 
         } catch (e){
           console.log(e);
@@ -133,18 +130,17 @@ io.sockets.on('connection', function (socket) {
       socket.leave(data.uuid); 
       // Emit API request from device to room for subscribers
       require('./lib/getUuid')(socket.id.toString(), function(uuid){
-        var results = {"api": "unsubscribe", "socketid": socket.id.toString()};
+        var results = {"api": "unsubscribe", "socketid": socket.id.toString(), "uuid": uuid};
         // socket.broadcast.to(uuid).emit('message', results);
 
         try{
           fn(results);
 
-          // Emit API request from device to room for subscribers
-          // socket.broadcast.to(uuid).emit('message', results);
-          socket.broadcast.to(data.uuid).emit('message', results);
-          if(uuid != data.uuid){
-            socket.broadcast.to(uuid).emit('message', results);                
-          }
+          // // Emit API request from device to room for subscribers
+          // socket.broadcast.to(data.uuid).emit('message', results);
+          // if(uuid != data.uuid){
+          //   socket.broadcast.to(uuid).emit('message', results);                
+          // }
 
         } catch (e){
           console.log(e);

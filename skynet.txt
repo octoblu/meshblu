@@ -430,3 +430,238 @@
 {"devices":"0000","message":{"test":"0000","fromUuid":"1234567890"},"api":"message","fromUuid":"1234567890","timestamp":1388107750891,"eventCode":300}
 {"api":"disconnect","socketid":"CcC2Rr7q8oi-_Mn-faYG","uuid":"1234567890","timestamp":1388107873619,"eventCode":102}
 "{socketid: socket, online: false}"
+{"socketId":"5JJgcgO_CIHe3JwtJkwW","protocol":"websocket","timestamp":1388434848216,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"5JJgcgO_CIHe3JwtJkwW","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388434848225,"eventCode":101}
+{"skynet":"online","timestamp":1388434853328,"eventCode":200}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388434853333,"eventCode":300}
+{"skynet":"online","timestamp":1388434853340,"eventCode":200}
+{"type":"drone","uuid":"e1c6a1c0-718f-11e3-a558-ed43144eaaef","timestamp":1388434853340,"token":"tl6yudsgtp7rpb9qtzwlh20wc5o2yb9","channel":"main","online":false,"_id":"52c1d5a59f537d530d000005","eventCode":400}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","armed":true,"timestamp":1388434853342,"eventCode":401}
+{"_id":"5249d88717651477ce000001","armed":true,"channel":"main","online":true,"socketId":"5JJgcgO_CIHe3JwtJkwW","timestamp":1388434853342,"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","eventCode":500}
+{"events":[{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","armed":true,"timestamp":1388434853342,"eventCode":401,"id":"52c1d5a59f537d530d000007"},{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388434853333,"eventCode":300,"id":"52c1d5a59f537d530d000004"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"5JJgcgO_CIHe3JwtJkwW","timestamp":1388434848225,"eventCode":101,"id":"52c1d5a49f537d530d000002"},{"api":"disconnect","socketid":"EPi0_w9ROfTA5OVkokB1","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388434740081,"eventCode":102,"id":"52c1d53427da95e3640003ae"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","armed":true,"timestamp":1388434560236,"eventCode":401,"id":"52c1d48027da95e3640003a7"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","armed":true,"timestamp":1388434560225,"eventCode":401,"id":"52c1d48027da95e3640003a6"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","armed":true,"timestamp":1388434560207,"eventCode":401,"id":"52c1d48027da95e3640003a4"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","armed":true,"timestamp":1388434560080,"eventCode":401,"id":"52c1d48027da95e3640003a2"},{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388434560228,"eventCode":300,"id":"52c1d48027da95e364000398"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","armed":true,"timestamp":1388434560054,"eventCode":401,"id":"52c1d48027da95e364000395"}],"timestamp":1388434853608,"eventCode":201}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"5JJgcgO_CIHe3JwtJkwW","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388434968126,"eventCode":102}
+{"socketId":"QrRsou5QVOjxV35sJkwX","protocol":"websocket","timestamp":1388434969312,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"QrRsou5QVOjxV35sJkwX","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388434969316,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388434969563,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"QrRsou5QVOjxV35sJkwX","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435017038,"eventCode":102}
+{"socketId":"S6oUjPWpvAg4d-jLJkwY","protocol":"websocket","timestamp":1388435017301,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"S6oUjPWpvAg4d-jLJkwY","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388435017306,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435017485,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"S6oUjPWpvAg4d-jLJkwY","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435037463,"eventCode":102}
+{"socketId":"2T0vHCOygtPtNZokJkwZ","protocol":"websocket","timestamp":1388435037679,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"2T0vHCOygtPtNZokJkwZ","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388435037685,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435037863,"eventCode":300}
+{"socketId":"rifUepBOAFgVx4XiM0nB","protocol":"websocket","timestamp":1388435427783,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"rifUepBOAFgVx4XiM0nB","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388435427791,"eventCode":101}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"rifUepBOAFgVx4XiM0nB","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388435427792,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435429400,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435429403,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435429404,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435429410,"eventCode":300}
+{"socketId":"2PLZ7G60kt6K4-aeNRUL","protocol":"websocket","timestamp":1388435544029,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"2PLZ7G60kt6K4-aeNRUL","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388435544037,"eventCode":101}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"2PLZ7G60kt6K4-aeNRUL","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388435544038,"eventCode":101}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"2PLZ7G60kt6K4-aeNRUL","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388435544038,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435545575,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435545577,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435545579,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435545581,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435545582,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435545583,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435545586,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435545588,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435545589,"eventCode":300}
+{"api":"disconnect","socketid":"2PLZ7G60kt6K4-aeNRUL","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435551140,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"L9Oxwt27ju9IXH9MNRUM","protocol":"websocket","timestamp":1388435551629,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"L9Oxwt27ju9IXH9MNRUM","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388435551633,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435551825,"eventCode":300}
+{"socketId":"OBewdbeZnLgEPeKONRUN","protocol":"websocket","timestamp":1388435626662,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"OBewdbeZnLgEPeKONRUN","timestamp":1388435626666,"eventCode":101}
+{"devices":"*","message":{"test":"54321","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435626925,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435626940,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435626954,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"OBewdbeZnLgEPeKONRUN","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435709710,"eventCode":102}
+{"socketId":"Sf_i0EZQte5i9uBSNRUO","protocol":"websocket","timestamp":1388435710329,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"Sf_i0EZQte5i9uBSNRUO","timestamp":1388435710333,"eventCode":101}
+{"devices":"*","message":{"test":"54321","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435710519,"eventCode":300}
+{"devices":["0000","1234567890"],"message":{"test":"12345","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435710521,"eventCode":300}
+{"devices":"0000","message":{"test":"0000","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435710523,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"test":"0000","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435710524,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"Sf_i0EZQte5i9uBSNRUO","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435785807,"eventCode":102}
+{"socketId":"xbO2mmYbynMiRnqRNRUP","protocol":"websocket","timestamp":1388435786711,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"xbO2mmYbynMiRnqRNRUP","timestamp":1388435786715,"eventCode":101}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"test":"0000","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"qos":0,"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435792206,"eventCode":300}
+{"api":"disconnect","socketid":"L9Oxwt27ju9IXH9MNRUM","uuid":{},"timestamp":1388435991927,"eventCode":102}
+{"socketId":"rpHwc548pH919uQANRUQ","protocol":"websocket","timestamp":1388435992570,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"rpHwc548pH919uQANRUQ","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388435992574,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388435992985,"eventCode":300}
+{"api":"disconnect","socketid":"xbO2mmYbynMiRnqRNRUP","uuid":{},"timestamp":1388436060549,"eventCode":102}
+{"socketId":"93a-g1e69Z2vwtgLNRUR","protocol":"websocket","timestamp":1388436064587,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"93a-g1e69Z2vwtgLNRUR","timestamp":1388436064590,"eventCode":101}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"test":"0000","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388436064781,"eventCode":300}
+{"api":"disconnect","socketid":"93a-g1e69Z2vwtgLNRUR","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388436079918,"eventCode":102}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"rpHwc548pH919uQANRUQ","uuid":{},"timestamp":1388436082748,"eventCode":102}
+{"socketId":"5eW-hbJ2U3f3yH0LNRUS","protocol":"websocket","timestamp":1388436083038,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"5eW-hbJ2U3f3yH0LNRUS","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388436083042,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388436083243,"eventCode":300}
+{"socketId":"Fkq8m7V00Nq8WNj7NRUT","protocol":"websocket","timestamp":1388436085597,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"Fkq8m7V00Nq8WNj7NRUT","timestamp":1388436085601,"eventCode":101}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"test":"0000","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"qos":0,"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388436085784,"eventCode":300}
+{"socketId":"MV2nO7cT3w61vmQlPq_d","protocol":"websocket","timestamp":1388436174720,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"MV2nO7cT3w61vmQlPq_d","timestamp":1388436174726,"eventCode":101}
+{"socketId":"sw-s7MVjiYPpQXCAPq_e","protocol":"websocket","timestamp":1388436174728,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"sw-s7MVjiYPpQXCAPq_e","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388436174730,"eventCode":101}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"sw-s7MVjiYPpQXCAPq_e","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388436174730,"eventCode":101}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"test":"0000","fromUuid":{}},"qos":0,"api":"message","fromUuid":{},"timestamp":1388436176563,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388436176580,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388436176582,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388436176601,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388436176613,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"sw-s7MVjiYPpQXCAPq_e","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388436180204,"eventCode":102}
+{"socketId":"VSo7jO7kIHBALT63Pq_f","protocol":"websocket","timestamp":1388436180456,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"VSo7jO7kIHBALT63Pq_f","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388436180460,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388436180658,"eventCode":300}
+{"socketId":"cF02TjPxTqM7yDlJPq_g","protocol":"websocket","timestamp":1388436200090,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"cF02TjPxTqM7yDlJPq_g","timestamp":1388436200094,"eventCode":101}
+{"api":"disconnect","socketid":"MV2nO7cT3w61vmQlPq_d","uuid":{},"timestamp":1388436201493,"eventCode":102}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"test":"0000","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"qos":0,"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388436202054,"eventCode":300}
+{"socketId":"pPsE_98Y8SLzB8CeFyes","protocol":"websocket","timestamp":1388450359679,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"pPsE_98Y8SLzB8CeFyes","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388450359687,"eventCode":101}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"pPsE_98Y8SLzB8CeFyes","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388450359688,"eventCode":101}
+{"socketId":"hTL9kmO5rLYyKdEbFyet","protocol":"websocket","timestamp":1388450379787,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"hTL9kmO5rLYyKdEbFyet","timestamp":1388450379791,"eventCode":101}
+{"devices":"*","message":{"test":"with qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"qos":0,"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450380105,"eventCode":300}
+{"api":"disconnect","socketid":"pPsE_98Y8SLzB8CeFyes","uuid":{},"timestamp":1388450548059,"eventCode":102}
+{"socketId":"1PQOUWxo8yAr8WojFyeu","protocol":"websocket","timestamp":1388450548716,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"1PQOUWxo8yAr8WojFyeu","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388450548720,"eventCode":101}
+{"api":"disconnect","socketid":"hTL9kmO5rLYyKdEbFyet","uuid":{},"timestamp":1388450595224,"eventCode":102}
+{"socketId":"1CCg4SY8K2vxYOoIGtKx","protocol":"websocket","timestamp":1388450600994,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"1CCg4SY8K2vxYOoIGtKx","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388450601001,"eventCode":101}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"1CCg4SY8K2vxYOoIGtKx","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388450601002,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450602467,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450602466,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450602467,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450602470,"eventCode":300}
+{"socketId":"1xGcItYpbMGUq3dMGtKy","protocol":"websocket","timestamp":1388450603338,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"1xGcItYpbMGUq3dMGtKy","timestamp":1388450603342,"eventCode":101}
+{"devices":"*","message":{"test":"without qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450603490,"eventCode":300}
+{"devices":"*","message":{"test":"with qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"qos":0,"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450603492,"eventCode":300}
+{"api":"disconnect","socketid":"1CCg4SY8K2vxYOoIGtKx","uuid":{},"timestamp":1388450616661,"eventCode":102}
+{"socketId":"1zRu1TKygWcV8gvFGtKz","protocol":"websocket","timestamp":1388450616859,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"1zRu1TKygWcV8gvFGtKz","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388450616863,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450617007,"eventCode":300}
+{"api":"disconnect","socketid":"1zRu1TKygWcV8gvFGtKz","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450679066,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"iqErKTFYt_-D8Y1yGtK0","protocol":"websocket","timestamp":1388450679424,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"iqErKTFYt_-D8Y1yGtK0","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388450679430,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450679614,"eventCode":300}
+{"api":"disconnect","socketid":"iqErKTFYt_-D8Y1yGtK0","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450710434,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"quvs320UADzsgCBYGtK1","protocol":"websocket","timestamp":1388450711255,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"quvs320UADzsgCBYGtK1","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388450711259,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450711402,"eventCode":300}
+{"api":"disconnect","socketid":"1xGcItYpbMGUq3dMGtKy","uuid":{},"timestamp":1388450884736,"eventCode":102}
+{"socketId":"b5lZ1SmGz5r7izTAHziS","protocol":"websocket","timestamp":1388450889814,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"b5lZ1SmGz5r7izTAHziS","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388450889821,"eventCode":101}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"b5lZ1SmGz5r7izTAHziS","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388450889822,"eventCode":101}
+{"api":"disconnect","socketid":"b5lZ1SmGz5r7izTAHziS","uuid":{},"timestamp":1388450892995,"eventCode":102}
+{"socketId":"9gR7UgIP4OCfwLMBHziT","protocol":"websocket","timestamp":1388450893137,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"9gR7UgIP4OCfwLMBHziT","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388450893142,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450893305,"eventCode":300}
+{"socketId":"uD5NZLHiDtb9imYMHziU","protocol":"websocket","timestamp":1388450902665,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"uD5NZLHiDtb9imYMHziU","timestamp":1388450902668,"eventCode":101}
+{"devices":"*","message":{"test":"with qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"qos":0,"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450902817,"eventCode":300}
+{"devices":"*","message":{"test":"without qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450902818,"eventCode":300}
+{"socketId":"rAzkumZLT08YEtOHHziV","protocol":"websocket","timestamp":1388450919395,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"rAzkumZLT08YEtOHHziV","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388450919400,"eventCode":101}
+{"api":"disconnect","socketid":"9gR7UgIP4OCfwLMBHziT","uuid":{},"timestamp":1388450919530,"eventCode":102}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388450919545,"eventCode":300}
+{"api":"disconnect","socketid":"uD5NZLHiDtb9imYMHziU","uuid":{},"timestamp":1388451020777,"eventCode":102}
+{"socketId":"plhvtCvej2gE5JfBIXgk","protocol":"websocket","timestamp":1388451039530,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"plhvtCvej2gE5JfBIXgk","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388451039536,"eventCode":101}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"plhvtCvej2gE5JfBIXgk","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388451039537,"eventCode":101}
+{"socketId":"ypXYdv_s8sZjjXE-IXgl","protocol":"websocket","timestamp":1388451040043,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"ypXYdv_s8sZjjXE-IXgl","timestamp":1388451040047,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451041073,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451041076,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451041304,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":{}},"api":"message","fromUuid":{},"timestamp":1388451041475,"eventCode":300}
+{"devices":"*","message":{"test":"with qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"qos":0,"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451041547,"eventCode":300}
+{"devices":"*","message":{"test":"without qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451041548,"eventCode":300}
+{"api":"disconnect","socketid":"plhvtCvej2gE5JfBIXgk","uuid":{},"timestamp":1388451048922,"eventCode":102}
+{"socketId":"KWNuVkz8geEY3RIyIXgm","protocol":"websocket","timestamp":1388451049776,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"KWNuVkz8geEY3RIyIXgm","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388451049779,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451049943,"eventCode":300}
+{"api":"disconnect","socketid":"ypXYdv_s8sZjjXE-IXgl","uuid":{},"timestamp":1388451081394,"eventCode":102}
+{"socketId":"pVI9SolRLFg5MuDjIXgn","protocol":"websocket","timestamp":1388451082676,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"pVI9SolRLFg5MuDjIXgn","timestamp":1388451082680,"eventCode":101}
+{"devices":"*","message":{"test":"with qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"qos":0,"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451082859,"eventCode":300}
+{"devices":"*","message":{"test":"without qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451082860,"eventCode":300}
+{"devices":"*","message":{"yellow":"off"},"timestamp":1388451157638,"eventCode":300}
+{"devices":"*","message":{"yellow":"off"},"timestamp":1388451256472,"eventCode":300}
+{"socketId":"pNoUpsfaTzHXhdZSJk7-","protocol":"websocket","timestamp":1388451359463,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"pNoUpsfaTzHXhdZSJk7-","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388451359469,"eventCode":101}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"pNoUpsfaTzHXhdZSJk7-","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388451359471,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451361222,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451361223,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451361225,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451361225,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"pNoUpsfaTzHXhdZSJk7-","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451368326,"eventCode":102}
+{"socketId":"NWaZ0uXxJ0QpzmX-Jk7_","protocol":"websocket","timestamp":1388451369141,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"NWaZ0uXxJ0QpzmX-Jk7_","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388451369146,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451369707,"eventCode":300}
+{"socketId":"aKl8ycKTY6NoeljdJk8A","protocol":"websocket","timestamp":1388451384645,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"aKl8ycKTY6NoeljdJk8A","timestamp":1388451384648,"eventCode":101}
+{"devices":"*","message":{"test":"with qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"qos":0,"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451384794,"eventCode":300}
+{"devices":"*","message":{"test":"without qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451384795,"eventCode":300}
+{"devices":"*","message":{"yellow":"off"},"timestamp":1388451397658,"eventCode":300}
+{"devices":"*","message":{"yellow":"off without qos"},"timestamp":1388451431225,"eventCode":300}
+{"api":"disconnect","socketid":"NWaZ0uXxJ0QpzmX-Jk7_","uuid":{},"timestamp":1388451465735,"eventCode":102}
+{"socketId":"8CDoA1topUz_D1DGJk8B","protocol":"websocket","timestamp":1388451466501,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"8CDoA1topUz_D1DGJk8B","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388451466504,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451466648,"eventCode":300}
+{"api":"disconnect","socketid":"aKl8ycKTY6NoeljdJk8A","uuid":{},"timestamp":1388451588790,"eventCode":102}
+{"socketId":"e0bKOeqIfzL1KKepJk8C","protocol":"websocket","timestamp":1388451589628,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"e0bKOeqIfzL1KKepJk8C","timestamp":1388451589631,"eventCode":101}
+{"devices":"*","message":{"test":"with qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"qos":0,"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451589830,"eventCode":300}
+{"devices":"*","message":{"test":"without qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451589833,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"e0bKOeqIfzL1KKepJk8C","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451774927,"eventCode":102}
+{"socketId":"D5TAQgoXGYK19me_LNcX","protocol":"websocket","timestamp":1388451781399,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"D5TAQgoXGYK19me_LNcX","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388451781405,"eventCode":101}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"D5TAQgoXGYK19me_LNcX","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388451781406,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451782943,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451782943,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451782944,"eventCode":300}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451782945,"eventCode":300}
+{"api":"disconnect","socketid":"D5TAQgoXGYK19me_LNcX","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451787977,"eventCode":102}
+"{socketid: socket, online: false}"
+{"socketId":"qGcimFgvHZhzi9fzLNcY","protocol":"websocket","timestamp":1388451788420,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"qGcimFgvHZhzi9fzLNcY","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388451788425,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451788567,"eventCode":300}
+{"socketId":"QcUZtCcntj1Sfx2ZLNcZ","protocol":"websocket","timestamp":1388451795561,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"QcUZtCcntj1Sfx2ZLNcZ","timestamp":1388451795565,"eventCode":101}
+{"devices":"*","message":{"test":"with qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"qos":0,"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451795713,"eventCode":300}
+{"devices":"*","message":{"test":"without qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451795714,"eventCode":300}
+{"api":"disconnect","socketid":"qGcimFgvHZhzi9fzLNcY","uuid":{},"timestamp":1388451830824,"eventCode":102}
+{"socketId":"JGTcaF8_PUIp8hsHLNca","protocol":"websocket","timestamp":1388451831070,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"JGTcaF8_PUIp8hsHLNca","token":"qirqglm6yb1vpldixflopnux4phtcsor","timestamp":1388451831076,"eventCode":101}
+{"devices":"*","message":{"red":"on","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451831222,"eventCode":300}
+{"api":"disconnect","socketid":"QcUZtCcntj1Sfx2ZLNcZ","uuid":{},"timestamp":1388451835457,"eventCode":102}
+{"socketId":"42X_aWHGFwwatthnLNcb","protocol":"websocket","timestamp":1388451837007,"eventCode":100}
+{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","token":"qirqglm6yb1vpldixflopnux4phtcsor","socketid":"42X_aWHGFwwatthnLNcb","timestamp":1388451837010,"eventCode":101}
+{"devices":"*","message":{"test":"without qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451837154,"eventCode":300}
+{"devices":"*","message":{"test":"with qos","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"api":"message","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388451837154,"eventCode":300}
+{"devices":"*","message":{"yellow":"off without qos"},"timestamp":1388452337973,"eventCode":300}
+{"devices":"*","message":{"yellow":"off with qos"},"timestamp":1388452368598,"eventCode":300}
+"{socketid: socket, online: false}"
+{"api":"disconnect","socketid":"42X_aWHGFwwatthnLNcb","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388453028836,"eventCode":102}

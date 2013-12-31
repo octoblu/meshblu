@@ -3,21 +3,18 @@ var restify = require('restify');
 var socketio = require('socket.io');
 var nstatic = require('node-static');
 
-if(config.mqtt){
-
-  var mqtt = require('mqtt'),
-    qos = 0;
-  var mqttsettings = {
-    keepalive: 1000,
-    protocolId: 'MQIsdp',
-    protocolVersion: 3,
-    clientId: 'skynet'
-  }
-
-  // create mqtt connection
-  var mqttclient = mqtt.createClient(1883, 'mqtt.skynet.im', mqttsettings);
-  // var mqttclient = mqtt.createClient(1883, 'localhost', mqttsettings);
+var mqtt = require('mqtt'),
+  qos = 0;
+var mqttsettings = {
+  keepalive: 1000, // seconds
+  protocolId: 'MQIsdp',
+  protocolVersion: 3,
+  clientId: 'skynet'
 }
+
+// create mqtt connection
+var mqttclient = mqtt.createClient(1883, 'mqtt.skynet.im', mqttsettings);
+// var mqttclient = mqtt.createClient(1883, 'localhost', mqttsettings);
 
 
 var server = restify.createServer();
@@ -45,20 +42,20 @@ io.sockets.on('connection', function (socket) {
       if (auth.status == 201){
         socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});
         console.log('subscribe: ' + data.uuid);
-        if(config.mqtt){
-          mqttclient.publish(data.uuid, '{"api": "connect", "status": 201, "socketid": ' + socket.id.toString() + ', "uuid": ' + data.uuid + '}, {qos:' + qos + '}');
-        } else {
+        // if(config.mqtt){
+          // mqttclient.publish(data.uuid, '{"api": "connect", "status": 201, "socketid": ' + socket.id.toString() + ', "uuid": ' + data.uuid + '}, {qos:' + qos + '}');
+        // } else {
           // Have device join its uuid room name so that others can subscribe to it
           socket.join(data.uuid);
-          socket.broadcast.to(data.uuid).emit('message', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});          
-        }
+          // socket.broadcast.to(data.uuid).emit('message', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});          
+        // }
       } else {
         socket.emit('notReady', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});
-        if(config.mqtt){
-          mqttclient.publish(data.uuid, '{"api": "connect", "status": ' + auth.status + ', "socketid": ' + socket.id.toString() + ', "uuid": ' + data.uuid + '}, {qos:' + qos + '}');
-        } else {
-          socket.broadcast.to(data.uuid).emit('message', {"api": "connect", "status": auth.status, "uuid": data.uuid});
-        }
+        // if(config.mqtt){
+        //   mqttclient.publish(data.uuid, '{"api": "connect", "status": ' + auth.status + ', "socketid": ' + socket.id.toString() + ', "uuid": ' + data.uuid + '}, {qos:' + qos + '}');
+        // } else {
+        //   socket.broadcast.to(data.uuid).emit('message', {"api": "connect", "status": auth.status, "uuid": data.uuid});
+        // }
       }
     });
   });
@@ -69,11 +66,11 @@ io.sockets.on('connection', function (socket) {
     // Emit API request from device to room for subscribers
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
       require('./lib/logEvent')(102, {"api": "disconnect", "socketid": socket.id.toString(), "uuid": uuid});
-      if(config.mqtt){
-        mqttclient.publish(uuid, '{"api": "disconnect", "socketid": ' + socket.id.toString() + ', "uuid": ' + uuid + '}, {qos:' + qos + '}');
-      } else {
-        socket.broadcast.to(uuid).emit('message', {"api": "disconnect", "socketid": socket.id.toString(), "uuid": uuid});
-      }
+      // if(config.mqtt){
+      //   mqttclient.publish(uuid, '{"api": "disconnect", "socketid": ' + socket.id.toString() + ', "uuid": ' + uuid + '}, {qos:' + qos + '}');
+      // } else {
+      //   socket.broadcast.to(uuid).emit('message', {"api": "disconnect", "socketid": socket.id.toString(), "uuid": uuid});
+      // }
     });      
 
   });
@@ -425,11 +422,14 @@ io.sockets.on('connection', function (socket) {
 
       if(data.devices == "all" || data.devices == "*"){
 
-        if(config.mqtt){
-          // mqttclient.publish('broadcast', JSON.stringify(dataMessage), {qos:qos});
-        } else {
+        // if(data.qos == undefined){
           socket.broadcast.emit('message', 'broadcast', dataMessage);
+        // }
+        if(data.qos == undefined){
+          mqttclient.publish('broadcast', JSON.stringify(dataMessage), {qos:qos});
         }
+
+
         require('./lib/logEvent')(300, eventData);
 
       } else {
@@ -442,15 +442,15 @@ io.sockets.on('connection', function (socket) {
 
         devices.forEach( function(device) { 
 
-          if(config.mqtt){
-            // console.log("MQTT message sent to " + device);
-            // console.log("MQTT message: " + JSON.stringify(dataMessage));
-            // mqttclient.publish(device, JSON.stringify(dataMessage), {qos:qos});
-          } else {
+          // if(data.qos == undefined){
             // Broadcast to room for pubsub
             console.log('sending message to room: ' + device);            
             socket.broadcast.to(device).emit('message', device, dataMessage);
+          // }
+          if(data.qos == undefined){
+            mqttclient.publish(device, JSON.stringify(dataMessage), {qos:qos});
           }
+
 
         });
 
@@ -567,11 +567,11 @@ server.post('/messages', function(req, res, next){
 
   if(devices == "all" || devices == "*"){
 
-      if(config.mqtt){
+      // if(config.mqtt){
         mqttclient.publish('broadcast', JSON.stringify(message), {qos:qos});
-      } else {    
+      // } else {    
         io.sockets.emit('message', 'broadcast', message);
-      }
+      // }
       require('./lib/logEvent')(300, eventData);
       res.json(eventData);
 
@@ -585,11 +585,11 @@ server.post('/messages', function(req, res, next){
       // Broadcast to room for pubsub
       console.log('sending message to room: ' + device);
 
-      if(config.mqtt){
+      // if(config.mqtt){
         mqttclient.publish(device, JSON.stringify(message), {qos:qos});
-      } else {
+      // } else {
         io.sockets.in(device).emit('message', device, message)
-      }
+      // }
       
     });
 

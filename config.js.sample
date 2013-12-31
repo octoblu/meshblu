@@ -1,6 +1,5 @@
 module.exports = {
   databaseUrl: "mongodb://user:pass@adam.mongohq.com:1337/skynet",
   port: 3000,
-  log: true,
-  mqtt: false
+  log: true
 };

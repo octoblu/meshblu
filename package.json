@@ -14,7 +14,8 @@
     "restify": "*",
     "node-uuid": "*",
     "node-static": "*",
-    "mqtt": "*"
+    "mqtt": "*",
+    "JSONStream": "*"
   },
   "subdomain": "skynet",
   "domains": [

@@ -665,3 +665,27 @@
 {"devices":"*","message":{"yellow":"off with qos"},"timestamp":1388452368598,"eventCode":300}
 "{socketid: socket, online: false}"
 {"api":"disconnect","socketid":"42X_aWHGFwwatthnLNcb","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1388453028836,"eventCode":102}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"off"},"timestamp":1388694223206,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"off"},"timestamp":1388698782612,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"off"},"timestamp":1388698805130,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"off"},"timestamp":1388700508887,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"off"},"timestamp":1388700517605,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"off"},"timestamp":1388700587747,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"off"},"timestamp":1388700732360,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"off"},"timestamp":1388700739709,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"offline"},"timestamp":1388700758877,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"offline"},"timestamp":1388700962823,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"offline"},"timestamp":1388701275288,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"offline"},"timestamp":1388701300861,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"offline"},"timestamp":1388701352628,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"offline"},"timestamp":1388701392843,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"offline"},"timestamp":1388701603183,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"offline"},"timestamp":1388701616707,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"offline"},"timestamp":1388701677633,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"offline"},"timestamp":1388703005931,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"offline"},"timestamp":1388703837848,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"offline"},"timestamp":1388703897955,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"offline"},"timestamp":1388703983602,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"off"},"timestamp":1388704003928,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"off"},"timestamp":1388704806021,"eventCode":300}
+{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"off"},"timestamp":1388704829117,"eventCode":300}

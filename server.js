@@ -545,6 +545,29 @@ server.get('/events/:uuid', function(req, res){
   });
 });
 
+// curl -X GET http://localhost:3000/events/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
+server.get('/subscribe/:uuid', function(req, res){
+  console.log(req.query);
+  require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
+    if (auth.authenticate == true){  
+      require('./lib/subscribe')(req.params.uuid, function(data){
+        console.log(data);
+        res.json(data);
+      });
+    } else {
+      console.log("Device not found or token not valid");
+      regdata = {
+        "errors": [{
+          "message": "Device not found or token not valid",
+          "code": 404
+        }]
+      };
+      res.json(regdata);
+    }
+  });
+});
+
+
 // curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://localhost:3000/messages
 // curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"], "message": {"yellow":"off"}}' http://localhost:3000/messages
 // curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' http://localhost:3000/messages

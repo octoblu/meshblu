@@ -524,7 +524,6 @@ server.del('/devices/:uuid', function(req, res){
 
 // curl -X GET http://localhost:3000/events/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
 server.get('/events/:uuid', function(req, res){
-  console.log(req.query);
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){  
       require('./lib/getEvents')(req.params.uuid, function(data){
@@ -547,12 +546,21 @@ server.get('/events/:uuid', function(req, res){
 
 // curl -X GET http://localhost:3000/events/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
 server.get('/subscribe/:uuid', function(req, res){
-  console.log(req.query);
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){  
+      // res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');      
+      // res.writeHead(200,{'Content-Type':'application/json'});
+      // res.statusCode = 200;
+      // res.setHeader('Content-Type', 'application/json');        
+      // require('./lib/subscribe')(req.params.uuid, res, function(data){
       require('./lib/subscribe')(req.params.uuid, function(data){
         console.log(data);
-        res.json(data);
+        // res.json(data);
+        // res.writeHead(200,{'Content-Type':'application/json'});
+        // res.header(200,{'Content-Type':'application/json'});
+        res.write(data);
+        res.end();
       });
     } else {
       console.log("Device not found or token not valid");

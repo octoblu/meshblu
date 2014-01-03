@@ -2,6 +2,8 @@ var config = require('./config');
 var restify = require('restify');
 var socketio = require('socket.io');
 var nstatic = require('node-static');
+var JSONStream = require('JSONStream');
+// var through = require('through');
 
 var mqtt = require('mqtt'),
   qos = 0;
@@ -549,19 +551,42 @@ server.get('/subscribe/:uuid', function(req, res){
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){  
       // res.statusCode = 200;
-      res.setHeader('Content-Type', 'application/json');      
+      // res.setHeader('Content-Type', 'application/json');      
       // res.writeHead(200,{'Content-Type':'application/json'});
       // res.statusCode = 200;
       // res.setHeader('Content-Type', 'application/json');        
-      // require('./lib/subscribe')(req.params.uuid, res, function(data){
-      require('./lib/subscribe')(req.params.uuid, function(data){
-        console.log(data);
-        // res.json(data);
-        // res.writeHead(200,{'Content-Type':'application/json'});
-        // res.header(200,{'Content-Type':'application/json'});
-        res.write(data);
-        res.end();
-      });
+
+      // var foo = JSONStream.stringify();
+      // foo.on("data", function(data){
+      //   console.log(data);
+      // })
+      // require('./lib/subscribe')(req.params.uuid)
+      //   .pipe(foo)
+      //   .pipe(res);
+
+      require('./lib/subscribe')(req.params.uuid)
+        .pipe(JSONStream.stringify())
+        .pipe(res);
+
+
+      // require('./lib/subscribe')(req.params.uuid)
+      //   .pipe(through(function(data){
+      //     // this.emit("data", JSON.stringify(data));
+      //     console.log(data);
+      //     res.write(JSON.stringify(data));
+      //   }))
+      //   // .pipe(res);
+
+      // require('./lib/subscribe')(req.params.uuid, function(data){
+      //   console.log(data);
+      //   // res.json(data);
+      //   // res.writeHead(200,{'Content-Type':'application/json'});
+      //   // res.header(200,{'Content-Type':'application/json'});
+
+      //   res.write(data);
+
+      //   // res.end();
+      // });
     } else {
       console.log("Device not found or token not valid");
       regdata = {

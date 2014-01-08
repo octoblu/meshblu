@@ -445,7 +445,7 @@ socket.on('connect', function(){
 
             <a name="npm"></a>
             <h1>Node.JS NPM Module</h1>
-            <h2>Skynet also offers a Node.JS NPM module for making event-driven IoT development fast and easy. This module supports MQTT communications so you must specify your desired QoS level on the config as well as each message and subscription.  You can install the skynet module by running:</h2>
+            <h2>Skynet also offers a Node.JS NPM module for making event-driven IoT development fast and easy. This Node.JS module allows you to specify messaging protocol ("mqtt", "websocket"). If you select MQTT communications, you must specify your desired Quality of Service level ("qos") on the config as well as each message and subscription.  You can install the skynet module by running:</h2>
             <code>npm install skynet</code>
             
             <h2>Here's a sample Node.JS app using the Skynet NPM module:</h2>
@@ -456,7 +456,9 @@ var skynet = require('skynet');
 var conn = skynet.createConnection({
   "uuid": "ad698900-2546-11e3-87fb-c560cb0ca47b",
   "token": "zh4p7as90pt1q0k98fzvwmc9rmjkyb9",
+  "protocol": "mqtt",
   "qos": 0 // MQTT Quality of Service (0=no confirmation, 1=confirmation, 2=not supported)
+  // "protocol": "websocket"
 });
 
 conn.on('notReady', function(data){

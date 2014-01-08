@@ -15,9 +15,12 @@ var mqttsettings = {
 }
 
 // create mqtt connection
-var mqttclient = mqtt.createClient(1883, 'mqtt.skynet.im', mqttsettings);
-// var mqttclient = mqtt.createClient(1883, 'localhost', mqttsettings);
-
+try {
+  var mqttclient = mqtt.createClient(1883, 'mqtt.skynet.im', mqttsettings);
+  // var mqttclient = mqtt.createClient(1883, 'localhost', mqttsettings);
+} catch(err){
+  console.log(err);
+}
 
 var server = restify.createServer();
 var io = socketio.listen(server);
@@ -402,6 +405,8 @@ io.sockets.on('connection', function (socket) {
   socket.on('message', function (data) {
     if(data == undefined){
       var data = {};
+    } else if (typeof data !== 'object'){
+      data = JSON.parse(data);
     }
 
     var eventData = data
@@ -417,13 +422,14 @@ io.sockets.on('connection', function (socket) {
 
       console.log('devices: ' + data.devices);
       console.log('message: ' + JSON.stringify(dataMessage));
+      console.log('protocol: ' + data.protocol);
 
       if(data.devices == "all" || data.devices == "*"){
 
         // if(data.qos == undefined){
-          socket.broadcast.emit('message', 'broadcast', dataMessage);
+          socket.broadcast.emit('message', 'broadcast', JSON.stringify(dataMessage));
         // }
-        if(data.qos == undefined){
+        if(data.protocol == undefined && data.protocol != "mqtt"){
           mqttclient.publish('broadcast', JSON.stringify(dataMessage), {qos:qos});
         }
 
@@ -443,9 +449,9 @@ io.sockets.on('connection', function (socket) {
           // if(data.qos == undefined){
             // Broadcast to room for pubsub
             console.log('sending message to room: ' + device);            
-            socket.broadcast.to(device).emit('message', device, dataMessage);
+            socket.broadcast.to(device).emit('message', device, JSON.stringify(dataMessage));
           // }
-          if(data.qos == undefined){
+          if(data.protocol == undefined && data.protocol != "mqtt"){
             mqttclient.publish(device, JSON.stringify(dataMessage), {qos:qos});
           }
 

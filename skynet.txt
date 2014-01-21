@@ -988,3 +988,14 @@
 {"uuid":"d454fb91-77fc-11e3-a1dd-abf6f2fb4c31","timestamp":1389141353250,"eventCode":402}
 {"socketid":"y9qMMiYNP2B_hAZNRWxr","online":false,"timestamp":1389142155363,"eventCode":401}
 {"api":"disconnect","socketid":"y9qMMiYNP2B_hAZNRWxr","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","timestamp":1389142155363,"eventCode":102}
+{"skynet":"online","timestamp":1390273584008,"eventCode":200}
+{"skynet":"online","timestamp":1390273615694,"eventCode":200}
+{"skynet":"online","timestamp":1390273616638,"eventCode":200}
+{"skynet":"online","timestamp":1390273618654,"eventCode":200}
+{"skynet":"online","timestamp":1390273621837,"eventCode":200}
+{"skynet":"online","timestamp":1390273648448,"eventCode":200}
+{"skynet":"online","timestamp":1390273665379,"eventCode":200}
+{"skynet":"online","timestamp":1390273679555,"eventCode":200}
+{"type":"drone","uuid":"b9a12300-656e-11e3-801a-a3bb7d3765b7","timestamp":1387101198640,"channel":"main","online":false,"_id":"52ad7c0e43ec4539330009c3","eventCode":500}
+{"error":{"message":"Devices not found","code":404},"timestamp":1390273778290,"eventCode":403}
+{"error":{"message":"Devices not found","code":404},"timestamp":1390273968072,"eventCode":403}

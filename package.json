@@ -16,6 +16,7 @@
     "node-static": "*",
     "mqtt": "*",
     "JSONStream": "*"
+    // "tropo-webapi"
   },
   "subdomain": "skynet",
   "domains": [

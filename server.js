@@ -3,7 +3,7 @@ var restify = require('restify');
 var socketio = require('socket.io');
 var nstatic = require('node-static');
 var JSONStream = require('JSONStream');
-// var through = require('through');
+// var tropo_webapi = require('tropo-webapi');
 
 var mqtt = require('mqtt'),
   qos = 0;
@@ -472,7 +472,12 @@ server.get('/status', function(req, res){
   require('./lib/getSystemStatus')(function(data){
     console.log(data);
     // io.sockets.in(req.params.uuid).emit('message', data)
-    res.json(data);
+    if(data.error){
+      res.json(data.error.code, data);
+    } else {
+      res.json(data);
+    }
+
   });
 });
 
@@ -484,7 +489,12 @@ server.get('/devices', function(req, res){
   require('./lib/getDevices')(req.query, function(data){
     console.log(data);
     // io.sockets.in(req.params.uuid).emit('message', data)
-    res.json(data);
+    if(data.error){
+      res.json(data.error.code, data);
+    } else {
+      res.json(data);
+    }
+
   });
 });
 
@@ -494,7 +504,12 @@ server.get('/devices/:uuid', function(req, res){
   require('./lib/whoAmI')(req.params.uuid, function(data){
     console.log(data);
     // io.sockets.in(req.params.uuid).emit('message', data)
-    res.json(data);
+    if(data.error){
+      res.json(data.error.code, data);
+    } else {
+      res.json(data);
+    }
+
   });
 });
 
@@ -504,7 +519,12 @@ server.post('/devices', function(req, res){
   require('./lib/register')(req.params, function(data){
     console.log(data);
     // io.sockets.in(data.uuid).emit('message', data)    
-    res.json(data);
+    if(data.error){
+      res.json(data.error.code, data);
+    } else {
+      res.json(data);
+    }
+
   });
 });
 
@@ -517,7 +537,12 @@ server.put('/devices/:uuid', function(req, res){
   require('./lib/updateDevice')(req.params.uuid, req.params, function(data){
     console.log(data);
     // io.sockets.in(req.params.uuid).emit('message', data)
-    res.json(data);
+    if(data.error){
+      res.json(data.error.code, data);
+    } else {
+      res.json(data);
+    }
+
   });
 });
 
@@ -526,7 +551,11 @@ server.del('/devices/:uuid', function(req, res){
   require('./lib/unregister')(req.params.uuid, req.params, function(data){
     console.log(data);
     // io.sockets.in(req.params.uuid).emit('message', data)
-    res.json(data);
+    if(data.error){
+      res.json(data.error.code, data);
+    } else {
+      res.json(data);
+    }
   });
 });
 
@@ -537,17 +566,26 @@ server.get('/events/:uuid', function(req, res){
       require('./lib/getEvents')(req.params.uuid, function(data){
         console.log(data);
         // io.sockets.in(req.params.uuid).emit('message', data)
+      if(data.error){
+        res.json(data.error.code, data);
+      } else {
         res.json(data);
+      }
       });
     } else {
       console.log("Device not found or token not valid");
       regdata = {
-        "errors": [{
+        "error": {
           "message": "Device not found or token not valid",
           "code": 404
-        }]
+        }
       };
-      res.json(regdata);
+      if(regdata.error){
+        res.json(regdata.error.code, regdata);
+      } else {
+        res.json(regdata);
+      }
+
     }
   });
 });
@@ -570,6 +608,7 @@ server.get('/subscribe/:uuid', function(req, res){
       //   .pipe(foo)
       //   .pipe(res);
 
+      // TODO: Add /n to stream to server current record
       require('./lib/subscribe')(req.params.uuid)
         .pipe(JSONStream.stringify())
         .pipe(res);
@@ -596,12 +635,17 @@ server.get('/subscribe/:uuid', function(req, res){
     } else {
       console.log("Device not found or token not valid");
       regdata = {
-        "errors": [{
+        "error": {
           "message": "Device not found or token not valid",
           "code": 404
-        }]
+        }
       };
-      res.json(regdata);
+      if(regdata.error){
+        res.json(regdata.error.code, regdata);
+      } else {
+        res.json(regdata);
+      }
+
     }
   });
 });
@@ -631,7 +675,11 @@ server.post('/messages', function(req, res, next){
         io.sockets.emit('message', 'broadcast', message);
       // }
       require('./lib/logEvent')(300, eventData);
-      res.json(eventData);
+      if(eventData.error){
+        res.json(eventData.error.code, eventData);
+      } else {
+        res.json(eventData);
+      }
 
   } else {
 
@@ -652,11 +700,31 @@ server.post('/messages', function(req, res, next){
     });
 
     require('./lib/logEvent')(300, eventData);
-    res.json(eventData);
+    if(eventData.error){
+      res.json(eventData.error.code, eventData);
+    } else {
+      res.json(eventData);
+    }
 
   }
 
 });
+
+// // curl -X GET -d "token=123" http://localhost:3000/inboundsms
+// server.get('/inboundsms', function(req, res){
+
+//   var session = JSON.parse(json);
+//   var tropo = new TropoWebAPI();
+//   var initialText = session.session.initialText;
+     
+
+
+//   require('./lib/unregister')(req.params.uuid, req.params, function(data){
+//     console.log(data);
+//     // io.sockets.in(req.params.uuid).emit('message', data)
+//     res.json(data);
+//   });
+// });
 
 
 // Serve static website

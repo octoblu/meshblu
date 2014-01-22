@@ -708,6 +708,13 @@ server.post('/messages', function(req, res, next){
   } catch(err) {
     var body = req.body;
   }
+  if (body.devices == undefined){
+    try {
+      var body = JSON.parse(req.params);
+    } catch(err) {
+      var body = req.params;
+    }
+  }
   var devices = body.devices;
   var message = body.message;
   var eventData = {devices: devices, message: message}

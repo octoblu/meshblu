@@ -999,3 +999,4 @@
 {"type":"drone","uuid":"b9a12300-656e-11e3-801a-a3bb7d3765b7","timestamp":1387101198640,"channel":"main","online":false,"_id":"52ad7c0e43ec4539330009c3","eventCode":500}
 {"error":{"message":"Devices not found","code":404},"timestamp":1390273778290,"eventCode":403}
 {"error":{"message":"Devices not found","code":404},"timestamp":1390273968072,"eventCode":403}
+{"devices":"5d6e9c91-820e-11e3-a399-f5b85b6b9fd0","message":{"text":"hello"},"timestamp":1390432374077,"eventCode":300}

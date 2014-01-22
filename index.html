@@ -375,6 +375,28 @@
             </div>
 
 
+            <div class="col-md-12">
+              <h1>Authenticate</h1>
+            </div>
+            <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-info" disabled> GET</button>
+              </div>
+              </td>
+              <td>
+              <div class="feature col-md-10">
+                <b>/authenticate/{uuid}?token={token}</b>  
+                <br />Returns UUID and authticate: true or false based on the validity of uuid/token credentials
+                <br />
+                <code>curl -X GET http://skynet.im/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?token=5ypy4rurayktke29ypbi30kcw5ovfgvi</code>
+                <br />
+                <textarea class="form-control">{"uuid":"81246e80-29fd-11e3-9468-e5f892df566b","authentication":true} OR {"uuid":"81246e80-29fd-11e3-9468-e5f892df566b","authentication":false}</textarea>
+              </div>
+              </td></tr></table>
+            </div>
+
+
           </div>
 
        </div>
@@ -441,7 +463,7 @@ socket.on('connect', function(){
 
             </pre>
 
-            <h2>Websocket API commands include: status, register, unregister, update, whoami, devices, subscribe, unsubscribe, and message. You can send a message to a specific UUID or an array of UUIDs or all nodes on Skynet. </h2>
+            <h2>Websocket API commands include: status, register, unregister, update, whoami, devices, subscribe, unsubscribe, authenticate, and message. You can send a message to a specific UUID or an array of UUIDs or all nodes on Skynet. </h2>
 
             <a name="npm"></a>
             <h1>Node.JS NPM Module</h1>

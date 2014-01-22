@@ -402,6 +402,32 @@ io.sockets.on('connection', function (socket) {
   });  
 
 
+  socket.on('authenticate', function(data, fn) { 
+    require('./lib/authDevice')(data.uuid, data.token, function(auth){
+
+      if (auth.authenticate == true){
+        var results = {"uuid": data.uuid, "authentication": true};
+        try{
+          fn(results);
+        } catch (e){
+          console.log(e);
+        }
+
+      } else {
+        var results = {"uuid": data.uuid, "authentication": false};
+        try{
+          fn(results);
+        } catch (e){
+          console.log(e);
+        }
+
+      };
+
+    });
+  });  
+
+
+
   socket.on('message', function (data) {
     if(data == undefined){
       var data = {};

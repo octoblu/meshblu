@@ -16,6 +16,7 @@ var nstatic = require('node-static');
 var JSONStream = require('JSONStream');
 // var tropo_webapi = require('tropo-webapi');
 
+
 var mqtt = require('mqtt'),
   qos = 0;
 var mqttsettings = {
@@ -204,7 +205,7 @@ io.sockets.on('connection', function (socket) {
 
       // Why is "api" still in the data object?
       delete reqData["api"];
-      require('./lib/getDevices')(data, function(results){
+      require('./lib/getDevices')(data, false, function(results){
         console.log(results);
         try{
           fn(results);
@@ -238,7 +239,7 @@ io.sockets.on('connection', function (socket) {
       // }
 
       delete reqData["api"];
-      require('./lib/whoAmI')(data, function(results){
+      require('./lib/whoAmI')(data, false, function(results){
         console.log(results);
         try{
           fn(results);
@@ -523,8 +524,9 @@ server.get('/status', function(req, res){
 // curl http://localhost:3000/devices?key=123
 // curl http://localhost:3000/devices?online=true
 server.get('/devices', function(req, res){
-  require('./lib/getDevices')(req.query, function(data){
-    console.log(data);
+
+  require('./lib/getDevices')(req.query, false, function(data){
+    // console.log(data);
     // io.sockets.in(req.params.uuid).emit('message', data)
     if(data.error){
       res.json(data.error.code, data);
@@ -538,7 +540,7 @@ server.get('/devices', function(req, res){
 
 // curl http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
 server.get('/devices/:uuid', function(req, res){
-  require('./lib/whoAmI')(req.params.uuid, function(data){
+  require('./lib/whoAmI')(req.params.uuid, false, function(data){
     console.log(data);
     // io.sockets.in(req.params.uuid).emit('message', data)
     if(data.error){
@@ -595,6 +597,41 @@ server.del('/devices/:uuid', function(req, res){
     }
   });
 });
+
+// Returns all devices owned by authenticated user
+// curl -X GET http://localhost:3000/mydevices/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
+server.get('/mydevices/:uuid', function(req, res){
+  require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
+    if (auth.authenticate == true){  
+      req.query.owner = req.params.uuid;
+      delete req.query.token;
+      require('./lib/getDevices')(req.query, true, function(data){
+        console.log(data);
+        // io.sockets.in(req.params.uuid).emit('message', data)
+        if(data.error){
+          res.json(data.error.code, data);
+        } else {
+          res.json(data);
+        }
+      });
+    } else {
+      console.log("Device not found or token not valid");
+      regdata = {
+        "error": {
+          "message": "Device not found or token not valid",
+          "code": 404
+        }
+      };
+      if(regdata.error){
+        res.json(regdata.error.code, regdata);
+      } else {
+        res.json(regdata);
+      }
+
+    }
+  });
+});
+
 
 // curl -X GET http://localhost:3000/events/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
 server.get('/events/:uuid', function(req, res){

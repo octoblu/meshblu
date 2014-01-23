@@ -1,3 +1,14 @@
+/* Setup command line parsing and options
+ * See: https://github.com/visionmedia/commander.js
+ */
+var app = require('commander');
+app
+  .option('-e, --environment', 'Set the environment (defaults to development)')
+  .parse(process.argv);
+
+console.log(app.environment);
+if(!app.environment) app.environment = 'development'; 
+
 var config = require('./config');
 var restify = require('restify');
 var socketio = require('socket.io');
@@ -800,5 +811,6 @@ server.listen(process.env.PORT || config.port, function() {
   console.log("     SS kk kk   yyyyyy nn   nn eeeee  tt    ");
   console.log(" SSSSS  kk  kk      yy nn   nn  eeeee  tttt ");
   console.log("                yyyyy                         ");
-  console.log('\nSkynet listening at %s', server.url);  
+  console.log('\nSkynet %s environment loaded... ', app.environment);
+  console.log('Skynet listening at %s', server.url);  
 });

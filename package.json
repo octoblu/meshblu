@@ -15,7 +15,8 @@
     "node-uuid": "*",
     "node-static": "*",
     "mqtt": "*",
-    "JSONStream": "*"
+    "JSONStream": "*",
+    "commander": "*"
   },
   "subdomain": "skynet",
   "domains": [

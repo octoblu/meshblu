@@ -1,2 +1,11 @@
+# Npm install files
 node_modules
+npm-debug.log
+
+# Config files
 config.js
+
+# Swap and meta data files
+.DS_Store
+*.swp
+*.swo

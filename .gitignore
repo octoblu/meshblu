@@ -5,6 +5,9 @@ npm-debug.log
 # Config files
 config.js
 
+# Log file
+skynet.txt
+
 # Swap and meta data files
 .DS_Store
 *.swp

@@ -631,44 +631,21 @@ server.get('/events/:uuid', function(req, res){
 server.get('/subscribe/:uuid', function(req, res){
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){  
-      // res.statusCode = 200;
-      // res.setHeader('Content-Type', 'application/json');      
-      // res.writeHead(200,{'Content-Type':'application/json'});
-      // res.statusCode = 200;
-      // res.setHeader('Content-Type', 'application/json');        
 
-      // var foo = JSONStream.stringify();
-      // foo.on("data", function(data){
-      //   console.log(data);
-      // })
-      // require('./lib/subscribe')(req.params.uuid)
-      //   .pipe(foo)
-      //   .pipe(res);
-
-      // TODO: Add /n to stream to server current record
+      var foo = JSONStream.stringify();
+      foo.on("data", function(data){
+        console.log(data);
+        data = data + '\n';
+      })
       require('./lib/subscribe')(req.params.uuid)
-        .pipe(JSONStream.stringify())
+        .pipe(foo)
         .pipe(res);
 
-
+      // // TODO: Add /n to stream to server current record
       // require('./lib/subscribe')(req.params.uuid)
-      //   .pipe(through(function(data){
-      //     // this.emit("data", JSON.stringify(data));
-      //     console.log(data);
-      //     res.write(JSON.stringify(data));
-      //   }))
-      //   // .pipe(res);
+      //   .pipe(JSONStream.stringify())
+      //   .pipe(res);
 
-      // require('./lib/subscribe')(req.params.uuid, function(data){
-      //   console.log(data);
-      //   // res.json(data);
-      //   // res.writeHead(200,{'Content-Type':'application/json'});
-      //   // res.header(200,{'Content-Type':'application/json'});
-
-      //   res.write(data);
-
-      //   // res.end();
-      // });
     } else {
       console.log("Device not found or token not valid");
       regdata = {
@@ -704,10 +681,6 @@ server.get('/authenticate/:uuid', function(req, res){
     }
   });
 });
-
-
-
-
 
 
 // curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://localhost:3000/messages

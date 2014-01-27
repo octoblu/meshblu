@@ -790,11 +790,17 @@ server.post('/messages', function(req, res, next){
 server.get('/inboundsms', function(req, res){
 
   console.log(req.params);
+  // { To: '17144625921',
+  // Type: 'sms',
+  // MessageUUID: 'f1f3cc84-8770-11e3-9f8a-842b2b455655',
+  // From: '14803813574',
+  // Text: 'Test' }
   var data = JSON.parse(json);
-  var phone = req.params.phoneNumber;
-  var message = "";
+  var toPhone = data.To;
+  var fromPhone = data.From;
+  var message = data.Text;
 
-  require('./lib/getPhone')(phone, function(uuid){
+  require('./lib/getPhone')(toPhone, function(uuid){
     console.log(uuid);
 
     mqttclient.publish(uuid, JSON.stringify(message), {qos:qos});

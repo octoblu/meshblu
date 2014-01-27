@@ -795,7 +795,11 @@ server.get('/inboundsms', function(req, res){
   // MessageUUID: 'f1f3cc84-8770-11e3-9f8a-842b2b455655',
   // From: '14803813574',
   // Text: 'Test' }
-  var data = JSON.parse(json);
+  try{
+    var data = JSON.parse(req.params);
+  } catch(e){
+    var data = req.params;
+  }
   var toPhone = data.To;
   var fromPhone = data.From;
   var message = data.Text;

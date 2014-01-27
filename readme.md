@@ -192,6 +192,7 @@ Event Codes
 * 202 =
 * 203 =
 * 300 = Incoming message
+* 301 = Incoming SMS message
 * 400 = Register device
 * 401 = Update device
 * 402 = Delete device

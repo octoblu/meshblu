@@ -31,7 +31,7 @@ try {
   var mqttclient = mqtt.createClient(1883, 'mqtt.skynet.im', mqttsettings);
   // var mqttclient = mqtt.createClient(1883, 'localhost', mqttsettings);
 } catch(err){
-  console.log(err);
+  console.log('No MQTT server found.');
 }
 
 var server = restify.createServer();
@@ -786,21 +786,30 @@ server.post('/messages', function(req, res, next){
 
 });
 
-// // curl -X GET -d "token=123" http://localhost:3000/inboundsms
-// server.get('/inboundsms', function(req, res){
+// curl -X GET -d "token=123" http://localhost:3000/inboundsms
+server.get('/inboundsms', function(req, res){
 
-//   var session = JSON.parse(json);
-//   var tropo = new TropoWebAPI();
-//   var initialText = session.session.initialText;
-     
+  console.log(req.params);
+  var data = JSON.parse(json);
+  var phone = req.params.phoneNumber;
+  var message = "";
 
+  require('./lib/getPhone')(phone, function(uuid){
+    console.log(uuid);
 
-//   require('./lib/unregister')(req.params.uuid, req.params, function(data){
-//     console.log(data);
-//     // io.sockets.in(req.params.uuid).emit('message', data)
-//     res.json(data);
-//   });
-// });
+    mqttclient.publish(uuid, JSON.stringify(message), {qos:qos});
+    io.sockets.in(uuid).emit('message', uuid, message)
+
+    var eventData = {devices: uuid, message: message}
+    require('./lib/logEvent')(301, eventData);
+    if(eventData.error){
+      res.json(eventData.error.code, eventData);
+    } else {
+      res.json(eventData);
+    }
+
+  });
+});
 
 
 // Serve static website

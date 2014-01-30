@@ -30,28 +30,8 @@ var mqttsettings = {
 try {
   var mqttclient = mqtt.createClient(1883, 'mqtt.skynet.im', mqttsettings);
   // var mqttclient = mqtt.createClient(1883, 'localhost', mqttsettings);
+  console.log('Skynet connected to MQTT broker');
 
-  mqttclient.subscribe('*');
-  // mqttclient.publish('742401f1-87a4-11e3-834d-670dadc0ddbf', 'Hello mqtt');
-
-  mqttclient.on('message', function (topic, message) {
-    console.log('mqtt message received', topic, message);
-
-    // Send SMS if UUID has a phoneNumber
-    require('./lib/whoAmI')(topic, false, function(smscheck){
-      if(smscheck.phoneNumber){
-        console.log("Sending SMS to", smscheck.phoneNumber)
-        require('./lib/sendSms')(topic, message, function(smscheck){
-          console.log('Sent SMS!');
-        });
-      }
-    });
-
-    // Broadcast to room for pubsub
-    console.log('sending message to room: ' + topic);            
-    io.sockets.in(topic).emit('message', topic, message);
-
-  });  
 
 } catch(err){
   console.log('No MQTT server found.');
@@ -534,6 +514,37 @@ io.sockets.on('connection', function (socket) {
   });
 
 });
+
+// Handle MQTT Messages
+try{
+  mqttclient.subscribe('*');
+  // mqttclient.publish('742401f1-87a4-11e3-834d-670dadc0ddbf', 'Hello mqtt');
+
+  mqttclient.on('message', function (topic, message) {
+    // console.log('mqtt message received', topic, message);
+    console.log('mqtt message received');
+    console.log(topic);
+    console.log(message);
+
+    // Send SMS if UUID has a phoneNumber
+    require('./lib/whoAmI')(topic, false, function(smscheck){
+      if(smscheck.phoneNumber){
+        console.log("Sending SMS to", smscheck.phoneNumber)
+        require('./lib/sendSms')(topic, message, function(smscheck){
+          console.log('Sent SMS!');
+        });
+      }
+    });
+
+    // Broadcast to room for pubsub
+    console.log('sending message to room: ' + topic);            
+    io.sockets.in(topic).emit('message', topic, message);
+
+  });  
+} catch(e){
+  console.log('no mqtt server found');
+}
+
 
 // curl http://localhost:3000/status
 server.get('/status', function(req, res){

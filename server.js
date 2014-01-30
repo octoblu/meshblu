@@ -528,19 +528,26 @@ try{
     console.log(topic);
     console.log(message);
 
-    // Send SMS if UUID has a phoneNumber
-    require('./lib/whoAmI')(topic, false, function(smscheck){
-      if(smscheck.phoneNumber){
-        console.log("Sending SMS to", smscheck.phoneNumber)
-        require('./lib/sendSms')(topic, message, function(smscheck){
-          console.log('Sent SMS!');
-        });
-      }
-    });
+    if (topic.length == 36){            
 
-    // Broadcast to room for pubsub
-    console.log('sending message to room: ' + topic);            
-    io.sockets.in(topic).emit('message', topic, message);
+      // Send SMS if UUID has a phoneNumber
+      require('./lib/whoAmI')(topic, false, function(smscheck){
+        if(smscheck.phoneNumber){
+          console.log("Sending SMS to", smscheck.phoneNumber)
+          require('./lib/sendSms')(topic, message, function(smscheck){
+            console.log('Sent SMS!');
+          });
+        }
+      });
+
+      // Broadcast to room for pubsub
+      console.log('sending message to room: ' + topic);            
+      io.sockets.in(topic).emit('message', topic, message);
+
+      var eventData = {devices: topic, message: message}
+      require('./lib/logEvent')(300, eventData);
+
+    }
 
   });  
 } catch(e){

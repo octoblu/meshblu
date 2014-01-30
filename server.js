@@ -485,24 +485,26 @@ io.sockets.on('connection', function (socket) {
 
         devices.forEach( function(device) { 
 
-          // Send SMS if UUID has a phoneNumber
-          require('./lib/whoAmI')(device, false, function(smscheck){
-            if(smscheck.phoneNumber){
-              console.log("Sending SMS to", smscheck.phoneNumber)
-              require('./lib/sendSms')(device, JSON.stringify(dataMessage), function(smscheck){
-                console.log('Sent SMS!');
-              });
+          if (device.length == 36){
+
+            // Send SMS if UUID has a phoneNumber
+            require('./lib/whoAmI')(device, false, function(smscheck){
+              if(smscheck.phoneNumber){
+                console.log("Sending SMS to", smscheck.phoneNumber)
+                require('./lib/sendSms')(device, JSON.stringify(dataMessage), function(smscheck){
+                  console.log('Sent SMS!');
+                });
+              }
+            });
+
+            // Broadcast to room for pubsub
+            console.log('sending message to room: ' + device);            
+            socket.broadcast.to(device).emit('message', device, JSON.stringify(dataMessage));
+
+            if(data.protocol == undefined && data.protocol != "mqtt"){
+              mqttclient.publish(device, JSON.stringify(dataMessage), {qos:qos});
             }
-          });
-
-          // Broadcast to room for pubsub
-          console.log('sending message to room: ' + device);            
-          socket.broadcast.to(device).emit('message', device, JSON.stringify(dataMessage));
-
-          if(data.protocol == undefined && data.protocol != "mqtt"){
-            mqttclient.publish(device, JSON.stringify(dataMessage), {qos:qos});
           }
-
 
         });
 
@@ -804,21 +806,25 @@ server.post('/messages', function(req, res, next){
 
     devices.forEach( function(device) { 
 
-      // Send SMS if UUID has a phoneNumber
-      require('./lib/whoAmI')(device, false, function(smscheck){
-        if(smscheck.phoneNumber){
-          console.log("Sending SMS to", smscheck.phoneNumber)
-          require('./lib/sendSms')(device, JSON.stringify(message), function(smscheck){
-            console.log('Sent SMS!');
-          });
-        }
-      });
+      if (device.length == 36){
+            
+        // Send SMS if UUID has a phoneNumber
+        require('./lib/whoAmI')(device, false, function(smscheck){
+          if(smscheck.phoneNumber){
+            console.log("Sending SMS to", smscheck.phoneNumber)
+            require('./lib/sendSms')(device, JSON.stringify(message), function(smscheck){
+              console.log('Sent SMS!');
+            });
+          }
+        });
 
-      // Broadcast to room for pubsub
-      console.log('sending message to room: ' + device);
+        // Broadcast to room for pubsub
+        console.log('sending message to room: ' + device);
 
-      mqttclient.publish(device, JSON.stringify(message), {qos:qos});
-      io.sockets.in(device).emit('message', device, message)
+        mqttclient.publish(device, JSON.stringify(message), {qos:qos});
+        io.sockets.in(device).emit('message', device, message);
+
+      }
       
     });
 

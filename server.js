@@ -35,8 +35,7 @@ try {
   // mqttclient.publish('742401f1-87a4-11e3-834d-670dadc0ddbf', 'Hello mqtt');
 
   mqttclient.on('message', function (topic, message) {
-    // console.log(topic);
-    // console.log(message);
+    console.log('mqtt message received', topic, message);
 
     // Send SMS if UUID has a phoneNumber
     require('./lib/whoAmI')(topic, false, function(smscheck){

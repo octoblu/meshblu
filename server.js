@@ -43,6 +43,7 @@ var io = socketio.listen(server);
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
+server.use(restify.CORS());
 
 process.on("uncaughtException", function(error) {
   return console.log(error.stack);
@@ -557,6 +558,7 @@ try{
 
 // curl http://localhost:3000/status
 server.get('/status', function(req, res){
+  res.setHeader('Access-Control-Allow-Origin','*');
   require('./lib/getSystemStatus')(function(data){
     console.log(data);
     // io.sockets.in(req.params.uuid).emit('message', data)
@@ -575,6 +577,7 @@ server.get('/status', function(req, res){
 // curl http://localhost:3000/devices?online=true
 server.get('/devices', function(req, res){
 
+  res.setHeader('Access-Control-Allow-Origin','*');
   require('./lib/getDevices')(req.query, false, function(data){
     // console.log(data);
     // io.sockets.in(req.params.uuid).emit('message', data)
@@ -590,6 +593,7 @@ server.get('/devices', function(req, res){
 
 // curl http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
 server.get('/devices/:uuid', function(req, res){
+  res.setHeader('Access-Control-Allow-Origin','*');
   require('./lib/whoAmI')(req.params.uuid, false, function(data){
     console.log(data);
     // io.sockets.in(req.params.uuid).emit('message', data)
@@ -605,6 +609,7 @@ server.get('/devices/:uuid', function(req, res){
 
 // curl -X POST -d "name=arduino&description=this+is+a+test" http://localhost:3000/devices
 server.post('/devices', function(req, res){
+  res.setHeader('Access-Control-Allow-Origin','*');
   require('./lib/register')(req.params, function(data){
     console.log(data);
     // io.sockets.in(data.uuid).emit('message', data)    
@@ -623,6 +628,7 @@ server.post('/devices', function(req, res){
 // curl -X PUT -d "token=123&myArray=[1,2,3]" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
 // curl -X PUT -d "token=123&myArray=4&action=push" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
 server.put('/devices/:uuid', function(req, res){
+  res.setHeader('Access-Control-Allow-Origin','*');
   require('./lib/updateDevice')(req.params.uuid, req.params, function(data){
     console.log(data);
     // io.sockets.in(req.params.uuid).emit('message', data)
@@ -637,6 +643,7 @@ server.put('/devices/:uuid', function(req, res){
 
 // curl -X DELETE -d "token=123" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
 server.del('/devices/:uuid', function(req, res){
+  res.setHeader('Access-Control-Allow-Origin','*');
   require('./lib/unregister')(req.params.uuid, req.params, function(data){
     console.log(data);
     // io.sockets.in(req.params.uuid).emit('message', data)
@@ -651,6 +658,7 @@ server.del('/devices/:uuid', function(req, res){
 // Returns all devices owned by authenticated user
 // curl -X GET http://localhost:3000/mydevices/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
 server.get('/mydevices/:uuid', function(req, res){
+  res.setHeader('Access-Control-Allow-Origin','*');
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){  
       req.query.owner = req.params.uuid;
@@ -685,6 +693,7 @@ server.get('/mydevices/:uuid', function(req, res){
 
 // curl -X GET http://localhost:3000/events/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
 server.get('/events/:uuid', function(req, res){
+  res.setHeader('Access-Control-Allow-Origin','*');
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){  
       require('./lib/getEvents')(req.params.uuid, function(data){
@@ -716,6 +725,7 @@ server.get('/events/:uuid', function(req, res){
 
 // curl -X GET http://localhost:3000/events/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
 server.get('/subscribe/:uuid', function(req, res){
+  res.setHeader('Access-Control-Allow-Origin','*');
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){  
 
@@ -753,6 +763,7 @@ server.get('/subscribe/:uuid', function(req, res){
 
 // curl -X GET http://localhost:3000/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?token=5ypy4rurayktke29ypbi30kcw5ovfgvi
 server.get('/authenticate/:uuid', function(req, res){
+  res.setHeader('Access-Control-Allow-Origin','*');
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){  
       res.json({uuid:req.params.uuid, authentication: true});
@@ -774,6 +785,7 @@ server.get('/authenticate/:uuid', function(req, res){
 // curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"], "message": {"yellow":"off"}}' http://localhost:3000/messages
 // curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' http://localhost:3000/messages
 server.post('/messages', function(req, res, next){
+  res.setHeader('Access-Control-Allow-Origin','*');
   try {
     var body = JSON.parse(req.body);
   } catch(err) {
@@ -849,6 +861,7 @@ server.post('/messages', function(req, res, next){
 // curl -X GET -d "token=123" http://localhost:3000/inboundsms
 server.get('/inboundsms', function(req, res){
 
+  res.setHeader('Access-Control-Allow-Origin','*');
   console.log(req.params);
   // { To: '17144625921',
   // Type: 'sms',

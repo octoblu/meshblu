@@ -28,8 +28,9 @@ var mqttsettings = {
 
 // create mqtt connection
 try {
-  var mqttclient = mqtt.createClient(1883, 'mqtt.skynet.im', mqttsettings);
+  // var mqttclient = mqtt.createClient(1883, 'mqtt.skynet.im', mqttsettings);
   // var mqttclient = mqtt.createClient(1883, 'localhost', mqttsettings);
+  var mqttclient = mqtt.createClient(1883, '127.0.0.1', mqttsettings);
   console.log('Skynet connected to MQTT broker');
 
 

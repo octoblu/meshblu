@@ -29,8 +29,8 @@ var mqttsettings = {
 // create mqtt connection
 try {
   // var mqttclient = mqtt.createClient(1883, 'mqtt.skynet.im', mqttsettings);
-  // var mqttclient = mqtt.createClient(1883, 'localhost', mqttsettings);
-  var mqttclient = mqtt.createClient(1883, '127.0.0.1', mqttsettings);
+  var mqttclient = mqtt.createClient(1883, 'localhost', mqttsettings);
+  // var mqttclient = mqtt.createClient(1883, '127.0.0.1', mqttsettings);
   console.log('Skynet connected to MQTT broker');
 
 
@@ -602,6 +602,20 @@ server.get('/devices/:uuid', function(req, res){
       res.json(data.error.code, data);
     } else {
       res.json(data);
+    }
+
+  });
+});
+
+// curl http://localhost:3000/gateway/01404680-2539-11e3-b45a-d3519872df26
+server.get('/gateway/:uuid', function(req, res){
+  // res.setHeader('Access-Control-Allow-Origin','*');
+  require('./lib/whoAmI')(req.params.uuid, false, function(data){
+    console.log(data);
+    if(data.error){
+      res.send(302, 'http://skynet.im');
+    } else {
+      res.send(302, 'http://' + data.ipAddress);
     }
 
   });

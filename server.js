@@ -613,9 +613,13 @@ server.get('/gateway/:uuid', function(req, res){
   require('./lib/whoAmI')(req.params.uuid, false, function(data){
     console.log(data);
     if(data.error){
-      res.send(302, 'http://skynet.im');
+      res.send(302, {
+        'location': 'http://skynet.im'
+      });
     } else {
-      res.send(302, 'http://' + data.ipAddress);
+      res.send(302, {
+        'location': 'http://' + data.ipAddress
+      });
     }
 
   });

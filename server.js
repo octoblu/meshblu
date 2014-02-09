@@ -572,6 +572,12 @@ server.get('/status', function(req, res){
   });
 });
 
+// curl http://localhost:3000/ipaddress
+server.get('/ipaddress', function(req, res){
+  res.setHeader('Access-Control-Allow-Origin','*');
+  res.json({ipAddress: req.ip});
+});
+
 
 // curl http://localhost:3000/devices
 // curl http://localhost:3000/devices?key=123

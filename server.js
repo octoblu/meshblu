@@ -579,6 +579,7 @@ server.get('/ipaddress', function(req, res){
 });
 
 
+
 // curl http://localhost:3000/devices
 // curl http://localhost:3000/devices?key=123
 // curl http://localhost:3000/devices?online=true
@@ -624,7 +625,7 @@ server.get('/gateway/:uuid', function(req, res){
       });
     } else {
       res.writeHead(302, {
-        'location': 'http://' + data.ipAddress
+        'location': 'http://' + data.localhost + ":" + data.port
       });
     }
     res.end();

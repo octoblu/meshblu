@@ -424,6 +424,11 @@ io.sockets.on('connection', function (socket) {
 
       if (auth.authenticate == true){
         var results = {"uuid": data.uuid, "authentication": true};
+
+        socket.emit('ready', {"api": "connect", "status": 201, "socketid": socket.id.toString(), "uuid": data.uuid});
+        console.log('subscribe: ' + data.uuid);
+        socket.join(data.uuid);
+
         try{
           fn(results);
         } catch (e){

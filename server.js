@@ -62,11 +62,18 @@ io.sockets.on('connection', function (socket) {
     require('./lib/logEvent')(101, data);
     require('./lib/updateSocketId')(data, function(auth){
       if (auth.status == 201){
-        socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});
-        console.log('subscribe: ' + data.uuid);
 
-        // Have device join its uuid room name so that others can subscribe to it
-        socket.join(data.uuid);
+        if(data.uuid){
+          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});
+          // Have device join its uuid room name so that others can subscribe to it
+          console.log('subscribe: ' + data.uuid);
+          socket.join(data.uuid);
+        } else {
+          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": auth.uuid, "token": auth.token});
+          // Have device join its uuid room name so that others can subscribe to it
+          console.log('subscribe: ' + auth.uuid);
+          socket.join(auth.uuid);
+        }
 
       } else {
         socket.emit('notReady', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});

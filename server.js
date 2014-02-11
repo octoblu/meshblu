@@ -64,20 +64,12 @@ io.sockets.on('connection', function (socket) {
       if (auth.status == 201){
         socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});
         console.log('subscribe: ' + data.uuid);
-        // if(config.mqtt){
-          // mqttclient.publish(data.uuid, '{"api": "connect", "status": 201, "socketid": ' + socket.id.toString() + ', "uuid": ' + data.uuid + '}, {qos:' + qos + '}');
-        // } else {
-          // Have device join its uuid room name so that others can subscribe to it
-          socket.join(data.uuid);
-          // socket.broadcast.to(data.uuid).emit('message', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});          
-        // }
+
+        // Have device join its uuid room name so that others can subscribe to it
+        socket.join(data.uuid);
+
       } else {
         socket.emit('notReady', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});
-        // if(config.mqtt){
-        //   mqttclient.publish(data.uuid, '{"api": "connect", "status": ' + auth.status + ', "socketid": ' + socket.id.toString() + ', "uuid": ' + data.uuid + '}, {qos:' + qos + '}');
-        // } else {
-        //   socket.broadcast.to(data.uuid).emit('message', {"api": "connect", "status": auth.status, "uuid": data.uuid});
-        // }
       }
     });
   });
@@ -88,11 +80,6 @@ io.sockets.on('connection', function (socket) {
     // Emit API request from device to room for subscribers
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
       require('./lib/logEvent')(102, {"api": "disconnect", "socketid": socket.id.toString(), "uuid": uuid});
-      // if(config.mqtt){
-      //   mqttclient.publish(uuid, '{"api": "disconnect", "socketid": ' + socket.id.toString() + ', "uuid": ' + uuid + '}, {qos:' + qos + '}');
-      // } else {
-      //   socket.broadcast.to(uuid).emit('message', {"api": "disconnect", "socketid": socket.id.toString(), "uuid": uuid});
-      // }
     });      
 
   });

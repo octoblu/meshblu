@@ -486,6 +486,23 @@ var conn = skynet.createConnection({
 conn.on('notReady', function(data){
   console.log('UUID FAILED AUTHENTICATION!');
   console.log(data);
+
+  // Register a device
+  conn.register({
+    "type": "drone"
+  }, function (data) {
+    console.log(data); 
+
+    // Login to SkyNet to fire onready event
+    conn.authenticate({
+      "uuid": data.uuid, 
+      "token": data.token
+    }, function (data) {
+      console.log(data); 
+    });
+
+  });
+
 });
 
 conn.on('ready', function(data){

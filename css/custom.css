@@ -950,7 +950,7 @@ header .logo .section2 {
   color: white;
 }
 #home span {
-  color: #eb5055;
+  color: #3498db;
 }
 #home .container {
   height: 100%;
@@ -1030,7 +1030,8 @@ section#home.featured p {
   color: white;
 }
 section#home.freelancer {
-  background: #f0eee8 url('../img/iot_teal_opacity.jpg') top center no-repeat;
+  /*background: #f0eee8 url('../img/iot_teal_opacity.jpg') top center no-repeat;*/
+  background: #f0eee8 url('../img/skynet_background.jpg') top center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1041,7 +1042,7 @@ section#home.freelancer {
 section#home.freelancer h1,
 section#home.freelancer p {
   /*color: #2980B9;*/
-  color: black;
+  color: white;
   font-weight: 900;
 }
 section#home.freelancer span {
@@ -1099,7 +1100,7 @@ section#about .feature p {
 }
 section#features,
 section#projects {
-  background: #e05a54;
+  background: #3498db;
   text-align: center;
   padding-bottom: 0;
 }
@@ -1114,13 +1115,14 @@ section#projects p {
   line-height: 1.8em;
 }
 section#restapi {
-  background: #f0eee8;
+  /*background: #f0eee8;*/
+  background: #e0e0e0;
   color: #464542;
 }
 section#pricing,
 section#team,
 section#websockets {
-  background-color: #dbbea1;
+  background-color: #eb5055;
   padding: 4em 0 8em;
 }
 section#footer-cta {

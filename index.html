@@ -47,6 +47,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
    <link rel="shortcut icon" href="ico/favicon.png">
+
   </head>
 
   <body>
@@ -72,6 +73,7 @@
         <ul>
           <li class="current"><a href="#home">Home</a></li>
           <li><a href="#about">About</a></li>
+          <li><a href="#demo">Demo</a></li>
           <li><a href="#projects">Screencasts</a></li>
           <li><a href="#restapi">REST API</a></li>
           <li><a href="#websockets">Websocket API</a></li>
@@ -148,6 +150,94 @@
             </div>            
           </div>
         </div>
+      </section>
+
+      <a name="demo"></a>
+      <section id="demo" class="freelancer">
+        <!-- <div class="helper"></div> -->
+        <div class="hero-content">
+          <div style="position:absolute;bottom:25px;margin-left:auto;margin-right:auto;width:100%;"><center><a class="btn btn-large scroll assimilate" data-toggle="modal" data-target="#demoModal" onclick="startDemo(this)">DEMO!</a></center></div>
+
+          <!-- Modal -->
+          <div class="modal fade" id="demoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title" id="myModalLabel">SkyNet Demo</h4>
+                </div>
+                <div class="modal-body">
+                  Registering virtual device with SkyNet...
+                  <div id="connect"></div>
+                  <br/>
+                  <div id="redirect"></div>
+                  <script>
+                  var index = 0;
+                  var text = '';
+
+                    function type(){
+                      if(text.charAt(index) == '|'){
+                        document.getElementById('connect').innerHTML += '<br/>';
+                      } else {
+                        document.getElementById('connect').innerHTML += text.charAt(index);
+                      }
+                      index += 1;
+                      var t = setTimeout('type()',100);
+                    }     
+
+                    function startDemo(){
+
+                      var skynetConfig = {}    
+                      skynet({appName:'skynetDemo'}, function (e, socket, device) {
+                        if (e) throw e
+                        console.log('REGISTERED', device);
+
+                        text = '{|"uuid":"' + device.uuid + '",|"token": "' + device.token + '"|}';
+                        type();
+                        // $('#screen').append('{<br />"uuid":"' + device.uuid + '",<br />"token": "' + device.token + '"<br />}<br /><br />');
+                        $('#redirect').append('Now, anyone or any device can subscribe to your skynet stream at:<br />');
+                        $('#redirect').append('<a href="/demo/' + device.uuid + '/' + device.token + '" target="_new">http://skynet.im/demo/' + device.uuid + '/' + device.token + '</a>');
+
+                        // socket.emit('subscribe', {
+                        //   "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
+                        //   "token": "qirqglm6yb1vpldixflopnux4phtcsor"
+                        // }, function (data) {
+                        //   console.log(data); 
+                        // });
+
+                        // socket.emit('unsubscribe', {"uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"}, function (data) {
+                        //   console.log(data);
+                        // });  
+
+                        // Send and receive messages
+                        socket.emit('message', {
+                          "devices": device.uuid,
+                          "message": {
+                          "skynet":"online"
+                        }}, function(data){
+                          console.log(data);
+                        }); 
+                        socket.on('message', function(channel, message){
+                          console.log('message received', channel, message);
+                        });
+
+
+                      });
+
+                    }
+
+                  </script>                
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
       </section>
 
       <a name="videos"></a>
@@ -715,9 +805,9 @@ script.
       "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
       "token": "qirqglm6yb1vpldixflopnux4phtcsor"
     }    
-    skynet(skynetConfig, function (e, socket) {
-    // skynet(function (e, skynet) {
-    // skynet({appName:'chris'}, function (e, skynet) {
+    skynet(skynetConfig, function (e, socket, device) {
+    // skynet(function (e, socket, device) {
+    // skynet({appName:'chris'}, function (e, socket, device) {
       if (e) throw e
 
       // Sample SkyNet API calls:
@@ -869,8 +959,9 @@ skynet({'appName':'chris', 'awesomeMeter':10}, function (e, skynet) {
     </div>
 
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/modernizr.custom.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script src="js/modernizr.custom.js"></script>
     <script src="js/bootstrap/bootstrap.js"></script>
     <script src="js/lte-ie7.js"></script> <!-- needed for icon fonts -->
 
@@ -884,7 +975,7 @@ skynet({'appName':'chris', 'awesomeMeter':10}, function (e, skynet) {
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/jquery.smooth-scroll.min.js"></script>
     <script src="js/custom.js"></script>
-
+    <script src="js/skynet.js"></script>
     <!--<script src="js/less-1.3.3.min.js"></script>-->
     <script>
       var jiggle,
@@ -902,6 +993,7 @@ skynet({'appName':'chris', 'awesomeMeter':10}, function (e, skynet) {
         $(".featuredSlider").fitVids();
       });
     </script>    
+
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

@@ -1,0 +1,34 @@
+<html>
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>  
+  <script src="js/skynet.js"></script>
+  <script>
+    var skynetConfig = {
+      "uuid": location.pathname.split("/")[1],
+      "token": location.pathname.split("/")[2]
+    }    
+    skynet(skynetConfig, function (e, socket, device) {
+      if (e) throw e
+      console.log('REGISTERED', device);
+
+      // Send and receive messages
+      socket.emit('message', {
+        "devices": location.pathname.split("/")[1],
+        "message": {
+        "skynet":"online"
+      }}, function(data){
+        console.log(data);
+      }); 
+      socket.on('message', function(channel, message){
+        console.log('message received', channel, message);
+      });
+
+
+    });
+
+  </script>
+</head>
+<body>
+<div id="device"></div>
+</body>
+</html>

@@ -1013,6 +1013,106 @@ section h2 {
   font-weight: 100;
   margin: 2em 0 1em;
 }
+
+#demo .container {
+  height: 100%;
+}
+#demo .helper {
+  height: 50%;
+  width: 100%;
+  margin-bottom: 0px;
+}
+#demo .hero-content {
+  width: 100%;
+  height: 800px;
+  margin: 0 auto;
+  position: static;
+
+}
+#demo .hero-content h1 {
+  font-size: 3.7em;
+  font-weight: bold;
+  text-transform: uppercase;
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 0.1em;
+  line-height: 1.5em;
+}
+#demo .hero-content p {
+  font-size: 2em;
+}
+#demo .hero-content a.scroll {
+  position: relative;
+  margin-top: 1em;
+  padding: 1.5em 2em;
+  font-size: 2em;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: white;
+}
+#demo .featured-image {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 90;
+}
+section#demo {
+  background: #f0eee8 url('../img/bg-featured2.png') 42% 90% no-repeat;
+  color: #464542;
+  padding: 0;
+}
+section#demo.featured {
+  background: #f0eee8 url('../img/bg-featured.jpg') top center no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+section#demo.featured h1,
+section#demo.featured p {
+  color: white;
+}
+section#demo.freelancer {
+  background: #000 url('../img/skynet_domination.jpg') center no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  /*opacity:0.4;*/
+  /*opacity: 0.7; filter: alpha(opacity=70);*/
+}
+section#demo.freelancer h1,
+section#demo.freelancer p {
+  /*color: #2980B9;*/
+  color: white;
+  font-weight: 900;
+}
+section#demo.freelancer span {
+  font-weight: 900;
+}
+section#demo.app {
+  background: #f0eee8 url('../img/bg-app2.jpg') top center no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+section#demo.app h1,
+section#demo.app p {
+  color: white;
+  font-weight: 200;
+}
+section#demo.app span {
+  color: white;
+  font-weight: 400;
+}
+section#demo h1,
+section#demo p {
+  color: #464542;
+  padding: 0 4em;
+}
 section#home {
   background: #f0eee8 url('../img/bg-featured2.png') 42% 90% no-repeat;
   color: #464542;
@@ -1031,7 +1131,7 @@ section#home.featured p {
 }
 section#home.freelancer {
   /*background: #f0eee8 url('../img/iot_teal_opacity.jpg') top center no-repeat;*/
-  background: #f0eee8 url('../img/skynet_background.jpg') top center no-repeat;
+  background: #000 url('../img/skynet_background.jpg') top center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

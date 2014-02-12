@@ -48,7 +48,8 @@ function skynet (config, cb) {
           cb(new Error('Authentication Error'));
         });
         socket.on('ready', function(data){
-          cb(null, socket);
+          // cb(null, socket);
+          cb(null, socket, data);
         });
 
       });

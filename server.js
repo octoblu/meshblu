@@ -64,7 +64,7 @@ io.sockets.on('connection', function (socket) {
       if (auth.status == 201){
 
         if(data.uuid){
-          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});
+          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid, "token": data.token});
           // Have device join its uuid room name so that others can subscribe to it
           console.log('subscribe: ' + data.uuid);
           socket.join(data.uuid);
@@ -923,6 +923,10 @@ server.get('/inboundsms', function(req, res){
 
 // Serve static website
 var file = new nstatic.Server('');
+server.get('/demo/:uuid/:token', function(req, res, next) {
+    file.serveFile('/demo.html', 200, {}, req, res);
+});
+
 server.get('/', function(req, res, next) {
     file.serveFile('/index.html', 200, {}, req, res);
 });

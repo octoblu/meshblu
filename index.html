@@ -426,6 +426,29 @@
               </td></tr></table>
             </div>
 
+            <div class="col-md-12">
+              <h1>myDevices</h1>
+            </div>
+
+            <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-info" disabled> GET</button>
+              </div>
+              </td>
+              <td>
+              <div class="feature col-md-10">
+                <b>/mydevices/{uuid}</b>  
+                <br />Returns all information (including tokens) of all devices or nodes belonging to a user's UUID (identified as "owner")
+                <br />
+                <code>curl -X GET http://skynet.im/mydevices/0d1234a0-1234-11e3-b09c-1234e847b2cc?token=1234glm6y1234ldix1234nux41234sor</code>
+                <br />
+                <textarea class="form-control">{"devices":[{"owner":"0d1234a0-1234-11e3-b09c-1234e847b2cc","name":"SMS","phoneNumber":"16025551234","uuid":"1c1234e1-xxxx-11e3-1234-671234c01234","timestamp":1390861609070,"token":"1234eg1234zz1tt1234w0op12346bt9","channel":"main","online":false,"_id":"52e6d1234980420c4a0001db"}}]}</textarea>
+                <br />                                      
+              </div>
+              </td></tr></table>
+            </div>
+
 
             <div class="col-md-12">
               <h1>Messages</h1>
@@ -616,7 +639,7 @@ socket.on('connect', function(){
             <h2>SkyNet also offers a Node.JS NPM module for making event-driven IoT development fast and easy. This Node.JS module allows you to specify messaging protocol ("mqtt", "websocket"). If you select MQTT communications, you must specify your desired Quality of Service level ("qos") on the config as well as each message and subscription.  You can install the skynet module by running:</h2>
             <code>npm install skynet</code>
             
-            <h2>Here's a sample Node.JS app using the SkyNet NPM module:</h2>
+            <h2>Here's a kitchen-sink sample Node.JS app using the SkyNet NPM module:</h2>
 
             <pre>
 var skynet = require('skynet');
@@ -900,19 +923,19 @@ var skynetConfig = {
   "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
   "token": "qirqglm6yb1vpldixflopnux4phtcsor"
 }    
-skynet(skynetConfig, function (e, socket) {
+skynet(skynetConfig, function (e, socket, device) {
 </pre>
 <br/>
-2. If you would like for SkyNet to automatically register a new UUID and token for you.
+2. If you would like for SkyNet to automatically register a new UUID and token for you. This information will be returned in the device object.
 <br/>
 <pre>
-skynet(function (e, skynet) {
+skynet(function (e, socket, device) {
 </pre>
 <br/>
 3. Similar to option two, SkyNet will automatically register your device/node but you can pass additional JSON elements to your device description. There are no reserved element names.
 <br/>
 <pre>
-skynet({'appName':'chris', 'awesomeMeter':10}, function (e, skynet) {
+skynet({'appName':'chris', 'awesomeMeter':10}, function (e, socket, device) {
 </pre>
 
             </h2>

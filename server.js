@@ -924,7 +924,7 @@ server.get('/inboundsms', function(req, res){
 // Serve static website
 var file = new nstatic.Server('');
 server.get('/demo/:uuid/:token', function(req, res, next) {
-    file.serveFile('/demo.html', 200, {}, req, res);
+  file.serveFile('/demo.html', 200, {}, req, res);
 });
 
 server.get('/', function(req, res, next) {

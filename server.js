@@ -451,7 +451,7 @@ io.sockets.on('connection', function (socket) {
       console.log(check);
       if(check.type == 'gateway' && check.uuid == data.uuid && check.token == data.token){
         if(check.online == true){
-          console.log("gateway online");
+          console.log("gateway online with socket id:", check.socketId);
 
           io.sockets.socket(check.socketId).emit("config", {devices: data.uuid, token: data.token, method: data.method}, function(results){
             console.log(results)

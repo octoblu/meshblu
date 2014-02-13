@@ -442,6 +442,71 @@ io.sockets.on('connection', function (socket) {
     });
   });  
 
+  socket.on('gatewayConfig', function(data, fn) { 
+    console.log('gateway api req received');
+    console.log(data);
+
+    require('./lib/whoAmI')(data.uuid, true, function(check){
+      console.log('whoami');
+      console.log(check);
+      if(check.type == 'gateway' && check.uuid == data.uuid && check.token == data.token){
+        if(check.online == true){
+          console.log("gateway online");
+
+          io.sockets.socket(check.socketId).emit("config", {devices: data.uuid, token: data.token, method: data.method}, function(results){
+            console.log(results)
+
+            // socket.emit('message', {"uuid": data.uuid, "online": true});
+            // var results = {"uuid": data.uuid, "online": true};
+            try{
+              fn(results);
+            } catch (e){
+              console.log(e);
+            }
+            require('./lib/logEvent')(600, results);
+
+          });
+
+        } else {
+
+          console.log("gateway offline");
+
+          results = {
+            "error": {
+              "message": "Gateway offline",
+              "code": 404
+            }
+          };
+
+          try{
+            fn(results);
+          } catch (e){
+            console.log(e);
+          }
+          require('./lib/logEvent')(600, results);
+
+
+        }
+
+      } else {
+
+        gatewaydata = {
+          "error": {
+            "message": "Gateway not found",
+            "code": 404
+          }
+        };
+        try{
+          fn(gatewaydata);
+        } catch (e){
+          console.log(e);
+        }        
+        require('./lib/logEvent')(600, gatewaydata);
+
+      }
+    });
+
+  });  
 
 
   socket.on('message', function (data) {
@@ -489,12 +554,14 @@ io.sockets.on('connection', function (socket) {
           if (device.length == 36){
 
             // Send SMS if UUID has a phoneNumber
-            require('./lib/whoAmI')(device, false, function(smscheck){
-              if(smscheck.phoneNumber){
-                console.log("Sending SMS to", smscheck.phoneNumber)
-                require('./lib/sendSms')(device, JSON.stringify(dataMessage), function(smscheck){
+            require('./lib/whoAmI')(device, false, function(check){
+              if(check.phoneNumber){
+                console.log("Sending SMS to", check.phoneNumber)
+                require('./lib/sendSms')(device, JSON.stringify(dataMessage), function(check){
                   console.log('Sent SMS!');
                 });
+              } else if(check.type && check.type == 'gateway'){
+                // Any special gateway messaging needed?
               }
             });
 

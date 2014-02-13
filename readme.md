@@ -199,6 +199,7 @@ Event Codes
 * 402 = Delete device
 * 403 = Query devices
 * 500 = WhoAmI
+* 600 = Gateway Config API call
 
 LICENSE
 -------

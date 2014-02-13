@@ -166,7 +166,7 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title" id="myModalLabel">SkyNet Demo</h4>
+                  <h4 class="modal-title" id="myModalLabel">SkyNet Sensor Demo</h4>
                 </div>
                 <div class="modal-body">
                   Registering virtual device with SkyNet...
@@ -616,7 +616,7 @@ socket.on('connect', function(){
       console.log('Device authenticated with SkyNet');
 
       // Send/Receive messages
-      socket.message({
+      socket.emit("message",{
         "devices": ["0d3a53...847b2cc", "11123...44567"],
         "message": {
           "red":"on"
@@ -625,6 +625,9 @@ socket.on('connect', function(){
       socket.on('message', function(channel, message){
         console.log('message received', channel, message);
       });
+
+      // Test API calls
+      socket.emit('whoami', {uuid: "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"}, function(data){console.log(data);});            
 
     }
   });

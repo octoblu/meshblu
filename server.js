@@ -14,8 +14,9 @@ var restify = require('restify');
 var socketio = require('socket.io');
 var nstatic = require('node-static');
 var JSONStream = require('JSONStream');
-// var tropo_webapi = require('tropo-webapi');
 
+var RedisStore = require('socket.io/lib/stores/redis');
+var redis = require('socket.io/node_modules/redis');
 
 var mqtt = require('mqtt'),
   qos = 0;
@@ -38,8 +39,40 @@ try {
   console.log('No MQTT server found.');
 }
 
+// Setup RedisStore for socket.io scaling
+var options, pub, store, sub;
+options = {
+  parser: "javascript"
+};
+pub = redis.createClient(config.redisPort, config.redisHost, options);
+sub = redis.createClient(config.redisPort, config.redisHost, options);
+store = redis.createClient(config.redisPort, config.redisHost, options);
+pub.auth(config.redisPassword, function(err) {
+  if (err) {
+    throw err;
+  }
+});
+sub.auth(config.redisPassword, function(err) {
+  if (err) {
+    throw err;
+  }
+});
+store.auth(config.redisPassword, function(err) {
+  if (err) {
+    throw err;
+  }
+});
+
 var server = restify.createServer();
 var io = socketio.listen(server);
+
+io.configure(function() {
+  return io.set("store", new RedisStore({
+    redisPub: pub,
+    redisSub: sub,
+    redisClient: store
+  }));
+});
 
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());

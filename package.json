@@ -17,7 +17,8 @@
     "mqtt": "*",
     "JSONStream": "*",
     "commander": "*",
-    "request": "*"
+    "request": "*",
+    "redis": "*"
   },
   "subdomain": "skynet",
   "domains": [

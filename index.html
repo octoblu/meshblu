@@ -189,7 +189,9 @@
 
                     function startDemo(){
 
-                      var skynetConfig = {}    
+                      var skynetConfig = {} 
+                      var x=0;
+                      var y=0;   
                       skynet({appName:'skynetDemo'}, function (e, socket, device) {
                         if (e) throw e
                         console.log('REGISTERED', device);
@@ -207,17 +209,22 @@
                         $(document).ready(function(){
                           $(document).mousemove(function(e){
                             $('#spnCursor').html("X Axis : " + e.pageX + " Y Axis : " + e.pageY);
-                            
+                            x=e.pageX;
+                            y=e.pageY;
+                          });
+
+                          setInterval(function(){
                             // Send and receive messages
                             socket.emit('message', {
                               "devices": device.uuid,
                               "message": {
-                              "x": e.pageX, "y": e.pageY
+                              "x": x, "y": y
                             }}, function(data){
                               console.log(data);
                             });  
+                            
+                          },300);   
 
-                          });
                         });
 
 

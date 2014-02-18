@@ -5,5 +5,8 @@ module.exports = {
   plivo: {
     authId: "abc",
     authToken: "123"
-  }
+  },
+  redisHost: "xyz.redistogo.com",
+  redisPort: "1234",
+  redisPassword: "abcdef"    
 };

@@ -6,18 +6,11 @@ SS      kk  kk yy   yy nn nnn    eee  tt
  SSSSS  kk  kk      yy nn   nn  eeeee  tttt
                 yyyyy
 ```
+Please visit [SkyNet.im](http://skynet.im) for more current documentation.
+
 ======
 
 Phase 1 - Build a network and realtime API for enabling machine-to-machine communications.
-
-Here are several quick screencasts that demostrate what you can do with Skynet:
-
-* [Screencast 1: What is Skynet?](http://www.youtube.com/watch?v=cPs1JNFyXjk)
-* [Screencast 2: Introducing an Arduino](http://www.youtube.com/watch?v=SzaTPiaDDQI)
-* [Screencast 3: Security device tokens added](http://www.youtube.com/watch?v=TB6RyzT10EA)
-* [Screencast 4: Node.JS NPM module released](http://www.youtube.com/watch?v=0WjNG6AOcXM)
-* [Screencast 5: PubSub feature added to device UUID channels](https://www.youtube.com/watch?v=SL_c1MSgMaw)
-* [Screencast 6: Events endpoint added to APIs](https://www.youtube.com/watch?v=GJqSabO1EUA)
 
 Installing
 ----------
@@ -29,7 +22,11 @@ $ npm install
 $ cp config.js.sample config.js
 ```
 
-Modify `config.js` with your MongoDB connection string. If you have MongoDB running locally use `mongodb://localhost:27017/skynet`.
+Modify `config.js` with your MongoDB connection string. If you have MongoDB running locally use: 
+
+```
+mongodb://localhost:27017/skynet
+```
 
 You must also modify `config.js` with your Redis connection information. If you have Redis running locally use:
 
@@ -207,6 +204,13 @@ Event Codes
 * 403 = Query devices
 * 500 = WhoAmI
 * 600 = Gateway Config API call
+
+FOLLOW US!
+----------
+
+* [Twitter/SKYNETim](http://twitter.com/skynetim)
+* [Facebook/SKYNETim](http://facebook.com/skynetim)
+
 
 LICENSE
 -------

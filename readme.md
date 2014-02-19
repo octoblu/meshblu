@@ -29,7 +29,14 @@ $ npm install
 $ cp config.js.sample config.js
 ```
 
-Modify `config.js` with you MongoDB connection string. If you have MongoDB running locally use `mongodb://localhost:27017/skynet`.
+Modify `config.js` with your MongoDB connection string. If you have MongoDB running locally use `mongodb://localhost:27017/skynet`.
+
+You must also modify `config.js` with your Redis connection information. If you have Redis running locally use:
+
+```
+redisHost: "127.0.0.1",
+redisPort: "6379"
+```
 
 HTTP(S) REST API
 ----------------

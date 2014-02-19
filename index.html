@@ -192,6 +192,8 @@
                       var skynetConfig = {} 
                       var x=0;
                       var y=0;   
+                      var oldx=0;
+                      var oldy=0;   
                       skynet({appName:'skynetDemo'}, function (e, socket, device) {
                         if (e) throw e
                         console.log('REGISTERED', device);
@@ -215,13 +217,19 @@
 
                           setInterval(function(){
                             // Send and receive messages
-                            socket.emit('message', {
-                              "devices": device.uuid,
-                              "message": {
-                              "x": x, "y": y
-                            }}, function(data){
-                              console.log(data);
-                            });  
+                            if(x != oldx ){
+                              oldx = x;
+                              oldy = y;
+                              
+                              socket.emit('message', {
+                                "devices": device.uuid,
+                                "message": {
+                                "x": x, "y": y
+                              }}, function(data){
+                                console.log(data);
+                              });  
+
+                            }
                             
                           },300);   
 

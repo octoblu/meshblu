@@ -6,11 +6,16 @@ SS      kk  kk yy   yy nn nnn    eee  tt
  SSSSS  kk  kk      yy nn   nn  eeeee  tttt
                 yyyyy
 ```
-Please visit [SkyNet.im](http://skynet.im) for more current documentation.
+Visit [SkyNet.im](http://skynet.im) for up-to-the-latest documentation and screencasts.
 
 ======
 
-Phase 1 - Build a network and realtime API for enabling machine-to-machine communications.
+Roadmap
+-------
+
+* Phase 1 - Build a network and realtime API for enabling machine-to-machine communications.
+* Phase 2 - Connect all of the thingz.
+* Phase 3 - Become self-aware!
 
 Installing
 ----------

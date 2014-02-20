@@ -40,6 +40,12 @@ redisHost: "127.0.0.1",
 redisPort: "6379"
 ```
 
+Start the server use:
+
+```bash
+$ node server.js
+```
+
 HTTP(S) REST API
 ----------------
 

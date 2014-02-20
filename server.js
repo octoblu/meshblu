@@ -28,7 +28,6 @@ var mqttsettings = {
 }
 
 var RateLimiter = require('limiter').RateLimiter;
-var limiter = new RateLimiter(10, 'second', true);  // fire CB immediately
 
 
 // create mqtt connection
@@ -88,6 +87,8 @@ process.on("uncaughtException", function(error) {
 });
 
 io.sockets.on('connection', function (socket) {
+
+  socket.limiter = new RateLimiter(10, 'second', true);  // fire CB immediately
 
   console.log('Websocket connection detected. Requesting identification from socket id: ' + socket.id.toString());
   require('./lib/logEvent')(100, {"socketId": socket.id.toString(), "protocol": "websocket"});
@@ -549,7 +550,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('message', function (data) {
 
     // Immediately send 429 header to client when rate limiting is in effect
-    limiter.removeTokens(1, function(err, remainingRequests) {
+    socket.limiter.removeTokens(1, function(err, remainingRequests) {
       if (remainingRequests < 0) {
         // response.writeHead(429, {'Content-Type': 'text/plain;charset=UTF-8'});
         // response.end('429 Too Many Requests - your IP is being rate limited');

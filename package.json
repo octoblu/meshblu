@@ -18,7 +18,8 @@
     "JSONStream": "*",
     "commander": "*",
     "request": "*",
-    "redis": "*"
+    "redis": "*",
+    "limiter": "*"
   },
   "subdomain": "skynet",
   "domains": [

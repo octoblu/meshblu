@@ -27,6 +27,10 @@ var mqttsettings = {
   clientId: 'skynet'
 }
 
+var RateLimiter = require('limiter').RateLimiter;
+var limiter = new RateLimiter(10, 'second', true);  // fire CB immediately
+
+
 // create mqtt connection
 try {
   // var mqttclient = mqtt.createClient(1883, 'mqtt.skynet.im', mqttsettings);
@@ -543,75 +547,98 @@ io.sockets.on('connection', function (socket) {
 
 
   socket.on('message', function (data) {
-    if(data == undefined){
-      var data = {};
-    } else if (typeof data !== 'object'){
-      data = JSON.parse(data);
-    }
 
-    var eventData = data
-
-    // Broadcast to room for pubsub
-    require('./lib/getUuid')(socket.id.toString(), function(uuid){
-      eventData["api"] = "message";
-      eventData["fromUuid"] = uuid;
-      // socket.broadcast.to(uuid).emit('message', eventData)  
-
-      var dataMessage = data.message;
-      dataMessage["fromUuid"] = uuid;
-
-      console.log('devices: ' + data.devices);
-      console.log('message: ' + JSON.stringify(dataMessage));
-      console.log('protocol: ' + data.protocol);
-
-      if(data.devices == "all" || data.devices == "*"){
-
-        socket.broadcast.emit('message', 'broadcast', JSON.stringify(dataMessage));
-
-        if(data.protocol == undefined && data.protocol != "mqtt"){
-          mqttclient.publish('broadcast', JSON.stringify(dataMessage), {qos:qos});
-        }
-
-        require('./lib/logEvent')(300, eventData);
+    // Immediately send 429 header to client when rate limiting is in effect
+    limiter.removeTokens(1, function(err, remainingRequests) {
+      if (remainingRequests < 0) {
+        // response.writeHead(429, {'Content-Type': 'text/plain;charset=UTF-8'});
+        // response.end('429 Too Many Requests - your IP is being rate limited');
+        
+        // TODO: Emit rate limit exceeded message 
+        console.log("Rate limit exceeded for socket:", socket.id.toString());
 
       } else {
 
-        var devices = data.devices;
+        if(data == undefined){
+          var data = {};
+        } else if (typeof data !== 'object'){
+          data = JSON.parse(data);
+        }
 
-        if( typeof devices === 'string' ) {
-            devices = [ devices ];
-        };
+        var eventData = data
 
-        devices.forEach( function(device) { 
+        // Broadcast to room for pubsub
+        require('./lib/getUuid')(socket.id.toString(), function(uuid){
+          eventData["api"] = "message";
+          eventData["fromUuid"] = uuid;
+          // socket.broadcast.to(uuid).emit('message', eventData)  
 
-          if (device.length == 36){
+          var dataMessage = data.message;
+          if (dataMessage){
+            dataMessage["fromUuid"] = uuid;
+          }           
 
-            // Send SMS if UUID has a phoneNumber
-            require('./lib/whoAmI')(device, false, function(check){
-              if(check.phoneNumber){
-                console.log("Sending SMS to", check.phoneNumber)
-                require('./lib/sendSms')(device, JSON.stringify(dataMessage), function(check){
-                  console.log('Sent SMS!');
-                });
-              } else if(check.type && check.type == 'gateway'){
-                // Any special gateway messaging needed?
-              }
-            });
+          console.log('devices: ' + data.devices);
+          console.log('message: ' + JSON.stringify(dataMessage));
+          console.log('protocol: ' + data.protocol);
 
-            // Broadcast to room for pubsub
-            console.log('sending message to room: ' + device);            
-            socket.broadcast.to(device).emit('message', device, JSON.stringify(dataMessage));
+          if(data.devices == "all" || data.devices == "*"){
+
+            socket.broadcast.emit('message', 'broadcast', JSON.stringify(dataMessage));
 
             if(data.protocol == undefined && data.protocol != "mqtt"){
-              mqttclient.publish(device, JSON.stringify(dataMessage), {qos:qos});
+              mqttclient.publish('broadcast', JSON.stringify(dataMessage), {qos:qos});
             }
+
+            require('./lib/logEvent')(300, eventData);
+
+          } else {
+
+            var devices = data.devices;
+
+            if( typeof devices === 'string' ) {
+                devices = [ devices ];
+            };
+
+            if(devices){
+
+              devices.forEach( function(device) { 
+
+                if (device.length == 36){
+
+                  // Send SMS if UUID has a phoneNumber
+                  require('./lib/whoAmI')(device, false, function(check){
+                    if(check.phoneNumber){
+                      console.log("Sending SMS to", check.phoneNumber)
+                      require('./lib/sendSms')(device, JSON.stringify(dataMessage), function(check){
+                        console.log('Sent SMS!');
+                      });
+                    } else if(check.type && check.type == 'gateway'){
+                      // Any special gateway messaging needed?
+                    }
+                  });
+
+                  // Broadcast to room for pubsub
+                  console.log('sending message to room: ' + device);            
+                  socket.broadcast.to(device).emit('message', device, JSON.stringify(dataMessage));
+
+                  if(data.protocol == undefined && data.protocol != "mqtt"){
+                    mqttclient.publish(device, JSON.stringify(dataMessage), {qos:qos});
+                  }
+                }
+
+              });
+
+
+            }
+
+            require('./lib/logEvent')(300, eventData);
           }
 
         });
 
-        require('./lib/logEvent')(300, eventData);
-      }
 
+      }
     });
 
   });

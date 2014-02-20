@@ -43,7 +43,7 @@ redisPort: "6379"
 Start the server use:
 
 ```bash
-$ nodejs server.js
+$ node server.js
 ```
 
 HTTP(S) REST API

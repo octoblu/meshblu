@@ -29,7 +29,7 @@ var mqttsettings = {
 
 // Create a throttle with 600 access limit per minute.
 // https://github.com/brycebaril/node-tokenthrottle
-var throttle = require("tokenthrottle")({rate: 600});
+// var throttle = require("tokenthrottle")({rate: 600});
 
 
 // create mqtt connection
@@ -549,16 +549,16 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('message', function (data) {
 
-    throttle.rateLimit(socket.id.toString(), function (err, limited) {
-      if (limited) {
+    // throttle.rateLimit(socket.id.toString(), function (err, limited) {
+      // if (limited) {
         // return res.next(new Error("Rate limit exceeded, please slow down."));
         // response.writeHead(429, {'Content-Type': 'text/plain;charset=UTF-8'});
         // response.end('429 Too Many Requests - your IP is being rate limited');
         
         // TODO: Emit rate limit exceeded message 
-        console.log("Rate limit exceeded for socket:", socket.id.toString());
+        // console.log("Rate limit exceeded for socket:", socket.id.toString());
 
-      } else {
+      // } else {
 
         if(data == undefined){
           var data = {};
@@ -642,7 +642,7 @@ io.sockets.on('connection', function (socket) {
       }
     });
 
-  });
+  // });
 
 });
 

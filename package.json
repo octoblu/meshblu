@@ -19,7 +19,7 @@
     "commander": "*",
     "request": "*",
     "redis": "*",
-    "tokenthrottle": "*"
+    "limiter": "*"
   },
   "subdomain": "skynet",
   "domains": [

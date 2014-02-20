@@ -549,7 +549,7 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('message', function (data) {
 
-    throttle.rateLimit(socket.id.toString(), function (err, limited) {
+    throttle.rateLimit(socket.id, function (err, limited) {
       if (limited) {
         // return res.next(new Error("Rate limit exceeded, please slow down."));
         // response.writeHead(429, {'Content-Type': 'text/plain;charset=UTF-8'});

@@ -27,7 +27,9 @@ var mqttsettings = {
   clientId: 'skynet'
 }
 
-var RateLimiter = require('limiter').RateLimiter;
+// Create a throttle with 10 access limit per second.
+// https://github.com/brycebaril/node-tokenthrottle
+var throttle = require("tokenthrottle")({rate: 10});
 
 
 // create mqtt connection
@@ -87,8 +89,6 @@ process.on("uncaughtException", function(error) {
 });
 
 io.sockets.on('connection', function (socket) {
-
-  socket.limiter = new RateLimiter(10, 'second', true);  // fire CB immediately
 
   console.log('Websocket connection detected. Requesting identification from socket id: ' + socket.id.toString());
   require('./lib/logEvent')(100, {"socketId": socket.id.toString(), "protocol": "websocket"});
@@ -549,9 +549,9 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('message', function (data) {
 
-    // Immediately send 429 header to client when rate limiting is in effect
-    socket.limiter.removeTokens(1, function(err, remainingRequests) {
-      if (remainingRequests < 0) {
+    throttle.rateLimit(socket.id.toString(), function (err, limited) {
+      if (limited) {
+        // return res.next(new Error("Rate limit exceeded, please slow down."));
         // response.writeHead(429, {'Content-Type': 'text/plain;charset=UTF-8'});
         // response.end('429 Too Many Requests - your IP is being rate limited');
         

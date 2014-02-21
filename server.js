@@ -27,11 +27,11 @@ var mqttsettings = {
   clientId: 'skynet'
 }
 
-// Create a throttle with 600 access limit per minute.
+// Create a throttle with 10 access limit per second.
 // https://github.com/brycebaril/node-tokenthrottle
 // var throttle = require("tokenthrottle")({
-//   rate: 60,       // replenish actions at 100 per second
-//   burst: 200,      // allow a maximum burst of 200 actions per minute
+//   rate: 10,       // replenish actions at 10 per second
+//   burst: 20,      // allow a maximum burst of 20 actions per second
 //   window: 60000,   // set the throttle window to a minute
 //   overrides: {
 //     "127.0.0.1": {rate: 0}, // No limit for localhost
@@ -41,9 +41,7 @@ var mqttsettings = {
 // });
 
 // rate per second
-var throttle = require("tokenthrottle")({rate: 10}); 
-
-// var RateLimiter = require('limiter').RateLimiter;
+var throttle = require("tokenthrottle")({rate: config.rateLimit}); 
 
 // create mqtt connection
 try {
@@ -624,7 +622,8 @@ io.sockets.on('connection', function (socket) {
 
           if(message.devices == "all" || message.devices == "*"){
 
-            socket.broadcast.emit('message', 'broadcast', JSON.stringify(dataMessage));
+            // socket.broadcast.emit('message', 'broadcast', JSON.stringify(dataMessage));
+            socket.broadcast.emit('message', 'broadcast', dataMessage);
 
             if(message.protocol == undefined && message.protocol != "mqtt"){
               mqttclient.publish('broadcast', JSON.stringify(dataMessage), {qos:qos});
@@ -660,7 +659,8 @@ io.sockets.on('connection', function (socket) {
 
                   // Broadcast to room for pubsub
                   console.log('sending message to room: ' + device);            
-                  socket.broadcast.to(device).emit('message', device, JSON.stringify(dataMessage));
+                  // socket.broadcast.to(device).emit('message', device, JSON.stringify(dataMessage));
+                  socket.broadcast.to(device).emit('message', device, dataMessage);
 
                   if(message.protocol == undefined && message.protocol != "mqtt"){
                     mqttclient.publish(device, JSON.stringify(dataMessage), {qos:qos});

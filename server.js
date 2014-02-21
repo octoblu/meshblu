@@ -29,7 +29,18 @@ var mqttsettings = {
 
 // Create a throttle with 600 access limit per minute.
 // https://github.com/brycebaril/node-tokenthrottle
-// var throttle = require("tokenthrottle")({rate: 600});
+// var throttle = require("tokenthrottle")({
+//   rate: 60,       // replenish actions at 100 per minute
+//   burst: 200,      // allow a maximum burst of 200 actions per minute
+//   window: 60000,   // set the throttle window to a minute
+//   overrides: {
+//     "127.0.0.1": {rate: 0}, // No limit for localhost
+//     "Joe Smith": {rate: 10}, // token "Joe Smith" gets 10 actions per second (Note defaults apply here, does not inherit)
+//     "2da0f39": {rate: 1000, burst: 2000, window: 1000}, // Allow a lot more actions to this token.
+//   }
+// });
+var throttle = require("tokenthrottle")({rate: 1});
+
 // var RateLimiter = require('limiter').RateLimiter;
 
 // create mqtt connection
@@ -104,7 +115,7 @@ io.sockets.on('connection', function (socket) {
 
   var ipAddress = socket.handshake.address.address;
 
-  // socket.limiter = new RateLimiter(10, 1000);
+  // socket.limiter = new RateLimiter(1, "second", true);
 
   console.log('Websocket connection detected. Requesting identification from socket id: ' + socket.id.toString());
   require('./lib/logEvent')(100, {"socketId": socket.id.toString(), "protocol": "websocket"});
@@ -564,27 +575,35 @@ io.sockets.on('connection', function (socket) {
   });  
 
 
-  socket.on('message', function (data) {
+  socket.on('message', function (messageX) {
 
     // socket.limiter.removeTokens(1, function(err, remainingRequests) {
-    // throttle.rateLimit(socket.id.toString(), function (err, limited) {
+    throttle.rateLimit(socket.id.toString(), function (err, limited) {
+      var message = messageX;
+      if (limited) {
       // if (remainingRequests < 0) {
         // return res.next(new Error("Rate limit exceeded, please slow down."));
         // response.writeHead(429, {'Content-Type': 'text/plain;charset=UTF-8'});
         // response.end('429 Too Many Requests - your IP is being rate limited');
         
         // TODO: Emit rate limit exceeded message 
-        // console.log("Rate limit exceeded for socket:", socket.id.toString());
+        console.log("Rate limit exceeded for socket:", socket.id.toString());
+        console.log("message", message);
 
-      // } else {
+      } else {
+        console.log("Sending message for socket:", socket.id.toString());
+        console.log("message", message);
 
-        if(data == undefined){
-          var data = {};
-        } else if (typeof data !== 'object'){
-          data = JSON.parse(data);
+        if(message == undefined){
+          var message = {};
+          return;
+        } else if (typeof message !== 'object'){
+          console.log("converting message");
+          message = JSON.parse(message);
         }
+        console.log("message", message);
 
-        var eventData = data
+        var eventData = message;
 
         // Broadcast to room for pubsub
         require('./lib/getUuid')(socket.id.toString(), function(uuid){
@@ -592,20 +611,20 @@ io.sockets.on('connection', function (socket) {
           eventData["fromUuid"] = uuid;
           // socket.broadcast.to(uuid).emit('message', eventData)  
 
-          var dataMessage = data.message;
+          var dataMessage = message.message;
           if (dataMessage){
             dataMessage["fromUuid"] = uuid;
           }           
 
-          console.log('devices: ' + data.devices);
+          console.log('devices: ' + message.devices);
           console.log('message: ' + JSON.stringify(dataMessage));
-          console.log('protocol: ' + data.protocol);
+          console.log('protocol: ' + message.protocol);
 
-          if(data.devices == "all" || data.devices == "*"){
+          if(message.devices == "all" || message.devices == "*"){
 
             socket.broadcast.emit('message', 'broadcast', JSON.stringify(dataMessage));
 
-            if(data.protocol == undefined && data.protocol != "mqtt"){
+            if(message.protocol == undefined && message.protocol != "mqtt"){
               mqttclient.publish('broadcast', JSON.stringify(dataMessage), {qos:qos});
             }
 
@@ -613,7 +632,7 @@ io.sockets.on('connection', function (socket) {
 
           } else {
 
-            var devices = data.devices;
+            var devices = message.devices;
 
             if( typeof devices === 'string' ) {
                 devices = [ devices ];
@@ -641,7 +660,7 @@ io.sockets.on('connection', function (socket) {
                   console.log('sending message to room: ' + device);            
                   socket.broadcast.to(device).emit('message', device, JSON.stringify(dataMessage));
 
-                  if(data.protocol == undefined && data.protocol != "mqtt"){
+                  if(message.protocol == undefined && message.protocol != "mqtt"){
                     mqttclient.publish(device, JSON.stringify(dataMessage), {qos:qos});
                   }
                 }
@@ -657,8 +676,8 @@ io.sockets.on('connection', function (socket) {
         });
 
 
-      // }
-    // });
+      }
+    });
 
   });
 

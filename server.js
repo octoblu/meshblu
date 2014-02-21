@@ -30,7 +30,7 @@ var mqttsettings = {
 // Create a throttle with 600 access limit per minute.
 // https://github.com/brycebaril/node-tokenthrottle
 // var throttle = require("tokenthrottle")({
-//   rate: 60,       // replenish actions at 100 per minute
+//   rate: 60,       // replenish actions at 100 per second
 //   burst: 200,      // allow a maximum burst of 200 actions per minute
 //   window: 60000,   // set the throttle window to a minute
 //   overrides: {
@@ -39,7 +39,9 @@ var mqttsettings = {
 //     "2da0f39": {rate: 1000, burst: 2000, window: 1000}, // Allow a lot more actions to this token.
 //   }
 // });
-var throttle = require("tokenthrottle")({rate: 1});
+
+// rate per second
+var throttle = require("tokenthrottle")({rate: 10}); 
 
 // var RateLimiter = require('limiter').RateLimiter;
 

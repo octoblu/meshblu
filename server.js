@@ -84,11 +84,25 @@ server.use(restify.queryParser());
 server.use(restify.bodyParser());
 server.use(restify.CORS());
 
+// Add throttling to HTTP API requests
+// server.use(restify.throttle({
+//   burst: 100,
+//   rate: 50,
+//   ip: true, // throttle based on source ip address
+//   overrides: {
+//     '127.0.0.1': {
+//       rate: 0, // unlimited
+//       burst: 0
+//     }
+//   }
+
 process.on("uncaughtException", function(error) {
   return console.log(error.stack);
 });
 
 io.sockets.on('connection', function (socket) {
+
+  var ipAddress = socket.handshake.address.address;
 
   // socket.limiter = new RateLimiter(10, 1000);
 
@@ -98,6 +112,7 @@ io.sockets.on('connection', function (socket) {
   socket.emit('identify', { socketid: socket.id.toString() });
   socket.on('identity', function (data) {
     data["socketid"] = socket.id.toString();
+    data["ipAddress"] = ipAddress;
     console.log('Identity received: ' + JSON.stringify(data));
     require('./lib/logEvent')(101, data);
     require('./lib/updateSocketId')(data, function(auth){
@@ -767,6 +782,7 @@ server.get('/gateway/:uuid', function(req, res){
 // curl -X POST -d "name=arduino&description=this+is+a+test" http://localhost:3000/devices
 server.post('/devices', function(req, res){
   res.setHeader('Access-Control-Allow-Origin','*');
+  req.params['ipAddress'] = req.connection.remoteAddress
   require('./lib/register')(req.params, function(data){
     console.log(data);
     // io.sockets.in(data.uuid).emit('message', data)    

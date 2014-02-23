@@ -625,8 +625,8 @@ io.sockets.on('connection', function (socket) {
             socket.broadcast.emit('message', 'broadcast', dataMessage);
 
             if(message.protocol == undefined && message.protocol != "mqtt"){
-              // mqttclient.publish('broadcast', JSON.stringify(dataMessage), {qos:qos});
-              mqttclient.publish('broadcast', dataMessage, {qos:qos});
+              mqttclient.publish('broadcast', JSON.stringify(dataMessage), {qos:qos});
+              // mqttclient.publish('broadcast', dataMessage, {qos:qos});
             }
 
             require('./lib/logEvent')(300, eventData);
@@ -663,8 +663,8 @@ io.sockets.on('connection', function (socket) {
                   socket.broadcast.to(device).emit('message', device, dataMessage);
 
                   if(message.protocol == undefined && message.protocol != "mqtt"){
-                    // mqttclient.publish(device, JSON.stringify(dataMessage), {qos:qos});
-                    mqttclient.publish(device, dataMessage, {qos:qos});
+                    mqttclient.publish(device, JSON.stringify(dataMessage), {qos:qos});
+                    // mqttclient.publish(device, dataMessage, {qos:qos});
                   }
                 }
 

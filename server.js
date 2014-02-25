@@ -519,7 +519,7 @@ io.sockets.on('connection', function (socket) {
         if(check.online == true){
           console.log("gateway online with socket id:", check.socketId);
 
-          io.sockets.socket(check.socketId).emit("config", {devices: data.uuid, token: data.token, method: data.method, name: data.name}, function(results){
+          io.sockets.socket(check.socketId).emit("config", {devices: data.uuid, token: data.token, method: data.method, name: data.name, type: data.type, options: data.options}, function(results){
             console.log(results)
 
             // socket.emit('message', {"uuid": data.uuid, "online": true});

@@ -608,8 +608,8 @@ io.sockets.on('connection', function (socket) {
           eventData["fromUuid"] = uuid;
           // socket.broadcast.to(uuid).emit('message', eventData)  
 
-          // var dataMessage = message.message;
-          var dataMessage = message;
+          var dataMessage = message.message;
+          // var dataMessage = message;
           if (dataMessage){
             dataMessage["fromUuid"] = uuid;
           }           

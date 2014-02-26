@@ -658,6 +658,7 @@ io.sockets.on('connection', function (socket) {
 
                   // Broadcast to room for pubsub
                   console.log('sending message to room: ' + device);            
+                  console.log('message', dataMessage);
                   // socket.broadcast.to(device).emit('message', device, JSON.stringify(dataMessage));
                   socket.broadcast.to(device).emit('message', device, dataMessage);
 

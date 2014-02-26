@@ -581,8 +581,6 @@ io.sockets.on('connection', function (socket) {
     throttle.rateLimit(socket.id.toString(), function (err, limited) {
       var message = messageX;
       if (limited) {
-      // if (remainingRequests < 0) {
-        // return res.next(new Error("Rate limit exceeded, please slow down."));
         // response.writeHead(429, {'Content-Type': 'text/plain;charset=UTF-8'});
         // response.end('429 Too Many Requests - your IP is being rate limited');
         
@@ -610,7 +608,8 @@ io.sockets.on('connection', function (socket) {
           eventData["fromUuid"] = uuid;
           // socket.broadcast.to(uuid).emit('message', eventData)  
 
-          var dataMessage = message.message;
+          // var dataMessage = message.message;
+          var dataMessage = message;
           if (dataMessage){
             dataMessage["fromUuid"] = uuid;
           }           

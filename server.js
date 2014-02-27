@@ -648,7 +648,7 @@ io.sockets.on('connection', function (socket) {
                   require('./lib/whoAmI')(device, false, function(check){
                     if(check.phoneNumber){
                       console.log("Sending SMS to", check.phoneNumber)
-                      require('./lib/sendSms')(device, JSON.stringify(dataMessage), function(check){
+                      require('./lib/sendSms')(device, JSON.stringify(message.message), function(check){
                         console.log('Sent SMS!');
                       });
                     } else if(check.type && check.type == 'gateway'){

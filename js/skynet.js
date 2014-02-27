@@ -23,12 +23,9 @@ function skynet (config, cb) {
 
   var authenticate = function() {
 
-      var socket = io.connect('http://skynet.im', {
-          port: 80
+      var socket = io.connect(config.host || "http://skynet.im", {
+          port: config.port || 80
       });
-      // var socket = io.connect('localhost', {
-      //     port: 3000
-      // });
 
       socket.on('connect', function(){
         console.log('Requesting websocket connection to Skynet');

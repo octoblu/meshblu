@@ -849,8 +849,11 @@ script.
   &lt;script&gt;
     var skynetConfig = {
       "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
-      "token": "qirqglm6yb1vpldixflopnux4phtcsor"
-    }    
+      "token": "qirqglm6yb1vpldixflopnux4phtcsor",
+      "protocol": "websocket",
+      "host": "localhost", // optional (defaults to "http://skynet.im")
+      "port": 3000 // optional (defaults to 80)
+    }   
     skynet(skynetConfig, function (e, socket, device) {
     // skynet(function (e, socket, device) {
     // skynet({appName:'chris'}, function (e, socket, device) {

@@ -596,7 +596,13 @@ io.sockets.on('connection', function (socket) {
           var message = {};
           return;
         } else if (typeof message !== 'object'){
-          message = JSON.parse(message);
+          try{
+            message = JSON.parse(message);
+          } catch(e){
+            console.log('ERROR', e);
+            return;
+          }
+          
         }
         console.log("message", message);
 

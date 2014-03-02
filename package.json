@@ -19,7 +19,8 @@
     "commander": "*",
     "request": "*",
     "redis": "*",
-    "tokenthrottle": "*"
+    "tokenthrottle": "*",
+    "lodash": "*"
   },
   "subdomain": "skynet",
   "domains": [

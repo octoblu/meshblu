@@ -124,6 +124,9 @@ io.sockets.on('connection', function (socket) {
   socket.on('identity', function (data) {
     data["socketid"] = socket.id.toString();
     data["ipAddress"] = ipAddress;
+    if(data.protocol == undefined){
+      data["protocol"] = "websocket";
+    }
     console.log('Identity received: ' + JSON.stringify(data));
     require('./lib/logEvent')(101, data);
     require('./lib/updateSocketId')(data, function(auth){

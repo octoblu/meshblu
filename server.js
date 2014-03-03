@@ -1062,29 +1062,10 @@ server.post('/messages', function(req, res, next){
   console.log('devices: ' + devices);
   console.log('message: ' + JSON.stringify(message));
 
-  require('./lib/authDevice')(body.uuid, body.token, function(auth){
+  sendMessage(devices, message);
+  res.json({devices:devices, message: message});
 
-    if (auth.authenticate == true){
-      //TODO figure out how to rate limit without checking auth
-      throttle.rateLimit(body.uuid, function (err, limited) {
-        var messageX = body;
-        if (limited) {
-          // TODO: Emit rate limit exceeded message
-          console.log("Rate limit exceeded for http:", messageX.uuid);
-          console.log("message", messageX);
-
-        } else {
-          sendMessage(message.uuid, messageX);
-        }
-      });
-
-    }else{
-      console.log('invalid attempted http publish', body);
-    }
-
-    require('./lib/logEvent')(300, message);
-  });
-
+  require('./lib/logEvent')(300, message);
 
 });
 

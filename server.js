@@ -1111,7 +1111,8 @@ server.get('/inboundsms', function(req, res){
     console.log(uuid);
 
     mqttclient.publish(uuid, JSON.stringify(message), {qos:qos});
-    io.sockets.in(uuid).emit('message', {message: message});
+    // io.sockets.in(uuid).emit('message', {message: message});
+    io.sockets.in(uuid).emit('message', message);
 
     var eventData = {devices: uuid, message: message}
     require('./lib/logEvent')(301, eventData);

@@ -30,8 +30,8 @@
         if(typeof message == "string"){
           message = JSON.parse(message);
         } 
-        if(message && message.x !== undefined){
-          $('#device').html("X Axis : " + message.x + " Y Axis : " + message.y);         
+        if(message && message.message.x !== undefined){
+          $('#device').html("X Axis : " + message.message.x + " Y Axis : " + message.message.y);         
         }
       });
 

@@ -637,8 +637,8 @@ socket.on('connect', function(){
           "red":"on"
         }
       });
-      socket.on('message', function(channel, message){
-        console.log('message received', channel, message);
+      socket.on('message', function(message){
+        console.log('message received', message);
       });
 
       // Test API calls
@@ -721,8 +721,8 @@ conn.on('ready', function(data){
     console.log(data); 
   });
 
-  conn.on('message', function(channel, message){
-    console.log('message received', channel, message);
+  conn.on('message', function(message){
+    console.log('message received', message);
   });
 
 
@@ -828,8 +828,8 @@ script.
     $(".activity").prepend(JSON.stringify(data) + '&lt;br /&gt;');
   });
 
-  socket.on('message', function (channel, message) {
-    console.log('message received', channel, message);
+  socket.on('message', function (message) {
+    console.log('message received', message);
     $(".activity").prepend(JSON.stringify(message) + '&lt;br /&gt;');
   });
 
@@ -884,8 +884,8 @@ script.
       }}, function(data){
         console.log(data);
       }); 
-      socket.on('message', function(channel, message){
-        console.log('message received', channel, message);
+      socket.on('message', function(message){
+        console.log('message received', message);
       });
 
 

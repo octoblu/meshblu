@@ -25,9 +25,11 @@
       }}, function(data){
         console.log(data);
       }); 
-      socket.on('message', function(channel, message){
+      socket.on('message', function(message){
         // console.log('message received', channel, message);
-        message = JSON.parse(message);
+        if(typeof message == "string"){
+          message = JSON.parse(message);
+        } 
         if(message && message.x !== undefined){
           $('#device').html("X Axis : " + message.x + " Y Axis : " + message.y);         
         }

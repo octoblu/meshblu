@@ -1093,7 +1093,13 @@ server.get('/inboundsms', function(req, res){
 
     mqttclient.publish(uuid, JSON.stringify(message), {qos:qos});
     // io.sockets.in(uuid).emit('message', {message: message});
-    io.sockets.in(uuid).emit('message', message);
+    io.sockets.in(uuid).emit('message', { 
+      devices: uuid,
+      message: message,
+      api: 'message',
+      fromUuid: {},
+      eventCode: 300 
+    });
 
     var eventData = {devices: uuid, message: message}
     require('./lib/logEvent')(301, eventData);

@@ -223,7 +223,7 @@
                               
                               socket.emit('message', {
                                 "devices": device.uuid,
-                                "message": {
+                                "payload": {
                                 "x": x, "y": y
                               }}, function(data){
                                 console.log(data);
@@ -479,16 +479,16 @@
                 <b>/messages</b>  
                 <br />Send a message to a specific device, array of devices, or all devices on the SkyNet platform 
                 <br />
-                <code>curl -X POST -d '{"devices": "*", "message": {"yellow":"off"}}' http://skynet.im/messages</code>
+                <code>curl -X POST -d '{"devices": "*", "payload": {"yellow":"off"}}' http://skynet.im/messages</code>
                 <br />                                      
-                <code>curl -X POST -d '{"devices": ["ad6...47b","2f3...170"], "message": {"yellow":"off"}}' http://skynet.im/messages</code>
+                <code>curl -X POST -d '{"devices": ["ad6...47b","2f3...170"], "payload": {"yellow":"off"}}' http://skynet.im/messages</code>
                 <br />                                      
-                <code>curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' http://skynet.im/messages</code>
+                <code>curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "payload": {"yellow":"off"}}' http://skynet.im/messages</code>
 
                 <br />                                      
                 <code>{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</code>
                 <br />
-                <textarea class="form-control">{"devices":"*","message":{"yellow":"off"}}</textarea>
+                <textarea class="form-control">{"devices":"*","payload":{"yellow":"off"}}</textarea>
                 <!-- <code>{"devices":"all","message":{"yellow":"off"}</code> -->
               </div>
               </td></tr></table>
@@ -633,7 +633,7 @@ socket.on('connect', function(){
       // Send/Receive messages
       socket.emit("message",{
         "devices": ["0d3a53...847b2cc", "11123...44567"],
-        "message": {
+        "payload": {
           "red":"on"
         }
       });
@@ -700,7 +700,7 @@ conn.on('ready', function(data){
   // Send and receive messages
   conn.message({
     "devices": "*",
-    "message": {
+    "payload": {
       "red":"on"
     },
     "qos": 0
@@ -771,7 +771,7 @@ conn.on('ready', function(data){
     // Send hello world to the array of device uuids
     conn.message({
       "devices": data.devices,
-      "message": {
+      "payload": {
         "hello":"world"
       },
       "qos": 0
@@ -879,7 +879,7 @@ script.
       // Send and receive messages
       socket.emit('message', {
         "devices": "*",
-        "message": {
+        "payload": {
         "skynet":"online"
       }}, function(data){
         console.log(data);

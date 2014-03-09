@@ -161,7 +161,7 @@ function sendMessage(fromUuid, data, fn){
               // Send SMS if UUID has a phoneNumber
               if(check.phoneNumber){
                 console.log("Sending SMS to", check.phoneNumber)
-                require('./lib/sendSms')(device, JSON.stringify(data.message), function(check){
+                require('./lib/sendSms')(device, JSON.stringify(data.payload), function(check){
                   console.log('Sent SMS!');
                 });
               } else if(check.type && check.type == 'gateway'){
@@ -1039,9 +1039,9 @@ server.get('/authenticate/:uuid', function(req, res){
 });
 
 
-// curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://localhost:3000/messages
-// curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"], "message": {"yellow":"off"}}' http://localhost:3000/messages
-// curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' http://localhost:3000/messages
+// curl -X POST -d '{"devices": "all", "payload": {"yellow":"off"}}' http://localhost:3000/messages
+// curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"], "payload": {"yellow":"off"}}' http://localhost:3000/messages
+// curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "payload": {"yellow":"off"}}' http://localhost:3000/messages
 server.post('/messages', function(req, res, next){
   res.setHeader('Access-Control-Allow-Origin','*');
   try {
@@ -1057,13 +1057,13 @@ server.post('/messages', function(req, res, next){
     }
   }
   var devices = body.devices;
-  var message = body.message;
+  var message = body.payload;
 
   console.log('devices: ' + devices);
-  console.log('message: ' + JSON.stringify(message));
+  console.log('payload: ' + JSON.stringify(message));
 
   sendMessage(devices, message);
-  res.json({devices:devices, message: message});
+  res.json({devices:devices, payload: message});
 
   require('./lib/logEvent')(300, message);
 
@@ -1095,13 +1095,13 @@ server.get('/inboundsms', function(req, res){
     // io.sockets.in(uuid).emit('message', {message: message});
     io.sockets.in(uuid).emit('message', { 
       devices: uuid,
-      message: message,
+      payload: message,
       api: 'message',
       fromUuid: {},
       eventCode: 300 
     });
 
-    var eventData = {devices: uuid, message: message}
+    var eventData = {devices: uuid, payload: message}
     require('./lib/logEvent')(301, eventData);
     if(eventData.error){
       res.json(eventData.error.code, eventData);

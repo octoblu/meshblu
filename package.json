@@ -20,7 +20,8 @@
     "request": "*",
     "redis": "*",
     "tokenthrottle": "*",
-    "lodash": "*"
+    "lodash": "*",
+    "elasticsearch": "*"
   },
   "subdomain": "skynet",
   "domains": [

@@ -2,6 +2,10 @@ module.exports = {
   databaseUrl: "mongodb://user:pass@adam.mongohq.com:1337/skynet",
   port: 3000,
   log: true,
+  elasticSearch: {
+    host: "localhost",
+    port: "9200"
+  },
   rateLimit: 10, // 10 transactions per user per secend
   plivo: {
     authId: "abc",
@@ -9,5 +13,5 @@ module.exports = {
   },
   redisHost: "xyz.redistogo.com",
   redisPort: "1234",
-  redisPassword: "abcdef"    
+  redisPassword: "abcdef"
 };

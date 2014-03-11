@@ -51,7 +51,7 @@ $ npm install
 $ cp config.js.sample config.js
 ```
 
-Modify `config.js` with your MongoDB connection string. If you have MongoDB running locally use: 
+Modify `config.js` with your MongoDB connection string. If you have MongoDB running locally use:
 
 ```
 mongodb://localhost:27017/skynet
@@ -145,7 +145,7 @@ curl -X DELETE -d "token=123" http://localhost:3000/devices/01404680-2539-11e3-b
 
 GET /mydevices/uuid
 
-Returns all information (including tokens) of all devices or nodes belonging to a user's UUID (identified as "owner") 
+Returns all information (including tokens) of all devices or nodes belonging to a user's UUID (identified as "owner")
 
 ```
 curl -X GET http://skynet.im/mydevices/0d1234a0-1234-11e3-b09c-1234e847b2cc?token=1234glm6y1234ldix1234nux41234sor
@@ -169,17 +169,17 @@ curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": 
 
 GET /events/uuid?token=token
 
-Returns last 10 events related to a specific device or node 
+Returns last 10 events related to a specific device or node
 
 ```
-curl -X GET http://skynet.im/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123 
+curl -X GET http://skynet.im/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123
 
 => {"events":[{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"lnHHS06ijWUXEzb01ZRy","timestamp":1382632438785,"eventCode":101,"_id":"52694bf6ad11379eec00003f"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"BuwnWQ_oLmpk5R3m1ZRv","timestamp":1382561240563,"eventCode":101,"_id":"526835d8ad11379eec000017"}]}
 ```
 
 GET /subscribe/uuid?token=token
 
-This is a streaming API that returns device/node mesages as they are sent and received. Notice the comma at the end of the response. SkyNet doesn't close the stream. 
+This is a streaming API that returns device/node mesages as they are sent and received. Notice the comma at the end of the response. SkyNet doesn't close the stream.
 
 ```
 curl -X GET http://skynet.im/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123
@@ -189,7 +189,7 @@ curl -X GET http://skynet.im/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?toke
 
 GET /authenticate/uuid?token=token
 
-Returns UUID and authticate: true or false based on the validity of uuid/token credentials 
+Returns UUID and authticate: true or false based on the validity of uuid/token credentials
 
 ```
 curl -X GET http://skynet.im/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?token=5ypy4rurayktke29ypbi30kcw5ovfgvi
@@ -197,9 +197,9 @@ curl -X GET http://skynet.im/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?t
 => {"uuid":"81246e80-29fd-11e3-9468-e5f892df566b","authentication":true} OR {"uuid":"81246e80-29fd-11e3-9468-e5f892df566b","authentication":false}
 ```
 
-GET /ipaddress 
+GET /ipaddress
 
-Returns the public IP address of the request. This is useful when working with the SkyNet Gateway behind a firewall. 
+Returns the public IP address of the request. This is useful when working with the SkyNet Gateway behind a firewall.
 
 ```
 curl -X GET http://skynet.im/ipaddress
@@ -279,10 +279,13 @@ Event Codes
 
 * 100 = Web socket connected
 * 101 = Web socket identification
+* 102 = Authenticate
 * 200 = System status API call
 * 201 = Get events
 * 202 =
 * 203 =
+* 204 = Subscribe
+* 205 = Unsubscribe
 * 300 = Incoming message
 * 301 = Incoming SMS message
 * 302 = Outgoung SMS message
@@ -320,5 +323,3 @@ For developers of Free Open Source Software ("FOSS") applications under the GPL 
 For developers and distributors of open source software under a FOSS license other than the GPL, Octoblu, inc. makes its GPL-licensed SkyNet.im platform available under a FOSS Exception that enables use of SkyNet.IM under certain conditions without causing the entire derivative work to be subject to the GPL.
 
 For more information, please contact sales@octoblu.com.
-
-

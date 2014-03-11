@@ -115,7 +115,7 @@ process.on("uncaughtException", function(error) {
 function sendMessage(fromUuid, data, fn){
 
   console.log("message", data);
-  data.fromUuid = fromUuid;
+  data.fromUuid = fromUuid.uuid;
 
   if(data.token){
     //never forward token to another client
@@ -158,6 +158,7 @@ function sendMessage(fromUuid, data, fn){
 
             //check devices are valid
             require('./lib/whoAmI')(device, false, function(check){
+
               // Send SMS if UUID has a phoneNumber
               if(check.phoneNumber){
                 console.log("Sending SMS to", check.phoneNumber)
@@ -173,14 +174,18 @@ function sendMessage(fromUuid, data, fn){
               console.log('sending message to room: ' + device);
               console.log('message', data);
 
+              var clonedMsg = _.clone(data);
+              clonedMsg.devices = device; //strip other devices from message
+              delete clonedMsg.protocol;
+              delete clonedMsg.api;
+
               //transmit mqtt clients over mqtt
               if(check.protocol == "mqtt"){
-                console.log('sending mqtt', device, data);
-                mqttclient.publish(device, JSON.stringify(data), {qos:qos});
+                console.log('sending mqtt', device, clonedMsg);
+                mqttclient.publish(device, JSON.stringify(clonedMsg), {qos:qos});
                 // mqttclient.publish(device, dataMessage, {qos:qos});
               }else{
-                var clonedMsg = _.clone(data);
-                clonedMsg.devices = device; //strip other devices from message
+
                 if(devices.length == 1 && check.online && fn){
                   //callback passed and message for specific target, treat as rpc
                   io.sockets.socket(check.socketId).emit("message", clonedMsg, function(results){
@@ -195,6 +200,11 @@ function sendMessage(fromUuid, data, fn){
                 }
               }
 
+              clonedMsg.toUuid = check; // add to device object to message for logging
+              clonedMsg.fromUuid = fromUuid; // add from device object to message for logging
+              require('./lib/logEvent')(300, clonedMsg);
+              console.log('new log', clonedMsg);
+
             });
 
 
@@ -205,7 +215,7 @@ function sendMessage(fromUuid, data, fn){
 
       }
 
-      require('./lib/logEvent')(300, data);
+      // require('./lib/logEvent')(300, data);
     }
 
 
@@ -228,7 +238,7 @@ io.sockets.on('connection', function (socket) {
       data["protocol"] = "websocket";
     }
     console.log('Identity received: ' + JSON.stringify(data));
-    require('./lib/logEvent')(101, data);
+    // require('./lib/logEvent')(101, data);
     require('./lib/updateSocketId')(data, function(auth){
       if (auth.status == 201){
 
@@ -247,6 +257,13 @@ io.sockets.on('connection', function (socket) {
       } else {
         socket.emit('notReady', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});
       }
+
+      require('./lib/whoAmI')(data.uuid, false, function(results){
+        data.auth = auth;
+        data.fromUuid = results;
+        require('./lib/logEvent')(101, data);
+      });
+
     });
   });
 
@@ -255,7 +272,11 @@ io.sockets.on('connection', function (socket) {
     require('./lib/updatePresence')(socket.id.toString());
     // Emit API request from device to room for subscribers
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
-      require('./lib/logEvent')(102, {"api": "disconnect", "socketid": socket.id.toString(), "uuid": uuid});
+
+      require('./lib/whoAmI')(data.uuid, false, function(results){
+        require('./lib/logEvent')(102, {"api": "disconnect", "socketid": socket.id.toString(), "uuid": uuid, "fromUuid": results});
+      });
+
     });
 
   });
@@ -264,14 +285,19 @@ io.sockets.on('connection', function (socket) {
   socket.on('subscribe', function(data, fn) {
     if(data.uuid && data.uuid.length > 30 && !data.token){
       //no token provided, attempt to only listen for public broadcasts FROM this uuid
-      require('./lib/whoAmI')(data, false, function(results){
+      require('./lib/whoAmI')(data.uuid, false, function(results){
         if(results.error){
           fn(results);
         }else{
           socket.join(data.uuid + "_bc");
           fn({"api": "subscribe", "result": true});
         }
+
+        data.toUuid = results;
+        require('./lib/logEvent')(204, data);
+
       });
+
     }else{
       //token provided, attempt to listen to any broadcast FOR this uuid
       require('./lib/authDevice')(data.uuid, data.token, function(auth){
@@ -281,8 +307,19 @@ io.sockets.on('connection', function (socket) {
 
           // Emit API request from device to room for subscribers
           require('./lib/getUuid')(socket.id.toString(), function(uuid){
-            var results = {"api": "subscribe", "socketid": socket.id.toString(), "uuid": uuid};
+            var results = {"api": "subscribe", "socketid": socket.id.toString(), "fromUuid": uuid, "toUuid": data.uuid};
             console.log(results);
+
+            require('./lib/whoAmI')(uuid, false, function(fromCheck){
+              require('./lib/whoAmI')(data.uuid, false, function(toCheck){
+                data.auth = auth;
+                data.fromUuid = fromCheck;
+                data.toUuid = toCheck;
+                require('./lib/logEvent')(204, data);
+              });
+            });
+
+
             try{
               fn(results);
 
@@ -302,8 +339,10 @@ io.sockets.on('connection', function (socket) {
         } else {
           console.log('subscribe failed for room ', data.uuid);
 
-          var results = {"api": "subscribe", "result": false};
+          var results = {"api": "subscribe", "uuid": data.uuid, "result": false};
           // socket.broadcast.to(uuid).emit('message', results);
+
+          require('./lib/logEvent')(204, results);
 
           console.log(results);
           try{
@@ -332,6 +371,15 @@ io.sockets.on('connection', function (socket) {
         var results = {"api": "unsubscribe", "socketid": socket.id.toString(), "uuid": uuid};
         // socket.broadcast.to(uuid).emit('message', results);
 
+        require('./lib/whoAmI')(uuid, false, function(fromCheck){
+          require('./lib/whoAmI')(data.uuid, false, function(toCheck){
+            data.fromUuid = fromCheck;
+            data.toUuid = toCheck;
+            require('./lib/logEvent')(205, data);
+          });
+        });
+
+
         try{
           fn(results);
 
@@ -357,6 +405,12 @@ io.sockets.on('connection', function (socket) {
 
       require('./lib/getSystemStatus')(function(results){
         console.log(results);
+
+        require('./lib/whoAmI')(uuid, false, function(check){
+          results.fromUuid = check;
+          require('./lib/logEvent')(200, results);
+        });
+
         try{
           fn(results);
 
@@ -389,6 +443,12 @@ io.sockets.on('connection', function (socket) {
       delete reqData["api"];
       require('./lib/getDevices')(data, false, function(results){
         console.log(results);
+
+        require('./lib/whoAmI')(uuid, false, function(check){
+          results.fromUuid = check;
+          require('./lib/logEvent')(403, results);
+        });
+
         try{
           fn(results);
 
@@ -423,6 +483,12 @@ io.sockets.on('connection', function (socket) {
       delete reqData["api"];
       require('./lib/whoAmI')(data, false, function(results){
         console.log(results);
+
+        require('./lib/whoAmI')(uuid, false, function(check){
+          results.fromUuid = check;
+          require('./lib/logEvent')(500, results);
+        });
+
         try{
           fn(results);
 
@@ -455,6 +521,12 @@ io.sockets.on('connection', function (socket) {
       delete reqData["api"];
       require('./lib/register')(data, function(results){
         console.log(results);
+
+        require('./lib/whoAmI')(uuid, false, function(check){
+          results.fromUuid = check;
+          require('./lib/logEvent')(200, results);
+        });
+
         try{
           fn(results);
 
@@ -487,6 +559,12 @@ io.sockets.on('connection', function (socket) {
       delete reqData["api"];
       require('./lib/updateDevice')(data.uuid, data, function(results){
         console.log(results);
+
+        require('./lib/whoAmI')(uuid, false, function(check){
+          results.fromUuid = check;
+          require('./lib/logEvent')(401, results);
+        });
+
         try{
           fn(results);
 
@@ -519,6 +597,12 @@ io.sockets.on('connection', function (socket) {
       delete reqData["api"];
       require('./lib/unregister')(data.uuid, data, function(results){
         console.log(results);
+
+        require('./lib/whoAmI')(uuid, false, function(check){
+          results.fromUuid = check;
+          require('./lib/logEvent')(402, results);
+        });
+
         try{
           fn(results);
 
@@ -553,6 +637,12 @@ io.sockets.on('connection', function (socket) {
 
           require('./lib/getEvents')(data.uuid, function(results){
             console.log(results);
+
+            require('./lib/whoAmI')(uuid, false, function(check){
+              results.fromUuid = check;
+              require('./lib/logEvent')(201, results);
+            });
+
 
             try{
               fn(results);
@@ -622,6 +712,12 @@ io.sockets.on('connection', function (socket) {
 
       };
 
+      require('./lib/whoAmI')(data.uuid, false, function(check){
+        results.toUuid = check;
+        require('./lib/logEvent')(102, results);
+      });
+
+
     });
   });
 
@@ -639,6 +735,9 @@ io.sockets.on('connection', function (socket) {
           io.sockets.socket(check.socketId).emit("config", {devices: data.uuid, token: data.token, method: data.method, name: data.name, type: data.type, options: data.options}, function(results){
             console.log(results);
 
+            results.toUuid = check;
+            require('./lib/logEvent')(600, results);
+
             // socket.emit('message', {"uuid": data.uuid, "online": true});
             // var results = {"uuid": data.uuid, "online": true};
             try{
@@ -646,7 +745,6 @@ io.sockets.on('connection', function (socket) {
             } catch (e){
               console.log(e);
             }
-            require('./lib/logEvent')(600, results);
 
           });
 
@@ -666,8 +764,9 @@ io.sockets.on('connection', function (socket) {
           } catch (e){
             console.log(e);
           }
-          require('./lib/logEvent')(600, results);
 
+          results.toUuid = check;
+          require('./lib/logEvent')(600, results);
 
         }
 
@@ -727,8 +826,10 @@ io.sockets.on('connection', function (socket) {
 
         // Broadcast to room for pubsub
         require('./lib/getUuid')(socket.id.toString(), function(uuid){
-          message.api = "message";
-          sendMessage(uuid, message, fn);
+          require('./lib/whoAmI')(uuid, false, function(check){
+            message.api = "message";
+            sendMessage(check, message, fn);
+          });
         });
 
       }
@@ -1093,12 +1194,12 @@ server.get('/inboundsms', function(req, res){
 
     mqttclient.publish(uuid, JSON.stringify(message), {qos:qos});
     // io.sockets.in(uuid).emit('message', {message: message});
-    io.sockets.in(uuid).emit('message', { 
+    io.sockets.in(uuid).emit('message', {
       devices: uuid,
       payload: message,
       api: 'message',
       fromUuid: {},
-      eventCode: 300 
+      eventCode: 300
     });
 
     var eventData = {devices: uuid, payload: message}

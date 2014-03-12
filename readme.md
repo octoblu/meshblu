@@ -19,7 +19,7 @@ SkyNet is an open source machine-to-machine instant messaging network and API. O
 
 SkyNet auto-assigns 36 character UUIDs and secret tokens to each registered device connected to the network. These device credentials are used to authenticate with SkyNet and maintain your device's JSON description in our device directory.  
 
-SkyNet allows you to query devices such as drones, hue light builb, weemos, arduinos, and server nodes that meet your criteria and send IM messages to 1 or all devices.
+SkyNet allows you to query devices such as drones, hue light bulbs, weemos, arduinos, and server nodes that meet your criteria and send IM messages to 1 or all devices.
 
 SkyNet includes a Node.JS NPM module called [SkyNet](http://skynet.im/#npm) and a [skynet.js](http://skynet.im/#javascript) file for simplifying Node.JS and mobile/client-side connectivity to SkyNet.
 

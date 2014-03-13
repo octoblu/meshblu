@@ -781,8 +781,8 @@ io.sockets.on('connection', function (socket) {
           io.sockets.socket(check.socketId).emit("config", {devices: data.uuid, token: data.token, method: data.method, name: data.name, type: data.type, options: data.options}, function(results){
             console.log(results);
 
-            results._id.toString();
-            delete results._id;
+            // results._id.toString();
+            // delete results._id;
             // check._id.toString();
             // delete check._id;
 

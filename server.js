@@ -282,7 +282,7 @@ io.sockets.on('connection', function (socket) {
     // Emit API request from device to room for subscribers
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
 
-      require('./lib/whoAmI')(data.uuid, false, function(results){
+      require('./lib/whoAmI')(uuid, false, function(results){
         // results._id.toString();
         // delete results_id;
 

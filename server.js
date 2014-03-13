@@ -122,6 +122,13 @@ function sendMessage(fromUuid, data, fn){
     delete data.token;
   }
 
+  try{
+    data._id.toString();
+    delete data._id;
+  } catch(e){
+    console.log(e);
+  }
+
   // Broadcast to room for pubsub
 
     console.log('devices: ' + data.devices);
@@ -130,15 +137,10 @@ function sendMessage(fromUuid, data, fn){
 
     if(data.devices == "all" || data.devices == "*"){
 
-
-
       if(fromUuid){
         io.sockets.in(fromUuid + '_bc').emit('message', data);
-
         mqttclient.publish(fromUuid + '_bc', JSON.stringify(data), {qos:qos});
       }
-
-
 
       require('./lib/logEvent')(300, data);
 
@@ -200,6 +202,11 @@ function sendMessage(fromUuid, data, fn){
                 }
               }
 
+              // check._id.toString();
+              // delete check._id;
+              // fromUuid._id.toString();
+              // delete fromUuid._id;
+
               clonedMsg.toUuid = check; // add to device object to message for logging
               clonedMsg.fromUuid = fromUuid; // add from device object to message for logging
               require('./lib/logEvent')(300, clonedMsg);
@@ -260,6 +267,8 @@ io.sockets.on('connection', function (socket) {
 
       require('./lib/whoAmI')(data.uuid, false, function(results){
         data.auth = auth;
+        // results._id.toString();
+        // delete results._id;
         data.fromUuid = results;
         require('./lib/logEvent')(101, data);
       });
@@ -274,6 +283,9 @@ io.sockets.on('connection', function (socket) {
     require('./lib/getUuid')(socket.id.toString(), function(uuid){
 
       require('./lib/whoAmI')(data.uuid, false, function(results){
+        // results._id.toString();
+        // delete results_id;
+
         require('./lib/logEvent')(102, {"api": "disconnect", "socketid": socket.id.toString(), "uuid": uuid, "fromUuid": results});
       });
 
@@ -292,6 +304,9 @@ io.sockets.on('connection', function (socket) {
           socket.join(data.uuid + "_bc");
           fn({"api": "subscribe", "result": true});
         }
+
+        // results._id.toString();
+        // delete results._id;
 
         data.toUuid = results;
         require('./lib/logEvent')(204, data);
@@ -313,6 +328,10 @@ io.sockets.on('connection', function (socket) {
             require('./lib/whoAmI')(uuid, false, function(fromCheck){
               require('./lib/whoAmI')(data.uuid, false, function(toCheck){
                 data.auth = auth;
+                // fromCheck._id.toString();
+                // delete fromCheck._id;
+                // toCheck._id.toString();
+                // delete toCheck._id;
                 data.fromUuid = fromCheck;
                 data.toUuid = toCheck;
                 require('./lib/logEvent')(204, data);
@@ -373,6 +392,10 @@ io.sockets.on('connection', function (socket) {
 
         require('./lib/whoAmI')(uuid, false, function(fromCheck){
           require('./lib/whoAmI')(data.uuid, false, function(toCheck){
+            // fromCheck._id.toString();
+            // delete fromCheck._id;
+            // toCheck._id.toString();
+            // delete toCheck._id;
             data.fromUuid = fromCheck;
             data.toUuid = toCheck;
             require('./lib/logEvent')(205, data);
@@ -407,6 +430,8 @@ io.sockets.on('connection', function (socket) {
         console.log(results);
 
         require('./lib/whoAmI')(uuid, false, function(check){
+          // check._id.toString();
+          // delete check._id;
           results.fromUuid = check;
           require('./lib/logEvent')(200, results);
         });
@@ -482,9 +507,13 @@ io.sockets.on('connection', function (socket) {
 
       delete reqData["api"];
       require('./lib/whoAmI')(data, false, function(results){
+        // results._id.toString();
+        // delete results._id;
         console.log(results);
 
         require('./lib/whoAmI')(uuid, false, function(check){
+          // check._id.toString();
+          // delete check._id;
           results.fromUuid = check;
           require('./lib/logEvent')(500, results);
         });
@@ -520,11 +549,16 @@ io.sockets.on('connection', function (socket) {
 
       delete reqData["api"];
       require('./lib/register')(data, function(results){
+        // results._id.toString();
+        // delete results._id;
         console.log(results);
 
         require('./lib/whoAmI')(uuid, false, function(check){
+
+          // check._id.toString();
+          // delete check._id;
           results.fromUuid = check;
-          require('./lib/logEvent')(200, results);
+          require('./lib/logEvent')(400, results);
         });
 
         try{
@@ -558,9 +592,14 @@ io.sockets.on('connection', function (socket) {
 
       delete reqData["api"];
       require('./lib/updateDevice')(data.uuid, data, function(results){
+        // results._id.toString();
+        // delete results._id;
         console.log(results);
 
         require('./lib/whoAmI')(uuid, false, function(check){
+          // check._id.toString();
+          // delete check._id;
+
           results.fromUuid = check;
           require('./lib/logEvent')(401, results);
         });
@@ -596,9 +635,14 @@ io.sockets.on('connection', function (socket) {
 
       delete reqData["api"];
       require('./lib/unregister')(data.uuid, data, function(results){
+        // results._id.toString();
+        // delete results._id;
+
         console.log(results);
 
         require('./lib/whoAmI')(uuid, false, function(check){
+          // check._id.toString();
+          // delete check._id;
           results.fromUuid = check;
           require('./lib/logEvent')(402, results);
         });
@@ -638,10 +682,10 @@ io.sockets.on('connection', function (socket) {
           require('./lib/getEvents')(data.uuid, function(results){
             console.log(results);
 
-            require('./lib/whoAmI')(uuid, false, function(check){
-              results.fromUuid = check;
-              require('./lib/logEvent')(201, results);
-            });
+            // require('./lib/whoAmI')(uuid, false, function(check){
+            //   results.fromUuid = check;
+            //   // require('./lib/logEvent')(201, results);
+            // });
 
 
             try{
@@ -713,6 +757,8 @@ io.sockets.on('connection', function (socket) {
       };
 
       require('./lib/whoAmI')(data.uuid, false, function(check){
+        // check._id.toString();
+        // delete check._id;
         results.toUuid = check;
         require('./lib/logEvent')(102, results);
       });
@@ -734,6 +780,11 @@ io.sockets.on('connection', function (socket) {
 
           io.sockets.socket(check.socketId).emit("config", {devices: data.uuid, token: data.token, method: data.method, name: data.name, type: data.type, options: data.options}, function(results){
             console.log(results);
+
+            results._id.toString();
+            delete results._id;
+            // check._id.toString();
+            // delete check._id;
 
             results.toUuid = check;
             require('./lib/logEvent')(600, results);
@@ -765,6 +816,10 @@ io.sockets.on('connection', function (socket) {
             console.log(e);
           }
 
+          results._id.toString();
+          delete results._id;
+          // check._id.toString();
+          // delete check._id;
           results.toUuid = check;
           require('./lib/logEvent')(600, results);
 
@@ -827,6 +882,9 @@ io.sockets.on('connection', function (socket) {
         // Broadcast to room for pubsub
         require('./lib/getUuid')(socket.id.toString(), function(uuid){
           require('./lib/whoAmI')(uuid, false, function(check){
+            // check._id.toString();
+            // delete check._id;
+
             message.api = "message";
             sendMessage(check, message, fn);
           });

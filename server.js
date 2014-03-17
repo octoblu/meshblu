@@ -816,8 +816,8 @@ io.sockets.on('connection', function (socket) {
             console.log(e);
           }
 
-          results._id.();
-          delete results._id;
+          // results._id.();
+          // delete results._id;
           // check._id.toString();
           // delete check._id;
           results.toUuid = check;

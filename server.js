@@ -122,12 +122,12 @@ function sendMessage(fromUuid, data, fn){
     delete data.token;
   }
 
-  try{
-    data._id.toString();
-    delete data._id;
-  } catch(e){
-    console.log(e);
-  }
+  // try{
+  //   data._id.toString();
+  //   delete data._id;
+  // } catch(e){
+  //   console.log(e);
+  // }
 
   // Broadcast to room for pubsub
 
@@ -816,7 +816,7 @@ io.sockets.on('connection', function (socket) {
             console.log(e);
           }
 
-          results._id.toString();
+          results._id.();
           delete results._id;
           // check._id.toString();
           // delete check._id;

@@ -21,7 +21,8 @@
     "redis": "*",
     "tokenthrottle": "*",
     "lodash": "*",
-    "elasticsearch": "*"
+    "elasticsearch": "*",
+    "moment": "*"
   },
   "subdomain": "skynet",
   "domains": [

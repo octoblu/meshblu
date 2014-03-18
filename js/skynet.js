@@ -39,10 +39,10 @@ function skynet (config, cb) {
             socket.emit('identity', {uuid: config.uuid, socketid: data.socketid, token: config.token});
             console.log(config)
           })
-        });      
+        });
 
         socket.on('notReady', function(data){
-          cb(new Error('Authentication Error'));
+          cb(new Error('Authentication Error'), socket);
         });
         socket.on('ready', function(data){
           // cb(null, socket);

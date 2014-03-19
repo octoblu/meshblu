@@ -1,6 +1,6 @@
 <html>
 <head>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>  
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="http://skynet.im/js/skynet.js"></script>
 
   <script>
@@ -9,29 +9,42 @@
     });
 
     var skynetConfig = {
-      "uuid": location.pathname.split("/")[2],
-      "token": location.pathname.split("/")[3]
-    }    
+      // "uuid": location.pathname.split("/")[2],
+      // "token": location.pathname.split("/")[3]
+        "uuid": "1917e841-afb7-11e3-912d-bd75677ad63b",
+        "token": "xufbkulx6pkqpvidvzmh3qyra6mvx6r",
+        "host": "localhost",
+        "port": 3000
+    }
     skynet(skynetConfig, function (e, socket, device) {
       console.log(e);
       if (e) throw e
       console.log('REGISTERED', device);
 
       // Send and receive messages
-      socket.emit('message', {
-        "devices": location.pathname.split("/")[2],
-        "payload": {
-        "skynet":"online"
-      }}, function(data){
-        console.log(data);
-      }); 
+      // socket.emit('message', {
+      //   "devices": location.pathname.split("/")[2],
+      //   "payload": {
+      //   "skynet":"online"
+      // }}, function(data){
+      //   console.log(data);
+      // });
+
+      // Subscribe to device/node i/o
+      socket.emit('subscribe', {
+        uuid: location.pathname.split("/")[2]
+      },
+        function(data){
+          console.log(data);
+        });
+
       socket.on('message', function(message){
         // console.log('message received', channel, message);
         if(typeof message == "string"){
           message = JSON.parse(message);
-        } 
+        }
         if(message && message.payload.x !== undefined){
-          $('#device').html("X Axis : " + message.payload.x + " Y Axis : " + message.payload.y);         
+          $('#device').html("X Axis : " + message.payload.x + " Y Axis : " + message.payload.y);
         }
       });
 

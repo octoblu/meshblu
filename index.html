@@ -189,7 +189,10 @@
 
                     function startDemo(){
 
-                      var skynetConfig = {}
+                      var skynetConfig = {
+                        "host": "localhost",
+                        "port": 3000
+                      }
                       var x=0;
                       var y=0;
                       var oldx=0;
@@ -222,7 +225,8 @@
                               oldy = y;
 
                               socket.emit('message', {
-                                "devices": device.uuid,
+                                // "devices": device.uuid,
+                                "devices": "*",
                                 "payload": {
                                 "x": x, "y": y
                               }}, function(data){

@@ -2,6 +2,8 @@
  * See: https://github.com/visionmedia/commander.js
  */
 var app = require('commander');
+var getUuid = require('./lib/getUuid');
+
 app
   .option('-e, --environment', 'Set the environment (defaults to development)')
   .parse(process.argv);
@@ -114,20 +116,15 @@ process.on("uncaughtException", function(error) {
 
 function sendMessage(fromUuid, data, fn){
 
-  console.log("message", data);
-  data.fromUuid = fromUuid.uuid;
+  console.log("sendMessage() from", fromUuid, 'data', data);
+
+  data.fromUuid = fromUuid;
 
   if(data.token){
     //never forward token to another client
     delete data.token;
   }
 
-  // try{
-  //   data._id.toString();
-  //   delete data._id;
-  // } catch(e){
-  //   console.log(e);
-  // }
 
   // Broadcast to room for pubsub
 
@@ -156,14 +153,14 @@ function sendMessage(fromUuid, data, fn){
 
         devices.forEach( function(device) {
 
-          if (device.length == 36){
+          if (device.length > 35){
 
             //check devices are valid
             require('./lib/whoAmI')(device, false, function(check){
 
               // Send SMS if UUID has a phoneNumber
               if(check.phoneNumber){
-                console.log("Sending SMS to", check.phoneNumber)
+                console.log("Sending SMS to", check.phoneNumber);
                 require('./lib/sendSms')(device, JSON.stringify(data.payload), function(check){
                   console.log('Sent SMS!');
                 });
@@ -180,6 +177,7 @@ function sendMessage(fromUuid, data, fn){
               clonedMsg.devices = device; //strip other devices from message
               delete clonedMsg.protocol;
               delete clonedMsg.api;
+              clonedMsg.fromUuid = data.fromUuid; // add from device object to message for logging
 
               //transmit mqtt clients over mqtt
               if(check.protocol == "mqtt"){
@@ -188,29 +186,33 @@ function sendMessage(fromUuid, data, fn){
                 // mqttclient.publish(device, dataMessage, {qos:qos});
               }else{
 
-                if(devices.length == 1 && check.online && fn){
+                if(fn && devices.length == 1 && check.online){
                   //callback passed and message for specific target, treat as rpc
                   io.sockets.socket(check.socketId).emit("message", clonedMsg, function(results){
+                    console.log('results', results);
                     try{
                       fn(results);
                     } catch (e){
                       console.log(e);
                     }
                   });
+                }
+                else if(fn && devices.length == 1 && !check.uuid){
+                  //immedieate return on invalid device
+                  fn({error: 'Invalid Device'});
+                }
+                else if(fn && devices.length == 1 && !check.online){
+                  //can't expect a response from something that's offline
+                  fn({error: 'Device Offline'});
                 }else{
                   io.sockets.in(device).emit('message', clonedMsg);
                 }
               }
 
-              // check._id.toString();
-              // delete check._id;
-              // fromUuid._id.toString();
-              // delete fromUuid._id;
-
-              clonedMsg.toUuid = check; // add to device object to message for logging
-              clonedMsg.fromUuid = fromUuid; // add from device object to message for logging
-              require('./lib/logEvent')(300, clonedMsg);
-              console.log('new log', clonedMsg);
+              var logMsg = _.clone(clonedMsg);
+              logMsg.toUuid = check; // add to device object to message for logging
+              require('./lib/logEvent')(300, logMsg);
+              console.log('new log', logMsg);
 
             });
 
@@ -280,8 +282,8 @@ io.sockets.on('connection', function (socket) {
     console.log('Presence offline for socket id: ' + socket.id.toString());
     require('./lib/updatePresence')(socket.id.toString());
     // Emit API request from device to room for subscribers
-    require('./lib/getUuid')(socket.id.toString(), function(uuid){
-
+    getUuid(socket.id.toString(), function(err, uuid){
+      if(err){ return; }
       require('./lib/whoAmI')(uuid, false, function(results){
         // results._id.toString();
         // delete results_id;
@@ -321,9 +323,9 @@ io.sockets.on('connection', function (socket) {
           socket.join(data.uuid);
 
           // Emit API request from device to room for subscribers
-          require('./lib/getUuid')(socket.id.toString(), function(uuid){
+          getUuid(socket.id.toString(), function(err, uuid){
+            if(err){ return; }
             var results = {"api": "subscribe", "socketid": socket.id.toString(), "fromUuid": uuid, "toUuid": data.uuid};
-            console.log(results);
 
             require('./lib/whoAmI')(uuid, false, function(fromCheck){
               require('./lib/whoAmI')(data.uuid, false, function(toCheck){
@@ -386,7 +388,8 @@ io.sockets.on('connection', function (socket) {
       console.log('leaving room ', data.uuid);
       socket.leave(data.uuid);
       // Emit API request from device to room for subscribers
-      require('./lib/getUuid')(socket.id.toString(), function(uuid){
+      getUuid(socket.id.toString(), function(err, uuid){
+        if(err){ return; }
         var results = {"api": "unsubscribe", "socketid": socket.id.toString(), "uuid": uuid};
         // socket.broadcast.to(uuid).emit('message', results);
 
@@ -423,7 +426,8 @@ io.sockets.on('connection', function (socket) {
   socket.on('status', function (fn) {
 
     // Emit API request from device to room for subscribers
-    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+    getUuid(socket.id.toString(), function(err, uuid){
+      if(err){ return; }
       // socket.broadcast.to(uuid).emit('message', {"api": "status"});
 
       require('./lib/getSystemStatus')(function(results){
@@ -456,7 +460,8 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     // Emit API request from device to room for subscribers
-    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+    getUuid(socket.id.toString(), function(err, uuid){
+      if(err){ return; }
       var reqData = data;
       reqData["api"] = "devices";
       // socket.broadcast.to(data.uuid).emit('message', reqData);
@@ -497,7 +502,8 @@ io.sockets.on('connection', function (socket) {
       data = data.uuid;
     }
     // Emit API request from device to room for subscribers
-    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+    getUuid(socket.id.toString(), function(err, uuid){
+      if(err){ return; }
       var reqData = data;
       reqData["api"] = "whoami";
       // socket.broadcast.to(data.uuid).emit('message', reqData);
@@ -507,9 +513,6 @@ io.sockets.on('connection', function (socket) {
 
       delete reqData["api"];
       require('./lib/whoAmI')(data, false, function(results){
-        // results._id.toString();
-        // delete results._id;
-        console.log(results);
 
         require('./lib/whoAmI')(uuid, false, function(check){
           // check._id.toString();
@@ -539,7 +542,7 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     // Emit API request from device to room for subscribers
-    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+    getUuid(socket.id.toString(), function(err, uuid){
       var reqData = data;
       reqData["api"] = "register";
       // socket.broadcast.to(data.uuid).emit('message', reqData);
@@ -549,11 +552,8 @@ io.sockets.on('connection', function (socket) {
 
       delete reqData["api"];
       require('./lib/register')(data, function(results){
-        // results._id.toString();
-        // delete results._id;
-        console.log(results);
 
-        require('./lib/whoAmI')(uuid, false, function(check){
+        require('./lib/whoAmI')(data.uuid, false, function(check){
 
           // check._id.toString();
           // delete check._id;
@@ -582,7 +582,8 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     };
     // Emit API request from device to room for subscribers
-    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+    getUuid(socket.id.toString(), function(err, uuid){
+      if(err){ return; }
       var reqData = data;
       reqData["api"] = "update";
       // socket.broadcast.to(data.uuid).emit('message', reqData);
@@ -625,7 +626,8 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     // Emit API request from device to room for subscribers
-    require('./lib/getUuid')(socket.id.toString(), function(uuid){
+    getUuid(socket.id.toString(), function(err, uuid){
+      if(err){ return; }
       var reqData = data;
       reqData["api"] = "unregister";
       // socket.broadcast.to(data.uuid).emit('message', reqData);
@@ -667,8 +669,8 @@ io.sockets.on('connection', function (socket) {
     require('./lib/authDevice')(data.uuid, data.token, function(auth){
 
       // Emit API request from device to room for subscribers
-      require('./lib/getUuid')(socket.id.toString(), function(uuid){
-
+      getUuid(socket.id.toString(), function(err, uuid){
+        if(err){ return; }
         var reqData = data;
         reqData["api"] = "events";
         // socket.broadcast.to(data.uuid).emit('message', reqData);
@@ -863,8 +865,7 @@ io.sockets.on('connection', function (socket) {
         console.log("message", message);
 
       } else {
-        console.log("Sending message for socket:", socket.id.toString());
-        console.log("message", message);
+        console.log("Sending message for socket:", socket.id.toString(), message);
 
         if(message == undefined){
           var message = {};
@@ -880,13 +881,12 @@ io.sockets.on('connection', function (socket) {
         }
 
         // Broadcast to room for pubsub
-        require('./lib/getUuid')(socket.id.toString(), function(uuid){
+        getUuid(socket.id.toString(), function(err, uuid){
+          if(err){ return; }
           require('./lib/whoAmI')(uuid, false, function(check){
-            // check._id.toString();
-            // delete check._id;
 
             message.api = "message";
-            sendMessage(check, message, fn);
+            sendMessage(check.uuid, message, fn);
           });
         });
 
@@ -938,7 +938,7 @@ try{
     // });
 
     //add auth and throttling later
-    sendMessage(null, message);
+    sendMessage(message.fromUuid, message);
 
   });
 } catch(e){

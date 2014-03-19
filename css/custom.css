@@ -956,7 +956,7 @@ header .logo .section2 {
   height: 100%;
 }
 #home .helper {
-  height: 50%;
+  height: 30%;
   width: 100%;
   margin-bottom: -170px;
 }
@@ -980,7 +980,7 @@ header .logo .section2 {
 }
 #home .hero-content a.scroll {
   position: relative;
-  margin-top: 1em;
+  margin-top: 4em;
   padding: 1.5em 2em;
   font-size: 2em;
   font-weight: 400;
@@ -1131,7 +1131,8 @@ section#home.featured p {
 }
 section#home.freelancer {
   /*background: #f0eee8 url('../img/iot_teal_opacity.jpg') top center no-repeat;*/
-  background: #000 url('../img/skynet_background.jpg') top center no-repeat;
+/*  background: #000 url('../img/skynet_background.jpg') top center no-repeat;*/
+  background: #000 url('../img/skynet_background2.jpg') top center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

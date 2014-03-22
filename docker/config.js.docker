@@ -1,0 +1,17 @@
+module.exports = {
+  databaseUrl: "mongodb://localhost:27017/skynet",
+  port: 3000,
+  log: true,
+  /*elasticSearch: {
+    host: "localhost",
+    port: "9200"
+  },*/
+  rateLimit: 10, // 10 transactions per user per secend
+  /*plivo: {
+    authId: "abc",
+    authToken: "123"
+  },*/
+  redisHost: "localhost",
+  redisPort: "6379",
+  redisPassword: "localhost"
+};

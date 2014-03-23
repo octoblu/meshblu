@@ -16,4 +16,6 @@ RUN cd /var/www && npm install
 ADD ./docker/config.js.docker /var/www/config.js
 ADD ./docker/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
+EXPOSE 3000
+
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"] 

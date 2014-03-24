@@ -535,6 +535,7 @@
               <div class="feature col-md-10">
                 <b>/subscribe/{uuid}?token={token}</b>
                 <br />This is a streaming API that returns device/node mesages as they are sent and received. Notice the comma at the end of the response. SkyNet doesn't close the stream.
+                <br />Note: You can subscribe to UUIDs without knowing the token but this will only allow you to receive broadcast messages from the UUID (devices=* or devices=all)
                 <br />
                 <code>curl -X GET http://skynet.im/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123</code>
                 <br />
@@ -585,6 +586,51 @@
               </div>
               </td></tr></table>
             </div>
+
+
+            <div class="col-md-12">
+              <h1>Data</h1>
+            </div>
+
+            <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-success" disabled> POST</button>
+              </div>
+              </td>
+              <td>
+              <div class="feature col-md-10">
+                <b>/data/{uuid}</b><br />
+                <b>Payload: token=value&key=value (i.e. temperature=78&humity=30)</b>
+                <br />Stores sensor data for a particular UUID. You can pass any key/value pairs.
+                <br />
+                <code>curl -X POST -d "token=123&temperature=78" http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc</code>
+                <br />
+                <textarea class="form-control">{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","ipAddress":"127.0.0.1","eventCode":700,"_id":"532f2e8c9c23809e93000002"}</textarea>
+                <br />
+              </div>
+              </td></tr></table>
+            </div>
+            <br />
+
+            <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-info" disabled> GET</button>
+              </div>
+              </td>
+              <td>
+              <div class="feature col-md-10">
+                <b>/data/{uuid}?token={token}</b>
+                <br />Returns last 10 data updates related to a specific device or node
+                <br />
+                <code>curl -X GET http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123</code>
+                <br />
+                <textarea class="form-control">"data":[{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","ipAddress":"127.0.0.1","id":"532f2e8c9c23809e93000001"}]}</textarea>
+              </div>
+              </td></tr></table>
+            </div>
+
 
 
           </div>
@@ -641,14 +687,71 @@ socket.on('connect', function(){
         "devices": ["0d3a53...847b2cc", "11123...44567"],
         "payload": {
           "red":"on"
+        }, function (data) {
+          console.log(data);
         }
       });
       socket.on('message', function(message){
         console.log('message received', message);
+        // { devices: '0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc',
+  payload: { red: 'on' },
+  fromUuid: '0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc' }
       });
 
-      // Test API calls
-      socket.emit('whoami', {uuid: "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"}, function(data){console.log(data);});
+      // Sample SkyNet API calls:
+      socket.emit('status', function(data){
+        console.log('status received');
+        console.log(data);
+        // { skynet: 'online' }
+      });
+
+      // Subscribe and unsubscribe to a device's messages and events
+      socket.emit('subscribe', {
+        "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
+        "token": "qirqglm6yb1vpldixflopnux4phtcsor"
+      }, function (data) {
+        console.log(data);
+        // {"api":"subscribe","socketid":"j3WWX81JwWYzaidRaNA7","fromUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","toUuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"}
+      });
+
+      socket.emit('unsubscribe', {"uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"}, function (data) {
+        console.log(data);
+        // {"api":"unsubscribe","socketid":"j3WWX81JwWYzaidRaNA7","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"}
+      });
+
+      // Register device
+      socket.emit('register', {
+        "type":"drone"
+      }, function (data) {
+        console.log(data);
+        // {"type":"drone","uuid":"b34cc731-b2f2-11e3-a36b-61e66c96102e","timestamp":"2014-03-24T01:22:01.123Z","token":"3k0t96e6n9mjkyb9ncpx8um4bstc5wmi","channel":"main","online":false,"ipAddress":""}
+      });
+
+
+      // Update device
+      socket.emit('update', {
+        "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
+        "token": "qirqglm6yb1vpldixflopnux4phtcsor",
+        "armed":true
+      }, function (data) {
+        console.log(data);
+        // {"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","armed":true,"timestamp":"2014-03-24T01:22:01.203Z"}
+      });
+
+      // WhoAmI?
+      socket.emit('whoami', {"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"}, function (data) {
+        console.log(data);
+        // {"armed":true,"channel":"main","color":"blue","ipAddress":"70.171.192.231","online":true,"protocol":"websocket","socketId":"j3WWX81JwWYzaidRaNA7","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"}
+      });
+
+      // Receive last 10 device events
+      socket.emit('events', {
+        "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
+        "token": "qirqglm6yb1vpldixflopnux4phtcsor"
+      }, function (data) {
+        console.log(data);
+        // {"events":[{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","armed":true,"timestamp":"2014-03-24T01:22:01.203Z","fromUuid":{"armed":true,"channel":"main","color":"blue","ipAddress":"70.171.192.231","online":true,"protocol":"websocket","socketId":"j3WWX81JwWYzaidRaNA7","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"eventCode":401,"id":"532f88b90db905bf09055983"}]}
+      });
 
     }
   });
@@ -656,7 +759,7 @@ socket.on('connect', function(){
 
             </pre>
 
-            <h2>Websocket API commands include: status, register, unregister, update, whoami, devices, subscribe, unsubscribe, authenticate, and message. You can send a message to a specific UUID or an array of UUIDs or all nodes on SkyNet. </h2>
+            <h2>Websocket API commands include: status, register, unregister, update, whoami, devices, subscribe, unsubscribe, authenticate, data, and message. You can send a message to a specific UUID or an array of UUIDs or all nodes on SkyNet. </h2>
 
             <a name="npm"></a>
             <h1>Node.JS NPM Module</h1>
@@ -794,6 +897,15 @@ conn.on('ready', function(data){
   conn.events({
     "uuid": "f828ef20-29f7-11e3-9604-b360d462c699",
     "token": "syep2lu2d0io1or305llz5u9ijrwwmi"
+  }, function (data) {
+    console.log(data);
+  });
+
+  // Store sensor data for device
+  conn.data({
+    "uuid": "f828ef20-29f7-11e3-9604-b360d462c699",
+    "token": "syep2lu2d0io1or305llz5u9ijrwwmi",
+    "temperature": 55
   }, function (data) {
     console.log(data);
   });
@@ -976,6 +1088,172 @@ skynet({'appName':'chris', 'awesomeMeter':10}, function (e, socket, device) {
         </div>
       </section>
 
+<a name="examples"></a>
+<section id="about">
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-12">
+        <h1>Examples</h1>
+
+<div class="bs-docs-section">
+  <h2 id="tabs-examples">Here are a few examples to get you started. You will need to create your own UUID and token. You can do this by running the following command from your terminal window:<br /><br />
+    <code>curl -X POST -d "type=example" http://skynet.im/devices</code>
+  </h2>
+  <h2>
+    This should return a response from SkyNet with your very own UUID and Token like this one!  Please use this UUID and Token in the examples below.<br /><br />
+    <textarea class="form-control">{"type":"example","ipAddress":"70.171.192.231","uuid":"0cf6c7e1-b2f8-11e3-a36b-61e66c96102e","timestamp":"2014-03-24T02:00:19.038Z","token":"63jous8wnn42huxrdz2456y1ypmk7qfr","channel":"main","online":false}</textarea>
+  </h2>
+  <h2>
+    We will be using the SkyNet and Request NPM modules in the examples below.  You can install them using the following terminal commands:<br /><br />
+    <code>npm install skynet</code><br />
+    <code>npm install request</code>
+  </h2>
+  <div class="bs-example bs-example-tabs">
+    <ul id="myTab" class="nav nav-tabs">
+      <li class="active"><a href="#rest_example" data-toggle="tab">REST</a></li>
+      <li><a href="#node_example" data-toggle="tab">Node.JS</a></li>
+      <li><a href="#js_example" data-toggle="tab">SkyNet.JS</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+      <div class="tab-pane fade in active" id="rest_example">
+        <pre ng-non-bindable="">
+          <code data-language="html">
+var request = require('request');
+
+// Check SkyNet status
+request('http://skynet.im/status', function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+    console.log(body) // Print skynet status.
+  }
+})
+
+// Subscribe to UUID
+// curl -X GET http://skynet.im/subscribe/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
+console.log('Subscribing to UUID: 0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc')
+request.get('http://skynet.im/subscribe/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc',
+  {qs: {'token': 'qirqglm6yb1vpldixflopnux4phtcsor'}}
+  , function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      console.log(body) // Print device activity.
+  }
+})
+
+// Send message
+// curl -X POST -d '{"devices": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc", "payload": {"yellow":"off"}}' http://skynet.im/messages
+setTimeout(function(){
+  request.post('http://skynet.im/messages',
+    {form: {'devices':'0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc', 'payload': 'test'}}
+    , function (error, response, body) {
+      if(response.statusCode == 200){
+        console.log(body);
+      }
+  });
+},1000);
+
+      </code>
+    </pre>
+      </div>
+      <div class="tab-pane fade" id="node_example">
+      <pre ng-non-bindable="">
+        <code data-language="html">
+var skynet = require('skynet');
+var request = require('request');
+
+var conn = skynet.createConnection({
+  "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
+  "token": "qirqglm6yb1vpldixflopnux4phtcsor",
+  "protocol": "websocket"
+});
+
+conn.on('ready', function(data){
+  console.log('Ready');
+
+  conn.on('message', function(data){
+    console.log(data);
+  });
+
+  conn.status(function (data) {
+    console.log(data);
+  });
+
+  conn.message({
+    "devices": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
+    "payload": {
+      "hello":"world"
+    }
+  });
+
+});
+      </code>
+    </pre>
+      </div>
+
+<div class="tab-pane fade" id="js_example">
+<pre ng-non-bindable="">
+  <code data-language="html">
+
+
+&lt;html&gt;
+&lt;head&gt;
+  &lt;script src="skynet.js"&gt;&lt;/script&gt;
+  &lt;script&gt;
+    var skynetConfig = {
+      "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
+      "token": "qirqglm6yb1vpldixflopnux4phtcsor",
+      "protocol": "websocket"
+    }
+    skynet(skynetConfig, function (e, socket) {
+      if (e) throw e
+
+      window.socket = socket;
+
+      // Wait for message
+      socket.on('message', function(message){
+        console.log('message received', message);
+      });
+
+      // Get the status of the Skynet network
+      socket.emit('status', function(data){
+        console.log('status received');
+        console.log(data);
+      });
+
+      // Send and receive messages
+      socket.emit('message', {
+        "devices": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
+        "payload": {
+        "red":"on"
+        }
+      }, function(data){
+        console.log(data);
+      });
+
+    });
+  &lt;/script&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+  Skynet.JS Demo
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code>
+</pre>
+</div>
+
+
+</div>
+
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
       <section id="footer-cta">
         <div class="container">
           <div class="row">
@@ -994,7 +1272,10 @@ skynet({'appName':'chris', 'awesomeMeter':10}, function (e, socket, device) {
           </div>
           <br/><br/><br/>
 <!--           <p class="pull-right">cover image by <a href="http://www.flickr.com/photos/dmje/5159177886/sizes/l/in/photostream/">dmje</a></p>
- -->        </div>
+ -->
+         <h1>Support is also available on IRC <br /><span class="colorHighlight2">irc.freenode.net / #skynetim</span></h1>
+
+        </div>
       </section>
 
       <!-- SIGN UP FORM MODAL -->

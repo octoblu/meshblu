@@ -8,7 +8,7 @@ app
   .option('-e, --environment', 'Set the environment (defaults to development)')
   .parse(process.argv);
 
-console.log(app.environment);
+// console.log(app.environment || "running in development mode");
 if(!app.environment) app.environment = 'development';
 
 var _ = require('lodash');
@@ -769,6 +769,46 @@ io.sockets.on('connection', function (socket) {
     });
   });
 
+  socket.on('data', function (data, fn) {
+
+    require('./lib/authDevice')(data.uuid, data.token, function(auth){
+
+      getUuid(socket.id.toString(), function(err, uuid){
+        if(err){ return; }
+        var reqData = data;
+        reqData["api"] = "data";
+
+        if (auth.authenticate == true){
+
+          require('./lib/logData')(data, function(results){
+            console.log(results);
+
+            try{
+              fn(results);
+            } catch (e){
+              console.log(e);
+            }
+
+          });
+
+        } else {
+          console.log('UUID not found or invalid token ', data.uuid);
+
+          var results = {"api": "data", "result": false};
+
+          console.log(results);
+          try{
+            fn(results);
+          } catch (e){
+            console.log(e);
+          }
+        }
+      });
+    });
+  });
+
+
+
   socket.on('gatewayConfig', function(data, fn) {
     console.log('gateway api req received');
     console.log(data);
@@ -1268,6 +1308,68 @@ server.get('/inboundsms', function(req, res){
       res.json(eventData);
     }
 
+  });
+});
+
+// curl -X POST -d "token=123&temperature=78" http://localhost:3000/data/ad698900-2546-11e3-87fb-c560cb0ca47b
+server.post('/data/:uuid', function(req, res){
+  res.setHeader('Access-Control-Allow-Origin','*');
+
+  require('./lib/authDevice')(req.params.uuid, req.params.token, function(auth){
+    if (auth.authenticate == true){
+
+      req.params['ipAddress'] = req.connection.remoteAddress
+      require('./lib/logData')(req.params, function(data){
+        console.log(data);
+        // io.sockets.in(data.uuid).emit('message', data)
+        if(data.error){
+          res.json(data.error.code, data);
+        } else {
+          res.json(data);
+        }
+      });
+
+    } else {
+      regdata = {
+        "error": {
+          "message": "Device not found or token not valid",
+          "code": 404
+        }
+      };
+      res.json(regdata.error.code, {uuid:req.params.uuid, authentication: false});
+    }
+  });
+
+});
+
+// curl -X GET http://localhost:3000/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
+server.get('/data/:uuid', function(req, res){
+  res.setHeader('Access-Control-Allow-Origin','*');
+  require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
+    if (auth.authenticate == true){
+      require('./lib/getData')(req.params.uuid, function(data){
+        console.log(data);
+        if(data.error){
+          res.json(data.error.code, data);
+        } else {
+          res.json(data);
+        }
+      });
+    } else {
+      console.log("Device not found or token not valid");
+      regdata = {
+        "error": {
+          "message": "Device not found or token not valid",
+          "code": 404
+        }
+      };
+      if(regdata.error){
+        res.json(regdata.error.code, regdata);
+      } else {
+        res.json(regdata);
+      }
+
+    }
   });
 });
 

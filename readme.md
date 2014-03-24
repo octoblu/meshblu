@@ -295,6 +295,7 @@ Event Codes
 * 403 = Query devices
 * 500 = WhoAmI
 * 600 = Gateway Config API call
+* 700 = Write sensor data
 
 FOLLOW US!
 ----------

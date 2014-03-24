@@ -70,6 +70,38 @@ Start the server use:
 $ node server.js
 ```
 
+Installing with Docker
+
+The default Dockerfile will run Skynet, MongoDB and Redis in a single container to make quick experiments easier.
+
+You'll need docker installed, then to build the Skynet image:
+
+From the directory where the Dockerfile resides run.
+
+```
+# docker build -t=skynet .
+```
+
+To run a fully self contained instance using the source bundled in the container.
+
+```
+# docker run -i -t -p 3000 skynet
+```
+
+This will run skynet and expose port 3000 from the container on a random host port that you can find by running docker ps.
+
+If you want to do development and run without rebuilding the image you can bind mount your source directory including node_modules onto the container. This example also binds a directory to hold the log of stdout & stderr from the Skynet node process.
+
+```
+# docker run -d -p 3000 --name=skynet_dev -v /path/to/your/skynet:/var/www -v /path/to/your/logs:/var/log/skynet skynet
+```
+
+If you change the code restarting the container is as easy as:
+
+```
+# docker restart skynet_dev
+```
+
 HTTP(S) REST API
 ----------------
 

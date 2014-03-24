@@ -6,7 +6,7 @@ module.exports = {
     host: "localhost",
     port: "9200"
   },
-  rateLimit: 10, // 10 transactions per user per secend
+  rateLimit: 10, // 10 transactions per user per second
   plivo: {
     authId: "abc",
     authToken: "123"

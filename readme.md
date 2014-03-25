@@ -6,14 +6,14 @@ SS      kk  kk yy   yy nn nnn    eee  tt
  SSSSS  kk  kk      yy nn   nn  eeeee  tttt
                 yyyyy
 ```
-OPEN COMMUNICATIONS NETWORK & API FOR THE INTERNET OF THINGS!
+OPEN COMMUNICATIONS NETWORK & API FOR THE INTERNET OF THINGS (IoT)!
 
 Visit [SKYNET.im](http://skynet.im) for up-to-the-latest documentation and screencasts.
 
 ======
 
-Intro
------
+Introduction
+------------
 
 SkyNet is an open source machine-to-machine instant messaging network and API. Our API supports both HTTP REST and realtime Web Sockets via RPC (remote procedure calls).  We also bridge [MQTT](http://mqtt.org) communications across our HTTP and Web Socket device channels.  
 
@@ -239,6 +239,27 @@ curl -X GET http://skynet.im/ipaddress
 => {"ipAddress":"70.171.149.205"}
 ```
 
+POST /data/uuid
+
+Stores your device's sensor data to SkyNet
+
+```
+curl -X POST -d "token=123&temperature=78" http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc
+
+=> {"timestamp":"2014-03-25T16:38:48.148Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"30","ipAddress":"127.0.0.1","eventCode":700,"_id":"5331b118512c974805000002"}
+```
+
+GET /data/uuid
+
+Retrieves your device's sensor data to SkyNet
+
+```
+curl -X GET http://localhost:3000/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123
+
+=> {"data":[{"timestamp":"2014-03-25T16:38:48.148Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"30","ipAddress":"127.0.0.1","id":"5331b118512c974805000001"},{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","ipAddress":"127.0.0.1","id":"532f2e8c9c23809e93000001"}]}
+```
+
+
 
 WEBSOCKET API
 -------------
@@ -289,6 +310,15 @@ Request and receive a device unregistration
 socket.emit('unregister', {"uuid":"b5535950-29fd-11e3-9113-0bd381f0b5ef", "token": "2ls40jx80s9bpgb9w2g0vi2li72v5cdi"}, function (data) {
   console.log(data);
 });
+```
+
+Store sensor data for a device uuid
+
+```js
+socket.emit('data', {"uuid":"b5535950-29fd-11e3-9113-0bd381f0b5ef", "token": "2ls40jx80s9bpgb9w2g0vi2li72v5cdi", "temperature": 55}, function (data) {
+  console.log(data);
+});
+
 ```
 
 Request and receive a message broadcast

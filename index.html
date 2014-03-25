@@ -754,6 +754,16 @@ socket.on('connect', function(){
         // {"events":[{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","armed":true,"timestamp":"2014-03-24T01:22:01.203Z","fromUuid":{"armed":true,"channel":"main","color":"blue","ipAddress":"70.171.192.231","online":true,"protocol":"websocket","socketId":"j3WWX81JwWYzaidRaNA7","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"},"eventCode":401,"id":"532f88b90db905bf09055983"}]}
       });
 
+      // Store sensor data for device
+      socket.emit('data', {
+        "uuid": "f828ef20-29f7-11e3-9604-b360d462c699",
+        "token": "syep2lu2d0io1or305llz5u9ijrwwmi",
+        "temperature": 55
+      }, function (data) {
+        console.log(data);
+      });
+
+
     }
   });
 });

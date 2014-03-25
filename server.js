@@ -187,6 +187,10 @@ function sendMessage(fromUuid, data, fn){
               }else{
 
                 if(fn && devices.length == 1 && check.online){
+
+                  // send message to socket.io room 
+                  io.sockets.in(device).emit('message', clonedMsg);
+
                   //callback passed and message for specific target, treat as rpc
                   io.sockets.socket(check.socketId).emit("message", clonedMsg, function(results){
                     console.log('results', results);
@@ -892,10 +896,12 @@ io.sockets.on('connection', function (socket) {
 
 
   socket.on('message', function (messageX, fn) {
-
+    console.log('messageX', messageX);
     // socket.limiter.removeTokens(1, function(err, remainingRequests) {
     throttle.rateLimit(socket.id.toString(), function (err, limited) {
       var message = messageX;
+      console.log('message', message);
+
       if (limited) {
         // response.writeHead(429, {'Content-Type': 'text/plain;charset=UTF-8'});
         // response.end('429 Too Many Requests - your IP is being rate limited');
@@ -1256,13 +1262,15 @@ server.post('/messages', function(req, res, next){
     }
   }
   var devices = body.devices;
-  var message = body.payload;
+  var message = {};
+  message.payload = body.payload;
+  message.devices = body.devices;
 
   console.log('devices: ' + devices);
   console.log('payload: ' + JSON.stringify(message));
 
   sendMessage(devices, message);
-  res.json({devices:devices, payload: message});
+  res.json({devices:devices, payload: body.payload});
 
   require('./lib/logEvent')(300, message);
 

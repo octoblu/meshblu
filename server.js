@@ -164,7 +164,7 @@ function sendMessage(fromUuid, data, fn){
 
                 if(fn && devices.length == 1 && check.online){
 
-                  // send message to socket.io room 
+                  // send message to socket.io room
                   io.sockets.in(device).emit('message', clonedMsg);
 
                   //callback passed and message for specific target, treat as rpc
@@ -533,9 +533,14 @@ io.sockets.on('connection', function (socket) {
           if(client && target && target.socketId && target.online){
             io.sockets.socket(target.socketId).emit("bindSocket", {fromUuid: uuid}, function(results){
               if(results == 'ok'){
-                bindSocket.connect(socket.id.toString(), target.socketId);
-                //should wait til we know stored?
-                fn({result: results});
+                bindSocket.connect(socket.id.toString(), target.socketId, function(err, val){
+                  if(err){
+                    fn({error: err});
+                  }else{
+                    fn({result: results});
+                  }
+                });
+
               }else{
                 fn({error: results});
               }

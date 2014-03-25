@@ -216,35 +216,36 @@ io.sockets.on('connection', function (socket) {
 
   // socket.limiter = new RateLimiter(1, "second", true);
 
-  console.log('Websocket connection detected. Requesting identification from socket id: ' + socket.id.toString());
-  require('./lib/logEvent')(100, {"socketId": socket.id.toString(), "protocol": "websocket"});
+  console.log('Websocket connection detected. Requesting identification from socket id: ', socket.id);
+  require('./lib/logEvent')(100, {"socketId": socket.id, "protocol": "websocket"});
 
-  socket.emit('identify', { socketid: socket.id.toString() });
+  socket.emit('identify', { socketid: socket.id });
   socket.on('identity', function (data) {
-    data["socketid"] = socket.id.toString();
+    console.log('identity received', data);
+    data["socketid"] = socket.id;
     data["ipAddress"] = ipAddress;
     if(data.protocol == undefined){
       data["protocol"] = "websocket";
     }
-    console.log('Identity received: ' + JSON.stringify(data));
+    console.log('Identity received: ', JSON.stringify(data));
     // require('./lib/logEvent')(101, data);
     require('./lib/updateSocketId')(data, function(auth){
       if (auth.status == 201){
 
         if(data.uuid){
-          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid, "token": data.token});
+          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id, "uuid": data.uuid, "token": data.token});
           // Have device join its uuid room name so that others can subscribe to it
           console.log('subscribe: ' + data.uuid);
           socket.join(data.uuid);
         } else {
-          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": auth.uuid, "token": auth.token});
+          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id, "uuid": auth.uuid, "token": auth.token});
           // Have device join its uuid room name so that others can subscribe to it
           console.log('subscribe: ' + auth.uuid);
           socket.join(auth.uuid);
         }
 
       } else {
-        socket.emit('notReady', {"api": "connect", "status": auth.status, "socketid": socket.id.toString(), "uuid": data.uuid});
+        socket.emit('notReady', {"api": "connect", "status": auth.status, "socketid": socket.id, "uuid": data.uuid});
       }
 
       require('./lib/whoAmI')(data.uuid, false, function(results){
@@ -259,10 +260,10 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('disconnect', function (data) {
-    console.log('Presence offline for socket id: ' + socket.id.toString());
+    console.log('Presence offline for socket id: ', socket.id);
     require('./lib/updatePresence')(socket.id.toString());
     // Emit API request from device to room for subscribers
-    getUuid(socket.id.toString(), function(err, uuid){
+    getUuid(socket.id, function(err, uuid){
       if(err){ return; }
       require('./lib/whoAmI')(uuid, false, function(results){
         // results._id.toString();
@@ -912,11 +913,9 @@ io.sockets.on('connection', function (socket) {
 
 
   socket.on('message', function (messageX, fn) {
-    console.log('messageX', messageX);
     // socket.limiter.removeTokens(1, function(err, remainingRequests) {
     throttle.rateLimit(socket.id.toString(), function (err, limited) {
       var message = messageX;
-      console.log('message', message);
 
       if (limited) {
         // response.writeHead(429, {'Content-Type': 'text/plain;charset=UTF-8'});

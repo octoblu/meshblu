@@ -2,7 +2,10 @@
  * See: https://github.com/visionmedia/commander.js
  */
 var app = require('commander');
+
+var redis = require('./lib/redis');
 var getUuid = require('./lib/getUuid');
+var bindSocket = require('./lib/bindSocket');
 
 app
   .option('-e, --environment', 'Set the environment (defaults to development)')
@@ -18,8 +21,7 @@ var socketio = require('socket.io');
 var nstatic = require('node-static');
 var JSONStream = require('JSONStream');
 
-var RedisStore = require('socket.io/lib/stores/redis');
-var redis = require('socket.io/node_modules/redis');
+
 
 var mqtt = require('mqtt'),
   qos = 0;
@@ -58,39 +60,13 @@ try {
   console.log('No MQTT server found.');
 }
 
-// Setup RedisStore for socket.io scaling
-var options, pub, store, sub;
-options = {
-  parser: "javascript"
-};
-pub = redis.createClient(config.redisPort, config.redisHost, options);
-sub = redis.createClient(config.redisPort, config.redisHost, options);
-store = redis.createClient(config.redisPort, config.redisHost, options);
-pub.auth(config.redisPassword, function(err) {
-  if (err) {
-    throw err;
-  }
-});
-sub.auth(config.redisPassword, function(err) {
-  if (err) {
-    throw err;
-  }
-});
-store.auth(config.redisPassword, function(err) {
-  if (err) {
-    throw err;
-  }
-});
+
 
 var server = restify.createServer();
 var io = socketio.listen(server);
 
 io.configure(function() {
-  return io.set("store", new RedisStore({
-    redisPub: pub,
-    redisSub: sub,
-    redisClient: store
-  }));
+  return io.set("store", redis.createIoStore());
 });
 
 server.use(restify.acceptParser(server.acceptable));
@@ -188,7 +164,7 @@ function sendMessage(fromUuid, data, fn){
 
                 if(fn && devices.length == 1 && check.online){
 
-                  // send message to socket.io room 
+                  // send message to socket.io room
                   io.sockets.in(device).emit('message', clonedMsg);
 
                   //callback passed and message for specific target, treat as rpc
@@ -537,6 +513,46 @@ io.sockets.on('connection', function (socket) {
         } catch (e){
           console.log(e);
         }
+      });
+    });
+  });
+
+  //tell skynet to forward plain text to another socket
+  socket.on('bindSocket', function (data, fn) {
+    if(!data){
+      return fn({error: 'invalid request'});
+    }
+
+    getUuid(socket.id.toString(), function(err, uuid){
+      if(err){ return fn({error: 'invalid client'}); }
+
+      require('./lib/whoAmI')(uuid, false, function(client){
+
+        require('./lib/whoAmI')(data.uuid, false, function(target){
+
+          if(client && target && target.socketId && target.online){
+            io.sockets.socket(target.socketId).emit("bindSocket", {fromUuid: uuid}, function(results){
+              if(results == 'ok'){
+                bindSocket.connect(socket.id.toString(), target.socketId, function(err, val){
+                  if(err){
+                    fn({error: err});
+                  }else{
+                    fn({result: results});
+                  }
+                });
+
+              }else{
+                fn({error: results});
+              }
+            });
+
+          }else{
+            console.log('client target',client, target);
+            return fn({error: 'invalid client or target'});
+          }
+
+        });
+
       });
     });
   });
@@ -913,28 +929,29 @@ io.sockets.on('connection', function (socket) {
       } else {
         console.log("Sending message for socket:", socket.id.toString(), message);
 
-        if(message == undefined){
-          var message = {};
+        if(!message){
           return;
-        } else if (typeof message !== 'object'){
-          try{
-            message = JSON.parse(message);
-          } catch(e){
-            console.log('ERROR', e);
-            return;
-          }
+        } else if (typeof message == 'string'){
 
-        }
-
-        // Broadcast to room for pubsub
-        getUuid(socket.id.toString(), function(err, uuid){
-          if(err){ return; }
-          require('./lib/whoAmI')(uuid, false, function(check){
-
-            message.api = "message";
-            sendMessage(check.uuid, message, fn);
+          bindSocket.getTarget(socket.id.toString(), function(err, target){
+            if(target){
+              io.sockets.socket(target).send(message);
+              //async update for TTL
+              bindSocket.connect(socket.id.toString(), target);
+            }
           });
-        });
+
+        }else{
+          // Broadcast to room for pubsub
+          getUuid(socket.id.toString(), function(err, uuid){
+            if(err){ return; }
+            require('./lib/whoAmI')(uuid, false, function(check){
+
+              message.api = "message";
+              sendMessage(check.uuid, message, fn);
+            });
+          });
+        }
 
       }
     });

@@ -94,7 +94,9 @@ function sendMessage(fromUuid, data, fn){
 
   console.log("sendMessage() from", fromUuid, 'data', data);
 
-  data.fromUuid = fromUuid;
+  if(fromUuid){
+    data.fromUuid = fromUuid;
+  }
 
   if(data.token){
     //never forward token to another client
@@ -935,12 +937,9 @@ io.sockets.on('connection', function (socket) {
         }else{
           // Broadcast to room for pubsub
           getUuid(socket.id.toString(), function(err, uuid){
-            if(err){ return; }
-            require('./lib/whoAmI')(uuid, false, function(check){
-
-              message.api = "message";
-              sendMessage(check.uuid, message, fn);
-            });
+            message.api = "message";
+            var fromUuid = uuid || message.fromUuid || null;
+            sendMessage(fromUuid, message, fn);
           });
         }
 

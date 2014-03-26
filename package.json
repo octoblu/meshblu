@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "mongojs": "*",
-    "redis": "*",
+    "redis": "~0.10.1",
     "socket.io": "*",
     "restify": "*",
     "node-uuid": "*",
@@ -18,7 +18,6 @@
     "JSONStream": "*",
     "commander": "*",
     "request": "*",
-    "redis": "*",
     "tokenthrottle": "*",
     "lodash": "*",
     "elasticsearch": "*",

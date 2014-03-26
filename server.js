@@ -162,10 +162,7 @@ function sendMessage(fromUuid, data, fn){
                 // mqttclient.publish(device, dataMessage, {qos:qos});
               }else{
 
-                if(fn && devices.length == 1 && check.online){
-
-                  // send message to socket.io room
-                  io.sockets.in(device).emit('message', clonedMsg);
+                if(fn && devices.length == 1 ){
 
                   //callback passed and message for specific target, treat as rpc
                   io.sockets.socket(check.socketId).emit("message", clonedMsg, function(results){
@@ -176,14 +173,6 @@ function sendMessage(fromUuid, data, fn){
                       console.log(e);
                     }
                   });
-                }
-                else if(fn && devices.length == 1 && !check.uuid){
-                  //immedieate return on invalid device
-                  fn({error: 'Invalid Device'});
-                }
-                else if(fn && devices.length == 1 && !check.online){
-                  //can't expect a response from something that's offline
-                  fn({error: 'Device Offline'});
                 }else{
                   io.sockets.in(device).emit('message', clonedMsg);
                 }
@@ -532,18 +521,18 @@ io.sockets.on('connection', function (socket) {
         require('./lib/whoAmI')(data.uuid, false, function(target){
 
           if(client && target && target.socketId && target.online){
-            io.sockets.socket(target.socketId).emit("bindSocket", {fromUuid: uuid}, function(results){
-              if(results == 'ok'){
+            io.sockets.socket(target.socketId).emit("bindSocket", {fromUuid: uuid}, function(data){
+              if(data == 'ok' || (data && data.result == 'ok')){
                 bindSocket.connect(socket.id.toString(), target.socketId, function(err, val){
                   if(err){
-                    fn({error: err});
+                    fn(err);
                   }else{
-                    fn({result: results});
+                    fn(data);
                   }
                 });
 
               }else{
-                fn({error: results});
+                fn(data);
               }
             });
 

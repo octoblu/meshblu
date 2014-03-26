@@ -165,7 +165,7 @@ function sendMessage(fromUuid, data, fn){
                 // mqttclient.publish(device, dataMessage, {qos:qos});
               }else{
 
-                if(fn && devices.length == 1 ){
+                if(fn && devices.length == 1 ){ 
                   // console.log('sending message to room:', device);
                   // io.sockets.in(device).emit('message', clonedMsg);
 

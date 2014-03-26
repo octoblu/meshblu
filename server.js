@@ -133,6 +133,7 @@ function sendMessage(fromUuid, data, fn){
 
             //check devices are valid
             require('./lib/whoAmI')(device, false, function(check){
+              console.log('check:', check);
 
               // Send SMS if UUID has a phoneNumber
               if(check.phoneNumber){
@@ -163,6 +164,8 @@ function sendMessage(fromUuid, data, fn){
               }else{
 
                 if(fn && devices.length == 1 ){
+                  console.log('sending message to room:', device);
+                  io.sockets.in(device).emit('message', clonedMsg);
 
                   //callback passed and message for specific target, treat as rpc
                   io.sockets.socket(check.socketId).emit("message", clonedMsg, function(results){

@@ -165,7 +165,7 @@ function sendMessage(fromUuid, data, fn){
                 // mqttclient.publish(device, dataMessage, {qos:qos});
               }else{
 
-                if(fn && devices.length == 1 ){ 
+                if(fn && devices.length == 1 ){
                   // console.log('sending message to room:', device);
                   // io.sockets.in(device).emit('message', clonedMsg);
 
@@ -790,6 +790,8 @@ io.sockets.on('connection', function (socket) {
 
       getUuid(socket.id.toString(), function(err, uuid){
         if(err){ return; }
+
+        delete data.token;
         var reqData = data;
         reqData["api"] = "data";
 
@@ -797,6 +799,16 @@ io.sockets.on('connection', function (socket) {
 
           require('./lib/logData')(data, function(results){
             console.log(results);
+
+            // Send messsage regarding data update
+            var message = {};
+            message.payload = data;
+            message.devices = uuid;
+
+            console.log('message: ' + JSON.stringify(message));
+
+            sendMessage(uuid, message);
+
 
             try{
               fn(results);
@@ -1333,6 +1345,8 @@ server.post('/data/:uuid', function(req, res){
   require('./lib/authDevice')(req.params.uuid, req.params.token, function(auth){
     if (auth.authenticate == true){
 
+      delete req.params.token;
+
       req.params['ipAddress'] = req.connection.remoteAddress
       require('./lib/logData')(req.params, function(data){
         console.log(data);
@@ -1340,6 +1354,16 @@ server.post('/data/:uuid', function(req, res){
         if(data.error){
           res.json(data.error.code, data);
         } else {
+
+          // Send messsage regarding data update
+          var message = {};
+          message.payload = req.params;
+          message.devices = req.params.uuid;
+
+          console.log('message: ' + JSON.stringify(message));
+
+          sendMessage(message.devices, message);
+
           res.json(data);
         }
       });

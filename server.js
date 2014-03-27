@@ -1386,7 +1386,7 @@ server.get('/data/:uuid', function(req, res){
   res.setHeader('Access-Control-Allow-Origin','*');
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){
-      require('./lib/getData')(req.params.uuid, function(data){
+      require('./lib/getData')(req, function(data){
         console.log(data);
         if(data.error){
           res.json(data.error.code, data);

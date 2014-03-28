@@ -535,7 +535,7 @@ io.sockets.on('connection', function (socket) {
 
         require('./lib/whoAmI')(data.uuid, false, function(target){
 
-          if(client && target && target.socketId && target.online){
+          if(client && target && target.socketId){
             io.sockets.socket(target.socketId).emit("bindSocket", {fromUuid: uuid}, function(data){
               if(data == 'ok' || (data && data.result == 'ok')){
                 bindSocket.connect(socket.id.toString(), target.socketId, function(err, val){

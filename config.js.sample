@@ -1,6 +1,8 @@
 module.exports = {
   databaseUrl: "mongodb://user:pass@adam.mongohq.com:1337/skynet",
+  ssl: false,
   port: 3000,
+  sslPort: 3001, // 443 for SSL
   log: true,
   elasticSearch: {
     host: "localhost",
@@ -11,7 +13,6 @@ module.exports = {
     authId: "abc",
     authToken: "123"
   },
-  ssl: false,
   redisHost: "xyz.redistogo.com",
   redisPort: "1234",
   redisPassword: "abcdef"

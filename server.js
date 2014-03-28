@@ -13,7 +13,12 @@ app
   .parse(process.argv);
 
 // console.log(app.environment || "running in development mode");
-if(!app.environment) app.environment = 'development';
+// if(!app.environment) app.environment = 'development';
+if(app.args[0]){
+  app.environment = app.args[0];
+} else {
+  app.environment = 'development';
+}
 
 var _ = require('lodash');
 var config = require('./config');
@@ -61,17 +66,42 @@ try {
   console.log('No MQTT server found.');
 }
 
-if(config.ssl){
-  var server = restify.createServer({
-    // certificate: fs.readFileSync("/home/cert/server.crt"),
-    // key: fs.readFileSync("/home/cert/server.key"),
-    certificate: fs.readFileSync("../skynet_certs/server.crt"),
-    key: fs.readFileSync("../skynet_certs/server.key"),
-    name: 'skynetim',
-  });
-} else {
-  var server = restify.createServer();
+// if(config.tls){
+//   var server = restify.createServer({
+//     // certificate: fs.readFileSync("/home/cert/server.crt"),
+//     // key: fs.readFileSync("/home/cert/server.key"),
+//     certificate: fs.readFileSync("../skynet_certs/server.crt"),
+//     key: fs.readFileSync("../skynet_certs/server.key")
+//   });
+// } else {
+//   var server = restify.createServer();
+// }
+
+
+// Instantiate our two servers (http & https)
+var server = restify.createServer();
+server.pre(restify.pre.sanitizePath());
+
+if(config.tls){
+
+  // Setup some https server options
+  if(app.environment == 'development'){
+    var https_options = {
+      certificate: fs.readFileSync("../skynet_certs/server.crt"),
+      key: fs.readFileSync("../skynet_certs/server.key")
+    };
+  } else {
+    var https_options = {
+      certificate: fs.readFileSync("/home/ec2-user/certs/server.crt"),
+      key: fs.readFileSync("/home/ec2-user/certs/server.key"),
+    };
+  }
+
+  var https_server = restify.createServer(https_options);
+  https_server.pre(restify.pre.sanitizePath());
 }
+
+
 
 var io = socketio.listen(server);
 
@@ -1022,16 +1052,22 @@ try{
 
 
 // Redirect www subdomain to root domain for https cert
-if(config.ssl){
-  server.get("/*", function(req, res, next) {
-    if (req.headers.host.match(/^www/) !== null) {
-      return res.redirect("https://" + req.headers.host.replace(/^www\./, "") + req.url);
-    } else {
-      return next();
-    }
-  });
-};
+// if(config.tls){
+//   server.get(/^\/.*/, function(req, res, next) {
+//     if (req.headers.host.match(/^www/) !== null) {
+//       // return res.redirect("https://" + req.headers.host.replace(/www\./i, "") + req.url);
+//       res.send(302, "https://" + req.headers.host.replace(/www\./i, "") + req.url);
+//     } else {
+//       return next;
+//     }
+//   });
+// };
 
+
+
+// Put any routing, response, etc. logic here. This allows us to define these functions
+// only once, and it will be re-used on both the HTTP and HTTPs servers
+var setup_server = function(server) {
 
 // curl http://localhost:3000/status
 server.get('/status', function(req, res){
@@ -1449,14 +1485,42 @@ server.get(/^\/.*/, function(req, res, next) {
     file.serve(req, res, next);
 });
 
+} // end of routes
 
+// Now, setup both servers in one step
+setup_server(server);
+if(config.tls){
+  setup_server(https_server);
+}
+
+console.log("\n SSSSS  kk                            tt    ");
+console.log("SS      kk  kk yy   yy nn nnn    eee  tt    ");
+console.log(" SSSSS  kkkkk  yy   yy nnn  nn ee   e tttt  ");
+console.log("     SS kk kk   yyyyyy nn   nn eeeee  tt    ");
+console.log(" SSSSS  kk  kk      yy nn   nn  eeeee  tttt ");
+console.log("                yyyyy                         ");
+console.log('\nSkynet %s environment loaded... ', app.environment);
+
+// Start our servers to listen on the appropriate ports
 server.listen(process.env.PORT || config.port, function() {
-  console.log("\n SSSSS  kk                            tt    ");
-  console.log("SS      kk  kk yy   yy nn nnn    eee  tt    ");
-  console.log(" SSSSS  kkkkk  yy   yy nnn  nn ee   e tttt  ");
-  console.log("     SS kk kk   yyyyyy nn   nn eeeee  tt    ");
-  console.log(" SSSSS  kk  kk      yy nn   nn  eeeee  tttt ");
-  console.log("                yyyyy                         ");
-  console.log('\nSkynet %s environment loaded... ', app.environment);
-  console.log('Skynet listening at %s', server.url);
+  console.log('%s listening at %s', server.name, server.url);
 });
+
+if(config.tls){
+  // https_server.listen(443, function() {
+  https_server.listen(process.env.SSLPORT || config.sslPort, function() {
+    console.log('%s listening at %s', https_server.name, https_server.url);
+  });
+}
+
+
+// server.listen(process.env.PORT || config.port, function() {
+//   console.log("\n SSSSS  kk                            tt    ");
+//   console.log("SS      kk  kk yy   yy nn nnn    eee  tt    ");
+//   console.log(" SSSSS  kkkkk  yy   yy nnn  nn ee   e tttt  ");
+//   console.log("     SS kk kk   yyyyyy nn   nn eeeee  tt    ");
+//   console.log(" SSSSS  kk  kk      yy nn   nn  eeeee  tttt ");
+//   console.log("                yyyyy                         ");
+//   console.log('\nSkynet %s environment loaded... ', app.environment);
+//   console.log('Skynet listening at %s', server.url);
+// });

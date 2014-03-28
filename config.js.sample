@@ -11,6 +11,7 @@ module.exports = {
     authId: "abc",
     authToken: "123"
   },
+  ssl: false,
   redisHost: "xyz.redistogo.com",
   redisPort: "1234",
   redisPassword: "abcdef"

@@ -6,6 +6,7 @@ var app = require('commander');
 var redis = require('./lib/redis');
 var getUuid = require('./lib/getUuid');
 var bindSocket = require('./lib/bindSocket');
+var fs = require('fs');
 
 app
   .option('-e, --environment', 'Set the environment (defaults to development)')
@@ -60,9 +61,18 @@ try {
   console.log('No MQTT server found.');
 }
 
+if(config.ssl){
+  var server = restify.createServer({
+    // certificate: fs.readFileSync("/home/cert/server.crt"),
+    // key: fs.readFileSync("/home/cert/server.key"),
+    certificate: fs.readFileSync("../skynet_certs/server.crt"),
+    key: fs.readFileSync("../skynet_certs/server.key"),
+    name: 'skynetim',
+  });
+} else {
+  var server = restify.createServer();
+}
 
-
-var server = restify.createServer();
 var io = socketio.listen(server);
 
 io.configure(function() {
@@ -1009,6 +1019,18 @@ try{
 } catch(e){
   console.log('no mqtt server found');
 }
+
+
+// Redirect www subdomain to root domain for https cert
+if(config.ssl){
+  server.get("/*", function(req, res, next) {
+    if (req.headers.host.match(/^www/) !== null) {
+      return res.redirect("https://" + req.headers.host.replace(/^www\./, "") + req.url);
+    } else {
+      return next();
+    }
+  });
+};
 
 
 // curl http://localhost:3000/status

@@ -53,5 +53,5 @@ function skynet (config, cb) {
 
   };
 
-  loadScript("http://skynet.im/socket.io/socket.io.js", authenticate);
+  loadScript("https://skynet.im/socket.io/socket.io.js", authenticate);
 };

@@ -7,6 +7,7 @@ var redis = require('./lib/redis');
 var getUuid = require('./lib/getUuid');
 var bindSocket = require('./lib/bindSocket');
 var fs = require('fs');
+var gatewayConfig = require('./lib/gatewayConfig');
 
 app
   .option('-e, --environment', 'Set the environment (defaults to development)')
@@ -183,10 +184,7 @@ function sendMessage(fromUuid, data, fn){
                 require('./lib/sendSms')(device, JSON.stringify(data.payload), function(check){
                   console.log('Sent SMS!');
                 });
-              } else if(check.type && check.type == 'gateway'){
-                // Any special gateway messaging needed?
               }
-
 
               // Broadcast to room for pubsub
               console.log('sending message to room: ' + device);
@@ -877,85 +875,8 @@ io.sockets.on('connection', function (socket) {
 
 
   socket.on('gatewayConfig', function(data, fn) {
-    console.log('gateway api req received');
-    console.log(data);
-
-    require('./lib/whoAmI')(data.uuid, true, function(check){
-      console.log('whoami');
-      console.log(check);
-      if(check.type == 'gateway' && check.uuid == data.uuid && check.token == data.token){
-        if(check.online == true){
-          console.log("gateway online with socket id:", check.socketId);
-
-          io.sockets.socket(check.socketId).emit("config", {devices: data.uuid, token: data.token, method: data.method, name: data.name, type: data.type, options: data.options}, function(results){
-            console.log(results);
-
-            // results._id.toString();
-            // delete results._id;
-            // check._id.toString();
-            // delete check._id;
-
-            results.toUuid = check;
-            require('./lib/logEvent')(600, results);
-
-            // socket.emit('message', {"uuid": data.uuid, "online": true});
-            // var results = {"uuid": data.uuid, "online": true};
-            try{
-              fn(results);
-            } catch (e){
-              console.log(e);
-            }
-
-          });
-
-        } else {
-
-          console.log("gateway offline");
-
-          results = {
-            "error": {
-              "message": "Gateway offline",
-              "code": 404
-            }
-          };
-
-          try{
-            fn(results);
-          } catch (e){
-            console.log(e);
-          }
-
-          // results._id.();
-          // delete results._id;
-          // check._id.toString();
-          // delete check._id;
-          results.toUuid = check;
-          require('./lib/logEvent')(600, results);
-
-        }
-
-      } else {
-
-        gatewaydata = {
-          "error": {
-            "message": "Gateway not found",
-            "code": 404
-          }
-        };
-        try{
-          fn(gatewaydata);
-        } catch (e){
-          console.log(e);
-        }
-        require('./lib/logEvent')(600, gatewaydata);
-
-      }
-    });
-
+    gatewayConfig(io, data, fn);
   });
-
-
-
 
 
   socket.on('message', function (messageX, fn) {
@@ -979,6 +900,7 @@ io.sockets.on('connection', function (socket) {
         } else if (typeof message == 'string'){
 
           bindSocket.getTarget(socket.id.toString(), function(err, target){
+            console.log('send with bind', err, target);
             if(target){
               io.sockets.socket(target).send(message);
               //async update for TTL
@@ -1350,6 +1272,29 @@ server.post('/messages', function(req, res, next){
   res.json({devices:devices, payload: body.payload});
 
   require('./lib/logEvent')(300, message);
+
+});
+
+// curl -X POST -d '{"uuid": "ad698900-2546-11e3-87fb-c560cb0ca47b", "token": "g6jmsla14j2fyldi7hqijbylwmrysyv5", "method": "getSubdevices"' http://localhost:3000/gatewayConfig
+server.post('/gatewayConfig', function(req, res, next){
+  res.setHeader('Access-Control-Allow-Origin','*');
+  var body;
+  try {
+    body = JSON.parse(req.body);
+  } catch(err) {
+    console.log('error parsing', err, req.body);
+    body = {};
+  }
+
+  gatewayConfig(io, body, function(result){
+    if(result && result.error && result.error.code){
+      res.json(result.error.code, result);
+    }else{
+      res.json(result);
+    }
+  });
+
+  require('./lib/logEvent')(300, body);
 
 });
 

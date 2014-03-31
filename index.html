@@ -208,7 +208,7 @@
                         type();
                         // $('#screen').append('{<br />"uuid":"' + device.uuid + '",<br />"token": "' + device.token + '"<br />}<br /><br />');
                         $('#redirect').html('Now, anyone or any device can subscribe to your skynet stream at:<br />');
-                        $('#redirect').append('<a href="/demo/' + device.uuid + '" target="_new">http://skynet.im/demo/' + device.uuid + '</a>');
+                        $('#redirect').append('<a href="http://skynet.im/demo/' + device.uuid + '" target="_new">http://skynet.im/demo/' + device.uuid + '</a>');
 
                         // socket.on('message', function(channel, message){
                         //   console.log('message received', channel, message);
@@ -322,7 +322,7 @@
             </div>
 
             <div class="col-md-12">
-              <h1>Base URI: http://skynet.im</h1>
+              <h1>Base URI: http(s)://skynet.im</h1>
             </div>
 
             <div class="col-md-12">

@@ -8,6 +8,7 @@ var getUuid = require('./lib/getUuid');
 var bindSocket = require('./lib/bindSocket');
 var fs = require('fs');
 
+// sudo NODE_ENV=production forever start server.js --environment production
 app
   .option('-e, --environment', 'Set the environment (defaults to development)')
   .parse(process.argv);

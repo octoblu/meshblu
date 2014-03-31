@@ -29,8 +29,6 @@ var socketio = require('socket.io');
 var nstatic = require('node-static');
 var JSONStream = require('JSONStream');
 
-
-
 var mqtt = require('mqtt'),
   qos = 0;
 var mqttsettings = {
@@ -68,18 +66,6 @@ try {
   console.log('No MQTT server found.');
 }
 
-// if(config.tls){
-//   var server = restify.createServer({
-//     // certificate: fs.readFileSync("/home/cert/server.crt"),
-//     // key: fs.readFileSync("/home/cert/server.key"),
-//     certificate: fs.readFileSync("../skynet_certs/server.crt"),
-//     key: fs.readFileSync("../skynet_certs/server.key")
-//   });
-// } else {
-//   var server = restify.createServer();
-// }
-
-
 // Instantiate our two servers (http & https)
 var server = restify.createServer();
 server.pre(restify.pre.sanitizePath());
@@ -94,8 +80,8 @@ if(config.tls){
     };
   } else {
     var https_options = {
-      certificate: fs.readFileSync("/home/ec2-user/certs/server.crt"),
-      key: fs.readFileSync("/home/ec2-user/certs/server.key"),
+      certificate: fs.readFileSync(config.tls.cert),
+      key: fs.readFileSync(config.tls.key),
     };
   }
 
@@ -103,13 +89,25 @@ if(config.tls){
   https_server.pre(restify.pre.sanitizePath());
 }
 
-
+// Setup websockets
 
 var io = socketio.listen(server);
+if(config.redis){
+  io.configure(function() {
+    return io.set("store", redis.createIoStore());
+  });
+};
 
-io.configure(function() {
-  return io.set("store", redis.createIoStore());
-});
+if(config.tls){
+  var ios = socketio.listen(https_server);
+
+  // TODO: Figure out why secure socket.io doesn't log to REDIS
+  // if(config.redis){
+    // ios.configure(function() {
+    //   return ios.set("store", redis.createIoStore());
+    // });
+  // };
+}
 
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
@@ -156,6 +154,9 @@ function sendMessage(fromUuid, data, fn){
 
       if(fromUuid){
         io.sockets.in(fromUuid + '_bc').emit('message', data);
+        if(config.tls){
+          ios.sockets.in(fromUuid + '_bc').emit('message', data);
+        }
         mqttclient.publish(fromUuid + '_bc', JSON.stringify(data), {qos:qos});
       }
 
@@ -217,8 +218,23 @@ function sendMessage(fromUuid, data, fn){
                       console.log(e);
                     }
                   });
+                  if(config.tls){
+                    ios.sockets.socket(check.socketId).emit("message", clonedMsg, function(results){
+                      console.log('results', results);
+                      try{
+                        fn(results);
+                      } catch (e){
+                        console.log(e);
+                      }
+                    });
+
+                  }
                 }else{
                   io.sockets.in(device).emit('message', clonedMsg);
+                  if(config.tls){
+                    ios.sockets.in(device).emit('message', clonedMsg);
+                  }
+
                 }
               }
 
@@ -244,7 +260,19 @@ function sendMessage(fromUuid, data, fn){
 }
 
 io.sockets.on('connection', function (socket) {
+  console.log('io connected');
+  socketLogic(socket);
+});
 
+if(config.tls){
+  ios.sockets.on('connection', function (socket) {
+    console.log('ios connected');
+    socketLogic(socket);
+  });
+}
+
+function socketLogic (socket){
+  console.log('socket connected...');
   var ipAddress = socket.handshake.address.address;
 
   // socket.limiter = new RateLimiter(1, "second", true);
@@ -294,7 +322,7 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('disconnect', function (data) {
     console.log('Presence offline for socket id: ', socket.id);
-    require('./lib/updatePresence')(socket.id.toString());
+    require('./lib/updatePresence')(socket.id);
     // Emit API request from device to room for subscribers
     getUuid(socket.id, function(err, uuid){
       if(err){ return; }
@@ -302,7 +330,7 @@ io.sockets.on('connection', function (socket) {
         // results._id.toString();
         // delete results_id;
 
-        require('./lib/logEvent')(102, {"api": "disconnect", "socketid": socket.id.toString(), "uuid": uuid, "fromUuid": results});
+        require('./lib/logEvent')(102, {"api": "disconnect", "socketid": socket.id, "uuid": uuid, "fromUuid": results});
       });
 
     });
@@ -337,9 +365,9 @@ io.sockets.on('connection', function (socket) {
           socket.join(data.uuid);
 
           // Emit API request from device to room for subscribers
-          getUuid(socket.id.toString(), function(err, uuid){
+          getUuid(socket.id, function(err, uuid){
             if(err){ return; }
-            var results = {"api": "subscribe", "socketid": socket.id.toString(), "fromUuid": uuid, "toUuid": data.uuid};
+            var results = {"api": "subscribe", "socketid": socket.id, "fromUuid": uuid, "toUuid": data.uuid};
 
             require('./lib/whoAmI')(uuid, false, function(fromCheck){
               require('./lib/whoAmI')(data.uuid, false, function(toCheck){
@@ -402,9 +430,9 @@ io.sockets.on('connection', function (socket) {
       console.log('leaving room ', data.uuid);
       socket.leave(data.uuid);
       // Emit API request from device to room for subscribers
-      getUuid(socket.id.toString(), function(err, uuid){
+      getUuid(socket.id, function(err, uuid){
         if(err){ return; }
-        var results = {"api": "unsubscribe", "socketid": socket.id.toString(), "uuid": uuid};
+        var results = {"api": "unsubscribe", "socketid": socket.id, "uuid": uuid};
         // socket.broadcast.to(uuid).emit('message', results);
 
         require('./lib/whoAmI')(uuid, false, function(fromCheck){
@@ -440,7 +468,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('status', function (fn) {
 
     // Emit API request from device to room for subscribers
-    getUuid(socket.id.toString(), function(err, uuid){
+    getUuid(socket.id, function(err, uuid){
       if(err){ return; }
       // socket.broadcast.to(uuid).emit('message', {"api": "status"});
 
@@ -474,7 +502,7 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     // Emit API request from device to room for subscribers
-    getUuid(socket.id.toString(), function(err, uuid){
+    getUuid(socket.id, function(err, uuid){
       if(err){ return; }
       var reqData = data;
       reqData["api"] = "devices";
@@ -516,7 +544,7 @@ io.sockets.on('connection', function (socket) {
       data = data.uuid;
     }
     // Emit API request from device to room for subscribers
-    getUuid(socket.id.toString(), function(err, uuid){
+    getUuid(socket.id, function(err, uuid){
       if(err){ return; }
       var reqData = data;
       reqData["api"] = "whoami";
@@ -557,7 +585,7 @@ io.sockets.on('connection', function (socket) {
       return fn({error: 'invalid request'});
     }
 
-    getUuid(socket.id.toString(), function(err, uuid){
+    getUuid(socket.id, function(err, uuid){
       if(err){ return fn({error: 'invalid client'}); }
 
       require('./lib/whoAmI')(uuid, false, function(client){
@@ -567,7 +595,7 @@ io.sockets.on('connection', function (socket) {
           if(client && target && target.socketId){
             io.sockets.socket(target.socketId).emit("bindSocket", {fromUuid: uuid}, function(data){
               if(data == 'ok' || (data && data.result == 'ok')){
-                bindSocket.connect(socket.id.toString(), target.socketId, function(err, val){
+                bindSocket.connect(socket.id, target.socketId, function(err, val){
                   if(err){
                     fn(err);
                   }else{
@@ -579,6 +607,25 @@ io.sockets.on('connection', function (socket) {
                 fn(data);
               }
             });
+
+            if(config.tls){
+              ios.sockets.socket(target.socketId).emit("bindSocket", {fromUuid: uuid}, function(data){
+                if(data == 'ok' || (data && data.result == 'ok')){
+                  bindSocket.connect(socket.id, target.socketId, function(err, val){
+                    if(err){
+                      fn(err);
+                    }else{
+                      fn(data);
+                    }
+                  });
+
+                }else{
+                  fn(data);
+                }
+              });
+
+            }
+
 
           }else{
             console.log('client target',client, target);
@@ -596,7 +643,7 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     // Emit API request from device to room for subscribers
-    getUuid(socket.id.toString(), function(err, uuid){
+    getUuid(socket.id, function(err, uuid){
       var reqData = data;
       reqData["api"] = "register";
       // socket.broadcast.to(data.uuid).emit('message', reqData);
@@ -636,7 +683,7 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     };
     // Emit API request from device to room for subscribers
-    getUuid(socket.id.toString(), function(err, uuid){
+    getUuid(socket.id, function(err, uuid){
       if(err){ return; }
       var reqData = data;
       reqData["api"] = "update";
@@ -680,7 +727,7 @@ io.sockets.on('connection', function (socket) {
       var data = {};
     }
     // Emit API request from device to room for subscribers
-    getUuid(socket.id.toString(), function(err, uuid){
+    getUuid(socket.id, function(err, uuid){
       if(err){ return; }
       var reqData = data;
       reqData["api"] = "unregister";
@@ -723,7 +770,7 @@ io.sockets.on('connection', function (socket) {
     require('./lib/authDevice')(data.uuid, data.token, function(auth){
 
       // Emit API request from device to room for subscribers
-      getUuid(socket.id.toString(), function(err, uuid){
+      getUuid(socket.id, function(err, uuid){
         if(err){ return; }
         var reqData = data;
         reqData["api"] = "events";
@@ -792,7 +839,7 @@ io.sockets.on('connection', function (socket) {
       if (auth.authenticate == true){
         var results = {"uuid": data.uuid, "authentication": true};
 
-        socket.emit('ready', {"api": "connect", "status": 201, "socketid": socket.id.toString(), "uuid": data.uuid});
+        socket.emit('ready', {"api": "connect", "status": 201, "socketid": socket.id, "uuid": data.uuid});
         console.log('subscribe: ' + data.uuid);
         socket.join(data.uuid);
 
@@ -827,7 +874,7 @@ io.sockets.on('connection', function (socket) {
 
     require('./lib/authDevice')(data.uuid, data.token, function(auth){
 
-      getUuid(socket.id.toString(), function(err, uuid){
+      getUuid(socket.id, function(err, uuid){
         if(err){ return; }
 
         delete data.token;
@@ -882,7 +929,7 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('message', function (messageX, fn) {
     // socket.limiter.removeTokens(1, function(err, remainingRequests) {
-    throttle.rateLimit(socket.id.toString(), function (err, limited) {
+    throttle.rateLimit(socket.id, function (err, limited) {
       var message = messageX;
 
       if (limited) {
@@ -890,28 +937,31 @@ io.sockets.on('connection', function (socket) {
         // response.end('429 Too Many Requests - your IP is being rate limited');
 
         // TODO: Emit rate limit exceeded message
-        console.log("Rate limit exceeded for socket:", socket.id.toString());
+        console.log("Rate limit exceeded for socket:", socket.id);
         console.log("message", message);
 
       } else {
-        console.log("Sending message for socket:", socket.id.toString(), message);
+        console.log("Sending message for socket:", socket.id, message);
 
         if(!message){
           return;
         } else if (typeof message == 'string'){
 
-          bindSocket.getTarget(socket.id.toString(), function(err, target){
+          bindSocket.getTarget(socket.id, function(err, target){
             console.log('send with bind', err, target);
             if(target){
               io.sockets.socket(target).send(message);
+              if(config.tls){
+                ios.sockets.socket(target).send(message);
+              }
               //async update for TTL
-              bindSocket.connect(socket.id.toString(), target);
+              bindSocket.connect(socket.id, target);
             }
           });
 
         }else{
           // Broadcast to room for pubsub
-          getUuid(socket.id.toString(), function(err, uuid){
+          getUuid(socket.id, function(err, uuid){
             message.api = "message";
             var fromUuid = uuid || message.fromUuid || null;
             sendMessage(fromUuid, message, fn);
@@ -923,7 +973,7 @@ io.sockets.on('connection', function (socket) {
 
   });
 
-});
+};
 
 // Handle MQTT Messages
 try{
@@ -1330,6 +1380,16 @@ server.get('/inboundsms', function(req, res){
       fromUuid: {},
       eventCode: 300
     });
+    if(config.tls){
+      ios.sockets.in(uuid).emit('message', {
+        devices: uuid,
+        payload: message,
+        api: 'message',
+        fromUuid: {},
+        eventCode: 300
+      });
+
+    }
 
     var eventData = {devices: uuid, payload: message}
     require('./lib/logEvent')(301, eventData);
@@ -1454,19 +1514,7 @@ server.listen(process.env.PORT || config.port, function() {
 
 if(config.tls){
   // https_server.listen(443, function() {
-  https_server.listen(process.env.SSLPORT || config.sslPort, function() {
+  https_server.listen(process.env.SSLPORT || config.tls.sslPort, function() {
     console.log('%s listening at %s', https_server.name, https_server.url);
   });
 }
-
-
-// server.listen(process.env.PORT || config.port, function() {
-//   console.log("\n SSSSS  kk                            tt    ");
-//   console.log("SS      kk  kk yy   yy nn nnn    eee  tt    ");
-//   console.log(" SSSSS  kkkkk  yy   yy nnn  nn ee   e tttt  ");
-//   console.log("     SS kk kk   yyyyyy nn   nn eeeee  tt    ");
-//   console.log(" SSSSS  kk  kk      yy nn   nn  eeeee  tttt ");
-//   console.log("                yyyyy                         ");
-//   console.log('\nSkynet %s environment loaded... ', app.environment);
-//   console.log('Skynet listening at %s', server.url);
-// });

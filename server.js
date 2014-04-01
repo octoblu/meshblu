@@ -153,6 +153,10 @@ function sendMessage(fromUuid, data, fn){
     if(data.devices == "all" || data.devices == "*"){
 
       if(fromUuid){
+
+// getUuid(socket.id, function(err, uuid){
+//   require('./lib/whoAmI')(uuid, false, function(check){
+
         io.sockets.in(fromUuid + '_bc').emit('message', data);
         if(config.tls){
           ios.sockets.in(fromUuid + '_bc').emit('message', data);
@@ -209,17 +213,22 @@ function sendMessage(fromUuid, data, fn){
                   // console.log('sending message to room:', device);
                   // io.sockets.in(device).emit('message', clonedMsg);
 
-                  //callback passed and message for specific target, treat as rpc
-                  io.sockets.socket(check.socketId).emit("message", clonedMsg, function(results){
-                    console.log('results', results);
-                    try{
-                      fn(results);
-                    } catch (e){
-                      console.log(e);
+                  if(check.secure){
+                    if(config.tls){
+                      ios.sockets.socket(check.socketId).emit("message", clonedMsg, function(results){
+                        console.log('results', results);
+                        try{
+                          fn(results);
+                        } catch (e){
+                          console.log(e);
+                        }
+                      });
+
                     }
-                  });
-                  if(config.tls){
-                    ios.sockets.socket(check.socketId).emit("message", clonedMsg, function(results){
+
+                  } else {
+                    //callback passed and message for specific target, treat as rpc
+                    io.sockets.socket(check.socketId).emit("message", clonedMsg, function(results){
                       console.log('results', results);
                       try{
                         fn(results);
@@ -229,10 +238,16 @@ function sendMessage(fromUuid, data, fn){
                     });
 
                   }
+
+
                 }else{
-                  io.sockets.in(device).emit('message', clonedMsg);
-                  if(config.tls){
-                    ios.sockets.in(device).emit('message', clonedMsg);
+
+                  if(check.secure){
+                    if(config.tls){
+                      ios.sockets.in(device).emit('message', clonedMsg);
+                    }
+                  } else {                    
+                    io.sockets.in(device).emit('message', clonedMsg);
                   }
 
                 }
@@ -261,17 +276,17 @@ function sendMessage(fromUuid, data, fn){
 
 io.sockets.on('connection', function (socket) {
   console.log('io connected');
-  socketLogic(socket);
+  socketLogic(socket, false);
 });
 
 if(config.tls){
   ios.sockets.on('connection', function (socket) {
     console.log('ios connected');
-    socketLogic(socket);
+    socketLogic(socket, true);
   });
 }
 
-function socketLogic (socket){
+function socketLogic (socket, secure){
   console.log('socket connected...');
   var ipAddress = socket.handshake.address.address;
 
@@ -285,6 +300,7 @@ function socketLogic (socket){
     console.log('identity received', data);
     data["socketid"] = socket.id;
     data["ipAddress"] = ipAddress;
+    data["secure"] = secure;
     if(data.protocol == undefined){
       data["protocol"] = "websocket";
     }
@@ -593,23 +609,28 @@ function socketLogic (socket){
         require('./lib/whoAmI')(data.uuid, false, function(target){
 
           if(client && target && target.socketId){
-            io.sockets.socket(target.socketId).emit("bindSocket", {fromUuid: uuid}, function(data){
-              if(data == 'ok' || (data && data.result == 'ok')){
-                bindSocket.connect(socket.id, target.socketId, function(err, val){
-                  if(err){
-                    fn(err);
+            if(target.secure){
+
+              if(config.tls){
+                ios.sockets.socket(target.socketId).emit("bindSocket", {fromUuid: uuid}, function(data){
+                  if(data == 'ok' || (data && data.result == 'ok')){
+                    bindSocket.connect(socket.id, target.socketId, function(err, val){
+                      if(err){
+                        fn(err);
+                      }else{
+                        fn(data);
+                      }
+                    });
+
                   }else{
                     fn(data);
                   }
                 });
 
-              }else{
-                fn(data);
               }
-            });
 
-            if(config.tls){
-              ios.sockets.socket(target.socketId).emit("bindSocket", {fromUuid: uuid}, function(data){
+            } else {
+              io.sockets.socket(target.socketId).emit("bindSocket", {fromUuid: uuid}, function(data){
                 if(data == 'ok' || (data && data.result == 'ok')){
                   bindSocket.connect(socket.id, target.socketId, function(err, val){
                     if(err){
@@ -623,7 +644,6 @@ function socketLogic (socket){
                   fn(data);
                 }
               });
-
             }
 
 
@@ -950,10 +970,22 @@ function socketLogic (socket){
           bindSocket.getTarget(socket.id, function(err, target){
             console.log('send with bind', err, target);
             if(target){
-              io.sockets.socket(target).send(message);
-              if(config.tls){
-                ios.sockets.socket(target).send(message);
-              }
+
+              // Determine is socket is secure
+              getUuid(socket.id, function(err, uuid){
+                require('./lib/whoAmI')(uuid, false, function(check){
+
+                  if(check.secure){
+                    if(config.tls){
+                      ios.sockets.socket(target).send(message);
+                    }
+                  } else {
+                    io.sockets.socket(target).send(message);
+                  }
+
+                });
+              });
+
               //async update for TTL
               bindSocket.connect(socket.id, target);
             }
@@ -1016,7 +1048,16 @@ try{
     // });
 
     //add auth and throttling later
-    sendMessage(message.fromUuid, message);
+
+    // Determine is socket is secure
+    // require('./lib/whoAmI')(message.uuid, false, function(check){
+      // if(check.secure){
+        // sendMessage(message.fromUuid, message, true);
+      // } else {
+        sendMessage(message.fromUuid, message);
+      // }
+    // });
+
 
   });
 } catch(e){
@@ -1373,23 +1414,29 @@ server.get('/inboundsms', function(req, res){
 
     mqttclient.publish(uuid, JSON.stringify(message), {qos:qos});
     // io.sockets.in(uuid).emit('message', {message: message});
-    io.sockets.in(uuid).emit('message', {
-      devices: uuid,
-      payload: message,
-      api: 'message',
-      fromUuid: {},
-      eventCode: 300
-    });
-    if(config.tls){
-      ios.sockets.in(uuid).emit('message', {
-        devices: uuid,
-        payload: message,
-        api: 'message',
-        fromUuid: {},
-        eventCode: 300
-      });
 
-    }
+    require('./lib/whoAmI')(uuid, false, function(check){
+      if(check.secure){
+        if(config.tls){
+          ios.sockets.in(uuid).emit('message', {
+            devices: uuid,
+            payload: message,
+            api: 'message',
+            fromUuid: {},
+            eventCode: 300
+          });
+        }
+      } else {
+        io.sockets.in(uuid).emit('message', {
+          devices: uuid,
+          payload: message,
+          api: 'message',
+          fromUuid: {},
+          eventCode: 300
+        });
+      }
+    });
+
 
     var eventData = {devices: uuid, payload: message}
     require('./lib/logEvent')(301, eventData);

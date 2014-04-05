@@ -15,6 +15,7 @@ ADD . /var/www
 RUN cd /var/www && npm install
 ADD ./docker/config.js.docker /var/www/config.js
 ADD ./docker/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
+RUN mkdir /var/log/skynet
 
 EXPOSE 3000
 

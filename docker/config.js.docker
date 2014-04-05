@@ -11,7 +11,9 @@ module.exports = {
     authId: "abc",
     authToken: "123"
   },*/
-  redisHost: "localhost",
-  redisPort: "6379",
-  redisPassword: "localhost"
+  redis: {
+    host: "localhost",
+    port: "6379",
+    password: "localhost"
+  }
 };

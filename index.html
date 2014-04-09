@@ -91,7 +91,7 @@
           <!-- <h1>I AM A <span>DESIGNER</span> / <span>DEVELOPER</span><br />living in Paris.</h1> -->
           <!-- <h1>REALTIME <span>IOT</span> NETWORK & <span>API</span></h1> -->
           <h1><span>Machine-to-machine</span> <br/>instant messaging</h1>
-          <a href="#about" class="btn btn-large scroll assimilate">Assimilate!</a>
+<!--           <a href="#about" class="btn btn-large scroll assimilate">Assimilate!</a> -->
         </div>
 
       </section>
@@ -147,6 +147,9 @@
 
           <div class="row">
             <div class="col-md-12">
+              <h3>
+                <a href="http://www.controlaltdieliet.be/blog/?p=343"><img src="/img/python_logo.png" width="100" height="100"></a> Thanks to <a href="https://twitter.com/ctl_alt_dieliet">Tom De Moor</a>, <a href="http://www.controlaltdieliet.be/blog/?p=343">Python websockets</a> are now supported on SkyNet!
+              </h3><br />
               <h3>SkyNet allows you to query devices such as drones, hue light bulbs, weemos, arduinos, and server nodes that meet your criteria and send IM messages to 1 or all devices.</h3>
               <h3>You can also subscribe to messages being sent to/from devices and their sensor activities.</h3>
 
@@ -461,7 +464,7 @@
               <td>
               <div class="feature col-md-10">
                 <b>/mydevices/{uuid}</b>
-                <br />Returns all information (including tokens) of all devices or nodes belonging to a user's UUID (identified as "owner")
+                <br />Returns all information (including tokens) of all devices or nodes belonging to a user's UUID (identified with an "owner" property and user's UUID i.e. "owner":"0d1234a0-1234-11e3-b09c-1234e847b2cc")
                 <br />
                 <code>curl -X GET http://skynet.im/mydevices/0d1234a0-1234-11e3-b09c-1234e847b2cc?token=1234glm6y1234ldix1234nux41234sor</code>
                 <br />

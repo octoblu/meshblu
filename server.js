@@ -246,7 +246,7 @@ function sendMessage(fromUuid, data, fn){
                     if(config.tls){
                       ios.sockets.in(device).emit('message', clonedMsg);
                     }
-                  } else {                    
+                  } else {
                     io.sockets.in(device).emit('message', clonedMsg);
                   }
 
@@ -909,7 +909,7 @@ function socketLogic (socket, secure){
             // Send messsage regarding data update
             var message = {};
             message.payload = data;
-            message.devices = uuid;
+            message.devices = data.uuid;
 
             console.log('message: ' + JSON.stringify(message));
 

@@ -14,7 +14,7 @@ module.exports = {
   rateLimits: {
     message: 10, // 10 transactions per user per second
     data: 10, // 10 transactions per user per second
-    identify: 2, // 2 transactions per IP per second
+    connection: 2, // 2 transactions per IP per second
     query: 2 // 2 transactions per user per second
   },
   plivo: {

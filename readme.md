@@ -364,25 +364,31 @@ FOLLOW US!
 
 * [Twitter/SKYNETim](http://twitter.com/skynetim)
 * [Facebook/SKYNETim](http://facebook.com/skynetim)
+* [Google Plus](https://plus.google.com/communities/106179367424841209509)
 
 
 LICENSE
 -------
 
-GNU GENERAL PUBLIC LICENSE (GPL) - See LICENSE file for details
+(MIT License)
 
-SkyNet.IM Commercial License for OEMs, ISVs and VARs
+Copyright (c) 2014 Octoblu <info@octoblu.com>
 
-Octoblu, inc. provides its SkyNet.IM Internet of Things (IoT) realtime network and API platform under a dual license model designed to meet the development and distribution needs of both commercial distributors (such as OEMs, ISVs and VARs) and open source projects.
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
 
-For OEMs, ISVs, VARs and Other Distributors of Commercial Applications:
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
 
-OEMs (Original Equipment Manufacturers), ISVs (Independent Software Vendors), VARs (Value Added Resellers) and other distributors that combine and distribute commercially licensed software with SkyNet.IM software and do not wish to distribute the source code for the commercially licensed software under version 2 of the GNU General Public License (the "GPL") must enter into a commercial license agreement with Octoblu, inc.
-
-For Open Source Projects and Other Developers of Open Source Applications:
-
-For developers of Free Open Source Software ("FOSS") applications under the GPL that want to combine and distribute those FOSS applications with SkyNet.IM software, Octoblu, inc.'s SkyNet.IM open source software licensed under the GPL is the best option.
-
-For developers and distributors of open source software under a FOSS license other than the GPL, Octoblu, inc. makes its GPL-licensed SkyNet.im platform available under a FOSS Exception that enables use of SkyNet.IM under certain conditions without causing the entire derivative work to be subject to the GPL.
-
-For more information, please contact sales@octoblu.com.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

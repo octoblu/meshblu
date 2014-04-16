@@ -2,6 +2,7 @@
  * See: https://github.com/visionmedia/commander.js
  */
 var app = require('commander');
+var tokenthrottle = require("tokenthrottle");
 
 var redis = require('./lib/redis');
 var getUuid = require('./lib/getUuid');
@@ -51,8 +52,17 @@ var mqttsettings = {
 //   }
 // });
 
+config.rateLimits = config.rateLimits || {};
 // rate per second
-var throttle = require("tokenthrottle")({rate: config.rateLimit});
+var throttles = {
+  connection : tokenthrottle({rate: config.rateLimits.connection || 3}),
+  message : tokenthrottle({rate: config.rateLimits.message || 10}),
+  data : tokenthrottle({rate: config.rateLimits.data || 10}),
+  query : tokenthrottle({rate: config.rateLimits.query || 2})
+};
+
+
+
 
 // create mqtt connection
 try {
@@ -96,7 +106,7 @@ if(config.redis){
   io.configure(function() {
     return io.set("store", redis.createIoStore());
   });
-};
+}
 
 if(config.tls){
   var ios = socketio.listen(https_server);
@@ -274,15 +284,27 @@ function sendMessage(fromUuid, data, fn){
 
 }
 
+function checkConnection(socket){
+  var ip = socket.handshake.address.address;
+  //console.log(ip);
+  throttles.connection.rateLimit(ip, function (err, limited) {
+    if(limited){
+      socket.emit('notReady',{error: 'rate limit exceeded ' + ip});
+      socket.disconnect();
+    }else{
+      console.log('io connected');
+      socketLogic(socket, false);
+    }
+  });
+}
+
 io.sockets.on('connection', function (socket) {
-  console.log('io connected');
-  socketLogic(socket, false);
+  checkConnection(socket);
 });
 
 if(config.tls){
   ios.sockets.on('connection', function (socket) {
-    console.log('ios connected');
-    socketLogic(socket, true);
+    checkConnection(socket);
   });
 }
 
@@ -365,8 +387,6 @@ function socketLogic (socket, secure){
           fn({"api": "subscribe", "result": true});
         }
 
-        // results._id.toString();
-        // delete results._id;
 
         data.toUuid = results;
         require('./lib/logEvent')(204, data);
@@ -388,10 +408,7 @@ function socketLogic (socket, secure){
             require('./lib/whoAmI')(uuid, false, function(fromCheck){
               require('./lib/whoAmI')(data.uuid, false, function(toCheck){
                 data.auth = auth;
-                // fromCheck._id.toString();
-                // delete fromCheck._id;
-                // toCheck._id.toString();
-                // delete toCheck._id;
+
                 data.fromUuid = fromCheck;
                 data.toUuid = toCheck;
                 require('./lib/logEvent')(204, data);
@@ -401,13 +418,6 @@ function socketLogic (socket, secure){
 
             try{
               fn(results);
-
-              // // Emit API request from device to room for subscribers
-              // socket.broadcast.to(data.uuid).emit('message', results);
-              // if(uuid != data.uuid){
-              //   socket.broadcast.to(uuid).emit('message', results);
-              // }
-
 
             } catch (e){
               console.log(e);
@@ -426,9 +436,6 @@ function socketLogic (socket, secure){
           console.log(results);
           try{
             fn(results);
-
-            // // Emit API request from device to room for subscribers
-            // socket.broadcast.to(data.uuid).emit('message', results);
 
           } catch (e){
             console.log(e);
@@ -453,10 +460,6 @@ function socketLogic (socket, secure){
 
         require('./lib/whoAmI')(uuid, false, function(fromCheck){
           require('./lib/whoAmI')(data.uuid, false, function(toCheck){
-            // fromCheck._id.toString();
-            // delete fromCheck._id;
-            // toCheck._id.toString();
-            // delete toCheck._id;
             data.fromUuid = fromCheck;
             data.toUuid = toCheck;
             require('./lib/logEvent')(205, data);
@@ -466,13 +469,6 @@ function socketLogic (socket, secure){
 
         try{
           fn(results);
-
-          // // Emit API request from device to room for subscribers
-          // socket.broadcast.to(data.uuid).emit('message', results);
-          // if(uuid != data.uuid){
-          //   socket.broadcast.to(uuid).emit('message', results);
-          // }
-
         } catch (e){
           console.log(e);
         }
@@ -483,116 +479,110 @@ function socketLogic (socket, secure){
   // APIs
   socket.on('status', function (fn) {
 
-    // Emit API request from device to room for subscribers
-    getUuid(socket.id, function(err, uuid){
-      if(err){ return; }
-      // socket.broadcast.to(uuid).emit('message', {"api": "status"});
+    throttles.query.rateLimit(socket.id, function (err, limited) {
+      if(limited){
+        console.log('status throttled', socket.id);
+      }else{
 
-      require('./lib/getSystemStatus')(function(results){
-        console.log(results);
+        // Emit API request from device to room for subscribers
+        getUuid(socket.id, function(err, uuid){
+          if(err){ return; }
+          // socket.broadcast.to(uuid).emit('message', {"api": "status"});
 
-        require('./lib/whoAmI')(uuid, false, function(check){
-          // check._id.toString();
-          // delete check._id;
-          results.fromUuid = check;
-          require('./lib/logEvent')(200, results);
+          require('./lib/getSystemStatus')(function(results){
+            console.log(results);
+
+            require('./lib/whoAmI')(uuid, false, function(check){
+              // check._id.toString();
+              // delete check._id;
+              results.fromUuid = check;
+              require('./lib/logEvent')(200, results);
+            });
+
+            try{
+              fn(results);
+
+            } catch (e){
+              console.log(e);
+            }
+          });
+
         });
-
-        try{
-          fn(results);
-
-          // // Emit API request from device to room for subscribers
-          // socket.broadcast.to(uuid).emit('message', results);
-
-        } catch (e){
-          console.log(e);
-        }
-      });
-
+      }
     });
 
   });
 
+
+
   socket.on('devices', function (data, fn) {
-    if(data == undefined){
-      var data = {};
-    }
-    // Emit API request from device to room for subscribers
-    getUuid(socket.id, function(err, uuid){
-      if(err){ return; }
-      var reqData = data;
-      reqData["api"] = "devices";
-      // socket.broadcast.to(data.uuid).emit('message', reqData);
-      // if(uuid != data.uuid){
-      //   socket.broadcast.to(uuid).emit('message', reqData);
-      // }
+    throttles.query.rateLimit(socket.id, function (err, limited) {
+      if(limited){
+        console.log('query throttled', socket.id);
+      }else{
 
-      // Why is "api" still in the data object?
-      delete reqData["api"];
-      require('./lib/getDevices')(data, false, function(results){
-        console.log(results);
-
-        require('./lib/whoAmI')(uuid, false, function(check){
-          results.fromUuid = check;
-          require('./lib/logEvent')(403, results);
-        });
-
-        try{
-          fn(results);
-
-          // // Emit API request from device to room for subscribers
-          // socket.broadcast.to(data.uuid).emit('message', results);
-          // if(uuid != data.uuid){
-          //   socket.broadcast.to(uuid).emit('message', results);
-          // }
-
-        } catch (e){
-          console.log(e);
+        if(!data || (typeof data != 'object')){
+          data = {};
         }
-      });
+        // Emit API request from device to room for subscribers
+        getUuid(socket.id, function(err, uuid){
+          if(err){ return; }
+          var reqData = data;
+          require('./lib/getDevices')(data, false, function(results){
+            console.log(results);
+
+            require('./lib/whoAmI')(uuid, false, function(check){
+              results.fromUuid = check;
+              require('./lib/logEvent')(403, results);
+            });
+
+            try{
+              fn(results);
+
+            } catch (e){
+              console.log(e);
+            }
+          });
+        });
+      }
     });
   });
 
   socket.on('whoami', function (data, fn) {
-    if(data == undefined){
-      var data = "";
-    } else {
-      data = data.uuid;
-    }
-    // Emit API request from device to room for subscribers
-    getUuid(socket.id, function(err, uuid){
-      if(err){ return; }
-      var reqData = data;
-      reqData["api"] = "whoami";
-      // socket.broadcast.to(data.uuid).emit('message', reqData);
-      // if(uuid != data.uuid){
-      //   socket.broadcast.to(uuid).emit('message', reqData);
-      // }
 
-      delete reqData["api"];
-      require('./lib/whoAmI')(data, false, function(results){
+    throttles.query.rateLimit(socket.id, function (err, limited) {
+      if(limited){
+        console.log('whoami throttled', socket.id);
+      }else{
 
-        require('./lib/whoAmI')(uuid, false, function(check){
-          // check._id.toString();
-          // delete check._id;
-          results.fromUuid = check;
-          require('./lib/logEvent')(500, results);
+        if(!data){
+          data = "";
+        } else {
+          data = data.uuid;
+        }
+        // Emit API request from device to room for subscribers
+        getUuid(socket.id, function(err, uuid){
+          if(err){ return; }
+          var reqData = data;
+          require('./lib/whoAmI')(data, false, function(results){
+
+            require('./lib/whoAmI')(uuid, false, function(check){
+              // delete check._id;
+              results.fromUuid = check;
+              require('./lib/logEvent')(500, results);
+            });
+
+            try{
+              fn(results);
+            } catch (e){
+              console.log(e);
+            }
+          });
         });
 
-        try{
-          fn(results);
-
-          // // Emit API request from device to room for subscribers
-          // socket.broadcast.to(data.uuid).emit('message', results);
-          // if(uuid != data.uuid){
-          //   socket.broadcast.to(uuid).emit('message', results);
-          // }
-
-        } catch (e){
-          console.log(e);
-        }
-      });
+      }
     });
+
   });
 
   //tell skynet to forward plain text to another socket
@@ -659,8 +649,8 @@ function socketLogic (socket, secure){
   });
 
   socket.on('register', function (data, fn) {
-    if(data == undefined){
-      var data = {};
+    if(!data){
+      data = {};
     }
     // Emit API request from device to room for subscribers
     getUuid(socket.id, function(err, uuid){
@@ -699,8 +689,8 @@ function socketLogic (socket, secure){
   });
 
   socket.on('update', function (data, fn) {
-    if(data == undefined){
-      var data = {};
+    if(!data){
+      data = {};
     };
     // Emit API request from device to room for subscribers
     getUuid(socket.id, function(err, uuid){
@@ -743,8 +733,8 @@ function socketLogic (socket, secure){
   });
 
   socket.on('unregister', function (data, fn) {
-    if(data == undefined){
-      var data = {};
+    if(!data){
+      data = {};
     }
     // Emit API request from device to room for subscribers
     getUuid(socket.id, function(err, uuid){
@@ -890,53 +880,62 @@ function socketLogic (socket, secure){
     });
   });
 
-  socket.on('data', function (data, fn) {
+  socket.on('data', function (messageX, fn) {
 
-    require('./lib/authDevice')(data.uuid, data.token, function(auth){
+    throttles.data.rateLimit(socket.id, function (err, limited) {
+      if(limited){
+        console.log('data throttled', socket.id);
+      }else{
+        var data = messageX;
 
-      getUuid(socket.id, function(err, uuid){
-        if(err){ return; }
+        require('./lib/authDevice')(data.uuid, data.token, function(auth){
 
-        delete data.token;
-        var reqData = data;
-        reqData["api"] = "data";
+          getUuid(socket.id, function(err, uuid){
+            if(err){ return; }
 
-        if (auth.authenticate == true){
+            delete data.token;
+            var reqData = data;
+            reqData["api"] = "data";
 
-          require('./lib/logData')(data, function(results){
-            console.log(results);
+            if (auth.authenticate == true){
 
-            // Send messsage regarding data update
-            var message = {};
-            message.payload = data;
-            message.devices = data.uuid;
+              require('./lib/logData')(data, function(results){
+                console.log(results);
 
-            console.log('message: ' + JSON.stringify(message));
+                // Send messsage regarding data update
+                var message = {};
+                message.payload = data;
+                message.devices = data.uuid;
 
-            sendMessage(uuid, message);
+                console.log('message: ' + JSON.stringify(message));
+
+                sendMessage(uuid, message);
 
 
-            try{
-              fn(results);
-            } catch (e){
-              console.log(e);
+                try{
+                  fn(results);
+                } catch (e){
+                  console.log(e);
+                }
+
+              });
+
+            } else {
+              console.log('UUID not found or invalid token ', data.uuid);
+
+              var results = {"api": "data", "result": false};
+
+              console.log(results);
+              try{
+                fn(results);
+              } catch (e){
+                console.log(e);
+              }
             }
-
           });
+        });
 
-        } else {
-          console.log('UUID not found or invalid token ', data.uuid);
-
-          var results = {"api": "data", "result": false};
-
-          console.log(results);
-          try{
-            fn(results);
-          } catch (e){
-            console.log(e);
-          }
-        }
-      });
+      }
     });
   });
 
@@ -949,7 +948,7 @@ function socketLogic (socket, secure){
 
   socket.on('message', function (messageX, fn) {
     // socket.limiter.removeTokens(1, function(err, remainingRequests) {
-    throttle.rateLimit(socket.id, function (err, limited) {
+    throttles.message.rateLimit(socket.id, function (err, limited) {
       var message = messageX;
 
       if (limited) {
@@ -1005,7 +1004,7 @@ function socketLogic (socket, secure){
 
   });
 
-};
+}
 
 // Handle MQTT Messages
 try{

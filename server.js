@@ -1496,14 +1496,31 @@ server.get('/data/:uuid', function(req, res){
   res.setHeader('Access-Control-Allow-Origin','*');
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){
-      require('./lib/getData')(req, function(data){
-        console.log(data);
-        if(data.error){
-          res.json(data.error.code, data);
-        } else {
-          res.json(data);
-        }
-      });
+
+      if(req.query.stream){
+
+        var foo = JSONStream.stringify();
+        foo.on("data", function(data){
+          console.log(data);
+          data = data + '\n';
+        })
+        require('./lib/getData')(req)
+          .pipe(foo)
+          .pipe(res);
+
+      } else {
+        
+        require('./lib/getData')(req, function(data){
+          console.log(data);
+          if(data.error){
+            res.json(data.error.code, data);
+          } else {
+            res.json(data);
+          }
+        });
+      }
+
+
     } else {
       console.log("Device not found or token not valid");
       regdata = {

@@ -284,7 +284,7 @@ function sendMessage(fromUuid, data, fn){
 
 }
 
-function checkConnection(socket){
+function checkConnection(socket, secure){
   var ip = socket.handshake.address.address;
   //console.log(ip);
   throttles.connection.rateLimit(ip, function (err, limited) {
@@ -293,18 +293,18 @@ function checkConnection(socket){
       socket.disconnect();
     }else{
       console.log('io connected');
-      socketLogic(socket, false);
+      socketLogic(socket, secure);
     }
   });
 }
 
 io.sockets.on('connection', function (socket) {
-  checkConnection(socket);
+  checkConnection(socket, false);
 });
 
 if(config.tls){
   ios.sockets.on('connection', function (socket) {
-    checkConnection(socket);
+    checkConnection(socket, true);
   });
 }
 
@@ -1509,7 +1509,7 @@ server.get('/data/:uuid', function(req, res){
           .pipe(res);
 
       } else {
-        
+
         require('./lib/getData')(req, function(data){
           console.log(data);
           if(data.error){

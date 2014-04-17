@@ -1496,7 +1496,6 @@ server.get('/data/:uuid', function(req, res){
   res.setHeader('Access-Control-Allow-Origin','*');
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){
-
       if(req.query.stream){
 
         var foo = JSONStream.stringify();

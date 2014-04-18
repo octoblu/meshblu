@@ -1282,7 +1282,7 @@ server.get('/subscribe/:uuid', function(req, res){
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){
 
-      var foo = JSONStream.stringify(open='\n', sep='\n,\n', close='\n\n');
+      var foo = JSONStream.stringify(open='\n', sep=',\n', close='\n\n');
       foo.on("data", function(data){
         console.log(data);
         data = data + '\r\n';
@@ -1498,7 +1498,7 @@ server.get('/data/:uuid', function(req, res){
     if (auth.authenticate == true){
       if(req.query.stream){
 
-        var foo = JSONStream.stringify(open='\n', sep='\n,\n', close='\n\n');
+        var foo = JSONStream.stringify(open='\n', sep=',\n', close='\n\n');
         foo.on("data", function(data){
           // data = data.toString() + '\r\n';
           console.log('DATA', data);

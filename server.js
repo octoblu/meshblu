@@ -1101,7 +1101,7 @@ console.log('\nSkynet %s environment loaded... ', app.environment);
 
 // Start our restful servers to listen on the appropriate ports
 
-coapServer.listen(process.env.PORT || coapConfig.port);
+coapServer.listen(coapConfig.port || 5683);
 
 server.listen(process.env.PORT || config.port, function() {
   console.log('%s listening at %s', server.name, server.url);

@@ -1203,6 +1203,26 @@ coapRouter.get('/mydevices/:uuid', function (req, res) {
 });
 
 
+// coap get 'http://localhost:3000/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?token=5ypy4rurayktke29ypbi30kcw5ovfgvi'
+coapRouter.get('/authenticate/:uuid', function(req, res){
+  require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
+    if (auth.authenticate == true){
+      res.json({uuid:req.params.uuid, authentication: true});
+    } else {
+      regdata = {
+        "error": {
+          "message": "Device not found or token not valid",
+          "code": 404
+        }
+      };
+      res.statusCode = regdata.error.code;
+      res.json({code: regdata.error.code, payload: {uuid:req.params.uuid, authentication: false}});
+
+    }
+  });
+});
+
+
 coapRouter.get('/gateway/:uuid', function (req, res) {
   require('./lib/whoAmI')(req.params.uuid, false, function (data) {
     console.log(data);
@@ -1217,6 +1237,29 @@ coapRouter.get('/gateway/:uuid', function (req, res) {
       });
     }
   });
+});
+
+
+// echo '{"uuid": "ad698900-2546-11e3-87fb-c560cb0ca47b", "token": "g6jmsla14j2fyldi7hqijbylwmrysyv5", "method": "getSubdevices"}' | coap post 'http://localhost:3000/gatewayConfig'
+coapRouter.post('/gatewayConfig', function(req, res){
+  var body;
+  try {
+    body = JSON.parse(req.body);
+  } catch(err) {
+    console.log('error parsing', err, req.body);
+    body = {};
+  }
+
+  gatewayConfig(io, body, function(result){
+    if(result && result.error && result.error.code){
+      res.statusCode = result.error.code;
+      res.json(result.error);
+    }else{
+      res.json(result);
+    }
+  });
+
+  require('./lib/logEvent')(300, body);
 });
 
 
@@ -1250,6 +1293,98 @@ coapRouter.get('/events/:uuid', function (req, res) {
 });
 
 
+// echo "token=123&temperature=78" | coap post 'http://localhost:3000/data/ad698900-2546-11e3-87fb-c560cb0ca47b'
+coapRouter.post('/data/:uuid', function(req, res){
+  require('./lib/authDevice')(req.params.uuid, req.params.token, function(auth){
+    if (auth.authenticate == true){
+
+      delete req.params.token;
+
+      req.params['ipAddress'] = req.connection.remoteAddress
+      require('./lib/logData')(req.params, function(data){
+        console.log(data);
+        if(data.error){
+          res.statusCode = data.error.code;
+          res.json(data.error);
+        } else {
+
+          // Send messsage regarding data update
+          var message = {};
+          message.payload = req.params;
+          message.devices = req.params.uuid;
+
+          console.log('message: ' + JSON.stringify(message));
+
+          sendMessage(message.devices, message);
+
+          res.json(data);
+        }
+      });
+
+    } else {
+      regdata = {
+        "error": {
+          "message": "Device not found or token not valid",
+          "code": 404
+        }
+      };
+      res.json(regdata.error.code, {uuid:req.params.uuid, authentication: false});
+    }
+  });
+
+});
+
+
+// coap get 'http://localhost:3000/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor'
+coapRouter.get('/data/:uuid', function(req, res){
+  require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
+    if (auth.authenticate == true){
+      if(req.query.stream){
+
+        var foo = JSONStream.stringify(open='\n', sep=',\n', close='\n\n');
+        foo.on("data", function(data){
+          console.log('DATA', data);
+          return data
+        });
+
+        require('./lib/getData')(req)
+          .pipe(foo)
+          .pipe(res);
+
+      } else {
+
+        require('./lib/getData')(req, function(data){
+          console.log(data);
+          if(data.error){
+            res.statusCode = data.error.code;
+            res.json(data.error);
+          } else {
+            res.json(data);
+          }
+        });
+      }
+
+
+    } else {
+      console.log("Device not found or token not valid");
+      regdata = {
+        "error": {
+          "message": "Device not found or token not valid",
+          "code": 404
+        }
+      };
+      if(regdata.error){
+        res.statusCode = regdata.error.code;
+        res.json(regdata.error);
+      } else {
+        res.json(regdata);
+      }
+
+    }
+  });
+});
+
+
 coapRouter.post('/messages', function (req, res, next) {
   try {
     var body = JSON.parse(req.payload);
@@ -1276,6 +1411,59 @@ coapRouter.post('/messages', function (req, res, next) {
 
   require('./lib/logEvent')(300, message);
 
+});
+
+
+// coap get 'http://localhost:3000/inboundsms?token=123'
+coapRouter.get('/inboundsms', function(req, res){
+  console.log(req.params);
+  try{
+    var data = JSON.parse(req.params);
+  } catch(e){
+    var data = req.params;
+  }
+  var toPhone = data.To;
+  var fromPhone = data.From;
+  var message = data.Text;
+
+  require('./lib/getPhone')(toPhone, function(uuid){
+    console.log(uuid);
+
+    mqttclient.publish(uuid, JSON.stringify(message), {qos:qos});
+
+    require('./lib/whoAmI')(uuid, false, function(check){
+      if(check.secure){
+        if(config.tls){
+          ios.sockets.in(uuid).emit('message', {
+            devices: uuid,
+            payload: message,
+            api: 'message',
+            fromUuid: {},
+            eventCode: 300
+          });
+        }
+      } else {
+        io.sockets.in(uuid).emit('message', {
+          devices: uuid,
+          payload: message,
+          api: 'message',
+          fromUuid: {},
+          eventCode: 300
+        });
+      }
+    });
+
+
+    var eventData = {devices: uuid, payload: message}
+    require('./lib/logEvent')(301, eventData);
+    if(eventData.error){
+      res.statusCode = eventData.error.code;
+      res.json(eventData.error);
+    } else {
+      res.json(eventData);
+    }
+
+  });
 });
 
 

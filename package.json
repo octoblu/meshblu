@@ -21,7 +21,10 @@
     "tokenthrottle": "*",
     "lodash": "*",
     "elasticsearch": "*",
-    "moment": "*"
+    "moment": "*",
+    "coap": "^0.6.0",
+    "qs": "^0.6.6",
+    "when": "^3.1.0"
   },
   "subdomain": "skynet",
   "domains": [

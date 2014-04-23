@@ -26,5 +26,9 @@ module.exports = {
     host: "xyz.redistogo.com",
     port: "1234",
     password: "abcdef"
+  },
+  coap: {
+    port: 5683,
+    host: "localhost"
   }
 };

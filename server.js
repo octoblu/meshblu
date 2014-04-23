@@ -58,7 +58,8 @@ var throttles = {
   connection : tokenthrottle({rate: config.rateLimits.connection || 3}),
   message : tokenthrottle({rate: config.rateLimits.message || 10}),
   data : tokenthrottle({rate: config.rateLimits.data || 10}),
-  query : tokenthrottle({rate: config.rateLimits.query || 2})
+  query : tokenthrottle({rate: config.rateLimits.query || 2}),
+  whoami : tokenthrottle({rate: config.rateLimits.whoami || 10}),
 };
 
 
@@ -225,7 +226,7 @@ function sendMessage(fromUuid, data, fn){
 
                   if(check.secure){
                     if(config.tls){
-                      ios.sockets.socket(check.socketId).emit("message", clonedMsg, function(results){
+                      ios.sockets.socket(check.socketid).emit("message", clonedMsg, function(results){
                         console.log('results', results);
                         try{
                           fn(results);
@@ -238,7 +239,7 @@ function sendMessage(fromUuid, data, fn){
 
                   } else {
                     //callback passed and message for specific target, treat as rpc
-                    io.sockets.socket(check.socketId).emit("message", clonedMsg, function(results){
+                    io.sockets.socket(check.socketid).emit("message", clonedMsg, function(results){
                       console.log('results', results);
                       try{
                         fn(results);
@@ -315,7 +316,7 @@ function socketLogic (socket, secure){
   // socket.limiter = new RateLimiter(1, "second", true);
 
   console.log('Websocket connection detected. Requesting identification from socket id: ', socket.id);
-  require('./lib/logEvent')(100, {"socketId": socket.id, "protocol": "websocket"});
+  require('./lib/logEvent')(100, {"socketid": socket.id, "protocol": "websocket"});
 
   socket.emit('identify', { socketid: socket.id });
   socket.on('identity', function (data) {
@@ -550,7 +551,7 @@ function socketLogic (socket, secure){
 
   socket.on('whoami', function (data, fn) {
 
-    throttles.query.rateLimit(socket.id, function (err, limited) {
+    throttles.whoami.rateLimit(socket.id, function (err, limited) {
       if(limited){
         console.log('whoami throttled', socket.id);
       }else{
@@ -598,13 +599,13 @@ function socketLogic (socket, secure){
 
         require('./lib/whoAmI')(data.uuid, false, function(target){
 
-          if(client && target && target.socketId){
+          if(client && target && target.socketid){
             if(target.secure){
 
               if(config.tls){
-                ios.sockets.socket(target.socketId).emit("bindSocket", {fromUuid: uuid}, function(data){
+                ios.sockets.socket(target.socketid).emit("bindSocket", {fromUuid: uuid}, function(data){
                   if(data == 'ok' || (data && data.result == 'ok')){
-                    bindSocket.connect(socket.id, target.socketId, function(err, val){
+                    bindSocket.connect(socket.id, target.socketid, function(err, val){
                       if(err){
                         fn(err);
                       }else{
@@ -620,9 +621,9 @@ function socketLogic (socket, secure){
               }
 
             } else {
-              io.sockets.socket(target.socketId).emit("bindSocket", {fromUuid: uuid}, function(data){
+              io.sockets.socket(target.socketid).emit("bindSocket", {fromUuid: uuid}, function(data){
                 if(data == 'ok' || (data && data.result == 'ok')){
-                  bindSocket.connect(socket.id, target.socketId, function(err, val){
+                  bindSocket.connect(socket.id, target.socketid, function(err, val){
                     if(err){
                       fn(err);
                     }else{

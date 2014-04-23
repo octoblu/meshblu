@@ -15,7 +15,8 @@ module.exports = {
     message: 10, // 10 transactions per user per second
     data: 10, // 10 transactions per user per second
     connection: 2, // 2 transactions per IP per second
-    query: 2 // 2 transactions per user per second
+    query: 2, // 2 transactions per user per second
+    whoami: 10 // 10 transactions per user per second
   },
   plivo: {
     authId: "abc",

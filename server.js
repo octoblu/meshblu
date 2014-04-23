@@ -1299,7 +1299,7 @@ coapRouter.get('/events/:uuid', function (req, res) {
 
 // coap post coap://localhost/data/196798f1-b5d8-11e3-8c93-45a0c0308eaa -p "token=00cpk8akrmz8semisbebhe0358livn29&temperature=43"
 coapRouter.post('/data/:uuid', function(req, res){
-  require('./lib/authDevice')(req.params.uuid, req.params.token, function(auth){
+  require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){
 
       delete req.params.token;
@@ -1334,6 +1334,7 @@ coapRouter.post('/data/:uuid', function(req, res){
           "code": 404
         }
       };
+      res.statusCode = regdata.error.code;
       res.json(regdata.error.code, {uuid:req.params.uuid, authentication: false});
     }
   });

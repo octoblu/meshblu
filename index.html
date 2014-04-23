@@ -650,6 +650,8 @@
               <div class="feature col-md-10">
                 <b>/data/{uuid}?token={token}</b>
                 <br />Returns last 10 data updates related to a specific device or node
+                <br />Optional query parameters include: start (time to start from), finish (time to end),
+limit (overrides the default 10 updates)
                 <br />Note: You can make this API stream sensor data by adding stream=true to the querystring. Notice the comma at the end of the response. SkyNet doesn't close the stream.
                 <br />
                 <code>curl -L -X GET http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123</code>

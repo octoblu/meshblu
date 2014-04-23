@@ -1083,7 +1083,7 @@ var coap       = require('coap'),
     coapServer = coap.createServer(),
     coapConfig = config.coap;
 
-
+// coap get coap://localhost/status
 coapRouter.get('/status', function (req, res) {
   require('./lib/getSystemStatus')(function (data) {
     console.log(data);
@@ -1097,6 +1097,7 @@ coapRouter.get('/status', function (req, res) {
 });
 
 
+// coap get coap://localhost/ipaddress
 coapRouter.get('/ipaddress', function (req, res) {
   res.json({ipAddress: req.rsinfo.address});
 });
@@ -1128,7 +1129,7 @@ coapRouter.post('/devices', function (req, res) {
   });
 });
 
-
+// coap post coap://localhost/devices -p "devices=a1634681-cb10-11e3-8fa5-2726ddcf5e29&payload=test"
 coapRouter.get('/devices/:uuid', function (req, res) {
   require('./lib/whoAmI')(req.params.uuid, false, function (data) {
     console.log(data);
@@ -1204,7 +1205,7 @@ coapRouter.get('/mydevices/:uuid', function (req, res) {
 });
 
 
-// coap get 'http://localhost:3000/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?token=5ypy4rurayktke29ypbi30kcw5ovfgvi'
+// coap get coap://localhost/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?token=5ypy4rurayktke29ypbi30kcw5ovfgvi
 coapRouter.get('/authenticate/:uuid', function(req, res){
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){
@@ -1241,7 +1242,7 @@ coapRouter.get('/gateway/:uuid', function (req, res) {
 });
 
 
-// echo '{"uuid": "ad698900-2546-11e3-87fb-c560cb0ca47b", "token": "g6jmsla14j2fyldi7hqijbylwmrysyv5", "method": "getSubdevices"}' | coap post 'http://localhost:3000/gatewayConfig'
+// echo '{"uuid": "ad698900-2546-11e3-87fb-c560cb0ca47b", "token": "g6jmsla14j2fyldi7hqijbylwmrysyv5", "method": "getSubdevices"}' | coap post 'coap://localhost:3000/gatewayConfig'
 coapRouter.post('/gatewayConfig', function(req, res){
   var body;
   try {
@@ -1264,8 +1265,10 @@ coapRouter.post('/gatewayConfig', function(req, res){
 });
 
 
+// coap get coap://localhost/events/196798f1-b5d8-11e3-8c93-45a0c0308eaa -p "token=00cpk8akrmz8semisbebhe0358livn29"
 coapRouter.get('/events/:uuid', function (req, res) {
-  require('./lib/authDevice')(req.params.uuid, req.query.token, function (auth) {
+  console.log(req);
+  require('./lib/authDevice')(req.params.uuid, req.params.token, function (auth) {
     if (auth.authenticate == true) {
       require('./lib/getEvents')(req.params.uuid, function (data) {
         console.log(data);
@@ -1294,14 +1297,16 @@ coapRouter.get('/events/:uuid', function (req, res) {
 });
 
 
-// echo "token=123&temperature=78" | coap post 'http://localhost:3000/data/ad698900-2546-11e3-87fb-c560cb0ca47b'
+// coap post coap://localhost/data/196798f1-b5d8-11e3-8c93-45a0c0308eaa -p "token=00cpk8akrmz8semisbebhe0358livn29&temperature=43"
 coapRouter.post('/data/:uuid', function(req, res){
   require('./lib/authDevice')(req.params.uuid, req.params.token, function(auth){
     if (auth.authenticate == true){
 
       delete req.params.token;
 
-      req.params['ipAddress'] = req.connection.remoteAddress
+      if(req.connection){
+        req.params['ipAddress'] = req.connection.remoteAddress;
+      }
       require('./lib/logData')(req.params, function(data){
         console.log(data);
         if(data.error){
@@ -1336,8 +1341,11 @@ coapRouter.post('/data/:uuid', function(req, res){
 });
 
 
-// coap get 'http://localhost:3000/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor'
+// coap get coap://localhost/data/196798f1-b5d8-11e3-8c93-45a0c0308eaa -p "token=00cpk8akrmz8semisbebhe0358livn29&limit=1"
 coapRouter.get('/data/:uuid', function(req, res){
+  console.log(req.params);
+  console.log(req.query);
+
   require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
     if (auth.authenticate == true){
       if(req.query.stream){
@@ -1353,7 +1361,7 @@ coapRouter.get('/data/:uuid', function(req, res){
           .pipe(res);
 
       } else {
-
+        req.query = req.params;
         require('./lib/getData')(req, function(data){
           console.log(data);
           if(data.error){
@@ -1385,7 +1393,7 @@ coapRouter.get('/data/:uuid', function(req, res){
   });
 });
 
-
+// coap post coap://localhost/messages -p "devices=a1634681-cb10-11e3-8fa5-2726ddcf5e29&payload=test"
 coapRouter.post('/messages', function (req, res, next) {
   try {
     var body = JSON.parse(req.payload);
@@ -1516,23 +1524,23 @@ function setupRestfulRoutes (server) {
       } else {
         res.json(data);
       }
-  
+
     });
   });
-  
+
   // curl http://localhost:3000/ipaddress
   server.get('/ipaddress', function(req, res){
     res.setHeader('Access-Control-Allow-Origin','*');
     res.json({ipAddress: req.connection.remoteAddress});
   });
-  
-  
-  
+
+
+
   // curl http://localhost:3000/devices
   // curl http://localhost:3000/devices?key=123
   // curl http://localhost:3000/devices?online=true
   server.get('/devices', function(req, res){
-  
+
     res.setHeader('Access-Control-Allow-Origin','*');
     require('./lib/getDevices')(req.query, false, function(data){
       // console.log(data);
@@ -1542,11 +1550,11 @@ function setupRestfulRoutes (server) {
       } else {
         res.json(data);
       }
-  
+
     });
   });
-  
-  
+
+
   // curl http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
   server.get('/devices/:uuid', function(req, res){
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -1558,10 +1566,10 @@ function setupRestfulRoutes (server) {
       } else {
         res.json(data);
       }
-  
+
     });
   });
-  
+
   // curl http://localhost:3000/gateway/01404680-2539-11e3-b45a-d3519872df26
   server.get('/gateway/:uuid', function(req, res){
     // res.setHeader('Access-Control-Allow-Origin','*');
@@ -1577,11 +1585,11 @@ function setupRestfulRoutes (server) {
         });
       }
       res.end();
-  
+
     });
   });
-  
-  
+
+
   // curl -X POST -d "name=arduino&description=this+is+a+test" http://localhost:3000/devices
   server.post('/devices', function(req, res){
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -1594,10 +1602,10 @@ function setupRestfulRoutes (server) {
       } else {
         res.json(data);
       }
-  
+
     });
   });
-  
+
   // curl -X PUT -d "token=123&online=true&temp=hello&temp2=world" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
   // curl -X PUT -d "token=123&online=true&temp=hello&temp2=null" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
   // curl -X PUT -d "token=123&online=true&temp=hello&temp2=" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
@@ -1613,10 +1621,10 @@ function setupRestfulRoutes (server) {
       } else {
         res.json(data);
       }
-  
+
     });
   });
-  
+
   // curl -X DELETE -d "token=123" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
   server.del('/devices/:uuid', function(req, res){
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -1630,7 +1638,7 @@ function setupRestfulRoutes (server) {
       }
     });
   });
-  
+
   // Returns all devices owned by authenticated user
   // curl -X GET http://localhost:3000/mydevices/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
   server.get('/mydevices/:uuid', function(req, res){
@@ -1661,12 +1669,12 @@ function setupRestfulRoutes (server) {
         } else {
           res.json(regdata);
         }
-  
+
       }
     });
   });
-  
-  
+
+
   // curl -X GET http://localhost:3000/events/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
   server.get('/events/:uuid', function(req, res){
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -1694,17 +1702,17 @@ function setupRestfulRoutes (server) {
         } else {
           res.json(regdata);
         }
-  
+
       }
     });
   });
-  
+
   // curl -X GET http://localhost:3000/events/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
   server.get('/subscribe/:uuid', function(req, res){
     res.setHeader('Access-Control-Allow-Origin','*');
     require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
       if (auth.authenticate == true){
-  
+
         var foo = JSONStream.stringify(open='\n', sep=',\n', close='\n\n');
         foo.on("data", function(data){
           console.log(data);
@@ -1713,12 +1721,12 @@ function setupRestfulRoutes (server) {
         require('./lib/subscribe')(req.params.uuid)
           .pipe(foo)
           .pipe(res);
-  
+
         // // TODO: Add /n to stream to server current record
         // require('./lib/subscribe')(req.params.uuid)
         //   .pipe(JSONStream.stringify())
         //   .pipe(res);
-  
+
       } else {
         console.log("Device not found or token not valid");
         regdata = {
@@ -1732,11 +1740,11 @@ function setupRestfulRoutes (server) {
         } else {
           res.json(regdata);
         }
-  
+
       }
     });
   });
-  
+
   // curl -X GET http://localhost:3000/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?token=5ypy4rurayktke29ypbi30kcw5ovfgvi
   server.get('/authenticate/:uuid', function(req, res){
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -1751,12 +1759,12 @@ function setupRestfulRoutes (server) {
           }
         };
         res.json(regdata.error.code, {uuid:req.params.uuid, authentication: false});
-  
+
       }
     });
   });
-  
-  
+
+
   // curl -X POST -d '{"devices": "all", "payload": {"yellow":"off"}}' http://localhost:3000/messages
   // curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"], "payload": {"yellow":"off"}}' http://localhost:3000/messages
   // curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "payload": {"yellow":"off"}}' http://localhost:3000/messages
@@ -1778,17 +1786,17 @@ function setupRestfulRoutes (server) {
     var message = {};
     message.payload = body.payload;
     message.devices = body.devices;
-  
+
     console.log('devices: ' + devices);
     console.log('payload: ' + JSON.stringify(message));
-  
+
     sendMessage(devices, message);
     res.json({devices:devices, payload: body.payload});
-  
+
     require('./lib/logEvent')(300, message);
-  
+
   });
-  
+
   // curl -X POST -d '{"uuid": "ad698900-2546-11e3-87fb-c560cb0ca47b", "token": "g6jmsla14j2fyldi7hqijbylwmrysyv5", "method": "getSubdevices"' http://localhost:3000/gatewayConfig
   server.post('/gatewayConfig', function(req, res, next){
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -1799,7 +1807,7 @@ function setupRestfulRoutes (server) {
       console.log('error parsing', err, req.body);
       body = {};
     }
-  
+
     gatewayConfig(io, body, function(result){
       if(result && result.error && result.error.code){
         res.json(result.error.code, result);
@@ -1807,14 +1815,14 @@ function setupRestfulRoutes (server) {
         res.json(result);
       }
     });
-  
+
     require('./lib/logEvent')(300, body);
-  
+
   });
-  
+
   // curl -X GET -d "token=123" http://localhost:3000/inboundsms
   server.get('/inboundsms', function(req, res){
-  
+
     res.setHeader('Access-Control-Allow-Origin','*');
     console.log(req.params);
     // { To: '17144625921',
@@ -1830,13 +1838,13 @@ function setupRestfulRoutes (server) {
     var toPhone = data.To;
     var fromPhone = data.From;
     var message = data.Text;
-  
+
     require('./lib/getPhone')(toPhone, function(uuid){
       console.log(uuid);
-  
+
       mqttclient.publish(uuid, JSON.stringify(message), {qos:qos});
       // io.sockets.in(uuid).emit('message', {message: message});
-  
+
       require('./lib/whoAmI')(uuid, false, function(check){
         if(check.secure){
           if(config.tls){
@@ -1858,8 +1866,8 @@ function setupRestfulRoutes (server) {
           });
         }
       });
-  
-  
+
+
       var eventData = {devices: uuid, payload: message}
       require('./lib/logEvent')(301, eventData);
       if(eventData.error){
@@ -1867,19 +1875,19 @@ function setupRestfulRoutes (server) {
       } else {
         res.json(eventData);
       }
-  
+
     });
   });
-  
+
   // curl -X POST -d "token=123&temperature=78" http://localhost:3000/data/ad698900-2546-11e3-87fb-c560cb0ca47b
   server.post('/data/:uuid', function(req, res){
     res.setHeader('Access-Control-Allow-Origin','*');
-  
+
     require('./lib/authDevice')(req.params.uuid, req.params.token, function(auth){
       if (auth.authenticate == true){
-  
+
         delete req.params.token;
-  
+
         req.params['ipAddress'] = req.connection.remoteAddress
         require('./lib/logData')(req.params, function(data){
           console.log(data);
@@ -1887,20 +1895,20 @@ function setupRestfulRoutes (server) {
           if(data.error){
             res.json(data.error.code, data);
           } else {
-  
+
             // Send messsage regarding data update
             var message = {};
             message.payload = req.params;
             message.devices = req.params.uuid;
-  
+
             console.log('message: ' + JSON.stringify(message));
-  
+
             sendMessage(message.devices, message);
-  
+
             res.json(data);
           }
         });
-  
+
       } else {
         regdata = {
           "error": {
@@ -1911,16 +1919,16 @@ function setupRestfulRoutes (server) {
         res.json(regdata.error.code, {uuid:req.params.uuid, authentication: false});
       }
     });
-  
+
   });
-  
+
   // curl -X GET http://localhost:3000/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=qirqglm6yb1vpldixflopnux4phtcsor
   server.get('/data/:uuid', function(req, res){
     res.setHeader('Access-Control-Allow-Origin','*');
     require('./lib/authDevice')(req.params.uuid, req.query.token, function(auth){
       if (auth.authenticate == true){
         if(req.query.stream){
-  
+
           var foo = JSONStream.stringify(open='\n', sep=',\n', close='\n\n');
           foo.on("data", function(data){
             // data = data.toString() + '\r\n';
@@ -1930,9 +1938,9 @@ function setupRestfulRoutes (server) {
           require('./lib/getData')(req)
             .pipe(foo)
             .pipe(res);
-  
+
         } else {
-  
+
           require('./lib/getData')(req, function(data){
             console.log(data);
             if(data.error){
@@ -1942,8 +1950,8 @@ function setupRestfulRoutes (server) {
             }
           });
         }
-  
-  
+
+
       } else {
         console.log("Device not found or token not valid");
         regdata = {
@@ -1957,22 +1965,22 @@ function setupRestfulRoutes (server) {
         } else {
           res.json(regdata);
         }
-  
+
       }
     });
   });
-  
-  
+
+
   // Serve static website
   var file = new nstatic.Server('');
   server.get('/demo/:uuid', function(req, res, next) {
     file.serveFile('/demo.html', 200, {}, req, res);
   });
-  
+
   server.get('/', function(req, res, next) {
       file.serveFile('/index.html', 200, {}, req, res);
   });
-  
+
   server.get(/^\/.*/, function(req, res, next) {
       file.serve(req, res, next);
   });

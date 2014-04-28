@@ -6,7 +6,7 @@ SS      kk  kk yy   yy nn nnn    eee  tt
  SSSSS  kk  kk      yy nn   nn  eeeee  tttt
                 yyyyy
 ```
-OPEN COMMUNICATIONS NETWORK & API FOR THE INTERNET OF THINGS (IoT)!
+OPEN MQTT & COAP COMMUNICATIONS NETWORK & API FOR THE INTERNET OF THINGS (IoT)!
 
 Visit [SKYNET.im](http://skynet.im) for up-to-the-latest documentation and screencasts.
 
@@ -15,13 +15,13 @@ Visit [SKYNET.im](http://skynet.im) for up-to-the-latest documentation and scree
 Introduction
 ------------
 
-SkyNet is an open source machine-to-machine instant messaging network and API. Our API supports both HTTP REST and realtime Web Sockets via RPC (remote procedure calls).  We also bridge [MQTT](http://mqtt.org) communications across our HTTP and Web Socket device channels.  
+SkyNet is an open source machine-to-machine instant messaging network and API. Our API supports both HTTP REST and realtime Web Sockets via RPC (remote procedure calls).  We also bridge [MQTT](http://mqtt.org) and [CoAP](http://en.wikipedia.org/wiki/Constrained_Application_Protocol) communications across our HTTP and Web Socket device channels.  
 
 SkyNet auto-assigns 36 character UUIDs and secret tokens to each registered device connected to the network. These device credentials are used to authenticate with SkyNet and maintain your device's JSON description in our device directory.  
 
 SkyNet allows you to query devices such as drones, hue light bulbs, weemos, arduinos, and server nodes that meet your criteria and send IM messages to 1 or all devices.
 
-SkyNet includes a Node.JS NPM module called [SkyNet](http://skynet.im/#npm) and a [skynet.js](http://skynet.im/#javascript) file for simplifying Node.JS and mobile/client-side connectivity to SkyNet.
+SkyNet includes a Node.JS NPM module called [SkyNet](http://skynet.im/#npm) and a [SkyNet.js](http://skynet.im/#javascript) file for simplifying Node.JS and mobile/client-side connectivity to SkyNet.
 
 You can also subscribe to messages being sent to/from devices and their sensor activities.
 
@@ -259,6 +259,22 @@ curl -X GET http://localhost:3000/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?toke
 => {"data":[{"timestamp":"2014-03-25T16:38:48.148Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"30","ipAddress":"127.0.0.1","id":"5331b118512c974805000001"},{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","ipAddress":"127.0.0.1","id":"532f2e8c9c23809e93000001"}]}
 ```
 
+CoAP API
+--------
+
+Our CoAP API works exactly like our REST API.  You can use [Matteo Collina's](https://twitter.com/matteocollina) [CoAP CLI](https://www.npmjs.org/package/coap-cli) for testing CoAP REST API calls.  Here are a few examples:
+
+coap get coap://skynet.im/status
+
+coap get coap://skynet.im/devices?type=drone
+
+coap get coap://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b
+
+coap post -p "type=drone&color=black" coap://skynet.im/devices
+
+coap put -p "token=123&color=blue&online=true" coap://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b
+
+coap delete -p "token=123" coap://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b
 
 
 WEBSOCKET API

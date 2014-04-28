@@ -141,6 +141,16 @@ process.on("uncaughtException", function(error) {
   return console.log(error.stack);
 });
 
+
+function cloneMessage(msg, device, fromUuid){
+  var clonedMsg = _.clone(msg);
+  clonedMsg.devices = device; //strip other devices from message
+  delete clonedMsg.protocol;
+  delete clonedMsg.api;
+  clonedMsg.fromUuid = msg.fromUuid; // add from device object to message for logging
+  return clonedMsg;
+}
+
 function sendMessage(fromUuid, data, fn){
 
   console.log("sendMessage() from", fromUuid, 'data', data);
@@ -164,9 +174,6 @@ function sendMessage(fromUuid, data, fn){
     if(data.devices == "all" || data.devices == "*"){
 
       if(fromUuid){
-
-// getUuid(socket.id, function(err, uuid){
-//   require('./lib/whoAmI')(uuid, false, function(check){
 
         io.sockets.in(fromUuid + '_bc').emit('message', data);
         if(config.tls){
@@ -206,23 +213,19 @@ function sendMessage(fromUuid, data, fn){
               // Broadcast to room for pubsub
               console.log('sending message to room: ' + device);
               console.log('message', data);
-
-              var clonedMsg = _.clone(data);
-              clonedMsg.devices = device; //strip other devices from message
-              delete clonedMsg.protocol;
-              delete clonedMsg.api;
-              clonedMsg.fromUuid = data.fromUuid; // add from device object to message for logging
+              var clonedMsg;
 
               //transmit mqtt clients over mqtt
               if(check.protocol == "mqtt"){
-                console.log('sending mqtt', device, clonedMsg);
+                clonedMsg = cloneMessage(data, device, fromUuid);
+                console.log('sending mqtt', device, clonedMsg );
                 mqttclient.publish(device, JSON.stringify(clonedMsg), {qos:qos});
                 // mqttclient.publish(device, dataMessage, {qos:qos});
               }else{
 
                 if(fn && devices.length == 1 ){
-                  // console.log('sending message to room:', device);
-                  // io.sockets.in(device).emit('message', clonedMsg);
+                  clonedMsg = cloneMessage(data, device, fromUuid);
+                  console.log('sending with callback to: ', check);
 
                   if(check.secure){
                     if(config.tls){
@@ -252,7 +255,8 @@ function sendMessage(fromUuid, data, fn){
 
 
                 }else{
-
+                  clonedMsg = cloneMessage(data, device, fromUuid);
+                  console.log('sending without callback: ', check);
                   if(check.secure){
                     if(config.tls){
                       ios.sockets.in(device).emit('message', clonedMsg);
@@ -333,19 +337,33 @@ function socketLogic (socket, secure){
       if (auth.status == 201){
 
         if(data.uuid){
-          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id, "uuid": data.uuid, "token": data.token});
+          socket.uuid = data.uuid;
+          socket.emit('ready', {"api": "connect", "status": auth.status, "uuid": data.uuid, "token": data.token});
           // Have device join its uuid room name so that others can subscribe to it
           console.log('subscribe: ' + data.uuid);
+          //make sure not in there already:
+          try{
+            socket.leave(data.uuid);
+          }catch(lexp){
+            console.log('error leaving room', lexp);
+          }
           socket.join(data.uuid);
         } else {
-          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id, "uuid": auth.uuid, "token": auth.token});
+          socket.uuid = auth.uuid;
+          socket.emit('ready', {"api": "connect", "status": auth.status, "uuid": auth.uuid, "token": auth.token});
           // Have device join its uuid room name so that others can subscribe to it
           console.log('subscribe: ' + auth.uuid);
+          //make sure not in there already:
+          try{
+            socket.leave(auth.uuid);
+          }catch(lexp){
+            console.log('error leaving room', lexp);
+          }
           socket.join(auth.uuid);
         }
 
       } else {
-        socket.emit('notReady', {"api": "connect", "status": auth.status, "socketid": socket.id, "uuid": data.uuid});
+        socket.emit('notReady', {"api": "connect", "status": auth.status, "uuid": data.uuid});
       }
 
       require('./lib/whoAmI')(data.uuid, false, function(results){
@@ -363,7 +381,7 @@ function socketLogic (socket, secure){
     console.log('Presence offline for socket id: ', socket.id);
     require('./lib/updatePresence')(socket.id);
     // Emit API request from device to room for subscribers
-    getUuid(socket.id, function(err, uuid){
+    getUuid(socket, function(err, uuid){
       if(err){ return; }
       require('./lib/whoAmI')(uuid, false, function(results){
         // results._id.toString();
@@ -402,7 +420,7 @@ function socketLogic (socket, secure){
           socket.join(data.uuid);
 
           // Emit API request from device to room for subscribers
-          getUuid(socket.id, function(err, uuid){
+          getUuid(socket, function(err, uuid){
             if(err){ return; }
             var results = {"api": "subscribe", "socketid": socket.id, "fromUuid": uuid, "toUuid": data.uuid};
 
@@ -454,7 +472,7 @@ function socketLogic (socket, secure){
       console.log('leaving room ', data.uuid);
       socket.leave(data.uuid);
       // Emit API request from device to room for subscribers
-      getUuid(socket.id, function(err, uuid){
+      getUuid(socket, function(err, uuid){
         if(err){ return; }
         var results = {"api": "unsubscribe", "socketid": socket.id, "uuid": uuid};
         // socket.broadcast.to(uuid).emit('message', results);
@@ -486,7 +504,7 @@ function socketLogic (socket, secure){
       }else{
 
         // Emit API request from device to room for subscribers
-        getUuid(socket.id, function(err, uuid){
+        getUuid(socket, function(err, uuid){
           if(err){ return; }
           // socket.broadcast.to(uuid).emit('message', {"api": "status"});
 
@@ -526,7 +544,7 @@ function socketLogic (socket, secure){
           data = {};
         }
         // Emit API request from device to room for subscribers
-        getUuid(socket.id, function(err, uuid){
+        getUuid(socket, function(err, uuid){
           if(err){ return; }
           var reqData = data;
           require('./lib/getDevices')(data, false, function(results){
@@ -562,7 +580,7 @@ function socketLogic (socket, secure){
           data = data.uuid;
         }
         // Emit API request from device to room for subscribers
-        getUuid(socket.id, function(err, uuid){
+        getUuid(socket, function(err, uuid){
           if(err){ return; }
           var reqData = data;
           require('./lib/whoAmI')(data, false, function(results){
@@ -592,7 +610,7 @@ function socketLogic (socket, secure){
       return fn({error: 'invalid request'});
     }
 
-    getUuid(socket.id, function(err, uuid){
+    getUuid(socket, function(err, uuid){
       if(err){ return fn({error: 'invalid client'}); }
 
       require('./lib/whoAmI')(uuid, false, function(client){
@@ -654,7 +672,7 @@ function socketLogic (socket, secure){
       data = {};
     }
     // Emit API request from device to room for subscribers
-    getUuid(socket.id, function(err, uuid){
+    getUuid(socket, function(err, uuid){
       var reqData = data;
       reqData["api"] = "register";
       // socket.broadcast.to(data.uuid).emit('message', reqData);
@@ -694,7 +712,7 @@ function socketLogic (socket, secure){
       data = {};
     };
     // Emit API request from device to room for subscribers
-    getUuid(socket.id, function(err, uuid){
+    getUuid(socket, function(err, uuid){
       if(err){ return; }
       var reqData = data;
       reqData["api"] = "update";
@@ -738,7 +756,7 @@ function socketLogic (socket, secure){
       data = {};
     }
     // Emit API request from device to room for subscribers
-    getUuid(socket.id, function(err, uuid){
+    getUuid(socket, function(err, uuid){
       if(err){ return; }
       var reqData = data;
       reqData["api"] = "unregister";
@@ -781,7 +799,7 @@ function socketLogic (socket, secure){
     require('./lib/authDevice')(data.uuid, data.token, function(auth){
 
       // Emit API request from device to room for subscribers
-      getUuid(socket.id, function(err, uuid){
+      getUuid(socket, function(err, uuid){
         if(err){ return; }
         var reqData = data;
         reqData["api"] = "events";
@@ -891,7 +909,7 @@ function socketLogic (socket, secure){
 
         require('./lib/authDevice')(data.uuid, data.token, function(auth){
 
-          getUuid(socket.id, function(err, uuid){
+          getUuid(socket, function(err, uuid){
             if(err){ return; }
 
             delete data.token;
@@ -972,7 +990,7 @@ function socketLogic (socket, secure){
             if(target){
 
               // Determine is socket is secure
-              getUuid(socket.id, function(err, uuid){
+              getUuid(socket, function(err, uuid){
                 require('./lib/whoAmI')(uuid, false, function(check){
 
                   if(check.secure){
@@ -993,7 +1011,7 @@ function socketLogic (socket, secure){
 
         }else{
           // Broadcast to room for pubsub
-          getUuid(socket.id, function(err, uuid){
+          getUuid(socket, function(err, uuid){
             message.api = "message";
             var fromUuid = uuid || message.fromUuid || null;
             sendMessage(fromUuid, message, fn);
@@ -1428,14 +1446,6 @@ coapRouter.get('/subscribe/:uuid', function (req, res) {
     console.log('auth', auth);
     if (auth.authenticate == true) {
       var foo = JSONStream.stringify(open='\n', sep=',\n', close='\n\n');
-      var fooData;
-      foo.on("data", function (data) {
-        fooData = fooData ? fooData += data : data;
-      });
-
-      foo.on("end", function () {
-        console.log('[incoming data]', fooData);
-      });
 
       require('./lib/subscribe')(req.params.uuid)
         .pipe(foo)

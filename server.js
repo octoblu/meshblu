@@ -1500,10 +1500,6 @@ coapRouter.get('/subscribe/:uuid', function (req, res) {
     console.log('auth', auth);
     if (auth.authenticate == true) {
       var foo = JSONStream.stringify(open='\n', sep=',\n', close='\n\n');
-      foo.on("data", function (data) {
-        console.log(data);
-        data = data + '\r\n';
-      });
 
       require('./lib/subscribe')(req.params.uuid)
         .pipe(foo)

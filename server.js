@@ -1423,68 +1423,18 @@ coapRouter.post('/messages', function (req, res, next) {
 
 });
 
-
-// coap get 'http://localhost:3000/inboundsms?token=123'
-coapRouter.get('/inboundsms', function(req, res){
-  console.log(req.params);
-  try{
-    var data = JSON.parse(req.params);
-  } catch(e){
-    var data = req.params;
-  }
-  var toPhone = data.To;
-  var fromPhone = data.From;
-  var message = data.Text;
-
-  require('./lib/getPhone')(toPhone, function(uuid){
-    console.log(uuid);
-
-    mqttclient.publish(uuid, JSON.stringify(message), {qos:qos});
-
-    require('./lib/whoAmI')(uuid, false, function(check){
-      if(check.secure){
-        if(config.tls){
-          ios.sockets.in(uuid).emit('message', {
-            devices: uuid,
-            payload: message,
-            api: 'message',
-            fromUuid: {},
-            eventCode: 300
-          });
-        }
-      } else {
-        io.sockets.in(uuid).emit('message', {
-          devices: uuid,
-          payload: message,
-          api: 'message',
-          fromUuid: {},
-          eventCode: 300
-        });
-      }
-    });
-
-
-    var eventData = {devices: uuid, payload: message}
-    require('./lib/logEvent')(301, eventData);
-    if(eventData.error){
-      res.statusCode = eventData.error.code;
-      res.json(eventData.error);
-    } else {
-      res.json(eventData);
-    }
-
-  });
-});
-
-
 coapRouter.get('/subscribe/:uuid', function (req, res) {
   require('./lib/authDevice')(req.params.uuid, req.query.token, function (auth) {
     console.log('auth', auth);
     if (auth.authenticate == true) {
       var foo = JSONStream.stringify(open='\n', sep=',\n', close='\n\n');
+      var fooData;
       foo.on("data", function (data) {
-        console.log(data);
-        data = data + '\r\n';
+        fooData = fooData ? fooData += data : data;
+      });
+
+      foo.on("end", function () {
+        console.log('[incoming data]', fooData);
       });
 
       require('./lib/subscribe')(req.params.uuid)
@@ -2011,7 +1961,7 @@ coapPort = coapConfig.port || 5683;
 coapHost = coapConfig.host || 'localhost';
 
 coapServer.listen(coapPort, coapHost, function () {
-  console.log('[coap] listening at coap://' + coapHost + ':' + coapPort);
+  console.log('coap listening at coap://' + coapHost + ':' + coapPort);
 });
 
 server.listen(process.env.PORT || config.port, function() {

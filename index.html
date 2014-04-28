@@ -105,8 +105,8 @@
             </div>
             <div class="feature col-md-4">
               <div aria-hidden="true" class="icon icon-cloudy-2"></div>
-              <h3>MQTT IoT NETWORK</h3>
-              <p class="hidden-phone">SkyNet is a cloud-based MQTT-powered network that scales to meet any needs whether the nodes are smart home devices, sensors, cloud resources, drones, Arduinos, Raspberry Pis, etc.</p>
+              <h3>MQTT & CoAP NETWORK</h3>
+              <p class="hidden-phone">SkyNet is a cloud-based MQTT & CoAP-powered network that scales to meet any needs whether the nodes are smart home devices, sensors, cloud resources, drones, Arduinos, Raspberry Pis, etc.</p>
             </div>
 
             <div class="feature col-md-4">
@@ -344,7 +344,7 @@
           <div class="row">
 
             <div class="col-md-12 text-center">
-              <h1>REST API</h1>
+              <h1>REST & CoAP API</h1>
             </div>
 
             <div class="col-md-12">
@@ -368,6 +368,8 @@
                 <br />
                 <code>curl -X GET http://skynet.im/status</code>
                 <br />
+                <code>coap get coap://skynet.im/status</code>
+                <br />
                 <textarea class="form-control">{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</textarea>
               </div>
               </td></tr></table>
@@ -389,6 +391,8 @@
                 <br />
                 <code>curl -X GET http://skynet.im/devices?type=drone</code>
                 <br />
+                <code>coap get coap://skynet.im/devices?type=drone</code>
+                <br />
                 <textarea class="form-control">{"devices":["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"]}</textarea>
                 <br />
               </div>
@@ -407,6 +411,8 @@
                 <br />Returns all information (except the token) of a specific device or node
                 <br />
                 <code>curl -X GET http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
+                <br />
+                <code>coap get coap://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
                 <br />
                 <textarea class="form-control">{"_id":"5241d9140345450000000001","api":"update","armed":true,"channel":"main","deviceDescription":"this is a test","deviceName":"hackboard","key":"777","online":true,"socketid":"fO8dxKEwARUH9Ea--p2C","timestamp":1381536277933,"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}</textarea>
                 <br />
@@ -428,6 +434,8 @@
                 <br />
                 <code>curl -X POST -d "type=drone&color=black" http://skynet.im/devices</code>
                 <br />
+                <code>coap post -p "type=drone&color=black" coap://skynet.im/devices</code>
+                <br />
                 <textarea class="form-control">{"type":"drone","color":"black","uuid":"6f72bc60-32d5-11e3-92e2-e94f95fc16a6","timestamp":1381537803046,"token":"4bbd2jm242dl5wmimbwz4rvlu77m0a4i","channel":"main","online":false,"_id":"5258980b56330f7dd000000d"}</textarea>
                 <br />
               </div>
@@ -448,6 +456,8 @@
                 <br />
                 <code>curl -X PUT -d "token=123&color=blue&online=true" http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
                 <br />
+                <code>coap put -p "token=123&color=blue&online=true" coap://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
+                <br />
                 <textarea class="form-control">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","color":"blue","timestamp":1381537750462}</textarea>
                 <br />
               </div>
@@ -467,6 +477,8 @@
                 <br />Deletes or unregisters a node or device currently registered with SkyNet. You must pass the token for security.
                 <br />
                 <code>curl -X DELETE -d "token=123" http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
+                <br />
+                <code>coap delete -p "token=123" coap://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
                 <br />
                 <textarea class="form-control">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","timestamp":1381537971074}</textarea>
                 <br />
@@ -490,6 +502,8 @@
                 <br />Returns all information (including tokens) of all devices or nodes belonging to a user's UUID (identified with an "owner" property and user's UUID i.e. "owner":"0d1234a0-1234-11e3-b09c-1234e847b2cc")
                 <br />
                 <code>curl -X GET http://skynet.im/mydevices/0d1234a0-1234-11e3-b09c-1234e847b2cc?token=1234glm6y1234ldix1234nux41234sor</code>
+                <br />
+                <code>coap get coap://skynet.im/mydevices/0d1234a0-1234-11e3-b09c-1234e847b2cc?token=1234glm6y1234ldix1234nux41234sor</code>
                 <br />
                 <textarea class="form-control">{"devices":[{"owner":"0d1234a0-1234-11e3-b09c-1234e847b2cc","name":"SMS","phoneNumber":"16025551234","uuid":"1c1234e1-xxxx-11e3-1234-671234c01234","timestamp":1390861609070,"token":"1234eg1234zz1tt1234w0op12346bt9","channel":"main","online":false,"_id":"52e6d1234980420c4a0001db"}}]}</textarea>
                 <br />
@@ -519,7 +533,13 @@
                 <code>curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "payload": {"yellow":"off"}}' http://skynet.im/messages</code>
 
                 <br />
-                <code>{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</code>
+
+                <code>coap post -p '{"devices": "*", "payload": {"yellow":"off"}}' coap://skynet.im/messages</code>
+                <br />
+                <code>coap post -p '{"devices": ["ad6...47b","2f3...170"], "payload": {"yellow":"off"}}' coap://skynet.im/messages</code>
+                <br />
+                <code>coap post -p '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "payload": {"yellow":"off"}}' coap://skynet.im/messages</code>
+
                 <br />
                 <textarea class="form-control">{"devices":"*","payload":{"yellow":"off"}}</textarea>
                 <!-- <code>{"devices":"all","message":{"yellow":"off"}</code> -->
@@ -542,6 +562,8 @@
                 <br />Returns last 10 events related to a specific device or node
                 <br />
                 <code>curl -X GET http://skynet.im/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123</code>
+                <br />
+                <code>coap get coap://skynet.im/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123</code>
                 <br />
                 <textarea class="form-control">{"events":[{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"lnHHS06ijWUXEzb01ZRy","timestamp":1382632438785,"eventCode":101,"_id":"52694bf6ad11379eec00003f"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"BuwnWQ_oLmpk5R3m1ZRv","timestamp":1382561240563,"eventCode":101,"_id":"526835d8ad11379eec000017"}]}</textarea>
               </div>
@@ -566,6 +588,8 @@
                 <br />
                 <code>curl -X GET http://skynet.im/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123</code>
                 <br />
+                <code>coap get coap://skynet.im/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123</code>
+                <br />
                 <textarea class="form-control">{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"on"},"timestamp":1388768270795,"eventCode":300,"_id":"52c6ec0e4f67671e44000001"},{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"on"},"timestamp":1388768277473,"eventCode":300,"_id":"52c6ec154f67671e44000002"},</textarea>
               </div>
               </td></tr></table>
@@ -588,6 +612,8 @@
                 <br />
                 <code>curl -X GET http://skynet.im/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?token=5ypy4rurayktke29ypbi30kcw5ovfgvi</code>
                 <br />
+                <code>coap get coap://skynet.im/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?token=5ypy4rurayktke29ypbi30kcw5ovfgvi</code>
+                <br />
                 <textarea class="form-control">{"uuid":"81246e80-29fd-11e3-9468-e5f892df566b","authentication":true} OR {"uuid":"81246e80-29fd-11e3-9468-e5f892df566b","authentication":false}</textarea>
               </div>
               </td></tr></table>
@@ -608,6 +634,8 @@
                 <br />Returns the public IP address of the request. This is useful when working with the SkyNet Gateway behind a firewall.
                 <br />
                 <code>curl -X GET http://skynet.im/ipaddress</code>
+                <br />
+                <code>coap get coap://skynet.im/ipaddress</code>
                 <br />
                 <textarea class="form-control">{"ipAddress":"70.171.149.205"}</textarea>
               </div>
@@ -632,6 +660,8 @@
                 <br />Stores sensor data for a particular UUID. You can pass any key/value pairs.
                 <br />
                 <code>curl -X POST -d "token=123&temperature=78" http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc</code>
+                <br />
+                <code>coap post -p "token=123&temperature=78" coap://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc</code>
                 <br />
                 <textarea class="form-control">{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","ipAddress":"127.0.0.1","eventCode":700,"_id":"532f2e8c9c23809e93000002"}</textarea>
                 <br />
@@ -658,15 +688,24 @@ limit (overrides the default 10 updates)
                 <br />
                 <code>curl -L -X GET http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123&stream=true</code>
                 <br />
+                <code>coap get coap://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123</code>
+                <br />
+                <code>coap get coap://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123&stream=true</code>
+                <br />
                 <textarea class="form-control">{"data":[{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","ipAddress":"127.0.0.1","id":"532f2e8c9c23809e93000001"}]}</textarea>
               </div>
               </td></tr></table>
             </div>
 
 
-
           </div>
 
+<br/><br/>
+<h4>
+<center>
+Note: The CoAP examples are using <a href="https://twitter.com/matteocollina">Matteo Collina's</a> <a href="https://www.npmjs.org/package/coap-cli">CoAP CLI</a> testing tool.
+</center>
+</h4>
        </div>
       </section>
 

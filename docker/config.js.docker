@@ -1,12 +1,23 @@
 module.exports = {
   databaseUrl: "mongodb://localhost:27017/skynet",
   port: 3000,
+  /*tls: {
+    sslPort: 443,
+    cert: "/certs/server.crt",
+    key: "/certs/server.key"
+  },*/
   log: true,
   /*elasticSearch: {
     host: "localhost",
     port: "9200"
   },*/
-  rateLimit: 10, // 10 transactions per user per secend
+  rateLimits: {
+    message: 10, // 10 transactions per user per second
+    data: 10, // 10 transactions per user per second
+    connection: 2, // 2 transactions per IP per second
+    query: 2, // 2 transactions per user per second
+    whoami: 10 // 10 transactions per user per second
+  },
   /*plivo: {
     authId: "abc",
     authToken: "123"
@@ -15,5 +26,9 @@ module.exports = {
     host: "localhost",
     port: "6379",
     password: "localhost"
+  },
+  coap: {
+    port: 5683,
+    host: "localhost"
   }
 };

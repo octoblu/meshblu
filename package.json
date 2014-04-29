@@ -22,7 +22,7 @@
     "lodash": "*",
     "elasticsearch": "*",
     "moment": "*",
-    "coap": "^0.6.0",
+    "coap": "git://github.com/mcollina/node-coap.git#null-address",
     "qs": "^0.6.6",
     "when": "^3.1.0"
   },

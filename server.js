@@ -1971,8 +1971,8 @@ coapPort = coapConfig.port || 5683;
 coapHost = coapConfig.host || 'localhost';
 
 // Passing in null for the host responds to any request on server
-coapServer.listen(coapPort, coapHost, function () {
-// coapServer.listen(coapPort, null, function () {
+// coapServer.listen(coapPort, coapHost, function () {
+coapServer.listen(coapPort, null, function () {
   console.log('coap listening at coap://' + coapHost + ':' + coapPort);
 });
 

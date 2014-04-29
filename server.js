@@ -338,7 +338,7 @@ function socketLogic (socket, secure){
 
         if(data.uuid){
           socket.uuid = data.uuid;
-          socket.emit('ready', {"api": "connect", "status": auth.status, "uuid": data.uuid, "token": data.token});
+          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id, "uuid": data.uuid, "token": data.token});
           // Have device join its uuid room name so that others can subscribe to it
           console.log('subscribe: ' + data.uuid);
           //make sure not in there already:
@@ -350,7 +350,7 @@ function socketLogic (socket, secure){
           socket.join(data.uuid);
         } else {
           socket.uuid = auth.uuid;
-          socket.emit('ready', {"api": "connect", "status": auth.status, "uuid": auth.uuid, "token": auth.token});
+          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id, "uuid": auth.uuid, "token": auth.token});
           // Have device join its uuid room name so that others can subscribe to it
           console.log('subscribe: ' + auth.uuid);
           //make sure not in there already:

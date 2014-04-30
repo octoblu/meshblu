@@ -10,7 +10,7 @@
   "dependencies": {
     "mongojs": "*",
     "redis": "~0.10.1",
-    "socket.io": "*",
+    "socket.io": "0.9.16",
     "restify": "*",
     "node-uuid": "*",
     "node-static": "*",
@@ -22,7 +22,7 @@
     "lodash": "*",
     "elasticsearch": "*",
     "moment": "*",
-    "coap": "git://github.com/mcollina/node-coap.git#null-address",
+    "coap": "^0.6.1",
     "qs": "^0.6.6",
     "when": "^3.1.0"
   },

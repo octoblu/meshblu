@@ -22,6 +22,10 @@ module.exports = {
     authId: "abc",
     authToken: "123"
   },
+  urbanAirship: {
+    key: "abc",
+    secret: "123"
+  },
   redis: {
     host: "xyz.redistogo.com",
     port: "1234",

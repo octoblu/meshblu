@@ -205,8 +205,16 @@ function sendMessage(fromUuid, data, fn){
               // Send SMS if UUID has a phoneNumber
               if(check.phoneNumber){
                 console.log("Sending SMS to", check.phoneNumber);
-                require('./lib/sendSms')(device, JSON.stringify(data.payload), function(check){
+                require('./lib/sendSms')(device, JSON.stringify(data.payload), function(sms){
                   console.log('Sent SMS!');
+                });
+              }
+
+              // Send Push Notification if UUID is an Octoblu Mobile device
+              if(check.type == 'octobluMobile'){
+                console.log("Sending Push Notification to", check.uuid);
+                require('./lib/sendPushNotification')(check, JSON.stringify(data.payload), function(push){
+                  console.log('Sent Push Notification!');
                 });
               }
 

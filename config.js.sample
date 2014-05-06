@@ -34,6 +34,5 @@ module.exports = {
   coap: {
     port: 5683,
     host: "localhost"
-  },
-  authImpl: './lib/simpleAuth'
+  }
 };

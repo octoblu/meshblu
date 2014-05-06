@@ -630,6 +630,8 @@ function socketLogic (socket, secure){
   //tell skynet to forward plain text to another socket
   socket.on('bindSocket', function (data, fn) {
 
+    var target;
+
     function bindReply(result){
       if(result == 'ok' || (result && result.result == 'ok')){
         bindSocket.connect(socket.id, target.socketid, function(err, val){
@@ -652,19 +654,20 @@ function socketLogic (socket, secure){
     getUuid(socket, function(err, uuid){
       if(err){ return fn({error: 'invalid client'}); }
 
-      require('./lib/whoAmI')(data.uuid, false, function(target){
-
-        if(target && target.socketid && securityImpl.canSend(uuid, target)){
-          if(target.secure && config.tls){
-            ios.sockets.socket(target.socketid).emit("bindSocket", {fromUuid: uuid}, bindReply);
-          } else {
-            io.sockets.socket(target.socketid).emit("bindSocket", {fromUuid: uuid}, bindReply);
+      require('./lib/whoAmI')(data.uuid, false, function(check){
+        if(!check.error){
+          target = check;
+          if(target.socketid && securityImpl.canSend(uuid, target)){
+            if(target.secure && config.tls){
+              ios.sockets.socket(target.socketid).emit("bindSocket", {fromUuid: uuid}, bindReply);
+            } else {
+              io.sockets.socket(target.socketid).emit("bindSocket", {fromUuid: uuid}, bindReply);
+            }
+          }else{
+            console.log('client target',uuid, target);
+            return fn({error: 'invalid client or target'});
           }
-        }else{
-          console.log('client target',uuid, target);
-          return fn({error: 'invalid client or target'});
         }
-
       });
 
     });
@@ -912,9 +915,9 @@ function socketLogic (socket, secure){
         } else if (typeof message == 'string'){
 
           bindSocket.getTarget(socket.id, function(err, target){
-            console.log('send with bind', err, target);
             if(target){
 
+              socket._unboundTarget = 0;
               // Determine is socket is secure
               getUuid(socket, function(err, uuid){
                 require('./lib/whoAmI')(uuid, false, function(check){
@@ -924,6 +927,7 @@ function socketLogic (socket, secure){
                       ios.sockets.socket(target).send(message);
                     }
                   } else {
+                    //console.log('socket lookup', io.sockets.socket(target));
                     io.sockets.socket(target).send(message);
                   }
 
@@ -932,6 +936,21 @@ function socketLogic (socket, secure){
 
               //async update for TTL
               bindSocket.connect(socket.id, target);
+            }else{
+              //no longer bound, start checking for unbound repeats
+              if(!socket._unboundTarget){
+                socket._unboundTarget = 1;
+              }else{
+                socket._unboundTarget += 1;
+              }
+
+              if(socket._unboundTarget > 2){
+                console.log('sending unbind message', socket.id);
+                socket.emit('unboundSocket', {error : 'unbound from remote uuid'});
+                socket._unboundTarget = 0;
+              }
+
+
             }
           });
 

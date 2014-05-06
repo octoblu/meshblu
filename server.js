@@ -168,7 +168,7 @@ function sendToSocket(device, msg, callback){
         }
       });
     }else{
-      socketServer.sockets.in(device).emit('message', clonedMsg);
+      socketServer.sockets.in(device.uuid).emit('message', msg);
     }
   }
 }

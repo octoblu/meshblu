@@ -1096,6 +1096,20 @@ coapRouter.get('/whoAmI/:uuid', function (req, res) {
   });
 });
 
+// coap get coap://localhost/devices/a1634681-cb10-11e3-8fa5-2726ddcf5e29
+coapRouter.get('/devices/:uuid', function (req, res) {
+  require('./lib/whoAmI')(req.params.uuid, false, function (data) {
+    console.log(data);
+    if(data.error) {
+      res.statusCode = data.error.code;
+      res.json(data.error);
+    } else {
+      res.json(data);
+    }
+
+  });
+});
+
 
 coapRouter.put('/devices/:uuid', function (req, res) {
 

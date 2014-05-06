@@ -1416,6 +1416,25 @@ function setupRestfulRoutes (server) {
   // curl http://localhost:3000/devices
   // curl http://localhost:3000/devices?key=123
   // curl http://localhost:3000/devices?online=true
+  // server.get('/devices/:uuid', function(req, res){
+  server.get('/devices', function(req, res){
+    res.setHeader('Access-Control-Allow-Origin','*');
+    // authDevice(req.params.uuid, req.query.token, function (auth) {
+      // if (auth.authenticate) {
+        require('./lib/getDevices')(req.params.uuid, req.query, req.connection.remoteAddress, false, function(data){
+          if(data.error){
+            res.json(data.error.code, data);
+          }else{
+            res.json(data);
+          }
+        });
+      // }else{
+        // res.json(401, {error: 'unauthorized'});
+      // }
+    // });
+
+  });
+
   server.get('/devices/:uuid', function(req, res){
     res.setHeader('Access-Control-Allow-Origin','*');
     authDevice(req.params.uuid, req.query.token, function (auth) {

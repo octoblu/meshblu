@@ -570,7 +570,7 @@ function socketLogic (socket, secure){
         getUuid(socket, function(err, uuid){
           if(err){ return; }
           var reqData = data;
-          require('./lib/getDevices')(uuid, data, false, function(results){
+          require('./lib/getDevices')(uuid, data, req.connection.remoteAddress, false, function(results){
             console.log(results);
 
             require('./lib/whoAmI')(uuid, false, function(check){
@@ -1069,7 +1069,7 @@ coapRouter.get('/ipaddress', function (req, res) {
 coapRouter.get('/devices', function (req, res) {
   authDevice(req.params.uuid, req.params.token, function (auth) {
     if (auth.authenticate) {
-      require('./lib/getDevices')(req.params.uuid, req.query, false, function (data) {
+      require('./lib/getDevices')(req.params.uuid, req.query, null,false, function (data) {
         if(data.error) {
           res.statusCode = data.error.code;
           res.json(data.error);
@@ -1168,7 +1168,7 @@ coapRouter.get('/mydevices/:uuid', function (req, res) {
     if (auth.authenticate == true) {
       req.query.owner = req.params.uuid;
       delete req.query.token;
-      require('./lib/getDevices')(req.params.uuid, req.query, true, function (data) {
+      require('./lib/getDevices')(req.params.uuid, req.query, null, true, function (data) {
         console.log(data);
         if(data.error) {
           res.statusCode = data.error.code;
@@ -1458,7 +1458,7 @@ function setupRestfulRoutes (server) {
     res.setHeader('Access-Control-Allow-Origin','*');
     authDevice(req.params.uuid, req.query.token, function (auth) {
       if (auth.authenticate) {
-        require('./lib/getDevices')(req.params.uuid, req.query, false, function(data){
+        require('./lib/getDevices')(req.params.uuid, req.query, req.connection.remoteAddress, false, function(data){
           if(data.error){
             res.json(data.error.code, data);
           }else{
@@ -1569,7 +1569,7 @@ function setupRestfulRoutes (server) {
       if (auth.authenticate){
         req.query.owner = req.params.uuid;
         delete req.query.token;
-        require('./lib/getDevices')(req.params.uuid, req.query, true, function(data){
+        require('./lib/getDevices')(req.params.uuid, req.query, req.connection.remoteAddress, true, function(data){
           console.log(data);
           // io.sockets.in(req.params.uuid).emit('message', data)
           if(data.error){

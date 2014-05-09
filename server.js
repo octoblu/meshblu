@@ -264,13 +264,6 @@ function sendMessage(fromUuid, data, fn){
                       console.log('Sent SMS!', device, check.phoneNumber);
                     });
                   }
-                  else if(check.type == 'octobluMobile'){
-                    // Push notification handler
-                    console.log("Sending Push Notification to", check.uuid);
-                    require('./lib/sendPushNotification')(check, JSON.stringify(clonedMsg.payload), function(push){
-                      console.log('Sent Push Notification!', device);
-                    });
-                  }
                   else if(check.protocol == "mqtt"){
                     // MQTT handler
                     console.log('sending mqtt', device);
@@ -285,6 +278,15 @@ function sendMessage(fromUuid, data, fn){
                       sendToSocket(check, clonedMsg, null);
                     }
                   }
+
+                  if(check.type == 'octobluMobile'){
+                    // Push notification handler
+                    console.log("Sending Push Notification to", check.uuid);
+                    require('./lib/sendPushNotification')(check, JSON.stringify(clonedMsg.payload), function(push){
+                      console.log('Sent Push Notification!', device);
+                    });
+                  }
+
 
                 }else{
                   clonedMsg.UNAUTHORIZED=true; //for logging

@@ -5,7 +5,13 @@ var app = require('commander');
 var tokenthrottle = require("tokenthrottle");
 
 var redis = require('./lib/redis');
-var getUuid = require('./lib/getUuid');
+//var getDevice = require('./lib/getDevice');
+var getDevice = require('./lib/getDevice');
+var getDevices = require('./lib/getDevices');
+var getLocalDevices = require('./lib/getLocalDevices');
+var claimDevice = require('./lib/claimDevice');
+var logEvent = require('./lib/logEvent');
+
 var bindSocket = require('./lib/bindSocket');
 var authDevice = require('./lib/authDevice');
 var fs = require('fs');
@@ -175,7 +181,7 @@ function sendToSocket(device, msg, callback){
 
 
 
-function handleUpdate(fromUuid, data, fn){
+function handleUpdate(fromDevice, data, fn){
 
   require('./lib/whoAmI')(data.uuid, false, function(check){
 
@@ -183,14 +189,11 @@ function handleUpdate(fromUuid, data, fn){
       return fn(check);
     }
 
-    if(securityImpl.canUpdate(fromUuid, check)){
+    if(securityImpl.canUpdate(fromDevice, check)){
       require('./lib/updateDevice')(data.uuid, data, function(results){
         console.log('update results', results);
-
-        require('./lib/whoAmI')(fromUuid, false, function(check){
-          results.fromUuid = check;
-          require('./lib/logEvent')(401, results);
-        });
+        results.fromUuid = fromDevice;
+        logEvent(401, results);
 
         try{
           fn(results);
@@ -206,7 +209,11 @@ function handleUpdate(fromUuid, data, fn){
 
 }
 
-function sendMessage(fromUuid, data, fn){
+function sendMessage(fromDevice, data, fn){
+  var fromUuid;
+  if(fromDevice){
+    fromUuid = fromDevice.uuid;
+  }
 
   console.log("sendMessage() from", fromUuid, 'data', data);
 
@@ -236,7 +243,7 @@ function sendMessage(fromUuid, data, fn){
         mqttclient.publish(fromUuid + '_bc', JSON.stringify(data), {qos:qos});
       }
 
-      require('./lib/logEvent')(300, data);
+      logEvent(300, data);
 
     } else {
 
@@ -255,7 +262,7 @@ function sendMessage(fromUuid, data, fn){
               var clonedMsg = cloneMessage(data, device, fromUuid);
               console.log('device check:', check);
               if(!check.error){
-                if(securityImpl.canSend(fromUuid, check)){
+                if(securityImpl.canSend(fromDevice, check)){
 
                   if(check.phoneNumber){
                     // SMS handler
@@ -300,7 +307,7 @@ function sendMessage(fromUuid, data, fn){
 
               var logMsg = _.clone(clonedMsg);
               logMsg.toUuid = check; // add to device object to message for logging
-              require('./lib/logEvent')(300, logMsg);
+              logEvent(300, logMsg);
 
             });
 
@@ -345,7 +352,7 @@ function socketLogic (socket, secure){
   // socket.limiter = new RateLimiter(1, "second", true);
 
   console.log('Websocket connection detected. Requesting identification from socket id: ', socket.id);
-  require('./lib/logEvent')(100, {"socketid": socket.id, "protocol": "websocket"});
+  logEvent(100, {"socketid": socket.id, "protocol": "websocket"});
 
   socket.emit('identify', { socketid: socket.id });
   socket.on('identity', function (data) {
@@ -357,35 +364,22 @@ function socketLogic (socket, secure){
       data["protocol"] = "websocket";
     }
     console.log('Identity received: ', JSON.stringify(data));
-    // require('./lib/logEvent')(101, data);
+    // logEvent(101, data);
     require('./lib/updateSocketId')(data, function(auth){
       if (auth.status == 201){
 
-        if(data.uuid){
-          socket.uuid = data.uuid;
-          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id, "uuid": data.uuid, "token": data.token});
+          socket.skynetDevice = auth.device;
+
+          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id, "uuid": auth.device.uuid, "token": auth.device.token});
           // Have device join its uuid room name so that others can subscribe to it
-          console.log('subscribe: ' + data.uuid);
+          console.log('subscribe: ' + auth.device.uuid);
           //make sure not in there already:
           try{
-            socket.leave(data.uuid);
+            socket.leave(auth.device.uuid);
           }catch(lexp){
             console.log('error leaving room', lexp);
           }
-          socket.join(data.uuid);
-        } else {
-          socket.uuid = auth.uuid;
-          socket.emit('ready', {"api": "connect", "status": auth.status, "socketid": socket.id, "uuid": auth.uuid, "token": auth.token});
-          // Have device join its uuid room name so that others can subscribe to it
-          console.log('subscribe: ' + auth.uuid);
-          //make sure not in there already:
-          try{
-            socket.leave(auth.uuid);
-          }catch(lexp){
-            console.log('error leaving room', lexp);
-          }
-          socket.join(auth.uuid);
-        }
+          socket.join(auth.device.uuid);
 
       } else {
         socket.emit('notReady', {"api": "connect", "status": auth.status, "uuid": data.uuid});
@@ -396,7 +390,7 @@ function socketLogic (socket, secure){
         // results._id.toString();
         // delete results._id;
         data.fromUuid = results;
-        require('./lib/logEvent')(101, data);
+        logEvent(101, data);
       });
 
     });
@@ -406,15 +400,9 @@ function socketLogic (socket, secure){
     console.log('Presence offline for socket id: ', socket.id);
     require('./lib/updatePresence')(socket.id);
     // Emit API request from device to room for subscribers
-    getUuid(socket, function(err, uuid){
-      if(err){ return; }
-      require('./lib/whoAmI')(uuid, false, function(results){
-        // results._id.toString();
-        // delete results_id;
-
-        require('./lib/logEvent')(102, {"api": "disconnect", "socketid": socket.id, "uuid": uuid, "fromUuid": results});
-      });
-
+    getDevice(socket, function(err, device){
+      device = device || null;
+      logEvent(102, {api: "disconnect", socketid: socket.id, device: device});
     });
 
   });
@@ -433,7 +421,7 @@ function socketLogic (socket, secure){
 
 
         data.toUuid = results;
-        require('./lib/logEvent')(204, data);
+        logEvent(204, data);
 
       });
 
@@ -445,24 +433,19 @@ function socketLogic (socket, secure){
           socket.join(data.uuid);
 
           // Emit API request from device to room for subscribers
-          getUuid(socket, function(err, uuid){
+          getDevice(socket, function(err, device){
             if(err){ return; }
-            var results = {"api": "subscribe", "socketid": socket.id, "fromUuid": uuid, "toUuid": data.uuid};
+            var results = {"api": "subscribe", "socketid": socket.id, "fromUuid": device.uuid, "toUuid": data.uuid};
 
-            require('./lib/whoAmI')(uuid, false, function(fromCheck){
-              require('./lib/whoAmI')(data.uuid, false, function(toCheck){
-                data.auth = auth;
-
-                data.fromUuid = fromCheck;
-                data.toUuid = toCheck;
-                require('./lib/logEvent')(204, data);
-              });
+            require('./lib/whoAmI')(data.uuid, false, function(toCheck){
+              data.auth = auth;
+              data.fromUuid = device;
+              data.toUuid = toCheck;
+              logEvent(204, data);
             });
-
 
             try{
               fn(results);
-
             } catch (e){
               console.log(e);
             }
@@ -475,7 +458,7 @@ function socketLogic (socket, secure){
           var results = {"api": "subscribe", "uuid": data.uuid, "result": false};
           // socket.broadcast.to(uuid).emit('message', results);
 
-          require('./lib/logEvent')(204, results);
+          logEvent(204, results);
 
           console.log(results);
           try{
@@ -497,17 +480,15 @@ function socketLogic (socket, secure){
       console.log('leaving room ', data.uuid);
       socket.leave(data.uuid);
       // Emit API request from device to room for subscribers
-      getUuid(socket, function(err, uuid){
+      getDevice(socket, function(err, device){
         if(err){ return; }
-        var results = {"api": "unsubscribe", "socketid": socket.id, "uuid": uuid};
+        var results = {"api": "unsubscribe", "socketid": socket.id, "uuid": device.uuid};
         // socket.broadcast.to(uuid).emit('message', results);
 
-        require('./lib/whoAmI')(uuid, false, function(fromCheck){
-          require('./lib/whoAmI')(data.uuid, false, function(toCheck){
-            data.fromUuid = fromCheck;
-            data.toUuid = toCheck;
-            require('./lib/logEvent')(205, data);
-          });
+        require('./lib/whoAmI')(data.uuid, false, function(toCheck){
+          data.fromUuid = device;
+          data.toUuid = toCheck;
+          logEvent(205, data);
         });
 
 
@@ -529,23 +510,18 @@ function socketLogic (socket, secure){
       }else{
 
         // Emit API request from device to room for subscribers
-        getUuid(socket, function(err, uuid){
+        getDevice(socket, function(err, device){
           if(err){ return; }
           // socket.broadcast.to(uuid).emit('message', {"api": "status"});
 
           require('./lib/getSystemStatus')(function(results){
-            console.log(results);
 
-            require('./lib/whoAmI')(uuid, false, function(check){
-              // check._id.toString();
-              // delete check._id;
-              results.fromUuid = check;
-              require('./lib/logEvent')(200, results);
-            });
+            results.fromUuid = device;
+            logEvent(200, results);
+            console.log(results);
 
             try{
               fn(results);
-
             } catch (e){
               console.log(e);
             }
@@ -569,16 +545,71 @@ function socketLogic (socket, secure){
           data = {};
         }
         // Emit API request from device to room for subscribers
-        getUuid(socket, function(err, uuid){
+        getDevice(socket, function(err, device){
           if(err){ return; }
           var reqData = data;
-          require('./lib/getDevices')(uuid, data, req.connection.remoteAddress, false, function(results){
+          getDevices(device, data, false, function(results){
+            results.fromUuid = device;
+            logEvent(403, results);
             console.log(results);
 
-            require('./lib/whoAmI')(uuid, false, function(check){
-              results.fromUuid = check;
-              require('./lib/logEvent')(403, results);
-            });
+            try{
+              fn(results);
+
+            } catch (e){
+              console.log(e);
+            }
+          });
+        });
+      }
+    });
+  });
+
+  socket.on('localDevices', function (data, fn) {
+    throttles.query.rateLimit(socket.id, function (err, limited) {
+      if(limited){
+        console.log('query throttled', socket.id);
+      }else{
+
+        if(!data || (typeof data != 'object')){
+          data = {};
+        }
+        // Emit API request from device to room for subscribers
+        getDevice(socket, function(err, device){
+          if(err){ return; }
+          getLocalDevices(device, false, function(results){
+            results.fromUuid = device;
+            logEvent(403, results);
+            console.log(results);
+
+            try{
+              fn(results);
+
+            } catch (e){
+              console.log(e);
+            }
+          });
+        });
+      }
+    });
+  });
+
+
+  socket.on('claimDevice', function (data, fn) {
+    throttles.query.rateLimit(socket.id, function (err, limited) {
+      if(limited){
+        console.log('query throttled', socket.id);
+      }else{
+
+        if(!data || (typeof data != 'object')){
+          data = {};
+        }
+        // Emit API request from device to room for subscribers
+        getDevice(socket, function(err, device){
+          if(err){ return; }
+          claimDevice(device, data.claimUuid, function(err, results){
+            logEvent(403, {error: err, results: results, fromUuid: device});
+            console.log('claimed', err, results);
 
             try{
               fn(results);
@@ -605,16 +636,12 @@ function socketLogic (socket, secure){
           data = data.uuid;
         }
         // Emit API request from device to room for subscribers
-        getUuid(socket, function(err, uuid){
+        getDevice(socket, function(err, device){
           if(err){ return; }
           var reqData = data;
           require('./lib/whoAmI')(data, false, function(results){
-
-            require('./lib/whoAmI')(uuid, false, function(check){
-              // delete check._id;
-              results.fromUuid = check;
-              require('./lib/logEvent')(500, results);
-            });
+            results.fromUuid = device;
+            logEvent(500, results);
 
             try{
               fn(results);
@@ -653,20 +680,20 @@ function socketLogic (socket, secure){
       return fn({error: 'invalid request'});
     }
 
-    getUuid(socket, function(err, uuid){
+    getDevice(socket, function(err, device){
       if(err){ return fn({error: 'invalid client'}); }
 
       require('./lib/whoAmI')(data.uuid, false, function(check){
         if(!check.error){
           target = check;
-          if(target.socketid && securityImpl.canSend(uuid, target)){
+          if(target.socketid && securityImpl.canSend(device, target)){
             if(target.secure && config.tls){
-              ios.sockets.socket(target.socketid).emit("bindSocket", {fromUuid: uuid}, bindReply);
+              ios.sockets.socket(target.socketid).emit("bindSocket", {fromUuid: device.uuid}, bindReply);
             } else {
-              io.sockets.socket(target.socketid).emit("bindSocket", {fromUuid: uuid}, bindReply);
+              io.sockets.socket(target.socketid).emit("bindSocket", {fromUuid: device.uuid}, bindReply);
             }
           }else{
-            console.log('client target',uuid, target);
+            console.log('client target',device.uuid, target);
             return fn({error: 'invalid client or target'});
           }
         }
@@ -688,10 +715,10 @@ function socketLogic (socket, secure){
         results.fromUuid = check;
 
         if(!check.error){
-          socket.uuid = check.uuid;
+          socket.skynetDevice = check;
         }
 
-        require('./lib/logEvent')(400, results);
+        logEvent(400, results);
       });
 
 
@@ -711,10 +738,10 @@ function socketLogic (socket, secure){
       data = {};
     }
     // Emit API request from device to room for subscribers
-    getUuid(socket, function(err, uuid){
+    getDevice(socket, function(err, fromDevice){
       if(err){ return; }
 
-      handleUpdate(uuid, data, fn);
+      handleUpdate(fromDevice, data, fn);
 
     });
   });
@@ -724,21 +751,15 @@ function socketLogic (socket, secure){
       data = {};
     }
     // Emit API request from device to room for subscribers
-    getUuid(socket, function(err, uuid){
+    getDevice(socket, function(err, device){
       if(err){ return; }
       var reqData = data;
       require('./lib/unregister')(data.uuid, data, function(results){
-        // results._id.toString();
-        // delete results._id;
 
         console.log(results);
 
-        require('./lib/whoAmI')(uuid, false, function(check){
-          // check._id.toString();
-          // delete check._id;
-          results.fromUuid = check;
-          require('./lib/logEvent')(402, results);
-        });
+        results.fromUuid = device;
+        logEvent(402, results);
 
         try{
           fn(results);
@@ -754,7 +775,7 @@ function socketLogic (socket, secure){
     authDevice(data.uuid, data.token, function(auth){
 
       // Emit API request from device to room for subscribers
-      getUuid(socket, function(err, uuid){
+      getDevice(socket, function(err, device){
         if(err){ return; }
         var reqData = data;
         reqData["api"] = "events";
@@ -823,7 +844,7 @@ function socketLogic (socket, secure){
         // check._id.toString();
         // delete check._id;
         results.toUuid = check;
-        require('./lib/logEvent')(102, results);
+        logEvent(102, results);
       });
 
 
@@ -840,7 +861,7 @@ function socketLogic (socket, secure){
 
         authDevice(data.uuid, data.token, function(auth){
 
-          getUuid(socket, function(err, uuid){
+          getDevice(socket, function(err, fromDevice){
             if(err){ return; }
 
             delete data.token;
@@ -859,7 +880,7 @@ function socketLogic (socket, secure){
 
                 console.log('message: ' + JSON.stringify(message));
 
-                sendMessage(uuid, message);
+                sendMessage(fromDevice, message);
 
 
                 try{
@@ -921,19 +942,15 @@ function socketLogic (socket, secure){
 
               socket._unboundTarget = 0;
               // Determine is socket is secure
-              getUuid(socket, function(err, uuid){
-                require('./lib/whoAmI')(uuid, false, function(check){
-
-                  if(check.secure){
-                    if(config.tls){
-                      ios.sockets.socket(target).send(message);
-                    }
-                  } else {
-                    //console.log('socket lookup', io.sockets.socket(target));
-                    io.sockets.socket(target).send(message);
+              getDevice(socket, function(err, device){
+                if(device.secure){
+                  if(config.tls){
+                    ios.sockets.socket(target).send(message);
                   }
-
-                });
+                } else {
+                  //console.log('socket lookup', io.sockets.socket(target));
+                  io.sockets.socket(target).send(message);
+                }
               });
 
               //async update for TTL
@@ -958,10 +975,11 @@ function socketLogic (socket, secure){
 
         }else{
           // Broadcast to room for pubsub
-          getUuid(socket, function(err, uuid){
-            message.api = "message";
-            var fromUuid = uuid || message.fromUuid || null;
-            sendMessage(fromUuid, message, fn);
+          getDevice(socket, function(err, fromDevice){
+            if(fromDevice){
+              message.api = "message";
+              sendMessage(fromDevice, message, fn);
+            }
           });
         }
 
@@ -1009,7 +1027,7 @@ try{
     //   }
 
     //   var eventData = {devices: topic, message: message};
-    //   require('./lib/logEvent')(300, eventData);
+    //   logEvent(300, eventData);
     // });
 
     //add auth and throttling later
@@ -1019,7 +1037,12 @@ try{
       // if(check.secure){
         // sendMessage(message.fromUuid, message, true);
       // } else {
-        sendMessage(message.fromUuid, message);
+        whoAmI(message.fromUuid, function(err, fromDevice){
+          if(fromDevice){
+            sendMessage(message.fromUuid, message);
+          }
+        });
+
       // }
     // });
 
@@ -1071,7 +1094,7 @@ coapRouter.get('/ipaddress', function (req, res) {
 coapRouter.get('/devices', function (req, res) {
   authDevice(req.params.uuid, req.params.token, function (auth) {
     if (auth.authenticate) {
-      require('./lib/getDevices')(req.params.uuid, req.query, null,false, function (data) {
+      getDevices(auth.device, req.query, false, function (data) {
         if(data.error) {
           res.statusCode = data.error.code;
           res.json(data.error);
@@ -1136,7 +1159,7 @@ coapRouter.put('/devices/:uuid', function (req, res) {
 
   authDevice(req.params.uuid, req.params.token, function (auth) {
     if (auth.authenticate) {
-      handleUpdate(req.params.uuid, req.params, function(result){
+      handleUpdate(auth.device, req.params, function(result){
         if(result.error){
           res.statusCode = result.error.code;
           res.json(result.error);
@@ -1170,7 +1193,7 @@ coapRouter.get('/mydevices/:uuid', function (req, res) {
     if (auth.authenticate == true) {
       req.query.owner = req.params.uuid;
       delete req.query.token;
-      require('./lib/getDevices')(req.params.uuid, req.query, null, true, function (data) {
+      getDevices(auth.device, req.query, true, function (data) {
         console.log(data);
         if(data.error) {
           res.statusCode = data.error.code;
@@ -1245,7 +1268,7 @@ coapRouter.post('/gatewayConfig', function(req, res){
     }
   });
 
-  require('./lib/logEvent')(300, body);
+  logEvent(300, body);
 });
 
 
@@ -1384,7 +1407,7 @@ coapRouter.post('/messages', function (req, res, next) {
   sendMessage(devices, message);
   res.json({devices:devices, payload: body.payload});
 
-  require('./lib/logEvent')(300, message);
+  logEvent(300, message);
 
 });
 
@@ -1442,7 +1465,7 @@ function setupRestfulRoutes (server) {
     res.setHeader('Access-Control-Allow-Origin','*');
     // authDevice(req.params.uuid, req.query.token, function (auth) {
       // if (auth.authenticate) {
-        require('./lib/getDevices')(req.params.uuid, req.query, req.connection.remoteAddress, false, function(data){
+        getDevices(req.params.uuid, req.query, req.connection.remoteAddress, false, function(data){
           if(data.error){
             res.json(data.error.code, data);
           }else{
@@ -1460,9 +1483,62 @@ function setupRestfulRoutes (server) {
     res.setHeader('Access-Control-Allow-Origin','*');
     authDevice(req.params.uuid, req.query.token, function (auth) {
       if (auth.authenticate) {
-        require('./lib/getDevices')(req.params.uuid, req.query, req.connection.remoteAddress, false, function(data){
+        getDevices(auth.device, req.query, false, function(data){
           if(data.error){
             res.json(data.error.code, data);
+          }else{
+            res.json(data);
+          }
+        });
+      }else{
+        res.json(401, {error: 'unauthorized'});
+      }
+    });
+  });
+
+  server.get('/localDevices/:uuid', function(req, res){
+    res.setHeader('Access-Control-Allow-Origin','*');
+    console.log('localDevices', req.params.uuid, req.query.token);
+    authDevice(req.params.uuid, req.query.token, function (auth) {
+      if (auth.authenticate) {
+
+        //TODO: Any server-to-server overriding should be done with ouath
+        if(req.query.overrideIp && config.skynet_override_token && req.header('Skynet_override_token') == config.skynet_override_token){
+          auth.device.ipAddress = req.query.overrideIp;
+        }else{
+          auth.device.ipAddress = req.connection.remoteAddress;
+        }
+
+
+        getLocalDevices(auth.device, false, function(data){
+          if(data.error){
+            res.json(data.error.code, data);
+          }else{
+            res.json(data);
+          }
+        });
+      }else{
+        res.json(401, {error: 'unauthorized'});
+      }
+    });
+  });
+
+  server.put('/claimDevice/:uuid', function(req, res){
+    console.log('claimDevice', req.params, req.query);
+    res.setHeader('Access-Control-Allow-Origin','*');
+    authDevice(req.params.uuid, req.query.token, function (auth) {
+      if (auth.authenticate) {
+
+        //TODO: Any server-to-server overriding should be done with ouath
+        if(req.query.overrideIp && config.skynet_override_token && req.header('Skynet_override_token') == config.skynet_override_token){
+          auth.device.ipAddress = req.query.overrideIp;
+        }else{
+          auth.device.ipAddress = req.connection.remoteAddress;
+        }
+
+        claimDevice(auth.device, req.query.claimUuid, function(error, data){
+          if(error){
+            res.json(400, data);
           }else{
             res.json(data);
           }
@@ -1513,7 +1589,7 @@ function setupRestfulRoutes (server) {
   // curl -X POST -d "name=arduino&description=this+is+a+test" http://localhost:3000/devices
   server.post('/devices', function(req, res){
     res.setHeader('Access-Control-Allow-Origin','*');
-    req.params['ipAddress'] = req.connection.remoteAddress
+    req.params['ipAddress'] = req.connection.remoteAddress;
     require('./lib/register')(req.params, function(data){
       console.log(data);
       // io.sockets.in(data.uuid).emit('message', data)
@@ -1535,7 +1611,7 @@ function setupRestfulRoutes (server) {
     res.setHeader('Access-Control-Allow-Origin','*');
     authDevice(req.params.uuid, req.query.token, function (auth) {
       if (auth.authenticate) {
-        handleUpdate(req.params.uuid, req.params, function(result){
+        handleUpdate(auth.device, req.params, function(result){
           if(result.error){
             res.json(result.error.code, result);
           }else{
@@ -1571,7 +1647,7 @@ function setupRestfulRoutes (server) {
       if (auth.authenticate){
         req.query.owner = req.params.uuid;
         delete req.query.token;
-        require('./lib/getDevices')(req.params.uuid, req.query, req.connection.remoteAddress, true, function(data){
+        getDevices(auth.device, req.query, true, function(data){
           console.log(data);
           // io.sockets.in(req.params.uuid).emit('message', data)
           if(data.error){
@@ -1680,7 +1756,7 @@ function setupRestfulRoutes (server) {
     sendMessage(devices, message);
     res.json({devices:devices, payload: body.payload});
 
-    require('./lib/logEvent')(300, message);
+    logEvent(300, message);
 
   });
 
@@ -1703,7 +1779,7 @@ function setupRestfulRoutes (server) {
       }
     });
 
-    require('./lib/logEvent')(300, body);
+    logEvent(300, body);
 
   });
 
@@ -1756,7 +1832,7 @@ function setupRestfulRoutes (server) {
 
 
       var eventData = {devices: uuid, payload: message}
-      require('./lib/logEvent')(301, eventData);
+      logEvent(301, eventData);
       if(eventData.error){
         res.json(eventData.error.code, eventData);
       } else {

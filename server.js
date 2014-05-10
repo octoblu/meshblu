@@ -18,6 +18,7 @@ var logEvent = require('./lib/logEvent');
 var updateDevice = require('./lib/updateDevice');
 var setupRestfulRoutes = require('./lib/setupHttpRoutes');
 var setupCoapRoutes = require('./lib/setupCoapRoutes');
+var setupMqttClient = require('./lib/setupMqttClient');
 var socketLogic = require('./lib/socketLogic');
 
 var fs = require('fs');

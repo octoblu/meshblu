@@ -16,7 +16,8 @@ module.exports = {
     data: 10, // 10 transactions per user per second
     connection: 2, // 2 transactions per IP per second
     query: 2, // 2 transactions per user per second
-    whoami: 10 // 10 transactions per user per second
+    whoami: 10, // 10 transactions per user per second
+    unthrottledIps: ["54.186.134.252"] // allow unlimited transactions from these IP addresses
   },
   plivo: {
     authId: "abc",

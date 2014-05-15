@@ -192,7 +192,7 @@ function sendMessage(fromDevice, data, fn){
     fromUuid = fromDevice.uuid;
   }
 
-  console.log("sendMessage() from", fromUuid, 'data', data);
+  console.log("sendMessage() from", fromUuid, data);
 
   if(fromUuid){
     data.fromUuid = fromUuid;

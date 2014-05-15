@@ -213,10 +213,13 @@ function sendMessage(fromDevice, data, fn){
     if(devices == "all" || devices == "*"){
 
       if(fromUuid){
+        io.sockets.in(fromUuid).emit('message', data);
         io.sockets.in(fromUuid + '_bc').emit('message', data);
         if(config.tls){
+          ios.sockets.in(fromUuid).emit('message', data);
           ios.sockets.in(fromUuid + '_bc').emit('message', data);
         }
+        mqttclient.publish(fromUuid, JSON.stringify(data), {qos:qos});
         mqttclient.publish(fromUuid + '_bc', JSON.stringify(data), {qos:qos});
       }
 

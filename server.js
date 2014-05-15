@@ -59,6 +59,7 @@ var throttles = {
   data : tokenthrottle({rate: config.rateLimits.data || 10}),
   query : tokenthrottle({rate: config.rateLimits.query || 2}),
   whoami : tokenthrottle({rate: config.rateLimits.whoami || 10}),
+  unthrottledIps : config.rateLimits.unthrottledIps || []
 };
 
 
@@ -311,15 +312,20 @@ var skynet = {
 function checkConnection(socket, secure){
   var ip = socket.handshake.address.address;
   //console.log(ip);
-  throttles.connection.rateLimit(ip, function (err, limited) {
-    if(limited){
-      socket.emit('notReady',{error: 'rate limit exceeded ' + ip});
-      socket.disconnect();
-    }else{
-      console.log('io connected');
-      socketLogic(socket, secure, skynet);
-    }
-  });
+  if(_.contains(throttles.unthrottledIps, ip)){
+    socketLogic(socket, secure, skynet);
+  }else{
+    throttles.connection.rateLimit(ip, function (err, limited) {
+      if(limited){
+        socket.emit('notReady',{error: 'rate limit exceeded ' + ip});
+        socket.disconnect();
+      }else{
+        console.log('io connected');
+        socketLogic(socket, secure, skynet);
+      }
+    });
+  }
+
 }
 
 

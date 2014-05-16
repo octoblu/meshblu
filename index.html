@@ -287,6 +287,29 @@
             <div class="col-md-12">
               <h1>Devices</h1>
             </div>
+
+             <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-success" disabled> POST</button>
+              </div>
+              </td>
+              <td>
+              <div class="feature col-md-10">
+                <b>/devices</b><br />
+                <b>Payload: key=value (i.e. type=drone&color=black)</b>
+                <br />Registers a node or device with SkyNet. SkyNet returns a UUID device id and security token. You can pass any key/value pairs and even override SkyNet's auto-generated UUID and/or token by passing your own uuid and/or token in the payload i.e. uuid=123&token=456
+                <br />
+                <b> Be sure to make note of your <strong>uuid</strong> and <strong>token</strong> as other calls require you to use these as a security check</b>
+                <code>curl -X POST -d "type=drone&color=black" http://skynet.im/devices</code>
+                <br />
+                <textarea class="form-control">{"type":"drone","color":"black","uuid":"6f72bc60-32d5-11e3-92e2-e94f95fc16a6","timestamp":1381537803046,"token":"4bbd2jm242dl5wmimbwz4rvlu77m0a4i","channel":"main","online":false,"_id":"5258980b56330f7dd000000d"}</textarea>
+
+                <br />
+              </div>
+              </td></tr></table>
+            </div>
+
             <div class="col-md-12">
               <table width="100%"><tr><td width="200px">
               <div class="feature col-md-2 text-center">
@@ -298,7 +321,7 @@
                 <b>/devices?key=value&key=value</b>
                 <br />Returns an array of device UUIDs based on key/value query criteria
                 <br />
-                <code>curl -X GET http://skynet.im/devices?type=drone</code>
+                <code>curl -X GET http://skynet.im/devices?type=drone --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</code>
                 <br />
                 <textarea class="form-control">{"devices":["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"]}</textarea>
                 <br />
@@ -317,29 +340,9 @@
                 <b>/devices/{uuid}</b>
                 <br />Returns all information (except the token) of a specific device or node
                 <br />
-                <code>curl -X GET http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
+                <code>curl -X GET http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</code>
                 <br />
                 <textarea class="form-control">{"_id":"5241d9140345450000000001","api":"update","armed":true,"channel":"main","deviceDescription":"this is a test","deviceName":"hackboard","key":"777","online":true,"socketid":"fO8dxKEwARUH9Ea--p2C","timestamp":1381536277933,"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}</textarea>
-                <br />
-              </div>
-              </td></tr></table>
-            </div>
-
-            <div class="col-md-12">
-              <table width="100%"><tr><td width="200px">
-              <div class="feature col-md-2 text-center">
-                <button class="btn btn-large btn-success" disabled> POST</button>
-              </div>
-              </td>
-              <td>
-              <div class="feature col-md-10">
-                <b>/devices</b><br />
-                <b>Payload: key=value (i.e. type=drone&color=black)</b>
-                <br />Registers a node or device with SkyNet. SkyNet returns a UUID device id and security token. You can pass any key/value pairs and even override SkyNet's auto-generated UUID and/or token by passing your own uuid and/or token in the payload i.e. uuid=123&token=456
-                <br />
-                <code>curl -X POST -d "type=drone&color=black" http://skynet.im/devices</code>
-                <br />
-                <textarea class="form-control">{"type":"drone","color":"black","uuid":"6f72bc60-32d5-11e3-92e2-e94f95fc16a6","timestamp":1381537803046,"token":"4bbd2jm242dl5wmimbwz4rvlu77m0a4i","channel":"main","online":false,"_id":"5258980b56330f7dd000000d"}</textarea>
                 <br />
               </div>
               </td></tr></table>
@@ -354,10 +357,10 @@
               <td>
               <div class="feature col-md-10">
                 <b>/devices/{uuid}</b><br />
-                <b>Payload: token=123&key=value (i.e. token=123&type=drone&color=blue&online=true)</b>
-                <br />Updates a node or device currently registered with SkyNet. You must pass the token for security but you can pass any key/value pairs to update object as well as null to remove a propery (i.e. color=null).
+                <b>Payload: key=value (i.e. type=drone&color=blue&online=true)</b>
+                <br />Updates a node or device currently registered with SkyNet that you have access to update. You can pass any key/value pairs to update object as well as null to remove a propery (i.e. color=null).
                 <br />
-                <code>curl -X PUT -d "token=123&color=blue&online=true" http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
+                <code>curl -X PUT -d "color=blue&online=true" http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</code>
                 <br />
                 <textarea class="form-control">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","color":"blue","timestamp":1381537750462}</textarea>
                 <br />
@@ -374,10 +377,9 @@
               <td>
               <div class="feature col-md-10">
                 <b>/devices/{uuid}</b><br />
-                <b>Payload: token=123</b>
-                <br />Deletes or unregisters a node or device currently registered with SkyNet. You must pass the token for security.
+                <br />Deletes or unregisters a node or device currently registered with SkyNet that you have access to update.
                 <br />
-                <code>curl -X DELETE -d "token=123" http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</code>
+                <code>curl -X DELETE http://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</code>
                 <br />
                 <textarea class="form-control">{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","timestamp":1381537971074}</textarea>
                 <br />
@@ -397,10 +399,10 @@
               </td>
               <td>
               <div class="feature col-md-10">
-                <b>/mydevices/{uuid}</b>
+                <b>/mydevices</b>
                 <br />Returns all information (including tokens) of all devices or nodes belonging to a user's UUID (identified with an "owner" property and user's UUID i.e. "owner":"0d1234a0-1234-11e3-b09c-1234e847b2cc")
                 <br />
-                <code>curl -X GET http://skynet.im/mydevices/0d1234a0-1234-11e3-b09c-1234e847b2cc?token=1234glm6y1234ldix1234nux41234sor</code>
+                <code>curl -X GET http://skynet.im/mydevices --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</code>
                 <br />
                 <textarea class="form-control">{"devices":[{"owner":"0d1234a0-1234-11e3-b09c-1234e847b2cc","name":"SMS","phoneNumber":"16025551234","uuid":"1c1234e1-xxxx-11e3-1234-671234c01234","timestamp":1390861609070,"token":"1234eg1234zz1tt1234w0op12346bt9","channel":"main","online":false,"_id":"52e6d1234980420c4a0001db"}}]}</textarea>
                 <br />
@@ -423,11 +425,11 @@
                 <b>/messages</b>
                 <br />Send a message to a specific device, array of devices, or all devices subscribing to a UUID on the SkyNet platform
                 <br />
-                <code>curl -X POST -d '{"devices": "*", "payload": {"yellow":"off"}}' http://skynet.im/messages</code>
+                <code>curl -X POST -d '{"devices": "*", "payload": {"yellow":"off"}}' http://skynet.im/messages --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</code>
                 <br />
-                <code>curl -X POST -d '{"devices": ["ad6...47b","2f3...170"], "payload": {"yellow":"off"}}' http://skynet.im/messages</code>
+                <code>curl -X POST -d '{"devices": ["ad6...47b","2f3...170"], "payload": {"yellow":"off"}}' http://skynet.im/messages --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</code>
                 <br />
-                <code>curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "payload": {"yellow":"off"}}' http://skynet.im/messages</code>
+                <code>curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "payload": {"yellow":"off"}}' http://skynet.im/messages --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</code>
 
                 <br />
 
@@ -448,10 +450,10 @@
               </td>
               <td>
               <div class="feature col-md-10">
-                <b>/events/{uuid}?token={token}</b>
+                <b>/events/{uuid}</b>
                 <br />Returns last 10 events related to a specific device or node
                 <br />
-                <code>curl -X GET http://skynet.im/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123</code>
+                <code>curl -X GET http://skynet.im/events/ad698900-2546-11e3-87fb-c560cb0ca47b --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</code>
                 <br />
                 <textarea class="form-control">{"events":[{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"lnHHS06ijWUXEzb01ZRy","timestamp":1382632438785,"eventCode":101,"_id":"52694bf6ad11379eec00003f"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"BuwnWQ_oLmpk5R3m1ZRv","timestamp":1382561240563,"eventCode":101,"_id":"526835d8ad11379eec000017"}]}</textarea>
               </div>
@@ -481,7 +483,7 @@
               </td></tr></table>
             </div>
 
-
+            <!--
             <div class="col-md-12">
               <h1>Authenticate</h1>
             </div>
@@ -502,6 +504,7 @@
               </div>
               </td></tr></table>
             </div>
+            -->
 
             <div class="col-md-12">
               <h1>IP Address</h1>

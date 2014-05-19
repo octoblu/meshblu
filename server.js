@@ -106,7 +106,8 @@ if(config.tls){
   // };
 }
 
-restify.CORS.ALLOW_HEADERS.push('authorization');
+restify.CORS.ALLOW_HEADERS.push('skynet_auth_uuid');
+restify.CORS.ALLOW_HEADERS.push('skynet_auth_token');
 restify.CORS.ALLOW_HEADERS.push('accept');
 restify.CORS.ALLOW_HEADERS.push('sid');
 restify.CORS.ALLOW_HEADERS.push('lang');
@@ -117,13 +118,8 @@ restify.CORS.ALLOW_HEADERS.push('x-requested-with');
 // server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
-server.use(restify.CORS( {origins: ['*']}));
+server.use(restify.CORS({ headers: [ 'skynet_auth_uuid', 'skynet_auth_token' ], origins: ['*'] }));
 server.use(restify.fullResponse());
-
-server.use(function(req, res, next){
-    req.header('Access-Control-Allow-Methods', '*');
-    next();
-});
 
 // Add throttling to HTTP API requests
 // server.use(restify.throttle({

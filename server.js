@@ -117,7 +117,7 @@ restify.CORS.ALLOW_HEADERS.push('x-requested-with');
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
-server.use(restify.CORS());
+server.use(restify.CORS( {origins: ['*']}));
 server.use(restify.fullResponse());
 
 // Add throttling to HTTP API requests

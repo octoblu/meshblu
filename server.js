@@ -106,6 +106,8 @@ if(config.tls){
   // };
 }
 
+restify.CORS.ALLOW_HEADERS.push('authorization');
+
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());

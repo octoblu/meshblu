@@ -120,6 +120,11 @@ server.use(restify.bodyParser());
 server.use(restify.CORS( {origins: ['*']}));
 server.use(restify.fullResponse());
 
+server.use(function(req, res, next){
+    req.header('Access-Control-Allow-Methods', '*');
+    next();
+});
+
 // Add throttling to HTTP API requests
 // server.use(restify.throttle({
 //   burst: 100,

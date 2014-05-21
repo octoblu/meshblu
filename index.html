@@ -541,12 +541,12 @@
               <td>
               <div class="feature col-md-10">
                 <b>/data/{uuid}</b><br />
-                <b>Payload: token=value&key=value (i.e. temperature=78&humity=30)</b>
+                <b>Payload: key=value&key2=value2 (i.e. temperature=78&humity=30)</b>
                 <br />Stores sensor data for a particular UUID. You can pass any key/value pairs.
                 <br />
-                <code>curl -X POST -d "token=123&temperature=78" http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</code>
+                <code>curl -X POST -d "wind=12&temperature=78" http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</code>
                 <br />
-                <textarea class="form-control">{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","ipAddress":"127.0.0.1","eventCode":700,"_id":"532f2e8c9c23809e93000002"}</textarea>
+                <textarea class="form-control">{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","wind":"12","ipAddress":"127.0.0.1","eventCode":700,"_id":"532f2e8c9c23809e93000002"}</textarea>
                 <br />
               </div>
               </td></tr></table>
@@ -561,17 +561,17 @@
               </td>
               <td>
               <div class="feature col-md-10">
-                <b>/data/{uuid}?token={token}</b>
+                <b>/data/{uuid}</b>
                 <br />Returns last 10 data updates related to a specific device or node
                 <br />Optional query parameters include: start (time to start from), finish (time to end),
 limit (overrides the default 10 updates)
                 <br />Note: You can make this API stream sensor data by adding stream=true to the querystring. Notice the comma at the end of the response. SkyNet doesn't close the stream.
                 <br />
-                <code>curl -L -X GET http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123</code>
+                <code>curl -L -X GET http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</code>
                 <br />
-                <code>curl -L -X GET http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123&stream=true</code>
+                <code>curl -L -X GET http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?stream=true --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</code>
                 <br />
-                <textarea class="form-control">{"data":[{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","ipAddress":"127.0.0.1","id":"532f2e8c9c23809e93000001"}]}</textarea>
+                <textarea class="form-control">{"data":[{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","wind":"12","ipAddress":"127.0.0.1","id":"532f2e8c9c23809e93000001"}]}</textarea>
               </div>
               </td></tr></table>
             </div>

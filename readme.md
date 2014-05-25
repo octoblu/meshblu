@@ -124,13 +124,13 @@ GET /devices
 Returns an array of all devices available to you on Skynet. Notice you can query against custom properties i.e. all drones or light switches and online/offline etc.
 
 ```
-curl http://localhost:3000/devices
+curl "http://localhost:3000/devices" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
-curl http://localhost:3000/devices?key=123
+curl "http://localhost:3000/devices?key=123" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
-curl http://localhost:3000/devices?online=true
+curl "http://localhost:3000/devices?online=true" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
-curl http://localhost:3000/devices?key=123&online=true
+curl "http://localhost:3000/devices?key=123&online=true" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170","9c62a150-29f6-11e3-89e7-c741cd5bd6dd","f828ef20-29f7-11e3-9604-b360d462c699","d896f9f0-29fb-11e3-a27c-614201ddde6e"]
 ```
@@ -140,7 +140,7 @@ GET /devices/uuid
 Returns all information on a given device by its UUID
 
 ```
-curl http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
+curl "http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => {"_id":"5241d9140345450000000001","channel":"main","deviceDescription":"this is a test","deviceName":"hackboard","key":"123","online":true,"socketid":"pG5UAhaZa_xXlvrItvTd","timestamp":1380340661522,"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}b
 ```
@@ -152,9 +152,9 @@ Registers a device on the Skynet network. You can add as many properties to the 
 Note: You can pass in a token parameter to overide skynet issuing you one
 
 ```
-curl -X POST -d "name=arduino&description=this+is+a+test" http://localhost:3000/devices
+curl -X POST -d "name=arduino&description=this+is+a+test" "http://localhost:3000/devices" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
-curl -X POST -d "name=arduino&token=123" http://localhost:3000/devices
+curl -X POST -d "name=arduino&token=123" "http://localhost:3000/devices" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => {"name":"arduino","description":"this is a test","uuid":"8220cff0-2939-11e3-88cd-0b8e5fdfd7d4","timestamp":1380481272431,"token":"1yw0nfc54okcsor2tfqqsuvnrcf2yb9","online":false,"_id":"524878f8cc12f0877f000003"}
 ```
@@ -164,7 +164,7 @@ PUT /devices/uuid
 Updates a device object. Token is required for security.
 
 ```
-curl -X PUT -d "token=123&online=true" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
+curl -X PUT -d "token=123&online=true" "http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => {"uuid":"8220cff0-2939-11e3-88cd-0b8e5fdfd7d4","timestamp":1380481439002,"online":true}
 ```
@@ -174,7 +174,7 @@ DELETE /devices/uuid
 Unregisters a device on the Skynet network. Token is required for security.
 
 ```
-curl -X DELETE -d "token=123" http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26
+curl -X DELETE -d "token=123" "http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => {"uuid":"8220cff0-2939-11e3-88cd-0b8e5fdfd7d4","timestamp":1380481567799}
 ```
@@ -184,7 +184,7 @@ GET /mydevices/uuid
 Returns all information (including tokens) of all devices or nodes belonging to a user's UUID (identified as "owner")
 
 ```
-curl -X GET http://skynet.im/mydevices/0d1234a0-1234-11e3-b09c-1234e847b2cc?token=1234glm6y1234ldix1234nux41234sor
+curl -X GET "http://skynet.im/mydevices/0d1234a0-1234-11e3-b09c-1234e847b2cc?token=1234glm6y1234ldix1234nux41234sor" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => {"devices":[{"owner":"0d1234a0-1234-11e3-b09c-1234e847b2cc","name":"SMS","phoneNumber":"16025551234","uuid":"1c1234e1-xxxx-11e3-1234-671234c01234","timestamp":1390861609070,"token":"1234eg1234zz1tt1234w0op12346bt9","channel":"main","online":false,"_id":"52e6d1234980420c4a0001db"}}]}
 ```
@@ -194,11 +194,11 @@ POST /messages
 Sends a JSON message to all devices or an array of devices or a specific device on the Skynet network.
 
 ```
-curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' http://localhost:3000/messages
+curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' "http://localhost:3000/messages" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
-curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"], "message": {"yellow":"off"}}' http://localhost:3000/messages
+curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"], "message": {"yellow":"off"}}' "http://localhost:3000/messages" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
-curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' http://localhost:3000/messages
+curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' "http://localhost:3000/messages" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => {"devices":"ad698900-2546-11e3-87fb-c560cb0ca47b","message":{"yellow":"off"},"timestamp":1380930482043,"eventCode":300}
 ```
@@ -208,7 +208,7 @@ GET /events/uuid?token=token
 Returns last 10 events related to a specific device or node
 
 ```
-curl -X GET http://skynet.im/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123
+curl -X GET "http://skynet.im/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => {"events":[{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"lnHHS06ijWUXEzb01ZRy","timestamp":1382632438785,"eventCode":101,"_id":"52694bf6ad11379eec00003f"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"BuwnWQ_oLmpk5R3m1ZRv","timestamp":1382561240563,"eventCode":101,"_id":"526835d8ad11379eec000017"}]}
 ```
@@ -218,7 +218,7 @@ GET /subscribe/uuid?token=token
 This is a streaming API that returns device/node mesages as they are sent and received. Notice the comma at the end of the response. SkyNet doesn't close the stream.
 
 ```
-curl -X GET http://skynet.im/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123
+curl -X GET "http://skynet.im/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => [{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"on"},"timestamp":1388768270795,"eventCode":300,"_id":"52c6ec0e4f67671e44000001"},{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"on"},"timestamp":1388768277473,"eventCode":300,"_id":"52c6ec154f67671e44000002"},
 ```
@@ -228,7 +228,7 @@ GET /authenticate/uuid?token=token
 Returns UUID and authticate: true or false based on the validity of uuid/token credentials
 
 ```
-curl -X GET http://skynet.im/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?token=5ypy4rurayktke29ypbi30kcw5ovfgvi
+curl -X GET "http://skynet.im/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?token=5ypy4rurayktke29ypbi30kcw5ovfgvi" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => {"uuid":"81246e80-29fd-11e3-9468-e5f892df566b","authentication":true} OR {"uuid":"81246e80-29fd-11e3-9468-e5f892df566b","authentication":false}
 ```
@@ -248,7 +248,7 @@ POST /data/uuid
 Stores your device's sensor data to SkyNet
 
 ```
-curl -X POST -d "token=123&temperature=78" http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc
+curl -X POST -d "token=123&temperature=78" "http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => {"timestamp":"2014-03-25T16:38:48.148Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"30","ipAddress":"127.0.0.1","eventCode":700,"_id":"5331b118512c974805000002"}
 ```
@@ -258,7 +258,7 @@ GET /data/uuid
 Retrieves your device's sensor data to SkyNet
 
 ```
-curl -X GET http://localhost:3000/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123
+curl -X GET "http://localhost:3000/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => {"data":[{"timestamp":"2014-03-25T16:38:48.148Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"30","ipAddress":"127.0.0.1","id":"5331b118512c974805000001"},{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","ipAddress":"127.0.0.1","id":"532f2e8c9c23809e93000001"}]}
 ```

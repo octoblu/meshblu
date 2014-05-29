@@ -100,8 +100,8 @@ If you change the code restarting the container is as easy as:
 # docker restart skynet_dev
 ```
 
-NodeBlu Developer Toolkit
--------------------------
+NodeBlu SkyNet Developer Toolkit
+--------------------------------
 <p align="center">
   <a href="https://chrome.google.com/webstore/detail/nodeblu/aanmmiaepnlibdlobmbhmfemjioahilm">
     <img width="100%" src="http://skynet.im/img/nodeblu.png"/>

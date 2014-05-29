@@ -106,8 +106,6 @@ Play with SkyNet.im IoT platform in Chrome! NodeBlu helps you experiment with th
 
 NodeBlu is Octoblu's fork of the popular [NodeRed](https://github.com/node-red/node-red) application from IBM.  Since our app is deployed as a Chrome extension, we decided to add extra local features such as speech recognition and text-to-speech, a WebRTC webcam, HTML5 notifications, access to ChromeDB, a gamepad controller, and access to local and remote Arduino and Spark devices via our SkyNet OS.
 
-You can run your NodeBlu flows on our servers 24/7 by signing up for an [Octoblu](http://octoblu.com) account today!  
-
 <p align="center">
   <a href="https://chrome.google.com/webstore/detail/nodeblu/aanmmiaepnlibdlobmbhmfemjioahilm">
     <img width="100%" src="http://skynet.im/img/nodeblu.png"/>

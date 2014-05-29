@@ -1,6 +1,6 @@
 <p align="center">
   <a href="http://skynet.im">
-    <img height="257" width="114" src="http://skynet.im/img/skyspread2.png"/>
+    <img width="100%" src="http://skynet.im/img/skyspread2.png"/>
   </a>
 </p>
 
@@ -99,6 +99,15 @@ If you change the code restarting the container is as easy as:
 ```
 # docker restart skynet_dev
 ```
+
+NodeBlu Developer Toolkit
+-------------------------
+<p align="center">
+  <a href="https://chrome.google.com/webstore/detail/nodeblu/aanmmiaepnlibdlobmbhmfemjioahilm">
+    <img width="100%" src="http://skynet.im/img/nodeblu.png"/>
+  </a>
+</p>
+
 
 HTTP(S) REST API
 ----------------

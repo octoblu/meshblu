@@ -1,11 +1,9 @@
-```
- SSSSS  kk                            tt
-SS      kk  kk yy   yy nn nnn    eee  tt
- SSSSS  kkkkk  yy   yy nnn  nn ee   e tttt
-     SS kk kk   yyyyyy nn   nn eeeee  tt
- SSSSS  kk  kk      yy nn   nn  eeeee  tttt
-                yyyyy
-```
+<p align="center">
+  <a href="http://skynet.im">
+    <img height="257" width="114" src="http://skynet.im/img/skyspread2.png"/>
+  </a>
+</p>
+
 OPEN MQTT & COAP COMMUNICATIONS NETWORK & API FOR THE INTERNET OF THINGS (IoT)!
 
 Visit [SKYNET.im](http://skynet.im) for up-to-the-latest documentation and screencasts.

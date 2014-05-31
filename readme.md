@@ -32,6 +32,8 @@ Press
 
 [LeapMotion](https://labs.leapmotion.com/46/) - Developer newsletter covers flying drones connected to SkyNet with LeapMotion sensor!
 
+[The New Stack](http://thenewstack.io/a-messaging-network-for-drones-called-skynet/) - Drones Get A Messaging Network Aptly Called SkyNet
+
 Roadmap
 -------
 

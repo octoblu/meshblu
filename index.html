@@ -1035,6 +1035,15 @@ socket.on('connect', function(){
         console.log(data);
       });
 
+      // Read sensor data from device (optional params: limit, start, finish)
+      socket.emit('getdata', {
+        "uuid": "f828ef20-29f7-11e3-9604-b360d462c699",
+        "token": "syep2lu2d0io1or305llz5u9ijrwwmi",
+        "limit": 1
+      }, function (data) {
+        console.log(data);
+      });
+
 
     }
   });

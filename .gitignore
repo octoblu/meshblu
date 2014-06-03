@@ -12,3 +12,6 @@ skynet.txt
 .DS_Store
 *.swp
 *.swo
+
+#NEDB files
+*.db

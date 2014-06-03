@@ -356,6 +356,15 @@ socket.emit('data', {"uuid":"b5535950-29fd-11e3-9113-0bd381f0b5ef", "token": "2l
 
 ```
 
+Request and receive an array of sensor data matching a specific criteria
+
+```js
+socket.emit('getdata', {"uuid":"b5535950-29fd-11e3-9113-0bd381f0b5ef", "token": "2ls40jx80s9bpgb9w2g0vi2li72v5cdi", "limit": 1}, function (data) {
+  console.log(data);
+});
+```
+
+
 Request and receive a message broadcast
 
 ```js

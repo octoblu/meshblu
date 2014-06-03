@@ -1,5 +1,4 @@
 module.exports = {
-  databaseUrl: "mongodb://user:pass@adam.mongohq.com:1337/skynet",
   port: 3000,
   //tls: {
   //  sslPort: 443,
@@ -7,6 +6,14 @@ module.exports = {
   //  key: "/certs/server.key"
   //},
   log: true,
+  databaseUrl: "mongodb://user:pass@adam.mongohq.com:1337/skynet",
+  // REDIS is optional. It's used for scaling session and sockets horizontally. Comment this section out if not desired.
+  redis: {
+    host: "xyz.redistogo.com",
+    port: "1234",
+    password: "abcdef"
+  },
+  // ElasticSearch is optional. It's used to analyze data. Comment this section out if not desired.
   elasticSearch: {
     host: "localhost",
     port: "9200"
@@ -26,11 +33,6 @@ module.exports = {
   urbanAirship: {
     key: "abc",
     secret: "123"
-  },
-  redis: {
-    host: "xyz.redistogo.com",
-    port: "1234",
-    password: "abcdef"
   },
   coap: {
     port: 5683,

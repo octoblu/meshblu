@@ -393,6 +393,7 @@ Event Codes
 * 500 = WhoAmI
 * 600 = Gateway Config API call
 * 700 = Write sensor data
+* 701 = Read sensor data
 
 FOLLOW US!
 ----------

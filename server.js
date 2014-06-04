@@ -196,6 +196,10 @@ function handleUpdate(fromDevice, data, fn){
 
 }
 
+function wrapMqttMessage(topic, data){
+  return JSON.stringify({topic: topic, data: data});
+}
+
 function sendMessage(fromDevice, data, fn){
   var fromUuid;
   if(fromDevice){
@@ -223,14 +227,11 @@ function sendMessage(fromDevice, data, fn){
     if(devices == "all" || devices == "*"){
 
       if(fromUuid){
-        io.sockets.in(fromUuid).emit('message', data);
         io.sockets.in(fromUuid + '_bc').emit('message', data);
         if(config.tls){
-          ios.sockets.in(fromUuid).emit('message', data);
           ios.sockets.in(fromUuid + '_bc').emit('message', data);
         }
-        mqttclient.publish(fromUuid, JSON.stringify(data), {qos:qos});
-        mqttclient.publish(fromUuid + '_bc', JSON.stringify(data), {qos:qos});
+        mqttclient.publish(fromUuid + '_bc', wrapMqttMessage('message', data), {qos:qos});
       }
 
       logEvent(300, data);
@@ -355,24 +356,28 @@ if(config.tls){
 
 
 var qos = 0;
-var mqttsettings = {
-  keepalive: 1000, // seconds
-  protocolId: 'MQIsdp',
-  protocolVersion: 3,
-  clientId: 'skynet'
-};
+
 
 // create mqtt connection
 try {
   // var mqttclient = mqtt.createClient(1883, 'mqtt.skynet.im', mqttsettings);
   var mqttConfig = config.mqtt || {};
+  var mqttsettings = {
+    keepalive: 1000, // seconds
+    protocolId: 'MQIsdp',
+    protocolVersion: 3,
+    clientId: 'skynet',
+    username: 'skynet',
+    password: mqttConfig.skynetPass
+  };
+  //console.log('attempting mqtt connection', mqttsettings);
   var mqttclient = mqtt.createClient(mqttConfig.port || 1883, mqttConfig.host || 'localhost', mqttsettings);
   // var mqttclient = mqtt.createClient(1883, '127.0.0.1', mqttsettings);
   console.log('Skynet connected to MQTT broker');
 
   setupMqttClient(skynet, mqttclient);
 } catch(err){
-  console.log('No MQTT server found.');
+  console.log('No MQTT server found.', err);
 }
 
 

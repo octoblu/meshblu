@@ -40,5 +40,11 @@ module.exports = {
   coap: {
     port: 5683,
     host: "localhost"
+  },
+  //these settings are for the mqtt server, and skynet mqtt client
+  mqtt: {
+    databaseUrl: "mongodb://user:pass@adam.mongohq.com:1337/skynet",
+    port: 1883,
+    skynetPass: "Very big random password 34lkj23orfjvi3-94ufpvuha4wuef-a09v4ji0rhgouj"
   }
 };

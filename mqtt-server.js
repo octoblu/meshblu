@@ -1,18 +1,22 @@
 'use strict';
 var mosca = require('mosca');
+var _ = require('lodash');
 var config = require('./config');
 var updateSocketId = require('./lib/updateSocketId');
 
 var server;
 
 config.mqtt = config.mqtt || {};
+var dataStore;
+if(config.mqtt.databaseUrl){
+  dataStore = {
+    type: 'mongo',
+    url: config.mqtt.databaseUrl,
+    pubsubCollection: 'mqtt',
+    mongo: {}
+  };
+}
 
-var dataStore = {
-  type: 'mongo',
-  url: config.mqtt.databaseUrl,
-  pubsubCollection: 'mqtt',
-  mongo: {}
-};
 
 var dataLogger = {
     level: 'debug'
@@ -20,9 +24,11 @@ var dataLogger = {
 
 var settings = {
   port: config.mqtt.port || 1883,
-  backend: dataStore,
+  backend: dataStore || {},
   logger: dataLogger
 };
+
+var skynetTopics = ['message', 'update', 'data', 'skynet'];
 
 function endsWith(str, suffix) {
   return str.indexOf(suffix, str.length - suffix.length) !== -1;
@@ -77,6 +83,8 @@ function authenticate(client, username, password, callback) {
 // the username from the topic and verifing it is the same of the authorized user
 function authorizePublish(client, topic, payload, callback) {
 
+  console.log('authorizePublish', topic, 'typeof:', typeof payload, 'payload:', payload, payload.toString());
+
   function reject(){
     callback('unauthorized');
     console.log('\nunauthorized Publish', topic, client.id);
@@ -86,15 +94,14 @@ function authorizePublish(client, topic, payload, callback) {
   if(client.skynetDevice){
     if(client.skynetDevice.uuid === 'skynet'){
       callback(null, true);
-    }else if(topic === 'skynet'){
+    }else if(_.contains(skynetTopics, topic)){
       try{
         var payloadObj = JSON.parse(payload.toString());
-        if(payloadObj.fromUuid === client.skynetDevice.uuid){
-          callback(null, true);
-          console.log('\nauthorized Publish', topic, client.id);
-        }else{
-          reject();
-        }
+        console.log('pre publish', payloadObj);
+        payloadObj.fromUuid = client.skynetDevice.uuid;
+        callback(null, new Buffer(JSON.stringify(payloadObj)));
+        console.log('\nauthorized Publish', topic, client.id, payloadObj);
+
       }catch(err){
         reject();
       }

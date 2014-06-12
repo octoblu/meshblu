@@ -44,7 +44,7 @@ Roadmap
 * Phase 2 - Connect all of the thingz.
 * Phase 3 - Become self-aware!
 
-Installing
+Installing/Running SkyNet private cloud
 ----------
 
 Clone the git repository, then:
@@ -98,7 +98,10 @@ You may also run something like [forever](https://www.npmjs.org/package/forever)
 $ forever start server.js
 ```
 
-If you would like to run our MQTT broker with your private SkyNet cloud, open another console tab and run:
+MQTT Broker
+-----------
+
+MQTT is an optional SkyNet protocol.  If you would like to run our MQTT broker with your private SkyNet cloud, open another console tab and run:
 
 ```bash
 $ node mqtt-server.js

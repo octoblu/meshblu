@@ -4,7 +4,7 @@
   </a>
 </p>
 
-OPEN MQTT & COAP COMMUNICATIONS NETWORK & API FOR THE INTERNET OF THINGS (IoT)!
+OPEN HTTP, WebSocket, MQTT, & COAP COMMUNICATIONS NETWORK & API FOR THE INTERNET OF THINGS (IoT)!
 
 Visit [SKYNET.im](http://skynet.im) for up-to-the-latest documentation and screencasts.
 
@@ -13,15 +13,16 @@ Visit [SKYNET.im](http://skynet.im) for up-to-the-latest documentation and scree
 Introduction
 ------------
 
-SkyNet is an open source machine-to-machine instant messaging network and API. Our API supports both HTTP REST and realtime Web Sockets via RPC (remote procedure calls).  We also bridge [MQTT](http://mqtt.org) and [CoAP](http://en.wikipedia.org/wiki/Constrained_Application_Protocol) communications across our HTTP and Web Socket device channels.  
+SkyNet is an open source machine-to-machine instant messaging network and API. Our API is available on HTTP REST, realtime Web Sockets via RPC (remote procedure calls), [MQTT](http://mqtt.org), and [CoAP](http://en.wikipedia.org/wiki/Constrained_Application_Protocol).  We also seamlessly bridge all of these protocols. For instance, an MQTT device can communicate with any CoAP or HTTP or WebSocket connected device on SkyNet.  
 
-SkyNet auto-assigns 36 character UUIDs and secret tokens to each registered device connected to the network. These device credentials are used to authenticate with SkyNet and maintain your device's JSON description in our device directory.  
+SkyNet auto-assigns 36 character UUIDs and 32 character secret tokens to each registered device connected to the network. These device "credentials" are used to authenticate with SkyNet and maintain your device's JSON description in the device directory.  
 
-SkyNet allows you to query devices such as drones, hue light bulbs, weemos, arduinos, and server nodes that meet your criteria and send IM messages to 1 or all devices.
-
-SkyNet includes a Node.JS NPM module called [SkyNet](http://skynet.im/#npm) and a [SkyNet.js](http://skynet.im/#javascript) file for simplifying Node.JS and mobile/client-side connectivity to SkyNet.
+SkyNet allows you to discover/query devices such as drones, hue light bulbs, weemos, insteons, raspberry pis, arduinos, server nodes, etc. that meet your criteria and send IM messages to 1 or all devices.
 
 You can also subscribe to messages being sent to/from devices and their sensor activities.
+
+SkyNet offers a Node.JS NPM module called [SkyNet](http://skynet.im/#npm) and a [SkyNet.js](http://skynet.im/#javascript) file for simplifying Node.JS and mobile/client-side connectivity to SkyNet.
+
 
 Press
 -----
@@ -53,18 +54,37 @@ $ npm install
 $ cp config.js.sample config.js
 ```
 
+[SKYNET.im](http://skynet.im) uses Mongo, Redis, ElasticSearch, and Splunk; however, we have made this infrastructure optional for you.  SkyNet falls back to file system and memory storage if these services are not configured allowing you to deploy a private SkyNet cloud to a Raspberry Pi or other mini-computer!
+
+If you want to include these services for a scalable infrastructure, you can make the following changes to your `config.js` file.
+
 Modify `config.js` with your MongoDB connection string. If you have MongoDB running locally use:
 
 ```
-mongodb://localhost:27017/skynet
+mongo: {
+  databaseUrl: mongodb://localhost:27017/skynet
+},
 ```
 
-You must also modify `config.js` with your Redis connection information. If you have Redis running locally use:
+You can also modify `config.js` with your Redis connection information. If you have Redis running locally use:
 
 ```
-redisHost: "127.0.0.1",
-redisPort: "6379"
+redis: {
+  host: "127.0.0.1",
+  port: "6379",
+  password: "abcdef"
+},
 ```
+
+You can also modify `config.js` with your ElasticSearch connection information. If you have ES running locally use:
+
+```
+elasticSearch: {
+  host: "localhost",
+  port: "9200"
+},
+```
+
 
 Start the server use:
 
@@ -72,7 +92,13 @@ Start the server use:
 $ node server.js
 ```
 
-Installing with Docker
+You may also run something like [forever](https://www.npmjs.org/package/forever) to keep it up and running:
+
+```bash
+$ forever start server.js
+```
+
+Installing SkyNet with Docker
 
 The default Dockerfile will run Skynet, MongoDB and Redis in a single container to make quick experiments easier.
 
@@ -81,13 +107,13 @@ You'll need docker installed, then to build the Skynet image:
 From the directory where the Dockerfile resides run.
 
 ```
-# docker build -t=skynet .
+$ docker build -t=skynet .
 ```
 
 To run a fully self contained instance using the source bundled in the container.
 
 ```
-# docker run -i -t -p 3000 skynet
+$ docker run -i -t -p 3000 skynet
 ```
 
 This will run skynet and expose port 3000 from the container on a random host port that you can find by running docker ps.
@@ -95,20 +121,20 @@ This will run skynet and expose port 3000 from the container on a random host po
 If you want to do development and run without rebuilding the image you can bind mount your source directory including node_modules onto the container. This example also binds a directory to hold the log of stdout & stderr from the Skynet node process.
 
 ```
-# docker run -d -p 3000 --name=skynet_dev -v /path/to/your/skynet:/var/www -v /path/to/your/logs:/var/log/skynet skynet
+$ docker run -d -p 3000 --name=skynet_dev -v /path/to/your/skynet:/var/www -v /path/to/your/logs:/var/log/skynet skynet
 ```
 
 If you change the code restarting the container is as easy as:
 
 ```
-# docker restart skynet_dev
+$ docker restart skynet_dev
 ```
 
 NodeBlu SkyNet Developer Toolkit
 --------------------------------
-Play with SkyNet.im IoT platform in Chrome! NodeBlu helps you experiment with the Octoblu and SkyNet.im Internet of Things platforms by dragging, dropping, and wiring up various nodes connected to SkyNet!
+Play with [SKYNET.im](http://skynet.im) IoT platform in Chrome! [NodeBLU](https://chrome.google.com/webstore/detail/nodeblu/aanmmiaepnlibdlobmbhmfemjioahilm) helps you experiment with the [Octoblu](http://octoblu.com) and [SKYNET.im](http://skynet.im) Internet of Things platforms by dragging, dropping, and wiring up various nodes connected to SkyNet!
 
-NodeBlu is Octoblu's fork of the popular [NodeRed](https://github.com/node-red/node-red) application from IBM.  Since our app is deployed as a Chrome extension, we decided to add extra local features such as speech recognition and text-to-speech, a WebRTC webcam, HTML5 notifications, access to ChromeDB, a gamepad controller, and access to local and remote Arduino and Spark devices via our SkyNet OS.
+NodeBLU is Octoblu's fork of the popular [NodeRed](https://github.com/node-red/node-red) application from IBM.  Since our app is deployed as a Chrome extension, we decided to add extra local features such as speech recognition and text-to-speech, a WebRTC webcam, HTML5 notifications, access to ChromeDB, a gamepad controller, and access to local and remote Arduino and Spark devices via our SkyNet OS.
 
 <p align="center">
   <a href="https://chrome.google.com/webstore/detail/nodeblu/aanmmiaepnlibdlobmbhmfemjioahilm">
@@ -120,9 +146,9 @@ NodeBlu is Octoblu's fork of the popular [NodeRed](https://github.com/node-red/n
 HTTP(S) REST API
 ----------------
 
-Most of our API endpoints require authentication credentials (UUID and secret token) passed in the HTTP headers as skynet_auth_uuid and skynet_auth_token respectively. These credentials are generated by registering a device or user with SkyNet via the POST /Devices API (see below). If you would like to associate additional SkyNet devices to the UUID and Token that you created (as a user), you can add an "owner" property to your other devices with the user's UUID as its value.
+Most of our API endpoints require authentication credentials (UUID and secret token) passed in the HTTP headers as skynet_auth_uuid and skynet_auth_token respectively. These credentials are generated by registering a device or user with SkyNet via the POST /Devices API (see below). If you would like to associate additional SkyNet devices with the UUID and Token that you created (as a user), you can add an "owner" property to your other devices with the user's UUID as its value; otherwise, you can use the device's UUID and token in the headers to control the device itself.
 
-We support the following device permissions: View/Discover, Send Messages, and Configure. These permissions are manageable by adding UUIDs to whitelists and blacklists arrays with the following names: viewWhitelist, viewBlacklist, sendWhitelist, sendBlacklist, updateWhitelist, updateBlacklist. Note: If your UUID is the same as the "owner" UUID, these permissions are not enforced (you are the owner).
+We support the following device permissions: View/Discover, Send Messages, Read Messages (subscribe) and Update. These permissions are manageable by adding UUIDs to whitelists and blacklists arrays with the following names: viewWhitelist, viewBlacklist, sendWhitelist, sendBlacklist, readWhitelist, readBlacklist, updateWhitelist, updateBlacklist. Note: If your UUID is the same as the "owner" UUID, these permissions are not enforced (you are the owner).
 
 GET /status
 
@@ -380,8 +406,72 @@ socket.emit('message', {"devices": ["b5535950-29fd-11e3-9113-0bd381f0b5ef", "ad6
 
 Websocket API commands include: status, register, unregister, update, whoami, devices, subscribe, unsubscribe, authenticate, and message. You can send a message to a specific UUID or an array of UUIDs or all nodes on SkyNet.
 
+MQTT API
+--------
+
+Our MQTT API works similar to our WebSocket API. In fact, we have a [skynet-mqtt](https://www.npmjs.org/package/skynet-mqtt) NPM module for to simplify client-side MQTT connects with SkyNet.
+
+```bash
+$ npm install skynet-mqtt
+```
+
+Here are a few examples:
+
+
+```javascript
+var skynet = require('skynet-mqtt');
+
+var conn = skynet.createConnection({
+  "uuid": "xxxxxxxxxxxx-My-UUID-xxxxxxxxxxxxxx",
+  "token": "xxxxxxx-My-Token-xxxxxxxxx",
+  "qos": 0, // MQTT Quality of Service (0=no confirmation, 1=confirmation, 2=N/A)
+  "host": "localhost", // optional - defaults to skynet.im
+  "port": 1883  // optional - defaults to 1883
+});
+
+conn.on('ready', function(){
+
+  console.log('UUID AUTHENTICATED!');
+
+  //Listen for messages
+  conn.on('message', function(message){
+    console.log('message received', message);
+  });
+
+
+  // Send a message to another device
+  conn.message({
+    "devices": "xxxxxxx-some-other-uuid-xxxxxxxxx",
+    "payload": {
+      "skynet":"online"
+    }
+  });
+
+
+  // Broadcast a message to any subscribers to your uuid
+  conn.message({
+    "devices": "*",
+    "payload": {
+      "hello":"skynet"
+    }
+  });
+
+
+  // Subscribe to broadcasts from another device
+  conn.subscribe('xxxxxxx-some-other-uuid-xxxxxxxxx');
+
+
+  // Log sensor data to skynet
+  conn.data({temperature: 75, windspeed: 10});
+
+});
+
+```
+
 Event Codes
 -----------
+
+If `log: true` in config.js, all transactions are logged to skynet.txt.  Here are the event codes associated with SkyNet transactions.
 
 * 100 = Web socket connected
 * 101 = Web socket identification

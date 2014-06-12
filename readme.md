@@ -98,7 +98,21 @@ You may also run something like [forever](https://www.npmjs.org/package/forever)
 $ forever start server.js
 ```
 
-Installing SkyNet with Docker
+If you would like to run our MQTT broker with your private SkyNet cloud, open another console tab and run:
+
+```bash
+$ node mqtt-server.js
+```
+
+ or using forever
+
+ ```bash
+ $ forever start mqtt-server.js
+ ```
+
+
+Docker
+------
 
 The default Dockerfile will run Skynet, MongoDB and Redis in a single container to make quick experiments easier.
 

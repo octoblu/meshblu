@@ -4,7 +4,7 @@
   </a>
 </p>
 
-OPEN HTTP, WebSocket, MQTT, & COAP COMMUNICATIONS NETWORK & API FOR THE INTERNET OF THINGS (IoT)!
+OPEN HTTP, WebSocket, MQTT, & CoAP COMMUNICATIONS NETWORK & API FOR THE INTERNET OF THINGS (IoT)!
 
 Visit [SKYNET.im](http://skynet.im) for up-to-the-latest documentation and screencasts.
 
@@ -159,6 +159,19 @@ NodeBLU is Octoblu's fork of the popular [NodeRed](https://github.com/node-red/n
   </a>
 </p>
 
+SkyNet Hub
+----------
+
+We have an open source SkyNet Hub also available on [GitHub](https://github.com/skynetim/hub).  Our Hub allows you to connect devices with or *without* IP addresses to SkyNet and communicate bi-directionally!  The Hub uses WebSockets to connect to SkyNet so it can traverse NAT firewalls and send/receive messages to/from SkyNet.
+
+The SkyNet Hub has an extensible [plugin](https://github.com/skynetim/hub/blob/master/plugins.md) architecture allowing you to create plugins for devices that we have not had a chance to connect yet.  You can search [NPMJS.org](https://www.npmjs.org/search?q=skynet-plugin) for a list of active SkyNet Hub plugins.
+
+SkyNet Operating System
+-----------------------
+
+As in [Terminator - (video)](https://www.youtube.com/watch?v=Ky7K3Je-NBo), SkyNet includes a micro-controller operating system that is compatible with [Arduino](http://www.arduino.cc/), [Spark](https://www.spark.io/), [Pinoccio](https://pinocc.io/), and [Tessel](https://tessel.io/)!  The OS is available on [GitHub](https://github.com/skynetim/skynet_firmware_arduino) and comes with firmata built-in.
+
+On power-on, the SkyNet OS connects to SkyNet, obtains a UUID, and awaits instructions! You can message the micro-controller to turn on/off pins and servos as well as request streaming analog sensor data from various pins.
 
 HTTP(S) REST API
 ----------------

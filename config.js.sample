@@ -21,6 +21,13 @@ module.exports = {
     host: "localhost",
     port: "9200"
   },
+  // if you want to resolve message up to another skynet server:
+  parentConnection: {
+    uuid: 'xxxx-my-uuid-on-parent-server-xxxx',
+    token: 'xxx ---  my token ---- xxxx',
+    server: 'skynet.im',
+    port: 80
+  },
   rateLimits: {
     message: 10, // 10 transactions per user per second
     data: 10, // 10 transactions per user per second

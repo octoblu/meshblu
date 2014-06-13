@@ -7,8 +7,9 @@ var tokenthrottle = require("tokenthrottle");
 var restify = require('restify');
 var socketio = require('socket.io');
 var mqtt = require('mqtt');
+var skynetClient = require('skynet'); //skynet npm client
 
-var config = require('./config');
+var config = require(process.env.SKYNET_CONFIG || './config');
 var securityImpl = require('./lib/getSecurityImpl');
 
 
@@ -23,6 +24,29 @@ var socketLogic = require('./lib/socketLogic');
 
 var fs = require('fs');
 var setupGatewayConfig = require('./lib/setupGatewayConfig');
+
+var parentConnection;
+
+if(config.parentConnection){
+  //console.log('logging into parent cloud', config.parentConnection, skynetClient);
+  parentConnection = skynetClient.createConnection(config.parentConnection);
+  parentConnection.on('notReady', function(data){
+    console.log('Failed authenitication to parent cloud', data);
+  });
+
+  parentConnection.on('ready', function(data){
+    console.log('UUID authenticated for parent cloud connection.', data);
+  });
+
+  parentConnection.on('message', function(data, fn){
+    if(data){
+      console.log('on message', data);
+      if(!Array.isArray(data.devices) && data.devices != config.parentConnection.uuid){
+        sendMessage({uuid: data.fromUuid}, data, fn);
+      }
+    }
+  });
+}
 
 // sudo NODE_ENV=production forever start server.js --environment production
 app
@@ -200,6 +224,16 @@ function wrapMqttMessage(topic, data){
   return JSON.stringify({topic: topic, data: data});
 }
 
+function forwardMessage(message, fn){
+  if(parentConnection){
+    try{
+      parentConnection.message(message, fn);
+    }catch(ex){
+      console.log('error forwarding message', ex);
+    }
+  }
+}
+
 function sendMessage(fromDevice, data, fn){
   var fromUuid;
   if(fromDevice){
@@ -245,12 +279,18 @@ function sendMessage(fromDevice, data, fn){
         }
 
         devices.forEach( function(device) {
-
+          var toDeviceProp = device;
           if (device.length > 35){
+
+            var deviceArray = device.split('/');
+            if(deviceArray.length > 1){
+              device = deviceArray.shift();
+              toDeviceProp = deviceArray.join('/');
+            }
 
             //check devices are valid
             whoAmI(device, false, function(check){
-              var clonedMsg = cloneMessage(data, device, fromUuid);
+              var clonedMsg = cloneMessage(data, toDeviceProp, fromUuid);
               console.log('device check:', check);
               if(!check.error){
                 if(securityImpl.canSend(fromDevice, check)){
@@ -296,6 +336,8 @@ function sendMessage(fromDevice, data, fn){
               }else{
                 clonedMsg.INVALID_DEVICE=true; //for logging
                 console.log('send attempt on invalid device from', fromUuid, 'to', device);
+                //forward the message upward the tree
+                forwardMessage(cloneMessage, fn);
               }
 
               var logMsg = _.clone(clonedMsg);

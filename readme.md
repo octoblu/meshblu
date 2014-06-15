@@ -85,6 +85,16 @@ elasticSearch: {
 },
 ```
 
+If you would like to connect your private SkyNet cloud to [SKYNET.im](http://skynet.im) or another private SkyNet cloud, register a UUID on the parent cloud using the POST /Devices REST API and add the following section to your config.js file:
+
+```
+parentConnection: {
+  uuid: 'xxxx-my-uuid-on-parent-server-xxxx',
+  token: 'xxx ---  my token ---- xxxx',
+  server: 'skynet.im',
+  port: 80
+},
+```
 
 Start the server use:
 
@@ -272,6 +282,12 @@ curl -X POST -d '{"devices": ["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2
 curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": {"yellow":"off"}}' "http://localhost:3000/messages" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => {"devices":"ad698900-2546-11e3-87fb-c560cb0ca47b","message":{"yellow":"off"},"timestamp":1380930482043,"eventCode":300}
+```
+
+Note: If your SkyNet cloud is connected to SKYNET.im or other private SkyNet clouds, you can send messages across SkyNet clouds by chaining UUIDs together separated by slashes (/).
+
+```
+curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b/2f3113d0-2796-11e3-95ef-e3081976e170", "message": {"yellow":"off"}}' "http://localhost:3000/messages" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 ```
 
 GET /events/uuid?token=token

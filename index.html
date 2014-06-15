@@ -447,7 +447,10 @@
                 <pre>curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "payload": {"yellow":"off"}}' http://skynet.im/messages --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</pre>
 
                 <pre>{"devices":"*","payload":{"yellow":"off"}}</pre>
-                <!-- <pre>{"devices":"all","message":{"yellow":"off"}</pre> -->
+                <br />
+                Note: If your SkyNet cloud is connected to SKYNET.im or other private SkyNet clouds, you can send messages across SkyNet clouds by chaining UUIDs together separated by slashes (/) where the first UUID is the target cloud and the second UUID is the device on that cloud.
+                <br />
+                <pre>curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b/2f3113d0-2796-11e3-95ef-e3081976e170", "message": {"yellow":"off"}}' "http://localhost:3000/messages" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</pre>
               </div>
               </td></tr></table>
             </div>

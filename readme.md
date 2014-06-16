@@ -85,7 +85,7 @@ elasticSearch: {
 },
 ```
 
-If you would like to connect your private SkyNet cloud to [SKYNET.im](http://skynet.im) or another private SkyNet cloud, register a UUID on the parent cloud using the POST /Devices REST API and add the following section to your config.js file:
+If you would like to connect your private SkyNet cloud to [SKYNET.im](http://skynet.im) or another private SkyNet cloud, register a UUID on the parent cloud (i.e. skynet.im) using the POST /Devices REST API and then add the returned UUID and token to the following section to your private cloud's config.js file:
 
 ```
 parentConnection: {
@@ -123,6 +123,14 @@ $ node mqtt-server.js
  $ forever start mqtt-server.js
  ```
 
+Note: Our MQTT Broker defaults to using Mongo; however, you can run it in memory by removing the databaseUrl from the config.js.
+
+```
+mqtt: {
+  port: 1883,
+  skynetPass: "Very big random password 34lkj23orfjvi3-94ufpvuha4wuef-a09v4ji0rhgouj"
+}
+```
 
 Docker
 ------
@@ -524,8 +532,6 @@ If `log: true` in config.js, all transactions are logged to skynet.txt.  Here ar
 * 102 = Authenticate
 * 200 = System status API call
 * 201 = Get events
-* 202 =
-* 203 =
 * 204 = Subscribe
 * 205 = Unsubscribe
 * 300 = Incoming message

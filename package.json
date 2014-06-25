@@ -21,20 +21,17 @@
     "node-static": "*",
     "node-uuid": "*",
     "qs": "^0.6.6",
-    "redis": "~0.10.1",
+    "redis": "~0.10.3",
     "request": "*",
     "restify": "*",
     "skynet": "0.0.36",
-    "socket.io": "0.9.16",
+    "socket.io": "1.0.6",
     "tokenthrottle": "*",
     "when": "^3.1.0"
   },
   "subdomain": "skynet",
   "domains": [
-    "e2e.io",
-    "skynet.im",
-    "skynetim.com",
-    "meshines.com"
+    "skynet.im"
   ],
   "scripts": {
     "start": "node server.js"

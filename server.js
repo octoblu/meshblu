@@ -112,15 +112,16 @@ if(config.tls){
 
 // Setup websockets
 var io, ios;
-io = socketio.listen(server);
+io = socketio(server);
 if(config.redis){
-  io.configure(function() {
-    return io.set("store", redis.createIoStore());
-  });
+  // io.configure(function() {
+  //   return io.set("store", redis.createIoStore());
+  // });
+  io.set("store", redis.createIoStore());
 }
 
 if(config.tls){
-  ios = socketio.listen(https_server);
+  ios = socketio(https_server);
 
   // TODO: Figure out why secure socket.io doesn't log to REDIS
   // if(config.redis){
@@ -366,8 +367,12 @@ var skynet = {
 };
 
 function checkConnection(socket, secure){
-  var ip = socket.handshake.address.address;
-  //console.log(ip);
+  console.log(socket);
+  // var ip = socket.handshake.address.address;
+  var ip = socket.handshake.address;
+  // var ip = socket.request.connection.remoteAddress
+  // console.log(ip);
+  
   if(_.contains(throttles.unthrottledIps, ip)){
     socketLogic(socket, secure, skynet);
   }else{
@@ -386,12 +391,12 @@ function checkConnection(socket, secure){
 
 
 
-io.sockets.on('connection', function (socket) {
+io.on('connection', function (socket) {
   checkConnection(socket, false);
 });
 
 if(config.tls){
-  ios.sockets.on('connection', function (socket) {
+  ios.on('connection', function (socket) {
     checkConnection(socket, true);
   });
 }

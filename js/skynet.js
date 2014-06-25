@@ -23,9 +23,11 @@ function skynet (config, cb) {
 
   var authenticate = function() {
 
-      var socket = io.connect(config.host || "http://skynet.im", {
-          port: config.port || 80
-      });
+      var network;
+      if(config.host && config.port){
+        network = config.host + ":" + config.port
+      }
+      var socket = io(network || "http://skynet.im");
 
       socket.on('connect', function(){
         console.log('Requesting websocket connection to Skynet');
@@ -42,7 +44,7 @@ function skynet (config, cb) {
         });
 
         socket.on('notReady', function(data){
-          cb(new Error('Authentication Error'), socket);
+          cb(new Error('Authentication Error'));
         });
         socket.on('ready', function(data){
           // cb(null, socket);
@@ -53,5 +55,7 @@ function skynet (config, cb) {
 
   };
 
-  loadScript("//skynet.im/socket.io/socket.io.js", authenticate);
+  // // loadScript("http://skynet.im/socket.io/socket.io.js", authenticate);
+  loadScript("https://skynet.im/socket.io/socket.io.js", authenticate);
+  // loadScript("http://localhost:3000/socket.io/socket.io.js", authenticate);
 };

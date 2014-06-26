@@ -25,6 +25,9 @@ function skynet (config, cb) {
 
       var network;
       if(config.host && config.port){
+        if(config.host.indexOf("http") == -1 && config.host.indexOf("ws") == -1){
+          config.host = "ws://" + config.host;
+        }
         network = config.host + ":" + config.port;
       }
       var socket = io(network || "http://skynet.im");

@@ -113,22 +113,17 @@ if(config.tls){
 // Setup websockets
 var io, ios;
 io = socketio(server);
+var redisStore;
 if(config.redis){
-  // io.configure(function() {
-  //   return io.set("store", redis.createIoStore());
-  // });
-  io.set("store", redis.createIoStore());
+  redisStore = redis.createIoStore();
+  io.adapter(redisStore);
 }
 
 if(config.tls){
   ios = socketio(https_server);
-
-  // TODO: Figure out why secure socket.io doesn't log to REDIS
-  // if(config.redis){
-    // ios.configure(function() {
-    //   return ios.set("store", redis.createIoStore());
-    // });
-  // };
+  if(config.redis){
+    io.adapter(redisStore);
+  }
 }
 
 restify.CORS.ALLOW_HEADERS.push('skynet_auth_uuid');
@@ -372,7 +367,7 @@ function checkConnection(socket, secure){
   var ip = socket.handshake.address;
   // var ip = socket.request.connection.remoteAddress
   // console.log(ip);
-  
+
   if(_.contains(throttles.unthrottledIps, ip)){
     socketLogic(socket, secure, skynet);
   }else{
@@ -455,7 +450,7 @@ coapServer.on('request', coapRouter.process);
 setupRestfulRoutes(server, skynet);
 
 if(config.tls){
-  setupRestfulRoutes(https_server);
+  setupRestfulRoutes(https_server, skynet);
 }
 
 console.log("\n SSSSS  kk                            tt    ");

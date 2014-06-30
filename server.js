@@ -291,8 +291,9 @@ function sendMessage(fromDevice, data, fn){
               if(!check.error){
                 if(securityImpl.canSend(fromDevice, check)){
 
-                  //to phone, but not from same phone
-                  if(check.phoneNumber && (clonedMsg.fromPhone !== check.phoneNumber)){
+                  // //to phone, but not from same phone
+                  // if(check.phoneNumber && (clonedMsg.fromPhone !== check.phoneNumber)){
+                  if(check.phoneNumber && check.type == "outboundSMS")){
                     // SMS handler
                     console.log("Sending SMS to", check.phoneNumber);
                     require('./lib/sendSms')(device, JSON.stringify(clonedMsg.payload), function(sms){

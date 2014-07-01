@@ -172,7 +172,8 @@ function sendToSocket(device, msg, callback){
 
   if(socketServer){
     if(callback){
-      socketServer.sockets.socket(device.socketid).emit('message', msg, function(results){
+      //TODO acks should be done on clients - this doesnt work in cluster
+      socketServer.sockets.connected[device.socketid].emit('message', msg, function(results){
         console.log('results', results);
         try{
           callback(results);
@@ -362,7 +363,7 @@ var skynet = {
 };
 
 function checkConnection(socket, secure){
-  console.log(socket);
+  //console.log(socket);
   // var ip = socket.handshake.address.address;
   var ip = socket.handshake.address;
   // var ip = socket.request.connection.remoteAddress

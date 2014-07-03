@@ -354,9 +354,19 @@ function sendMessage(fromDevice, data, fn){
 
 }
 
+
+function sendActivity(data, fn){
+  console.log("SENDING ACTIVITY DATA");
+  var activityMessage = {}
+  activityMessage.devices = "*";
+  activityMessage.payload = data;
+  sendMessage({uuid: config.uuid}, activityMessage, fn);
+}
+
 var skynet = {
   handleUpdate: handleUpdate,
   sendMessage: sendMessage,
+  sendActivity: sendActivity,
   gatewayConfig : setupGatewayConfig(io, ios),
   throttles: throttles,
   io: io,

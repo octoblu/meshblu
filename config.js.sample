@@ -21,10 +21,14 @@ module.exports = {
     host: "localhost",
     port: "9200"
   },
+  // this skynet cloud's uuid
+  uuid: 'xxxx-my-cloud's-uuid-xxxx',
+  token: 'xxx ---  my token ---- xxxx',
+  broadcastActivity: false,  
   // if you want to resolve message up to another skynet server:
   parentConnection: {
     uuid: 'xxxx-my-uuid-on-parent-server-xxxx',
-    token: 'xxx ---  my token ---- xxxx',
+    token: 'xxx-my-token-on-parent-server-xxxx',
     server: 'skynet.im',
     port: 80
   },

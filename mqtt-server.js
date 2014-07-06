@@ -1,10 +1,21 @@
 'use strict';
 var mosca = require('mosca');
 var _ = require('lodash');
+
 var config = require('./config');
+var redis = require('./lib/redis');
+var whoAmI = require('./lib/whoAmI');
 var updateSocketId = require('./lib/updateSocketId');
+var sendMessageCreator = require('./lib/sendMessage');
+var wrapMqttMessage = require('./lib/wrapMqttMessage');
+var securityImpl = require('./lib/getSecurityImpl');
+var updateFromClient = require('./lib/updateFromClient');
 
 var server;
+var io;
+if(config.redis){
+  io = require('socket.io-emitter')(redis.client);
+}
 
 config.mqtt = config.mqtt || {};
 var dataStore;
@@ -28,7 +39,7 @@ var settings = {
   logger: dataLogger
 };
 
-var skynetTopics = ['message', 'update', 'data', 'skynet'];
+var skynetTopics = ['message', 'messageAck', 'update', 'data', 'gatewayConfig', 'whoami'];
 
 function endsWith(str, suffix) {
   return str.indexOf(suffix, str.length - suffix.length) !== -1;
@@ -38,9 +49,67 @@ process.on("uncaughtException", function(error) {
   return console.log(error.stack);
 });
 
+
+function socketEmitter(uuid, topic, data){
+  if(io){
+    io.in(uuid).emit(topic, data);
+  }
+}
+
+function mqttEmitter(uuid, wrappedData, options){
+  options = options || {};
+  var message = {
+    topic: uuid,
+    payload: wrappedData, // or a Buffer
+    qos: options.qos || 0, // 0, 1, or 2
+    retain: false // or true
+  };
+
+  server.publish(message, function() {
+    //console.log('done!');
+  });
+
+}
+
+function emitToClient(topic, device, msg){
+  console.log('emtting to client', topic, device, msg);
+  if(device.protocol === "mqtt"){
+    // MQTT handler
+    console.log('sending mqtt', device);
+    mqttEmitter(device.uuid, wrapMqttMessage(topic, msg), {qos: msg.qos || 0});
+  }
+  else{
+    socketEmitter(device.uuid, topic, msg);
+  }
+
+}
+
+var sendMessage = sendMessageCreator(socketEmitter, mqttEmitter);
+
+function clientAck(fromDevice, data){
+  if(fromDevice && data && data.ack){
+    whoAmI(data.devices, false, function(check){
+      if(!check.error && securityImpl.canSend(fromDevice, check)){
+        emitToClient('messageAck', check, data);
+      }
+    });
+  }
+}
+
+function serverAck(fromDevice, ack, resp){
+  if(fromDevice && ack && resp){
+    var msg = {
+      ack: ack,
+      payload: resp,
+      qos: resp.qos
+    };
+    mqttEmitter(fromDevice.uuid, wrapMqttMessage('messageAck', msg), {qos: msg.qos || 0});
+  }
+}
+
 // Accepts the connection if the username and password are valid
 function authenticate(client, username, password, callback) {
-  console.log('authenticate username:', username.toString(),'password', password.toString(),'client.id:', client.id, client.clientId, client.client_id);
+  console.log('\nauthenticate username:', username.toString(),'password', password.toString(),'client.id:', client.id, client.clientId, client.client_id);
 
   if(username && username.toString() === 'skynet'){
     if(password && password.toString() === config.mqtt.skynetPass){
@@ -64,7 +133,7 @@ function authenticate(client, username, password, callback) {
 
 
     updateSocketId(data, function(auth){
-      if (auth.status == 201){
+      if (auth.status === 201){
           client.skynetDevice = auth.device;
           console.log('authenticated: ' + auth.device.uuid);
           callback(null, true);
@@ -83,7 +152,7 @@ function authenticate(client, username, password, callback) {
 // the username from the topic and verifing it is the same of the authorized user
 function authorizePublish(client, topic, payload, callback) {
 
-  console.log('authorizePublish', topic, 'typeof:', typeof payload, 'payload:', payload, payload.toString());
+  //console.log('authorizePublish', topic, 'typeof:', typeof payload, 'payload:', payload, payload.toString());
 
   function reject(){
     callback('unauthorized');
@@ -97,10 +166,10 @@ function authorizePublish(client, topic, payload, callback) {
     }else if(_.contains(skynetTopics, topic)){
       try{
         var payloadObj = JSON.parse(payload.toString());
-        console.log('pre publish', payloadObj);
+        //console.log('pre publish', payloadObj);
         payloadObj.fromUuid = client.skynetDevice.uuid;
         callback(null, new Buffer(JSON.stringify(payloadObj)));
-        console.log('\nauthorized Publish', topic, client.id, payloadObj);
+        //console.log('\nauthorized Publish', topic, client.id, payloadObj);
 
       }catch(err){
         reject();
@@ -122,7 +191,7 @@ function authorizeSubscribe(client, topic, callback) {
     (client.skynetDevice &&
       ((client.skynetDevice.uuid === 'skynet') || (client.skynetDevice.uuid === topic)))){
     callback(null, true);
-    console.log('authorized subscribe', topic, client.skynetDevice);
+    //console.log('authorized subscribe', topic, client.skynetDevice);
   }else{
     callback('unauthorized');
   }
@@ -131,7 +200,7 @@ function authorizeSubscribe(client, topic, callback) {
 
 // fired when the mqtt server is ready
 function setup() {
-  console.log('Skynet MQTT server started on port', config.port);
+  console.log('Skynet MQTT server started on port', config.mqtt.port);
   server.authenticate = authenticate;
   server.authorizePublish = authorizePublish;
   server.authorizeSubscribe = authorizeSubscribe;
@@ -143,7 +212,42 @@ server = new mosca.Server(settings);
 server.on('ready', setup);
 
 server.on('published', function(packet, client) {
-   //console.log('Published', packet, client);
+  //console.log('\nPublished payload:', packet.payload, ' topic:', packet.topic);
+  try{
+    var msg, ack;
+    if('message' === packet.topic){
+      sendMessage(client.skynetDevice, JSON.parse(packet.payload.toString()));
+    }
+    else if('messageAck' === packet.topic){
+      clientAck(client.skynetDevice, JSON.parse(packet.payload.toString()));
+    }
+    else if('update' === packet.topic){
+      msg = JSON.parse(packet.payload.toString());
+      if(msg.ack){
+        ack = msg.ack;
+        delete msg.ack;
+        updateFromClient(client.skynetDevice, msg, function(resp){
+          serverAck(client.skynetDevice, ack, resp);
+        });
+      }
+    }
+    else if('whoami' === packet.topic){
+      msg = JSON.parse(packet.payload.toString());
+      if(msg.ack){
+        ack = msg.ack;
+        delete msg.ack;
+        whoAmI(client.skynetDevice.uuid, true, function(resp){
+          serverAck(client.skynetDevice, ack, resp);
+        });
+      }
+    }
+
+    //var payload = JSON.parse(packet.payload.toString());
+    //console.log('payload', payload);
+  }catch(ex){
+    console.log('error publishing');
+  }
+
 });
 
 // fired when a client connects or disconnects

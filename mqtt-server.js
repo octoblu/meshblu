@@ -253,6 +253,7 @@ server.on('published', function(packet, client) {
 // fired when a client connects or disconnects
 server.on('clientConnected', function(client) {
   console.log('Client Connected:', client.id);
+  console.log('Client Connected:', client.connection.stream);
 });
 
 server.on('clientDisconnected', function(client) {

@@ -5,6 +5,7 @@ var _ = require('lodash');
 var config = require('./config');
 var redis = require('./lib/redis');
 var whoAmI = require('./lib/whoAmI');
+var logData = require('./lib/logData');
 var updateSocketId = require('./lib/updateSocketId');
 var sendMessageCreator = require('./lib/sendMessage');
 var wrapMqttMessage = require('./lib/wrapMqttMessage');
@@ -190,6 +191,7 @@ function authorizeSubscribe(client, topic, callback) {
   if(endsWith(topic, '_bc') ||
     (client.skynetDevice &&
       ((client.skynetDevice.uuid === 'skynet') || (client.skynetDevice.uuid === topic)))){
+    console.log('\n subscribed',client, topic);
     callback(null, true);
     //console.log('authorized subscribe', topic, client.skynetDevice);
   }else{
@@ -212,7 +214,7 @@ server = new mosca.Server(settings);
 server.on('ready', setup);
 
 server.on('published', function(packet, client) {
-  //console.log('\nPublished payload:', packet.payload, ' topic:', packet.topic);
+  console.log('\nPublished payload:', packet.payload, ' topic:', packet.topic);
   try{
     var msg, ack;
     if('message' === packet.topic){
@@ -240,6 +242,26 @@ server.on('published', function(packet, client) {
           serverAck(client.skynetDevice, ack, resp);
         });
       }
+    }
+    else if('data' === packet.topic){
+      msg = JSON.parse(packet.payload.toString());
+      delete msg.token;
+      msg.uuid = client.skynetDevice.uuid;
+
+      logData(msg, function(results){
+        console.log('data log', results);
+
+        // Send messsage regarding data update
+        var message = {};
+        message.payload = msg;
+        // message.devices = data.uuid;
+        message.devices = "*";
+
+        console.log('message: ' + JSON.stringify(message));
+
+        sendMessage(client.skynetDevice, message);
+
+      });
     }
 
     //var payload = JSON.parse(packet.payload.toString());

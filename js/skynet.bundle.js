@@ -24,6 +24,9 @@ function Connection(opt){
   this._ackId = 0;
 
   this.options = opt || {};
+  this.options.options = this.options.options || {};
+
+  this.options.options.transports = this.options.options.transports || {transports: ['websocket']};
   this.options.forceNew = (opt.forceNew != null) ? opt.forceNew : false;
 
   this.options.server = this.options.server || 'ws://skynet.im';
@@ -39,7 +42,7 @@ function Connection(opt){
   // }
   var network = this.options.server + ':' + this.options.port;
   console.log('trying', network);
-  this.socket = socketIoClient(network, {transports: ['websocket']}); // || "ws://skynet.im");
+  this.socket = socketIoClient(network, this.options.options); // || "ws://skynet.im");
 
   // this.socket = io.connect(this.options.server || "http://skynet.im", {
   //   port: this.options.port || 80,

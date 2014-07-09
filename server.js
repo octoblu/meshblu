@@ -247,7 +247,7 @@ function checkConnection(socket, secure){
 
 io.on('connection', function (socket) {
   checkConnection(socket, false);
-  var client = socket.conn.request;  
+  var client = socket.conn.request;
   console.log('CONNECTED', socket.handshake.address);
 });
 

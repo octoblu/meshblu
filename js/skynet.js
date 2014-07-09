@@ -1,7 +1,7 @@
 function skynet (config, cb) {
   if (!cb && typeof config === 'function') {
-    cb = config
-    config = {}
+    cb = config;
+    config = {};
   }
 
   function loadScript(url, callback)
@@ -42,8 +42,8 @@ function skynet (config, cb) {
           else socket.emit('register', config, function (ident) {
             config = ident
             socket.emit('identity', {uuid: config.uuid, socketid: data.socketid, token: config.token});
-            console.log(config)
-          })
+            console.log(config);
+          });
         });
 
         socket.on('notReady', function(data){

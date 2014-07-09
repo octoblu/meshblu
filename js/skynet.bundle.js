@@ -26,7 +26,7 @@ function Connection(opt){
   this.options = opt || {};
   this.options.options = this.options.options || {};
 
-  this.options.options.transports = this.options.options.transports || {transports: ['websocket']};
+  this.options.options.transports = this.options.options.transports || ['websocket'];
   this.options.forceNew = (opt.forceNew != null) ? opt.forceNew : false;
 
   this.options.server = this.options.server || 'ws://skynet.im';
@@ -131,6 +131,7 @@ Connection.prototype._emitWithAck = function(topic, data, fn){
         }
       }, timeout);
     }
+    //console.log('emitting ack', topic, data);
     this.socket.emit(topic, data);
   }
   return this;

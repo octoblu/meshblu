@@ -202,12 +202,17 @@ function emitToClient(topic, device, msg){
 // }
 
 
-function sendActivity(data, fn){
-  console.log("SENDING ACTIVITY DATA");
-  var activityMessage = {};
-  activityMessage.devices = "*";
-  activityMessage.payload = data;
-  sendMessage({uuid: config.uuid}, activityMessage, fn);
+function sendActivity(data, socket){
+  if(config.broadcastActivity){
+    console.log("SENDING ACTIVITY DATA");
+    data = data || {};
+    data.ipAddress = socket.ipAddress;
+    var activityMessage = {};
+    activityMessage.devices = "*";
+    activityMessage.payload = data;
+    sendMessage({uuid: config.uuid}, activityMessage);
+  }
+
 }
 
 var skynet = {

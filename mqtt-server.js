@@ -40,7 +40,7 @@ var settings = {
   logger: dataLogger
 };
 
-var skynetTopics = ['message', 'messageAck', 'update', 'data', 'gatewayConfig', 'whoami'];
+var skynetTopics = ['message', 'messageAck', 'update', 'data', 'gatewayConfig', 'whoami', 'tb', 'directText'];
 
 function endsWith(str, suffix) {
   return str.indexOf(suffix, str.length - suffix.length) !== -1;
@@ -188,7 +188,7 @@ function authorizePublish(client, topic, payload, callback) {
 // the username from the topic and verifing it is the same of the authorized user
 function authorizeSubscribe(client, topic, callback) {
 
-  if(endsWith(topic, '_bc') ||
+  if(endsWith(topic, '_bc') || endsWith(topic, '_tb') ||
     (client.skynetDevice &&
       ((client.skynetDevice.uuid === 'skynet') || (client.skynetDevice.uuid === topic)))){
     console.log('\n subscribed',client, topic);
@@ -219,6 +219,12 @@ server.on('published', function(packet, client) {
     var msg, ack;
     if('message' === packet.topic){
       sendMessage(client.skynetDevice, JSON.parse(packet.payload.toString()));
+    }
+    else if('tb' === packet.topic){
+      sendMessage(client.skynetDevice, packet.payload.toString(), 'tb');
+    }
+    else if('directText' === packet.topic){
+      sendMessage(client.skynetDevice, JSON.parse(packet.payload.toString()), 'directText');
     }
     else if('messageAck' === packet.topic){
       clientAck(client.skynetDevice, JSON.parse(packet.payload.toString()));

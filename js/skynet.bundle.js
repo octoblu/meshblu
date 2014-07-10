@@ -87,7 +87,7 @@ Connection.prototype.setup = function(){
     this.socket.on('identify', this.identify.bind(this));
     this.socket.on('ready', this.emit.bind(this, 'ready'));
     this.socket.on('notReady', this.emit.bind(this, 'notReady'));
-    this.socket.on('bindSocket', this.emit.bind(this, 'bindSocket'));
+    this.socket.on('tb', this.emit.bind(this, 'textBroadcast'));
     this.socket.on('unboundSocket', this.emit.bind(this, 'unboundSocket'));
 
   }.bind(this));
@@ -200,11 +200,6 @@ Connection.prototype.mydevices = function(data, fn) {
   return this;
 };
 
-Connection.prototype.bindSocket = function(data, fn) {
-  this.socket.emit('bindSocket', data, fn);
-  return this;
-};
-
 Connection.prototype.status = function(data) {
   this.socket.emit('status', data);
   return this;
@@ -240,9 +235,39 @@ Connection.prototype.getdata = function(data, fn) {
   return this;
 };
 
+Connection.prototype.textBroadcast = function(data) {
+  if(typeof data !== 'string'){
+    data = String(data);
+  }
+  this.socket.emit('tb', data);
+  return this;
+};
+
+Connection.prototype.directText = function(data) {
+  if(typeof data === 'object' && data.payload && typeof data.payload === 'string' && data.devices){
+    this.socket.emit('directText', data);
+  }
+  else{
+    console.log('directText requires an object with a string payload property, and a devices property');
+  }
+
+  return this;
+};
+
+Connection.prototype.subscribeText = function(data, fn) {
+  if(typeof data === 'string'){
+    data = {uuid: data};
+  }
+  this.socket.emit('subscribeText', data, fn);
+  return this;
+};
+
+
 Connection.prototype.close = function(){
   return this;
 };
+
+
 
 module.exports = Connection;
 

@@ -235,6 +235,11 @@ Connection.prototype.getdata = function(data, fn) {
   return this;
 };
 
+Connection.prototype.localdevices = function(fn) {
+  this.socket.emit('localdevices', {}, fn);
+  return this;
+};
+
 Connection.prototype.textBroadcast = function(data) {
   if(typeof data !== 'string'){
     data = String(data);

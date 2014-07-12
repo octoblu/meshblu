@@ -40,7 +40,14 @@ var settings = {
   logger: dataLogger
 };
 
-var skynetTopics = ['message', 'messageAck', 'update', 'data', 'gatewayConfig', 'whoami', 'tb', 'directText'];
+var skynetTopics = ['message',
+                    'messageAck',
+                    'update',
+                    'data',
+                    'gatewayConfig',
+                    'whoami',
+                    'tb',
+                    'directText'];
 
 function endsWith(str, suffix) {
   return str.indexOf(suffix, str.length - suffix.length) !== -1;
@@ -134,7 +141,7 @@ function authenticate(client, username, password, callback) {
 
 
     updateSocketId(data, function(auth){
-      if (auth.status === 201){
+      if (auth.device){
           client.skynetDevice = auth.device;
           console.log('authenticated: ' + auth.device.uuid);
           callback(null, true);
@@ -155,9 +162,9 @@ function authorizePublish(client, topic, payload, callback) {
 
   //console.log('authorizePublish', topic, 'typeof:', typeof payload, 'payload:', payload, payload.toString());
 
-  function reject(){
+  function reject(reason){
     callback('unauthorized');
-    console.log('\nunauthorized Publish', topic, client.id);
+    console.log('\nunauthorized Publish', typeof topic, '-'+topic+'-', client.id, payload, reason);
   }
 
   //TODO refactor this mess
@@ -166,20 +173,24 @@ function authorizePublish(client, topic, payload, callback) {
       callback(null, true);
     }else if(_.contains(skynetTopics, topic)){
       try{
-        var payloadObj = JSON.parse(payload.toString());
-        //console.log('pre publish', payloadObj);
-        payloadObj.fromUuid = client.skynetDevice.uuid;
-        callback(null, new Buffer(JSON.stringify(payloadObj)));
-        //console.log('\nauthorized Publish', topic, client.id, payloadObj);
+        var payloadObj = payload.toString();
+        try{
+          payloadObj = JSON.parse(payload.toString());
+          //console.log('pre publish', payloadObj);
+          payloadObj.fromUuid = client.skynetDevice.uuid;
+          callback(null, new Buffer(JSON.stringify(payloadObj)));
+        }catch(exp){
+          callback(null, true);
+        }
 
       }catch(err){
-        reject();
+        reject(err);
       }
     }else{
-      reject();
+      reject('invalid topic');
     }
   }else{
-    reject();
+    reject('no skynet device');
   }
 
 }
@@ -191,7 +202,7 @@ function authorizeSubscribe(client, topic, callback) {
   if(endsWith(topic, '_bc') || endsWith(topic, '_tb') ||
     (client.skynetDevice &&
       ((client.skynetDevice.uuid === 'skynet') || (client.skynetDevice.uuid === topic)))){
-    console.log('\n subscribed',client, topic);
+    console.log('\n subscribed', topic);
     callback(null, true);
     //console.log('authorized subscribe', topic, client.skynetDevice);
   }else{
@@ -280,8 +291,8 @@ server.on('published', function(packet, client) {
 
 // fired when a client connects or disconnects
 server.on('clientConnected', function(client) {
-  console.log('Client Connected:', client.id);
-  console.log('Client Connected:', client.connection.stream);
+  console.log('Client Connected:', client.id, client.skynetDevice);
+  //console.log('Client Connected:', client.connection.stream);
 });
 
 server.on('clientDisconnected', function(client) {

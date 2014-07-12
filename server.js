@@ -203,11 +203,11 @@ function emitToClient(topic, device, msg){
 // }
 
 
-function sendActivity(data, socket){
+function sendActivity(data){
+  //TODO throttle, maybe only send out with IP
   if(config.broadcastActivity){
     console.log("SENDING ACTIVITY DATA");
     data = data || {};
-    data.ipAddress = socket.ipAddress;
     var activityMessage = {};
     activityMessage.devices = "*";
     activityMessage.payload = data;

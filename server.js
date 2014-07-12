@@ -161,6 +161,7 @@ process.on("uncaughtException", function(error) {
 
 
 function socketEmitter(uuid, topic, data){
+  //console.log('socketEmitter', uuid, topic, data);
   if(redisIoEmitter){
     redisIoEmitter.in(uuid).emit(topic, data);
   }else{

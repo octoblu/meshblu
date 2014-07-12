@@ -224,7 +224,7 @@ server.on('published', function(packet, client) {
       sendMessage(client.skynetDevice, packet.payload.toString(), 'tb');
     }
     else if('directText' === packet.topic){
-      sendMessage(client.skynetDevice, JSON.parse(packet.payload.toString()), 'directText');
+      sendMessage(client.skynetDevice, JSON.parse(packet.payload.toString()), 'tb');
     }
     else if('messageAck' === packet.topic){
       clientAck(client.skynetDevice, JSON.parse(packet.payload.toString()));

@@ -1,27 +1,31 @@
-<p align="center">
-  <a href="http://skynet.im">
-    <img width="100%" src="http://skynet.im/img/skyspread2.png"/>
-  </a>
-</p>
+```
+MM    MM              hh      bb      lll         
+MMM  MMM   eee   sss  hh      bb      lll uu   uu 
+MM MM MM ee   e s     hhhhhh  bbbbbb  lll uu   uu 
+MM    MM eeeee   sss  hh   hh bb   bb lll uu   uu 
+MM    MM  eeeee     s hh   hh bbbbbb  lll  uuuu u 
+                 sss                                                                              
+```
+Formerly SkyNet.im
 
 OPEN HTTP, WebSocket, MQTT, & CoAP COMMUNICATIONS NETWORK & API FOR THE INTERNET OF THINGS (IoT)!
 
-Visit [SKYNET.im](http://skynet.im) for up-to-the-latest documentation and screencasts.
+Visit [meshblu.octoblu.com](http://meshblu.octoblu.com) for up-to-the-latest documentation and screencasts.
 
 ======
 
 Introduction
 ------------
 
-SkyNet is an open source machine-to-machine instant messaging network and API. Our API is available on HTTP REST, realtime Web Sockets via RPC (remote procedure calls), [MQTT](http://mqtt.org), and [CoAP](http://en.wikipedia.org/wiki/Constrained_Application_Protocol).  We also seamlessly bridge all of these protocols. For instance, an MQTT device can communicate with any CoAP or HTTP or WebSocket connected device on SkyNet.  
+Meshblu is an open source machine-to-machine instant messaging network and API. Our API is available on HTTP REST, realtime Web Sockets via RPC (remote procedure calls), [MQTT](http://mqtt.org), and [CoAP](http://en.wikipedia.org/wiki/Constrained_Application_Protocol).  We seamlessly bridge all of these protocols. For instance, an MQTT device can communicate with any CoAP or HTTP or WebSocket connected device on Meshblu.  
 
-SkyNet auto-assigns 36 character UUIDs and 32 character secret tokens to each registered device connected to the network. These device "credentials" are used to authenticate with SkyNet and maintain your device's JSON description in the device directory.  
+Meshblu auto-assigns 36 character UUIDs and secret tokens to each registered device connected to the network. These device "credentials" are used to authenticate with Meshblu and maintain your device's JSON description in the device directory.  
 
-SkyNet allows you to discover/query devices such as drones, hue light bulbs, weemos, insteons, raspberry pis, arduinos, server nodes, etc. that meet your criteria and send IM messages to 1 or all devices.
+Meshblu allows you to discover/query devices such as drones, hue light bulbs, weemos, insteons, raspberry pis, arduinos, server nodes, etc. that meet your criteria and send IM messages to 1 or all devices.
 
 You can also subscribe to messages being sent to/from devices and their sensor activities.
 
-SkyNet offers a Node.JS NPM module called [SkyNet](http://skynet.im/#npm) and a [SkyNet.js](http://skynet.im/#javascript) file for simplifying Node.JS and mobile/client-side connectivity to SkyNet.
+Meshblu offers a Node.JS NPM module called [SkyNet](https://www.npmjs.org/package/skynet) and a [SkyNet.js](http://skynet.im/#javascript) file for simplifying Node.JS and mobile/client-side connectivity to Meshblu.
 
 
 Press
@@ -54,7 +58,7 @@ $ npm install
 $ cp config.js.sample config.js
 ```
 
-[SKYNET.im](http://skynet.im) uses Mongo, Redis, ElasticSearch, and Splunk; however, we have made this infrastructure optional for you.  SkyNet falls back to file system and memory storage if these services are not configured allowing you to deploy a private SkyNet cloud to a Raspberry Pi or other mini-computer!
+[Meshblu](http://meshblu.octoblu.com) uses Mongo, Redis, ElasticSearch, and Splunk; however, we have made this infrastructure optional for you.  Meshblu falls back to file system and memory storage if these services are not configured allowing you to deploy a private Meshblu cloud to a Raspberry Pi or other mini-computer!
 
 If you want to include these services for a scalable infrastructure, you can make the following changes to your `config.js` file.
 
@@ -85,7 +89,7 @@ elasticSearch: {
 },
 ```
 
-If you would like to connect your private SkyNet cloud to [SKYNET.im](http://skynet.im) or another private SkyNet cloud, register a UUID on the parent cloud (i.e. skynet.im) using the POST /Devices REST API and then add the returned UUID and token to the following section to your private cloud's config.js file:
+If you would like to connect your private Meshblu cloud to [SKYNET.im](http://skynet.im) or another private Meshblu cloud, register a UUID on the parent cloud (i.e. skynet.im) using the POST /Devices REST API and then add the returned UUID and token to the following section to your private cloud's config.js file:
 
 ```
 parentConnection: {
@@ -111,7 +115,7 @@ $ forever start server.js
 MQTT Broker
 -----------
 
-MQTT is an optional SkyNet protocol.  If you would like to run our MQTT broker with your private SkyNet cloud, open another console tab and run:
+MQTT is an optional SkyNet protocol.  If you would like to run our MQTT broker with your private Meshblu cloud, open another console tab and run:
 
 ```bash
 $ node mqtt-server.js
@@ -135,9 +139,9 @@ mqtt: {
 Docker
 ------
 
-The default Dockerfile will run Skynet, MongoDB and Redis in a single container to make quick experiments easier.
+The default Dockerfile will run Meshblu, MongoDB and Redis in a single container to make quick experiments easier.
 
-You'll need docker installed, then to build the Skynet image:
+You'll need docker installed, then to build the Meshblu image:
 
 From the directory where the Dockerfile resides run.
 
@@ -165,11 +169,11 @@ If you change the code restarting the container is as easy as:
 $ docker restart skynet_dev
 ```
 
-NodeBlu SkyNet Developer Toolkit
+Nodeblu Developer Toolkit
 --------------------------------
-Play with [SKYNET.im](http://skynet.im) IoT platform in Chrome! [NodeBLU](https://chrome.google.com/webstore/detail/nodeblu/aanmmiaepnlibdlobmbhmfemjioahilm) helps you experiment with the [Octoblu](http://octoblu.com) and [SKYNET.im](http://skynet.im) Internet of Things platforms by dragging, dropping, and wiring up various nodes connected to SkyNet!
+Play with [Meshblu](http://meshblu.octoblu.com) IoT platform in Chrome! [Nodeblu](https://chrome.google.com/webstore/detail/nodeblu/aanmmiaepnlibdlobmbhmfemjioahilm) helps you experiment with the [Octoblu](http://octoblu.com) and [Meshblu](http://meshblu.octoblu.com) Internet of Things platforms by dragging, dropping, and wiring up various nodes connected to Meshblu!
 
-NodeBLU is Octoblu's fork of the popular [NodeRed](https://github.com/node-red/node-red) application from IBM.  Since our app is deployed as a Chrome extension, we decided to add extra local features such as speech recognition and text-to-speech, a WebRTC webcam, HTML5 notifications, access to ChromeDB, a gamepad controller, and access to local and remote Arduino and Spark devices via our SkyNet OS.
+Nodeblu is Octoblu's fork of the popular [NodeRED](https://github.com/node-red/node-red) application from IBM.  Since our app is deployed as a Chrome extension, we decided to add extra local features such as speech recognition and text-to-speech, a WebRTC webcam, HTML5 notifications, access to ChromeDB, a gamepad controller, and access to local and remote Arduino and Spark devices via our [Microblu](https://github.com/octoblu/microblu_mqtt) OS.
 
 <p align="center">
   <a href="https://chrome.google.com/webstore/detail/nodeblu/aanmmiaepnlibdlobmbhmfemjioahilm">
@@ -177,30 +181,30 @@ NodeBLU is Octoblu's fork of the popular [NodeRed](https://github.com/node-red/n
   </a>
 </p>
 
-SkyNet Hub
-----------
+Gateblu
+-------
 
-We have an open source SkyNet Hub also available on [GitHub](https://github.com/skynetim/hub).  Our Hub allows you to connect devices with or *without* IP addresses to SkyNet and communicate bi-directionally!  The Hub uses WebSockets to connect to SkyNet so it can traverse NAT firewalls and send/receive messages to/from SkyNet.
+We have an open source Octoblu Gateway also available on [GitHub](https://github.com/octoblu/gateblu). Our Gateway allows you to connect devices with or *without* IP addresses to Meshblu and communicate bi-directionally!  The Gateway uses WebSockets to connect to Meshblu so it can traverse NAT firewalls and send/receive messages to/from Meshblu.
 
-The SkyNet Hub has an extensible [plugin](https://github.com/skynetim/hub/blob/master/plugins.md) architecture allowing you to create plugins for devices that we have not had a chance to connect yet.  You can search [NPMJS.org](https://www.npmjs.org/search?q=skynet-plugin) for a list of active SkyNet Hub plugins.
+Gateblu has an extensible [plugin](https://github.com/octoblu/gateblu/blob/master/plugins.md) architecture allowing you to create plugins for devices that we have not had a chance to connect yet.  You can search [NPMJS.org](https://www.npmjs.org/search?q=skynet-plugin) for a list of active Gateblu plugins.
 
-SkyNet Operating System
+Microblu Operating System
 -----------------------
 
-As in [Terminator - (video)](https://www.youtube.com/watch?v=Ky7K3Je-NBo), SkyNet includes a micro-controller operating system that is compatible with [Arduino](http://www.arduino.cc/), [Spark](https://www.spark.io/), [Pinoccio](https://pinocc.io/), and [Tessel](https://tessel.io/)!  The OS is available on [GitHub](https://github.com/skynetim/skynet_firmware_arduino) and comes with firmata built-in.
+As in [Terminator - (video)](https://www.youtube.com/watch?v=Ky7K3Je-NBo), Meshblu includes a micro-controller operating system that is compatible with [Arduino](http://www.arduino.cc/), [Spark](https://www.spark.io/), and [Pinoccio](https://pinocc.io/)!  The OS is available on [GitHub](https://github.com/octoblu/microblu_mqtt) and comes with firmata built-in.
 
-On power-on, the SkyNet OS connects to SkyNet, obtains a UUID, and awaits instructions! You can message the micro-controller to turn on/off pins and servos as well as request streaming analog sensor data from various pins.
+On power-on, the Microblu OS connects to Meshblu, obtains a UUID, and awaits your instructions! You can message the micro-controller to turn on/off pins and servos as well as request streaming analog sensor data from various pins.
 
 HTTP(S) REST API
 ----------------
 
-Most of our API endpoints require authentication credentials (UUID and secret token) passed in the HTTP headers as skynet_auth_uuid and skynet_auth_token respectively. These credentials are generated by registering a device or user with SkyNet via the POST /Devices API (see below). If you would like to associate additional SkyNet devices with the UUID and Token that you created (as a user), you can add an "owner" property to your other devices with the user's UUID as its value; otherwise, you can use the device's UUID and token in the headers to control the device itself.
+Most of our API endpoints require authentication credentials (UUID and secret token) passed in the HTTP headers as skynet_auth_uuid and skynet_auth_token respectively. These credentials are generated by registering a device or user with Meshblu via the POST /Devices API (see below). If you would like to associate additional Meshblu devices with the UUID and Token that you created (as a user), you can add an "owner" property to your other devices with the user's UUID as its value; otherwise, you can use the device's UUID and token in the headers to control the device itself.
 
 We support the following device permissions: View/Discover, Send Messages, Read Messages (subscribe) and Update. These permissions are manageable by adding UUIDs to whitelists and blacklists arrays with the following names: viewWhitelist, viewBlacklist, sendWhitelist, sendBlacklist, readWhitelist, readBlacklist, updateWhitelist, updateBlacklist. Note: If your UUID is the same as the "owner" UUID, these permissions are not enforced (you are the owner).
 
 GET /status
 
-Returns the current status of the Skynet network
+Returns the current status of the Meshblu network
 
 ```
 curl http://localhost:3000/status
@@ -210,7 +214,7 @@ curl http://localhost:3000/status
 
 GET /devices
 
-Returns an array of all devices available to you on Skynet. Notice you can query against custom properties i.e. all drones or light switches and online/offline etc.
+Returns an array of all devices available to you on Meshblu. Notice you can query against custom properties i.e. all drones or light switches and online/offline etc.
 
 ```
 curl "http://localhost:3000/devices" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
@@ -236,7 +240,7 @@ curl "http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26" --head
 
 POST /devices
 
-Registers a device on the Skynet network. You can add as many properties to the device object as desired. Skynet returns a device UUID and token which needs to be used with future updates to the device object
+Registers a device on the Meshblu network. You can add as many properties to the device object as desired. Meshblu returns a device UUID and token which needs to be used with future updates to the device object
 
 Note: You can pass in a token parameter to overide skynet issuing you one
 
@@ -260,7 +264,7 @@ curl -X PUT -d "token=123&online=true" "http://localhost:3000/devices/01404680-2
 
 DELETE /devices/uuid
 
-Unregisters a device on the Skynet network. Token is required for security.
+Unregisters a device on the Meshblu network. Token is required for security.
 
 ```
 curl -X DELETE -d "token=123" "http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
@@ -280,7 +284,7 @@ curl -X GET "http://skynet.im/mydevices/0d1234a0-1234-11e3-b09c-1234e847b2cc?tok
 
 POST /messages
 
-Sends a JSON message to all devices or an array of devices or a specific device on the Skynet network.
+Sends a JSON message to all devices or an array of devices or a specific device on the Meshblu network.
 
 ```
 curl -X POST -d '{"devices": "all", "message": {"yellow":"off"}}' "http://localhost:3000/messages" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
@@ -292,7 +296,7 @@ curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "message": 
 => {"devices":"ad698900-2546-11e3-87fb-c560cb0ca47b","message":{"yellow":"off"},"timestamp":1380930482043,"eventCode":300}
 ```
 
-Note: If your SkyNet cloud is connected to SKYNET.im or other private SkyNet clouds, you can send messages across SkyNet clouds by chaining UUIDs together separated by slashes (/) where the first UUID is the target cloud and the second UUID is the device on that cloud.
+Note: If your Meshblu cloud is connected to SKYNET.im or other private Meshblu clouds, you can send messages across Meshblu clouds by chaining UUIDs together separated by slashes (/) where the first UUID is the target cloud and the second UUID is the device on that cloud.
 
 ```
 curl -X POST -d '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b/2f3113d0-2796-11e3-95ef-e3081976e170", "message": {"yellow":"off"}}' "http://localhost:3000/messages" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
@@ -310,7 +314,7 @@ curl -X GET "http://skynet.im/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=
 
 GET /subscribe/uuid?token=token
 
-This is a streaming API that returns device/node mesages as they are sent and received. Notice the comma at the end of the response. SkyNet doesn't close the stream.
+This is a streaming API that returns device/node mesages as they are sent and received. Notice the comma at the end of the response. Meshblu doesn't close the stream.
 
 ```
 curl -X GET "http://skynet.im/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
@@ -330,7 +334,7 @@ curl -X GET "http://skynet.im/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?
 
 GET /ipaddress
 
-Returns the public IP address of the request. This is useful when working with the SkyNet Gateway behind a firewall.
+Returns the public IP address of the request. This is useful when working with the Octoblu Gateway behind a firewall.
 
 ```
 curl -X GET http://skynet.im/ipaddress
@@ -340,7 +344,7 @@ curl -X GET http://skynet.im/ipaddress
 
 POST /data/uuid
 
-Stores your device's sensor data to SkyNet
+Stores your device's sensor data to Meshblu
 
 ```
 curl -X POST -d "token=123&temperature=78" "http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
@@ -350,7 +354,7 @@ curl -X POST -d "token=123&temperature=78" "http://skynet.im/data/0d3a53a0-2a0b-
 
 GET /data/uuid
 
-Retrieves your device's sensor data to SkyNet
+Retrieves your device's sensor data to Meshblu
 
 ```
 curl -X GET "http://localhost:3000/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
@@ -525,7 +529,7 @@ conn.on('ready', function(){
 Event Codes
 -----------
 
-If `log: true` in config.js, all transactions are logged to skynet.txt.  Here are the event codes associated with SkyNet transactions.
+If `log: true` in config.js, all transactions are logged to skynet.txt.  Here are the event codes associated with Meshblu transactions.
 
 * 100 = Web socket connected
 * 101 = Web socket identification
@@ -549,8 +553,8 @@ If `log: true` in config.js, all transactions are logged to skynet.txt.  Here ar
 FOLLOW US!
 ----------
 
-* [Twitter/SKYNETim](http://twitter.com/skynetim)
-* [Facebook/SKYNETim](http://facebook.com/skynetim)
+* [Twitter/Octoblu](http://twitter.com/octoblu)
+* [Facebook/Octoblu](http://facebook.com/octoblu)
 * [Google Plus](https://plus.google.com/communities/106179367424841209509)
 
 

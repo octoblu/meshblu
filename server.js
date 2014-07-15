@@ -299,13 +299,19 @@ if(config.tls){
   setupRestfulRoutes(https_server, skynet);
 }
 
-console.log("\n SSSSS  kk                            tt    ");
-console.log("SS      kk  kk yy   yy nn nnn    eee  tt    ");
-console.log(" SSSSS  kkkkk  yy   yy nnn  nn ee   e tttt  ");
-console.log("     SS kk kk   yyyyyy nn   nn eeeee  tt    ");
-console.log(" SSSSS  kk  kk      yy nn   nn  eeeee  tttt ");
-console.log("                yyyyy                         ");
-console.log('\nSkynet %s environment loaded... ', app.environment);
+
+
+
+
+
+
+console.log("\nMM    MM              hh      bb      lll         ");
+console.log("MMM  MMM   eee   sss  hh      bb      lll uu   uu ");
+console.log("MM MM MM ee   e s     hhhhhh  bbbbbb  lll uu   uu ");
+console.log("MM    MM eeeee   sss  hh   hh bb   bb lll uu   uu ");
+console.log("MM    MM  eeeee     s hh   hh bbbbbb  lll  uuuu u ");
+console.log("                 sss                              ");
+console.log('\Meshblu (formerly skynet.im) %s environment loaded... ', app.environment);
 
 // Start our restful servers to listen on the appropriate ports
 
@@ -316,15 +322,15 @@ var coapHost = coapConfig.host || 'localhost';
 // coapServer.listen(coapPort, coapHost, function () {
 // coapServer.listen(coapPort, null, function () {
 coapServer.listen(coapPort, function () {
-  console.log('coap listening at coap://' + coapHost + ':' + coapPort);
+  console.log('CoAP listening at coap://' + coapHost + ':' + coapPort);
 });
 
 server.listen(process.env.PORT || config.port, function() {
-  console.log('%s listening at %s', server.name, server.url);
+  console.log('HTTP listening at %s', server.url);
 });
 
 if(config.tls){
   https_server.listen(process.env.SSLPORT || config.tls.sslPort, function() {
-    console.log('%s listening at %s', https_server.name, https_server.url);
+    console.log('HTTPS listening at %s', https_server.url);
   });
 }

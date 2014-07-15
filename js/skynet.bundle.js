@@ -87,7 +87,7 @@ Connection.prototype.setup = function(){
     this.socket.on('identify', this.identify.bind(this));
     this.socket.on('ready', this.emit.bind(this, 'ready'));
     this.socket.on('notReady', this.emit.bind(this, 'notReady'));
-    this.socket.on('tb', this.emit.bind(this, 'textBroadcast'));
+    this.socket.on('tb', this.emit.bind(this, 'tb'));
     this.socket.on('unboundSocket', this.emit.bind(this, 'unboundSocket'));
 
   }.bind(this));
@@ -206,11 +206,17 @@ Connection.prototype.status = function(data) {
 };
 
 Connection.prototype.subscribe = function(data, fn) {
+  if(typeof data === 'string'){
+    data = {uuid: data};
+  }
   this.socket.emit('subscribe', data, fn);
   return this;
 };
 
 Connection.prototype.unsubscribe = function(data, fn) {
+  if(typeof data === 'string'){
+    data = {uuid: data};
+  }
   this.socket.emit('unsubscribe', data, fn);
   return this;
 };
@@ -264,6 +270,14 @@ Connection.prototype.subscribeText = function(data, fn) {
     data = {uuid: data};
   }
   this.socket.emit('subscribeText', data, fn);
+  return this;
+};
+
+Connection.prototype.unsubscribeText = function(data, fn) {
+  if(typeof data === 'string'){
+    data = {uuid: data};
+  }
+  this.socket.emit('unsubscribeText', data, fn);
   return this;
 };
 
@@ -6523,13 +6537,8 @@ function Buffer (subject, encoding, noZero) {
 
   var type = typeof subject
 
-  // Workaround: node's base64 implementation allows for non-padded strings
-  // while base64-js does not.
   if (encoding === 'base64' && type === 'string') {
-    subject = stringtrim(subject)
-    while (subject.length % 4 !== 0) {
-      subject = subject + '='
-    }
+    subject = base64clean(subject)
   }
 
   // Find the length
@@ -7484,6 +7493,18 @@ Buffer._augment = function (arr) {
   arr.toArrayBuffer = BP.toArrayBuffer
 
   return arr
+}
+
+var INVALID_BASE64_RE = /[^+\/0-9A-z]/g
+
+function base64clean (str) {
+  // Node strips out invalid characters like \n and \t from the string, base64-js does not
+  str = stringtrim(str).replace(INVALID_BASE64_RE, '')
+  // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
+  while (str.length % 4 !== 0) {
+    str = str + '='
+  }
+  return str
 }
 
 function stringtrim (str) {

@@ -8,37 +8,28 @@
       $('#uuid').append(location.pathname.split("/")[2]);
     });
 
-    var skynetConfig = {
-      // "uuid": location.pathname.split("/")[2],
-      // "token": location.pathname.split("/")[3]
-        "uuid": "1917e841-afb7-11e3-912d-bd75677ad63b",
-        "token": "xufbkulx6pkqpvidvzmh3qyra6mvx6r"
-        // "host": "localhost",
-        // "port": 3000
-    }
-    skynet(skynetConfig, function (e, socket, device) {
-      console.log(e);
-      if (e) throw e
-      console.log('REGISTERED', device);
+    var conn = skynet.createConnection({
+      "uuid": "1917e841-afb7-11e3-912d-bd75677ad63b",
+      "token": "xufbkulx6pkqpvidvzmh3qyra6mvx6r",
+      // server: 'localhost',
+      // port: 3000
+      server: 'ws://skynet.im',
+      port: 80
 
-      // Send and receive messages
-      // socket.emit('message', {
-      //   "devices": location.pathname.split("/")[2],
-      //   "payload": {
-      //   "skynet":"online"
-      // }}, function(data){
-      //   console.log(data);
-      // });
+    });
+
+    conn.on('ready', function(device){
+      console.log('Ready');    
 
       // Subscribe to device/node i/o
-      socket.emit('subscribe', {
+      conn.subscribe({
         uuid: location.pathname.split("/")[2]
       },
         function(data){
           console.log(data);
         });
 
-      socket.on('message', function(message){
+      conn.on('message', function(message){
         // console.log('message received', channel, message);
         if(typeof message == "string"){
           message = JSON.parse(message);
@@ -54,7 +45,7 @@
   </script>
 </head>
 <body>
-  <p>Connecting to SkyNet!</p>
+  <p>Connecting to Meshblu!</p>
   <p>Subscribing to UUID: <span id="uuid"></span></p>
   <p>Listening for sensor data...</p>
   <div id="device"></div>

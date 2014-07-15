@@ -1165,9 +1165,12 @@ section#home.app span {
   color: white;
   font-weight: 400;
 }
-section#home h1,
+section#home h1{
+  color: #ffffff;
+  padding: 0 4em;
+}
 section#home p {
-  color: #464542;
+  /*color: #464542;*/
   padding: 0 4em;
 }
 section#about {

@@ -12,13 +12,14 @@ var config = require(process.env.SKYNET_CONFIG || './config');
 
 var redis = require('./lib/redis');
 
-var updateFromClient = require('./lib/updateFromClient');
 var setupRestfulRoutes = require('./lib/setupHttpRoutes');
 var setupCoapRoutes = require('./lib/setupCoapRoutes');
 var setupMqttClient = require('./lib/setupMqttClient');
 var socketLogic = require('./lib/socketLogic');
 var sendMessageCreator = require('./lib/sendMessage');
 var wrapMqttMessage = require('./lib/wrapMqttMessage');
+var createSocketEmitter = require('./lib/createSocketEmitter');
+var sendActivity = require('./lib/sendActivity');
 
 var fs = require('fs');
 var setupGatewayConfig = require('./lib/setupGatewayConfig');
@@ -112,11 +113,7 @@ if(config.tls){
 var io, ios;
 io = socketio(server);
 var redisStore;
-var redisIoEmitter;
 if(config.redis){
-  if(config.redis){
-    redisIoEmitter = require('socket.io-emitter')(redis.client);
-  }
   redisStore = redis.createIoStore();
   io.adapter(redisStore);
 }
@@ -160,15 +157,7 @@ process.on("uncaughtException", function(error) {
 });
 
 
-function socketEmitter(uuid, topic, data){
-  //console.log('socketEmitter', uuid, topic, data);
-  if(redisIoEmitter){
-    redisIoEmitter.in(uuid).emit(topic, data);
-  }else{
-    io.sockets.in(uuid).emit(topic, data);
-    ios.sockets.in(uuid).emit(topic, data);
-  }
-}
+var socketEmitter = createSocketEmitter(io, ios);
 
 function mqttEmitter(uuid, wrappedData, options){
   if(mqttclient){
@@ -182,7 +171,7 @@ function emitToClient(topic, device, msg){
   if(device.protocol === "mqtt"){
     // MQTT handler
     console.log('sending mqtt', device);
-    mqttEmitter(device.uuid, wrapMqttMessage(topic, msg), {qos:qos});
+    mqttEmitter(device.uuid, wrapMqttMessage(topic, msg), {qos:msg.qos || 0});
   }
   else{
     socketEmitter(device.uuid, topic, msg);
@@ -202,19 +191,6 @@ function emitToClient(topic, device, msg){
 //   }
 // }
 
-
-function sendActivity(data){
-  //TODO throttle, maybe only send out with IP
-  if(config.broadcastActivity){
-    console.log("SENDING ACTIVITY DATA");
-    data = data || {};
-    var activityMessage = {};
-    activityMessage.devices = "*";
-    activityMessage.payload = data;
-    sendMessage({uuid: config.uuid}, activityMessage);
-  }
-
-}
 
 var skynet = {
   sendMessage: sendMessage,

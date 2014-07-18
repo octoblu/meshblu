@@ -2,9 +2,9 @@ module.exports = {
   mongo: {
     databaseUrl: process.env.MONGODB_URI
   },
-  port: process.env.PORT || 80,
+  port: parseInt(process.env.PORT) || 80,
   tls: {
-    sslPort: process.env.SSL_PORT || 443,
+    sslPort: parseInt(process.env.SSL_PORT) || 443,
     cert: process.env.SSL_CERT,
     key: process.env.SSL_KEY
   },
@@ -14,14 +14,14 @@ module.exports = {
   log: (process.env.USE_LOG || "true").toLowerCase() == "true",
   elasticSearch: {
     host: process.env.ELASTIC_SEARCH_HOST,
-    port: process.env.ELASTIC_SEARCH_PORT
+    port: parseInt(process.env.ELASTIC_SEARCH_PORT)
   },
   rateLimits: {
-    message: process.env.RATE_LIMITS_MESSAGE || 10,
-    data: process.env.RATE_LIMITS_DATA || 10,
-    connection: process.env.RATE_LIMITS_CONNECTION || 2,
-    query: process.env.RATE_LIMITS_QUERY || 2,
-    whoami: process.env.RATE_LIMITS_WHOAMI || 10,
+    message: parseInt(process.env.RATE_LIMITS_MESSAGE),
+    data: parseInt(process.env.RATE_LIMITS_DATA),
+    connection: parseInt(process.env.RATE_LIMITS_CONNECTION),
+    query: parseInt(process.env.RATE_LIMITS_QUERY),
+    whoami: parseInt(process.env.RATE_LIMITS_WHOAMI),
     unthrottledIps: (process.env.RATE_LIMITS_UNTHROTTLED_IPS || '').split(',')
   },
   urbanAirship: {
@@ -34,16 +34,16 @@ module.exports = {
   },
   redis: {
     host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
+    port: parseInt(process.env.REDIS_PORT),
     password: process.env.REDIS_PASSWORD
   },
   coap: {
-    port: process.env.COAP_PORT,
+    port: parseInt(process.env.COAP_PORT),
     host: process.env.COAP_HOST
   },
   mqtt: {
     databaseUrl: process.env.MQTT_DATABASE_URI,
-    port: process.env.MQTT_PORT,
+    port: parseInt(process.env.MQTT_PORT),
     skynetPass: process.env.MQTT_PASSWORD
   },
   skynet_override_token: process.env.OVERRIDE_TOKEN,
@@ -51,6 +51,6 @@ module.exports = {
     uuid: process.env.PARENT_CONNECTION_UUID,
     token: process.env.PARENT_CONNECTION_TOKEN,
     server: process.env.PARENT_CONNECTION_SERVER,
-    port: process.env.PARENT_CONNECTION_PORT
+    port: parseInt(process.env.PARENT_CONNECTION_PORT)
   }
 };

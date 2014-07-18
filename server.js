@@ -56,6 +56,8 @@ app
 // if(!app.environment) app.environment = 'development';
 if(app.args[0]){
   app.environment = app.args[0];
+} else if(process.env.NODE_ENV){
+  app.environment = process.env.NODE_ENV;
 } else {
   app.environment = 'development';
 }

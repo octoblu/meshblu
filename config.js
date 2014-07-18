@@ -22,7 +22,7 @@ module.exports = {
     connection: process.env.RATE_LIMITS_CONNECTION || 2,
     query: process.env.RATE_LIMITS_QUERY || 2,
     whoami: process.env.RATE_LIMITS_WHOAMI || 10,
-    unthrottledIps: process.env.RATE_LIMITS_UNTHROTTLED_IPS.split(',')
+    unthrottledIps: (process.env.RATE_LIMITS_UNTHROTTLED_IPS || '').split(',')
   },
   urbanAirship: {
     key: process.env.URBAN_AIRSHIP_KEY,

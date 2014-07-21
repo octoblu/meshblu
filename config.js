@@ -17,11 +17,11 @@ module.exports = {
     port: parseInt(process.env.ELASTIC_SEARCH_PORT)
   },
   rateLimits: {
-    message: parseInt(process.env.RATE_LIMITS_MESSAGE),
-    data: parseInt(process.env.RATE_LIMITS_DATA),
-    connection: parseInt(process.env.RATE_LIMITS_CONNECTION),
-    query: parseInt(process.env.RATE_LIMITS_QUERY),
-    whoami: parseInt(process.env.RATE_LIMITS_WHOAMI),
+    message: parseInt(process.env.RATE_LIMITS_MESSAGE || 10),
+    data: parseInt(process.env.RATE_LIMITS_DATA || 10),
+    connection: parseInt(process.env.RATE_LIMITS_CONNECTION || 2),
+    query: parseInt(process.env.RATE_LIMITS_QUERY || 2),
+    whoami: parseInt(process.env.RATE_LIMITS_WHOAMI || 10),
     unthrottledIps: (process.env.RATE_LIMITS_UNTHROTTLED_IPS || '').split(',')
   },
   urbanAirship: {

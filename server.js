@@ -97,13 +97,13 @@ if(config.tls){
   // Setup some https server options
   if(app.environment === 'development'){
     var https_options = {
-      certificate: fs.readFileSync("../meshblue-certs/skynet.im/server.crt"),
-      key: fs.readFileSync("../meshblue-certs/skynet.im/server.key")
+      certificate: fs.readFileSync("../meshblu-certs/skynet.im/server.crt"),
+      key: fs.readFileSync("../meshblu-certs/skynet.im/server.key")
     };
   } else {
     var https_options = {
       certificate: fs.readFileSync(config.tls.cert),
-      key: fs.readFileSync(config.tls.key),
+      key: fs.readFileSync(config.tls.key)
     };
   }
 

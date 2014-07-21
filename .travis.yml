@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "0.10"
+deploy:
+  provider: opsworks
+  access_key_id: AKIAJCOOWS3NWOOZRDGQ
+  secret_access_key:
+    secure: KOR29IukG7svfdwoHmPMUrAg+gO7NFmSX6Th6lbar6vPlQkFr59xtLFyMJE2LVYWS0CYPQPMhxSN1oFM+tnYoDNMAX31Q8ZC6theW4UbJIjrNBadzq8FH2OWTvFUHv2UGEcmndTBl+x4VW1wKwy72pAzQ6mCl2+B9viUYRbp7Tg=
+  app-id: e1883763-9db4-432f-900a-628dd84aceaa
+  on:
+    repo: octoblu/meshblu

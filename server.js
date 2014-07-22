@@ -92,7 +92,7 @@ var throttles = {
 var server = restify.createServer();
 server.pre(restify.pre.sanitizePath());
 
-if(config.tls){
+if(config.tls && config.tls.cert){
 
   // Setup some https server options
   var https_options = {
@@ -108,12 +108,12 @@ if(config.tls){
 var io, ios;
 io = socketio(server);
 var redisStore;
-if(config.redis){
+if(config.redis && config.redis.host){
   redisStore = redis.createIoStore();
   io.adapter(redisStore);
 }
 
-if(config.tls){
+if(config.tls && config.tls.cert){
   ios = socketio(https_server);
   if(config.redis){
     ios.adapter(redisStore);
@@ -228,7 +228,7 @@ io.on('connection', function (socket) {
   console.log('CONNECTED', socket.handshake.address);
 });
 
-if(config.tls){
+if(config.tls && config.tls.cert){
   ios.on('connection', function (socket) {
     checkConnection(socket, true);
   });
@@ -266,7 +266,7 @@ coapServer.on('request', coapRouter.process);
 // Now, setup both servers in one step
 setupRestfulRoutes(server, skynet);
 
-if(config.tls){
+if(config.tls && config.tls.cert){
   setupRestfulRoutes(https_server, skynet);
 }
 

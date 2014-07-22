@@ -95,17 +95,10 @@ server.pre(restify.pre.sanitizePath());
 if(config.tls){
 
   // Setup some https server options
-  if(app.environment === 'development'){
-    var https_options = {
-      certificate: fs.readFileSync("../meshblu-certs/skynet.im/server.crt"),
-      key: fs.readFileSync("../meshblu-certs/skynet.im/server.key")
-    };
-  } else {
-    var https_options = {
-      certificate: fs.readFileSync(config.tls.cert),
-      key: fs.readFileSync(config.tls.key)
-    };
-  }
+  var https_options = {
+    certificate: fs.readFileSync(config.tls.cert),
+    key: fs.readFileSync(config.tls.key)
+  };
 
   var https_server = restify.createServer(https_options);
   https_server.pre(restify.pre.sanitizePath());

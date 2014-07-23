@@ -201,7 +201,7 @@ function checkConnection(socket, secure){
   //console.log(socket);
   // var ip = socket.handshake.address.address;
   console.log('SOCKET HEADERS', socket.handshake);
-  var ip = socket.handshake.address;
+  var ip = socket.handshake.headers["x-forwarded-for"] || socket.request.connection.remoteAddress;
   // var ip = socket.request.connection.remoteAddress
   // console.log(ip);
 

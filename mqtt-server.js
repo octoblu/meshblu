@@ -18,27 +18,47 @@ if(config.redis){
   io = require('socket.io-emitter')(redis.client);
 }
 
-config.mqtt = config.mqtt || {};
-var dataStore;
-if(config.mqtt.databaseUrl){
-  dataStore = {
-    type: 'mongo',
-    url: config.mqtt.databaseUrl,
-    pubsubCollection: 'mqtt',
-    mongo: {}
-  };
-}
-
-
 var dataLogger = {
     level: 'debug'
 };
 
 var settings = {
   port: config.mqtt.port || 1883,
-  backend: dataStore || {},
-  logger: dataLogger
+  logger: dataLogger,
+  stats: config.mqtt.stats || false
 };
+
+
+config.mqtt = config.mqtt || {};
+
+
+if(config.redis){
+  var ascoltatore = {
+    type: 'redis',
+    redis: require('redis'),
+    port: config.redis.port || 6379,
+    return_buffers: true, // to handle binary payloads
+    host: config.redis.host || "localhost"
+  };
+  settings.backend = ascoltatore;
+  settings.persistence= {
+    factory: mosca.persistence.Redis
+  };
+
+}else if(config.mqtt.databaseUrl){
+  settings.backend = {
+    type: 'mongo',
+    url: config.mqtt.databaseUrl,
+    pubsubCollection: 'mqtt',
+    mongo: {}
+  };
+}else{
+  settings.backend = {};
+}
+
+
+
+
 
 var skynetTopics = ['message',
                     'messageAck',

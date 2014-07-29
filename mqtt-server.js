@@ -140,7 +140,7 @@ function serverAck(fromDevice, ack, resp){
 function authenticate(client, username, password, callback) {
   //console.log('\nauthenticate username:', username.toString(),'password', password.toString(),'client.id:', client.id, client.clientId, client.client_id);
 
-  if(username && username.toString() === 'skynet'){
+  if(username && username.toString() === 'skynet' && password){
     if(password && password.toString() === config.mqtt.skynetPass){
       client.skynetDevice = {
         uuid: 'skynet',
@@ -149,7 +149,7 @@ function authenticate(client, username, password, callback) {
     }else{
       callback('unauthorized');
     }
-  }else{
+  }else if(username && password){
     var data = {
       uuid: username.toString(),
       token: password.toString(),
@@ -172,6 +172,8 @@ function authenticate(client, username, password, callback) {
       }
 
     });
+  }else{
+    callback('unauthorized');
   }
 
 

@@ -46,6 +46,9 @@ module.exports = {
     port: parseInt(process.env.MQTT_PORT),
     skynetPass: process.env.MQTT_PASSWORD
   },
+  yo: {
+    token: process.env.YO_TOKEN
+  },
   skynet_override_token: process.env.OVERRIDE_TOKEN,
   parentConnection: {
     uuid: process.env.PARENT_CONNECTION_UUID,

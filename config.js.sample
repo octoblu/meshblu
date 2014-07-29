@@ -57,5 +57,8 @@ module.exports = {
     databaseUrl: "mongodb://user:pass@adam.mongohq.com:1337/skynet",
     port: 1883,
     skynetPass: "Very big random password 34lkj23orfjvi3-94ufpvuha4wuef-a09v4ji0rhgouj"
+  },
+  yo: {
+    token: "your yo token from http://yoapi.justyo.co/"
   }
 };

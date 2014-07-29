@@ -541,6 +541,9 @@ If `log: true` in config.js, all transactions are logged to skynet.txt.  Here ar
 * 300 = Incoming message
 * 301 = Incoming SMS message
 * 302 = Outgoung SMS message
+* 303 = Incoming Yo message
+* 304 = Outgoung Yo message
+* 305 = Outgoung Push Notification message
 * 400 = Register device
 * 401 = Update device
 * 402 = Delete device

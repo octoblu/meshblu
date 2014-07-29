@@ -138,7 +138,7 @@ function serverAck(fromDevice, ack, resp){
 
 // Accepts the connection if the username and password are valid
 function authenticate(client, username, password, callback) {
-  console.log('\nauthenticate username:', username.toString(),'password', password.toString(),'client.id:', client.id, client.clientId, client.client_id);
+  //console.log('\nauthenticate username:', username.toString(),'password', password.toString(),'client.id:', client.id, client.clientId, client.client_id);
 
   if(username && username.toString() === 'skynet'){
     if(password && password.toString() === config.mqtt.skynetPass){

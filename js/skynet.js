@@ -185,6 +185,11 @@ Connection.prototype.unregister = function(data, fn) {
   return this;
 };
 
+Connection.prototype.claimdevice = function(data, fn) {
+    this.socket.emit('claimdevice', data, fn);
+    return this;
+};
+
 Connection.prototype.whoami = function(data, fn) {
   this.socket.emit('whoami', data, fn);
   return this;

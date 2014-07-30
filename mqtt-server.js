@@ -42,7 +42,9 @@ if(config.redis){
   };
   settings.backend = ascoltatore;
   settings.persistence= {
-    factory: mosca.persistence.Redis
+    factory: mosca.persistence.Redis,
+    host: ascoltatore.host,
+    port: ascoltatore.port
   };
 
 }else if(config.mqtt.databaseUrl){

@@ -102,7 +102,7 @@ Connection.prototype._handleAckRequest = function(topic, data){
     if(data.ack && data.fromUuid){
       //TODO clean these up if not used
       self.emit(topic, data, function(response){
-        self.socket.emit('messageAck', {
+        self._messageAck({
           devices: data.fromUuid,
           ack: data.ack,
           payload: response
@@ -137,6 +137,12 @@ Connection.prototype._emitWithAck = function(topic, data, fn){
   return this;
 };
 
+Connection.prototype._messageAck = function(response){
+  this.socket.emit('messageAck', response);
+  return this;
+};
+
+
 
 Connection.prototype.identify = function(){
   this.socket.emit('identity', {
@@ -146,6 +152,7 @@ Connection.prototype.identify = function(){
   });
   return this;
 };
+
 
 Connection.prototype.message = function(data, fn) {
   return this._emitWithAck('message', data, fn);
@@ -186,8 +193,8 @@ Connection.prototype.unregister = function(data, fn) {
 };
 
 Connection.prototype.claimdevice = function(data, fn) {
-    this.socket.emit('claimdevice', data, fn);
-    return this;
+  this.socket.emit('claimdevice', data, fn);
+  return this;
 };
 
 Connection.prototype.whoami = function(data, fn) {
@@ -287,7 +294,8 @@ Connection.prototype.unsubscribeText = function(data, fn) {
 };
 
 
-Connection.prototype.close = function(){
+Connection.prototype.close = function(fn){
+  this.socket.close(fn);
   return this;
 };
 

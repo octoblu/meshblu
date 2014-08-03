@@ -49,11 +49,12 @@ module.exports = {
   yo: {
     token: process.env.YO_TOKEN
   },
-  skynet_override_token: process.env.OVERRIDE_TOKEN,
-  parentConnection: {
-    uuid: process.env.PARENT_CONNECTION_UUID,
-    token: process.env.PARENT_CONNECTION_TOKEN,
-    server: process.env.PARENT_CONNECTION_SERVER,
-    port: parseInt(process.env.PARENT_CONNECTION_PORT)
-  }
+  skynet_override_token: process.env.OVERRIDE_TOKEN
+//    ,
+//  parentConnection: {
+//    uuid: process.env.PARENT_CONNECTION_UUID,
+//    token: process.env.PARENT_CONNECTION_TOKEN,
+//    server: process.env.PARENT_CONNECTION_SERVER,
+//    port: parseInt(process.env.PARENT_CONNECTION_PORT)
+//  }
 };

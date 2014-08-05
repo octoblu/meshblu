@@ -446,6 +446,51 @@
             </div>
 
             <div class="col-md-12">
+              <h1>localDevices</h1>
+            </div>
+
+            <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-info" disabled> GET</button>
+              </div>
+              </td>
+              <td>
+              <div class="feature col-md-10">
+                <b>/localdevices</b>
+                <br />Returns a list of unclaimed devices that are on the same network as the requesting resource.
+                <br />
+                <pre>curl -X GET http://skynet.im/localdevices --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</pre>
+                <pre>{"devices":[{"autoRegister":true,"online":false,"timestamp":"2014-08-05T20:38:31.139Z","ipAddress":"184.98.43.115","protocol":"websocket","secure":false,"uuid":"76537331-1ce0-11e4-861d-89322229e557","channel":"main"},{"autoRegister":true,"online":true,"timestamp":"2014-08-05T16:50:52.492Z","ipAddress":"184.98.43.115","protocol":"websocket","secure":false,"uuid":"a92350c1-1cc0-11e4-861d-89322229e557","channel":"main"}]}</pre>
+                <br />
+              </div>
+              </td></tr></table>
+            </div>
+
+
+            <div class="col-md-12">
+              <h1>claimDevice</h1>
+            </div>
+
+            <div class="col-md-12">
+              <table width="100%"><tr><td width="200px">
+              <div class="feature col-md-2 text-center">
+                <button class="btn btn-large btn-warning" disabled> PUT</button>
+              </div>
+              </td>
+              <td>
+              <div class="feature col-md-10">
+                <b>/claimdevice/:uuid</b>
+                <br />Adds the skynet_auth_uuid as the owner of this device UUID allowing a user or device to claim ownership of another device.
+                <br />
+                <pre>curl -X PUT http://skynet.im/claimdevice/{:uuid} --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</pre>
+                <pre>{"updatedExisting":true,"n":1,"connectionId":232,"err":null,"ok":1}</pre>
+                <br />
+              </div>
+              </td></tr></table>
+            </div>
+
+            <div class="col-md-12">
               <h1>myDevices</h1>
             </div>
 
@@ -1061,6 +1106,24 @@ socket.on('connect', function(){
         // {"armed":true,"channel":"main","color":"blue","ipAddress":"70.171.192.231","online":true,"protocol":"websocket","socketid":"j3WWX81JwWYzaidRaNA7","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc"}
       });
 
+      // Local devices
+      socket.emit('localdevices', function (data) {
+        console.log(data);
+        // {"devices":[{"drone","uuid":"b34cc731-b2f2-11e3-a36b-61e66c96102e","timestamp":"2014-03-24T01:22:01.123Z","token":"3k0t96e6n9mjkyb9ncpx8um4bstc5wmi","channel":"main","online":false,"ipAddress":"184.98.43.115"}]}
+      });
+
+      // Claim device
+      socket.emit('claimdevice', {"uuid":"76537331-1ce0-11e4-861d-89322229e557"}, function (data) {
+        console.log(data);
+        // {"results":{"updatedExisting":true,"n":1,"connectionId":232,"err":null,"ok":1}}
+      });
+
+      // My devices
+      socket.emit('mydevices', {}, function (data) {
+        console.log(data);
+        // {"devices":[{"drone","uuid":"b34cc731-b2f2-11e3-a36b-61e66c96102e","timestamp":"2014-03-24T01:22:01.123Z","token":"3k0t96e6n9mjkyb9ncpx8um4bstc5wmi","channel":"main","online":false,"ipAddress":"184.98.43.115"}], "eventCode": 403, "fromUuid": "c33e14c0-fd55-11e3-a290-ef9910e207d9", "timestamp": "2014-08-05T23:05:13.834Z"}
+      });
+
       // Receive last 10 device events
       socket.emit('events', {
         "uuid": "0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc",
@@ -1296,7 +1359,7 @@ conn.on('ready', function(data){
   conn.whoami({"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}, function (data) {
     console.log(data);
   });
-
+  
   // Receive an array of device UUIDs based on user defined search criteria
   conn.devices({
     "type":"drone"
@@ -1312,6 +1375,25 @@ conn.on('ready', function(data){
     });
 
   });
+
+  // Local devices
+  conn.localdevices(function (data) {
+    console.log(data);
+    // {"devices":[{"drone","uuid":"b34cc731-b2f2-11e3-a36b-61e66c96102e","timestamp":"2014-03-24T01:22:01.123Z","token":"3k0t96e6n9mjkyb9ncpx8um4bstc5wmi","channel":"main","online":false,"ipAddress":"184.98.43.115"}]}
+  });
+
+  // Claim device
+  conn.claimdevice({"uuid":"76537331-1ce0-11e4-861d-89322229e557"}, function (data) {
+    console.log(data);
+    // {"results":{"updatedExisting":true,"n":1,"connectionId":232,"err":null,"ok":1}}
+  });
+
+  // My devices
+  conn.mydevices({}, function (data) {
+    console.log(data);
+    // {"devices":[{"drone","uuid":"b34cc731-b2f2-11e3-a36b-61e66c96102e","timestamp":"2014-03-24T01:22:01.123Z","token":"3k0t96e6n9mjkyb9ncpx8um4bstc5wmi","channel":"main","online":false,"ipAddress":"184.98.43.115"}], "eventCode": 403, "fromUuid": "c33e14c0-fd55-11e3-a290-ef9910e207d9", "timestamp": "2014-08-05T23:05:13.834Z"}
+  });
+
 
   // SkyNet status
   conn.status(function (data) {

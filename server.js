@@ -301,7 +301,7 @@ server.listen(process.env.PORT || config.port, function() {
   console.log('HTTP listening at %s', server.url);
 });
 
-if(config.tls){
+if(config.tls && config.tls.key){
   https_server.listen(process.env.SSLPORT || config.tls.sslPort, function() {
     console.log('HTTPS listening at %s', https_server.url);
   });

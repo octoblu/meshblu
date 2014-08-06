@@ -224,7 +224,12 @@
       <div class="col-md-12">
         <h1>Meshblu in Action</h1>
 
-        <div style=""><center><a class="btn btn-large scroll assimilate" data-toggle="modal" data-target="#demoModal" onclick="startDemo(this)">DEMO!</a></center></div>
+        <div style="">
+          <center>
+            <a class="btn btn-large scroll assimilate" data-toggle="modal" data-target="#demoModal" onclick="startDemo(this)">SENSOR DEMO</a>
+            <a class="btn btn-large scroll assimilate" href="/js.html">JAVASCRIPT CONSOLE</a>
+          </center>
+        </div>
 
         <br />
 
@@ -1359,7 +1364,7 @@ conn.on('ready', function(data){
   conn.whoami({"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}, function (data) {
     console.log(data);
   });
-  
+
   // Receive an array of device UUIDs based on user defined search criteria
   conn.devices({
     "type":"drone"

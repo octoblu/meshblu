@@ -272,12 +272,32 @@ curl -X DELETE -d "token=123" "http://localhost:3000/devices/01404680-2539-11e3-
 => {"uuid":"8220cff0-2939-11e3-88cd-0b8e5fdfd7d4","timestamp":1380481567799}
 ```
 
-GET /mydevices/uuid
+GET /localdevices 
+
+Returns a list of unclaimed devices that are on the same network as the requesting resource. 
+
+```
+curl -X GET http://skynet.im/localdevices --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
+
+=> {"devices":[{"autoRegister":true,"online":false,"timestamp":"2014-08-05T20:38:31.139Z","ipAddress":"184.98.43.115","protocol":"websocket","secure":false,"uuid":"76537331-1ce0-11e4-861d-89322229e557","channel":"main"},{"autoRegister":true,"online":true,"timestamp":"2014-08-05T16:50:52.492Z","ipAddress":"184.98.43.115","protocol":"websocket","secure":false,"uuid":"a92350c1-1cc0-11e4-861d-89322229e557","channel":"main"}]}
+```
+
+GET /claimdevice/:uuid 
+
+Adds the skynet_auth_uuid as the owner of this device UUID allowing a user or device to claim ownership of another device. 
+
+```
+curl -X PUT http://skynet.im/claimdevice/{:uuid} --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
+
+=> {"updatedExisting":true,"n":1,"connectionId":232,"err":null,"ok":1}
+```
+
+GET /mydevices
 
 Returns all information (including tokens) of all devices or nodes belonging to a user's UUID (identified as "owner")
 
 ```
-curl -X GET "http://skynet.im/mydevices/0d1234a0-1234-11e3-b09c-1234e847b2cc?token=1234glm6y1234ldix1234nux41234sor" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
+curl -X GET "http://skynet.im/mydevices" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => {"devices":[{"owner":"0d1234a0-1234-11e3-b09c-1234e847b2cc","name":"SMS","phoneNumber":"16025551234","uuid":"1c1234e1-xxxx-11e3-1234-671234c01234","timestamp":1390861609070,"token":"1234eg1234zz1tt1234w0op12346bt9","channel":"main","online":false,"_id":"52e6d1234980420c4a0001db"}}]}
 ```

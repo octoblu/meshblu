@@ -14,7 +14,7 @@ var updateFromClient = require('./lib/updateFromClient');
 
 var server;
 var io;
-if(config.redis){
+if(config.redis && config.redis.host){
   io = require('socket.io-emitter')(redis.client);
 }
 
@@ -32,7 +32,7 @@ var settings = {
 config.mqtt = config.mqtt || {};
 
 
-if(config.redis){
+if(config.redis && config.redis.host){
   var ascoltatore = {
     type: 'redis',
     redis: require('redis'),
@@ -238,7 +238,7 @@ function authorizeSubscribe(client, topic, callback) {
 
 // fired when the mqtt server is ready
 function setup() {
-  console.log('Skynet MQTT server started on port', config.mqtt.port);
+  console.log('Skynet MQTT server started on port', config.mqtt.port || 1883);
   server.authenticate = authenticate;
   server.authorizePublish = authorizePublish;
   server.authorizeSubscribe = authorizeSubscribe;

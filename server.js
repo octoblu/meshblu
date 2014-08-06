@@ -115,7 +115,7 @@ if(config.redis && config.redis.host){
 
 if(config.tls && config.tls.cert){
   ios = socketio(https_server);
-  if(config.redis){
+  if(config.redis && config.redis.host){
     ios.adapter(redisStore);
   }
 }
@@ -301,7 +301,7 @@ server.listen(process.env.PORT || config.port, function() {
   console.log('HTTP listening at %s', server.url);
 });
 
-if(config.tls && config.tls.key){
+if(config.tls && config.tls.cert){
   https_server.listen(process.env.SSLPORT || config.tls.sslPort, function() {
     console.log('HTTPS listening at %s', https_server.url);
   });

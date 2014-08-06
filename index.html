@@ -671,6 +671,7 @@ limit (overrides the default 10 updates)
                 <br />
                 <pre>curl -L -X GET http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</pre>
                 <pre>curl -L -X GET http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?stream=true --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"</pre>
+                <pre>curl -L -X GET --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}" "http://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?start=2013-08-06T20:50:21.818Z&finish=2013-08-06T20:60:21.818Z" </pre>
                 <pre>{"data":[{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","wind":"12","ipAddress":"127.0.0.1","id":"532f2e8c9c23809e93000001"}]}</pre>
               </div>
               </td></tr></table>

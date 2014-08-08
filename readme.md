@@ -141,6 +141,10 @@ Heroku
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
+Use the button above to deploy to the [Heroku](http://heroku.com/) cloud for Free! Starts out with a basic implementation of Meshblu with only MongoDB. The app.json / config.js can be modified to allow for more protocols and storage systems.
+
+[Heroku](http://heroku.com/) allows you scale with a touch of a button.
+
 Docker
 ------
 

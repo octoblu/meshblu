@@ -146,6 +146,14 @@ server.use(restify.fullResponse());
 //       burst: 0
 //     }
 //   }
+//
+
+// for https params
+https_server.use(restify.queryParser());
+https_server.use(restify.bodyParser());
+https_server.use(restify.CORS({ headers: [ 'skynet_auth_uuid', 'skynet_auth_token' ], origins: ['*'] }));
+https_server.use(restify.fullResponse());
+
 
 process.on("uncaughtException", function(error) {
   return console.log(error.stack);

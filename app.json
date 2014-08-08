@@ -14,5 +14,5 @@
         "RATE_LIMITS_WHOAMI" : 10,
         "RATE_LIMITS_UNTHROTTLED_IPS" : ""
     },
-    "repository": "https://github.com/octoblu/meshblu"
+    "repository": "https://github.com/peterdemartini/meshblu"
 }

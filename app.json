@@ -1,0 +1,19 @@
+{
+    "name": "Meshblu",
+    "description": "Meshblu is an open source machine-to-machine instant messaging network and API. ",
+    "website": "http://meshblu.org",
+    "success_url": "/",
+    "addons": ["mongohq"],
+    "env": {
+        "NODE_ENV": "production",
+        "PORT": "80",
+        "RATE_LIMITS_MESSAGE" : "10",
+        "RATE_LIMITS_DATA" : "10",
+        "RATE_LIMITS_CONNECTION" : "2",
+        "RATE_LIMITS_QUERY" : "2",
+        "RATE_LIMITS_WHOAMI" : "10",
+        "RATE_LIMITS_UNTHROTTLED_IPS" : ""
+    },
+    "repository": "https://github.com/octoblu/meshblu",
+    "keywords": ["M2M", "IoT", "Communication", "arduino", "skynet", "meshblu"]
+}

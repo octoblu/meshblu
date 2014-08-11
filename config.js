@@ -49,7 +49,8 @@ module.exports = {
   yo: {
     token: process.env.YO_TOKEN
   },
-  skynet_override_token: process.env.OVERRIDE_TOKEN
+  skynet_override_token: process.env.OVERRIDE_TOKEN,
+  useProxyProtocol: (process.env.USE_PROXY_PROTOCOL || "false").toLowerCase() == "true"
 //    ,
 //  parentConnection: {
 //    uuid: process.env.PARENT_CONNECTION_UUID,

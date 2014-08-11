@@ -4,14 +4,14 @@
 var _ = require('lodash');
 var app = require('commander');
 var tokenthrottle = require("tokenthrottle");
+var http = require('http');
+
+var config = require(process.env.SKYNET_CONFIG || './config');
 var restify = require('restify');
 var socketio = require('socket.io');
 var skynetClient = require('skynet'); //skynet npm client
-
-var config = require(process.env.SKYNET_CONFIG || './config');
-
+var proxyListener = require('./proxyListener');
 var redis = require('./lib/redis');
-
 var setupRestfulRoutes = require('./lib/setupHttpRoutes');
 var setupCoapRoutes = require('./lib/setupCoapRoutes');
 var setupMqttClient = require('./lib/setupMqttClient');
@@ -230,19 +230,25 @@ function checkConnection(socket, secure){
       }
     });
   }
-
 }
 
+var socketConnectionEvent = 'connection';
+if (config.useProxyProtocol) {
+  socketConnectionEvent = 'proxiedConnection';
+  proxyListener.resetListeners(server);
+  if(useHTTPS){
+    proxyListener.resetListeners(https_server);
+  }
+}
 
-
-io.on('connection', function (socket) {
+io.on(socketConnectionEvent, function (socket) {
   checkConnection(socket, false);
   var client = socket.conn.request;
   console.log('CONNECTED', socket.handshake.address);
 });
 
 if(useHTTPS){
-  ios.on('connection', function (socket) {
+  ios.on(socketConnectionEvent, function (socket) {
     checkConnection(socket, true);
   });
 }

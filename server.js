@@ -26,6 +26,8 @@ var setupGatewayConfig = require('./lib/setupGatewayConfig');
 
 var parentConnection;
 
+var useHTTPS = config.tls && config.tls.cert;
+
 if(config.parentConnection){
   //console.log('logging into parent cloud', config.parentConnection, skynetClient);
   parentConnection = skynetClient.createConnection(config.parentConnection);
@@ -92,7 +94,7 @@ var throttles = {
 var server = restify.createServer();
 server.pre(restify.pre.sanitizePath());
 
-if(config.tls && config.tls.cert){
+if(useHTTPS){
 
   // Setup some https server options
   var https_options = {
@@ -113,7 +115,7 @@ if(config.redis && config.redis.host){
   io.adapter(redisStore);
 }
 
-if(config.tls && config.tls.cert){
+if(useHTTPS){
   ios = socketio(https_server);
   if(config.redis && config.redis.host){
     ios.adapter(redisStore);
@@ -149,10 +151,12 @@ server.use(restify.fullResponse());
 //
 
 // for https params
-https_server.use(restify.queryParser());
-https_server.use(restify.bodyParser());
-https_server.use(restify.CORS({ headers: [ 'skynet_auth_uuid', 'skynet_auth_token' ], origins: ['*'] }));
-https_server.use(restify.fullResponse());
+if (useHTTPS) {
+  https_server.use(restify.queryParser());
+  https_server.use(restify.bodyParser());
+  https_server.use(restify.CORS({ headers: [ 'skynet_auth_uuid', 'skynet_auth_token' ], origins: ['*'] }));
+  https_server.use(restify.fullResponse());
+}
 
 
 process.on("uncaughtException", function(error) {
@@ -237,7 +241,7 @@ io.on('connection', function (socket) {
   console.log('CONNECTED', socket.handshake.address);
 });
 
-if(config.tls && config.tls.cert){
+if(useHTTPS){
   ios.on('connection', function (socket) {
     checkConnection(socket, true);
   });
@@ -275,7 +279,7 @@ coapServer.on('request', coapRouter.process);
 // Now, setup both servers in one step
 setupRestfulRoutes(server, skynet);
 
-if(config.tls && config.tls.cert){
+if(useHTTPS){
   setupRestfulRoutes(https_server, skynet);
 }
 
@@ -309,7 +313,7 @@ server.listen(process.env.PORT || config.port, function() {
   console.log('HTTP listening at %s', server.url);
 });
 
-if(config.tls && config.tls.cert){
+if(useHTTPS){
   https_server.listen(process.env.SSLPORT || config.tls.sslPort, function() {
     console.log('HTTPS listening at %s', https_server.url);
   });

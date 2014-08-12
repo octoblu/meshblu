@@ -239,14 +239,14 @@ function checkConnection(socket, secure){
   }
 }
 
-io.on('connected', function (socket) {
+io.on('connection', function (socket) {
   checkConnection(socket, false);
   var client = socket.conn.request;
   console.log('CONNECTED', socket.handshake.address);
 });
 
 if(useHTTPS){
-  ios.on('connected', function (socket) {
+  ios.on('connection', function (socket) {
     checkConnection(socket, true);
   });
 }

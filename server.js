@@ -106,6 +106,13 @@ if(useHTTPS){
   https_server.pre(restify.pre.sanitizePath());
 }
 
+if (config.useProxyProtocol) {
+  proxyListener.resetListeners(server.server);
+  if(useHTTPS){
+    proxyListener.resetListeners(https_server.server);
+  }
+}
+
 // Setup websockets
 var io, ios;
 io = socketio(server);
@@ -232,23 +239,14 @@ function checkConnection(socket, secure){
   }
 }
 
-var socketConnectionEvent = 'connection';
-if (config.useProxyProtocol) {
-  socketConnectionEvent = 'proxiedConnection';
-  proxyListener.resetListeners(server);
-  if(useHTTPS){
-    proxyListener.resetListeners(https_server);
-  }
-}
-
-io.on(socketConnectionEvent, function (socket) {
+io.on('connected', function (socket) {
   checkConnection(socket, false);
   var client = socket.conn.request;
   console.log('CONNECTED', socket.handshake.address);
 });
 
 if(useHTTPS){
-  ios.on(socketConnectionEvent, function (socket) {
+  ios.on('connected', function (socket) {
     checkConnection(socket, true);
   });
 }

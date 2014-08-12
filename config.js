@@ -16,6 +16,14 @@ module.exports = {
     host: process.env.ELASTIC_SEARCH_HOST,
     port: parseInt(process.env.ELASTIC_SEARCH_PORT)
   },
+  splunk: {
+    protocol: process.env.SPLUNK_PROTOCOL || "http", 	//This should be "http" OR "https"
+    host: process.env.SPLUNK_HOST, 			//The Host to connect to
+    port: parseInt(process.env.SPLUNK_PORT) || 8089, 	//The Splunk Port
+    user: process.env.SPLUNK_USER,			//The user to connect with - does not have to be admin
+    password: process.env.SPLUNK_PASSWORD,		//The Password
+    index: process.env.SPLUNK_INDEX || "meshblu"	//The Splunk index to send the data to. OCT-TA-meshblu uses "meshblu"
+  },
   rateLimits: {
     message: parseInt(process.env.RATE_LIMITS_MESSAGE || 10),
     data: parseInt(process.env.RATE_LIMITS_DATA || 10),

@@ -696,7 +696,7 @@ limit (overrides the default 10 updates)
           </div>
 
           <div class="col-md-12">
-            <h1>Base URI: coap://skynet.im</h1>
+            <h1>Base URI: coap://coap.octoblu.com</h1>
           </div>
 
           <div class="col-md-12">
@@ -714,7 +714,7 @@ limit (overrides the default 10 updates)
               <b>/status</b>
               <br />Returns the SkyNet platform status
               <br />
-              <pre>coap get coap://skynet.im/status</pre>
+              <pre>coap get coap://coap.octoblu.com/status</pre>
               <pre>{"skynet":"online","timestamp":1381536589633,"eventCode":200,"_id":"5258934d56330f7dd0000009"}</pre>
             </div>
             </td></tr></table>
@@ -734,7 +734,7 @@ limit (overrides the default 10 updates)
               <b>/devices?key=value&key=value</b>
               <br />Returns an array of device UUIDs based on key/value query criteria
               <br />
-              <pre>coap get coap://skynet.im/devices?type=drone</pre>
+              <pre>coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/devices?type=drone</pre>
               <pre>{"devices":["ad698900-2546-11e3-87fb-c560cb0ca47b","2f3113d0-2796-11e3-95ef-e3081976e170"]}</pre>
               <br />
             </div>
@@ -752,7 +752,7 @@ limit (overrides the default 10 updates)
               <b>/devices/{uuid}</b>
               <br />Returns all information (except the token) of a specific device or node
               <br />
-              <pre>coap get coap://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</pre>
+              <pre>coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</pre>
               <pre>{"_id":"5241d9140345450000000001","api":"update","armed":true,"channel":"main","deviceDescription":"this is a test","deviceName":"hackboard","key":"777","online":true,"socketid":"fO8dxKEwARUH9Ea--p2C","timestamp":1381536277933,"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b"}</pre>
               <br />
             </div>
@@ -771,7 +771,7 @@ limit (overrides the default 10 updates)
               <b>Payload: key=value (i.e. type=drone&color=black)</b>
               <br />Registers a node or device with SkyNet. SkyNet returns a UUID device id and security token. You can pass any key/value pairs and even override SkyNet's auto-generated UUID and/or token by passing your own uuid and/or token in the payload i.e. uuid=123&token=456
               <br />
-              <pre>coap post -p "type=drone&color=black" coap://skynet.im/devices</pre>
+              <pre>coap post -p "type=drone&color=black" -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/devices</pre>
               <pre>{"type":"drone","color":"black","uuid":"6f72bc60-32d5-11e3-92e2-e94f95fc16a6","timestamp":1381537803046,"token":"4bbd2jm242dl5wmimbwz4rvlu77m0a4i","channel":"main","online":false,"_id":"5258980b56330f7dd000000d"}</pre>
               <br />
             </div>
@@ -790,7 +790,7 @@ limit (overrides the default 10 updates)
               <b>Payload: token=123&key=value (i.e. token=123&type=drone&color=blue&online=true)</b>
               <br />Updates a node or device currently registered with SkyNet. You must pass the token for security but you can pass any key/value pairs to update object as well as null to remove a propery (i.e. color=null).
               <br />
-              <pre>coap put -p "token=123&color=blue&online=true" coap://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</pre>
+              <pre>coap put -p "token=123&color=blue&online=true" -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</pre>
               <pre>{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","color":"blue","timestamp":1381537750462}</pre>
               <br />
             </div>
@@ -809,7 +809,7 @@ limit (overrides the default 10 updates)
               <b>Payload: token=123</b>
               <br />Deletes or unregisters a node or device currently registered with SkyNet. You must pass the token for security.
               <br />
-              <pre>coap delete -p "token=123" coap://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</pre>
+              <pre>coap delete -p "token=123" -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/devices/ad698900-2546-11e3-87fb-c560cb0ca47b</pre>
               <pre>{"uuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","timestamp":1381537971074}</pre>
               <br />
             </div>
@@ -831,7 +831,7 @@ limit (overrides the default 10 updates)
               <b>/mydevices/{uuid}</b>
               <br />Returns all information (including tokens) of all devices or nodes belonging to a user's UUID (identified with an "owner" property and user's UUID i.e. "owner":"0d1234a0-1234-11e3-b09c-1234e847b2cc")
               <br />
-              <pre>coap get coap://skynet.im/mydevices/0d1234a0-1234-11e3-b09c-1234e847b2cc?token=1234glm6y1234ldix1234nux41234sor</pre>
+              <pre>coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/mydevices/0d1234a0-1234-11e3-b09c-1234e847b2cc?token=1234glm6y1234ldix1234nux41234sor</pre>
               <pre>{"devices":[{"owner":"0d1234a0-1234-11e3-b09c-1234e847b2cc","name":"SMS","phoneNumber":"16025551234","uuid":"1c1234e1-xxxx-11e3-1234-671234c01234","timestamp":1390861609070,"token":"1234eg1234zz1tt1234w0op12346bt9","channel":"main","online":false,"_id":"52e6d1234980420c4a0001db"}}]}</pre>
               <br />
             </div>
@@ -853,8 +853,8 @@ limit (overrides the default 10 updates)
               <b>/messages</b>
               <br />Send a message to a specific device, array of devices, or all devices subscribing to a UUID on the SkyNet platform
               <br />
-              <pre>coap post -p '{"devices": "*", "payload": {"yellow":"off"}}' coap://skynet.im/messages</pre>
-              <pre>coap post -p '{"devices": ["ad6...47b","2f3...170"], "payload": {"yellow":"off"}}' coap://skynet.im/messages</pre>
+              <pre>coap post -p '{"devices": "*", "payload": {"yellow":"off"}}' -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/messages</pre>
+              <pre>coap post -p '{"devices": ["ad6...47b","2f3...170"], "payload": {"yellow":"off"}}' -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/messages</pre>
               <pre>coap post -p '{"devices": "ad698900-2546-11e3-87fb-c560cb0ca47b", "payload": {"yellow":"off"}}' coap://skynet.im/messages</pre>
               <pre>{"devices":"*","payload":{"yellow":"off"}}</pre>
               <!-- <pre>{"devices":"all","message":{"yellow":"off"}</pre> -->
@@ -876,7 +876,7 @@ limit (overrides the default 10 updates)
               <b>/events/{uuid}?token={token}</b>
               <br />Returns last 10 events related to a specific device or node
               <br />
-              <pre>coap get coap://skynet.im/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123</pre>
+              <pre>coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123</pre>
               <pre>{"events":[{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"lnHHS06ijWUXEzb01ZRy","timestamp":1382632438785,"eventCode":101,"_id":"52694bf6ad11379eec00003f"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"BuwnWQ_oLmpk5R3m1ZRv","timestamp":1382561240563,"eventCode":101,"_id":"526835d8ad11379eec000017"}]}</pre>
             </div>
             </td></tr></table>
@@ -898,29 +898,8 @@ limit (overrides the default 10 updates)
               <br />This is a streaming API that returns device/node messages as they are sent and received. Notice the comma at the end of the response. SkyNet doesn't close the stream.
               <br />Note: You can subscribe to UUIDs without knowing the token but this will only allow you to receive broadcast messages from the UUID (devices=* or devices=all)
               <br />
-              <pre>coap get coap://skynet.im/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123 -o</pre>
+              <pre>coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123 -o</pre>
               <pre>{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"on"},"timestamp":1388768270795,"eventCode":300,"_id":"52c6ec0e4f67671e44000001"},{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"on"},"timestamp":1388768277473,"eventCode":300,"_id":"52c6ec154f67671e44000002"},</pre>
-            </div>
-            </td></tr></table>
-          </div>
-
-
-          <div class="col-md-12">
-            <h1>Authenticate</h1>
-          </div>
-          <div class="col-md-12">
-            <table width="100%"><tr><td width="200px">
-            <div class="feature col-md-2 text-center">
-              <button class="btn btn-large btn-info" disabled> GET</button>
-            </div>
-            </td>
-            <td>
-            <div class="feature col-md-10">
-              <b>/authenticate/{uuid}?token={token}</b>
-              <br />Returns UUID and authticate: true or false based on the validity of uuid/token credentials
-              <br />
-              <pre>coap get coap://skynet.im/authenticate/81246e80-29fd-11e3-9468-e5f892df566b?token=5ypy4rurayktke29ypbi30kcw5ovfgvi</pre>
-              <pre>{"uuid":"81246e80-29fd-11e3-9468-e5f892df566b","authentication":true} OR {"uuid":"81246e80-29fd-11e3-9468-e5f892df566b","authentication":false}</pre>
             </div>
             </td></tr></table>
           </div>
@@ -939,7 +918,7 @@ limit (overrides the default 10 updates)
               <b>/ipaddress</b>
               <br />Returns the public IP address of the request. This is useful when working with the SkyNet Gateway behind a firewall.
               <br />
-              <pre>coap get coap://skynet.im/ipaddress</pre>
+              <pre>coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/ipaddress</pre>
               <pre>{"ipAddress":"70.171.149.205"}</pre>
             </div>
             </td></tr></table>
@@ -962,7 +941,7 @@ limit (overrides the default 10 updates)
               <b>Payload: token=value&key=value (i.e. temperature=78&humity=30)</b>
               <br />Stores sensor data for a particular UUID. You can pass any key/value pairs.
               <br />
-              <pre>coap post -p "token=123&temperature=78" coap://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc</pre>
+              <pre>coap post -p "token=123&temperature=78" -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc</pre>
               <pre>{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","ipAddress":"127.0.0.1","eventCode":700,"_id":"532f2e8c9c23809e93000002"}</pre>
               <br />
             </div>
@@ -984,8 +963,8 @@ limit (overrides the default 10 updates)
 limit (overrides the default 10 updates)
               <br />Note: You can make this API stream sensor data by adding stream=true to the querystring. Notice the comma at the end of the response. SkyNet doesn't close the stream.
               <br />
-              <pre>coap get coap://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123</pre>
-              <pre>coap get coap://skynet.im/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123&stream=true  -o</pre>
+              <pre>coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123</pre>
+              <pre>coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123&stream=true  -o</pre>
               <pre>{"data":[{"timestamp":"2014-03-23T18:57:16.093Z","uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","temperature":"78","ipAddress":"127.0.0.1","id":"532f2e8c9c23809e93000001"}]}</pre>
             </div>
             </td></tr></table>
@@ -997,7 +976,7 @@ limit (overrides the default 10 updates)
 <br/><br/>
 <h4>
 <center>
-Note: The CoAP examples are using <a href="https://twitter.com/matteocollina">Matteo Collina's</a> <a href="https://www.npmjs.org/package/coap-cli">CoAP CLI</a> testing tool.
+Note: The CoAP examples are using <a href="https://twitter.com/matteocollina">Matteo Collina's</a> <a href="https://github.com/chrismatthieu/coap-cli">CoAP CLI</a> testing tool.
 </center>
 </h4>
      </div>

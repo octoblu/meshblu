@@ -270,14 +270,19 @@ var mqttclient = setupMqttClient(skynet, config);
 // };
 
 // Integrate coap
-var coap       = require('coap'),
-    coapRouter = require('./lib/coapRouter'),
-    coapServer = coap.createServer(),
-    coapConfig = config.coap || {};
+// var coap       = require('coap');
 
-setupCoapRoutes(coapRouter, skynet);
+// coap.registerOption('skynet_auth_uuid');
+// coap.registerOption('skynet_auth_token');
 
-coapServer.on('request', coapRouter.process);
+// var coapRouter = require('./lib/coapRouter'),
+//     coapServer = coap.createServer(),
+//     coapConfig = config.coap || {};
+
+
+// setupCoapRoutes(coapRouter, skynet);
+
+// coapServer.on('request', coapRouter.process);
 
 
 // Now, setup both servers in one step
@@ -303,15 +308,12 @@ console.log('\Meshblu (formerly skynet.im) %s environment loaded... ', app.envir
 
 // Start our restful servers to listen on the appropriate ports
 
-var coapPort = coapConfig.port || 5683;
-var coapHost = coapConfig.host || 'localhost';
+// var coapPort = coapConfig.port || 5683;
+// var coapHost = coapConfig.host || 'localhost';
 
-// Passing in null for the host responds to any request on server
-// coapServer.listen(coapPort, coapHost, function () {
-// coapServer.listen(coapPort, null, function () {
-coapServer.listen(coapPort, function () {
-  console.log('CoAP listening at coap://' + coapHost + ':' + coapPort);
-});
+// coapServer.listen(coapPort, function () {
+//   console.log('CoAP listening at coap://' + coapHost + ':' + coapPort);
+// });
 
 server.listen(process.env.PORT || config.port, function() {
   console.log('HTTP listening at %s', server.url);

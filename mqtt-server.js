@@ -58,10 +58,6 @@ if(config.redis && config.redis.host){
   settings.backend = {};
 }
 
-
-
-
-
 var skynetTopics = ['message',
                     'messageAck',
                     'update',

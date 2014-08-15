@@ -13,6 +13,13 @@ deploy:
     access_key_id: AKIAIT4X4NDGM2WVL6VA
     secret_access_key:
       secure: fqCKEwrQBo2P9G6CiQqU4dv/nwQ64FWv+TRblkvZxCsGe+VKoNYSz57B2AaX0mGvTyS7qt7GHOxcU4T64KYdXpRuYe/Z2yekp7K9mcgGCqYnprwUo7Xh67kstixjKxvs4QzYRWF0tJiaeoXgLoXxu0fO111iP8bCIQc5ThBSF+8=
+    app-id: 7b21bb86-93bb-4a2b-b482-7a8a3ab4a23b
+    on:
+      branch: master
+  - provider: opsworks
+    access_key_id: AKIAIT4X4NDGM2WVL6VA
+    secret_access_key:
+      secure: fqCKEwrQBo2P9G6CiQqU4dv/nwQ64FWv+TRblkvZxCsGe+VKoNYSz57B2AaX0mGvTyS7qt7GHOxcU4T64KYdXpRuYe/Z2yekp7K9mcgGCqYnprwUo7Xh67kstixjKxvs4QzYRWF0tJiaeoXgLoXxu0fO111iP8bCIQc5ThBSF+8=
     app-id: 5fcc76e4-b0cc-41d3-b794-8a8b4ff0ed9e
     on:
       branch: staging

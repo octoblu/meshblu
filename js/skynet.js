@@ -29,7 +29,7 @@ function Connection(opt){
   this.options.options.transports = this.options.options.transports || ['websocket'];
   this.options.forceNew = (opt.forceNew != null) ? opt.forceNew : false;
 
-  this.options.server = this.options.server || 'ws://skynet.im';
+  this.options.server = this.options.server || 'ws://meshblu.octoblu.com';
   this.options.port = this.options.port || 80;
 
 

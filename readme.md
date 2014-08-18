@@ -431,17 +431,31 @@ CoAP API
 
 Our CoAP API works exactly like our REST API.  You can use [Matteo Collina's](https://twitter.com/matteocollina) [CoAP CLI](https://www.npmjs.org/package/coap-cli) for testing CoAP REST API calls.  Here are a few examples:
 
-coap get coap://skynet.im/status
+coap get coap://coap.octoblu.com/status
 
-coap get coap://skynet.im/devices?type=drone
+coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/devices?type=drone
 
-coap get coap://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b
+coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/devices/ad698900-2546-11e3-87fb-c560cb0ca47b
 
-coap post -p "type=drone&color=black" coap://skynet.im/devices
+coap post -p "type=drone&color=black" -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/devices
 
-coap put -p "token=123&color=blue&online=true" coap://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b
+coap put -p "token=123&color=blue&online=true" -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/devices/ad698900-2546-11e3-87fb-c560cb0ca47b
 
-coap delete -p "token=123" coap://skynet.im/devices/ad698900-2546-11e3-87fb-c560cb0ca47b
+coap delete -p "token=123" -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/devices/ad698900-2546-11e3-87fb-c560cb0ca47b
+
+coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/mydevices/0d1234a0-1234-11e3-b09c-1234e847b2cc?token=1234glm6y1234ldix1234nux41234sor
+
+coap post -p '{"devices": "*", "payload": {"yellow":"off"}}' -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/messages
+
+coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123
+
+coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123 -o
+
+coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/ipaddress
+
+coap post -p "token=123&temperature=78" -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc
+
+coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/data/0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc?token=123
 
 
 WEBSOCKET API

@@ -30,6 +30,17 @@ Meshblu offers a Node.JS NPM module called [SkyNet](https://www.npmjs.org/packag
 
 Press
 -----
+[AllSeen Alliance](https://allseenalliance.org/announcement/allseen-alliance-reaches-50-members-expands-smart-home-connected-car-and-security-focus) - Allseen Alliance reaches 50 members; expands smart home, connected car and security focus
+
+[Sys-Con](http://iot.sys-con.com/node/3125944) - Exclusive Octoblu Interview @ThingsExpo Silicon Valley
+
+[Onalytica](http://www.onalytica.com/blog/posts/the-internet-of-things-top-100-organizations) - The Internet of Things - Top 100 Organizations
+
+[GigaOm](http://gigaom.com/2014/07/21/octoblu-launches-to-make-skynet-internet-of-things-tools-professional-grade/) - Octoblu launches to make Skynet internet of things tools professional grade
+
+[VentureBeat](http://venturebeat.com/2014/07/22/internet-of-things-startup-octoblu-designs-a-platform-that-translates-protocols/) - Internet of things startup Octoblu designs a platform that translates protocols
+
+[Forbes](http://www.forbes.com/sites/benkepes/2014/07/22/octoblu-rolls-out-its-internet-of-things-thing/) - Octoblu Peels Back The Covers On Its Internet Of Things Platform
 
 [GigaOm](http://gigaom.com/2014/02/04/podcast-meet-skynet-an-open-source-im-platform-for-the-internet-of-things/) - Listen to Stacey Higginbotham from GigaOm interview Chris Matthieu, the founder of SkyNet, about our capabilities, uses, and future direction.
 
@@ -133,6 +144,30 @@ Note: Our MQTT Broker defaults to using Mongo; however, you can run it in memory
 mqtt: {
   port: 1883,
   skynetPass: "Very big random password 34lkj23orfjvi3-94ufpvuha4wuef-a09v4ji0rhgouj"
+}
+```
+
+CoAP
+----
+
+CoAP is an optional SkyNet protocol.  If you would like to run our CoAP protocol with your private Meshblu cloud, open another console tab and run:
+
+```bash
+$ node coap-server.js
+```
+
+ or using forever
+
+ ```bash
+ $ forever start coap-server.js
+ ```
+
+Note: Our CoAP protocol defaults to using Mongo; however, you can run it in memory by removing the databaseUrl from the config.js.
+
+```
+coap: {
+  port: 5683,
+  host: "localhost"
 }
 ```
 

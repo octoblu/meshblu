@@ -1,10 +1,10 @@
 ```
-MM    MM              hh      bb      lll         
-MMM  MMM   eee   sss  hh      bb      lll uu   uu 
-MM MM MM ee   e s     hhhhhh  bbbbbb  lll uu   uu 
-MM    MM eeeee   sss  hh   hh bb   bb lll uu   uu 
-MM    MM  eeeee     s hh   hh bbbbbb  lll  uuuu u 
-                 sss                                                                              
+MM    MM              hh      bb      lll
+MMM  MMM   eee   sss  hh      bb      lll uu   uu
+MM MM MM ee   e s     hhhhhh  bbbbbb  lll uu   uu
+MM    MM eeeee   sss  hh   hh bb   bb lll uu   uu
+MM    MM  eeeee     s hh   hh bbbbbb  lll  uuuu u
+                 sss
 ```
 Formerly SkyNet.im
 
@@ -17,9 +17,9 @@ Visit [meshblu.octoblu.com](http://meshblu.octoblu.com) for up-to-the-latest doc
 Introduction
 ------------
 
-Meshblu is an open source machine-to-machine instant messaging network and API. Our API is available on HTTP REST, realtime Web Sockets via RPC (remote procedure calls), [MQTT](http://mqtt.org), and [CoAP](http://en.wikipedia.org/wiki/Constrained_Application_Protocol).  We seamlessly bridge all of these protocols. For instance, an MQTT device can communicate with any CoAP or HTTP or WebSocket connected device on Meshblu.  
+Meshblu is an open source machine-to-machine instant messaging network and API. Our API is available on HTTP REST, realtime Web Sockets via RPC (remote procedure calls), [MQTT](http://mqtt.org), and [CoAP](http://en.wikipedia.org/wiki/Constrained_Application_Protocol).  We seamlessly bridge all of these protocols. For instance, an MQTT device can communicate with any CoAP or HTTP or WebSocket connected device on Meshblu.
 
-Meshblu auto-assigns 36 character UUIDs and secret tokens to each registered device connected to the network. These device "credentials" are used to authenticate with Meshblu and maintain your device's JSON description in the device directory.  
+Meshblu auto-assigns 36 character UUIDs and secret tokens to each registered device connected to the network. These device "credentials" are used to authenticate with Meshblu and maintain your device's JSON description in the device directory.
 
 Meshblu allows you to discover/query devices such as drones, hue light bulbs, weemos, insteons, raspberry pis, arduinos, server nodes, etc. that meet your criteria and send IM messages to 1 or all devices.
 
@@ -316,9 +316,9 @@ curl -X DELETE -d "token=123" "http://localhost:3000/devices/01404680-2539-11e3-
 => {"uuid":"8220cff0-2939-11e3-88cd-0b8e5fdfd7d4","timestamp":1380481567799}
 ```
 
-GET /localdevices 
+GET /localdevices
 
-Returns a list of unclaimed devices that are on the same network as the requesting resource. 
+Returns a list of unclaimed devices that are on the same network as the requesting resource.
 
 ```
 curl -X GET http://skynet.im/localdevices --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
@@ -326,9 +326,9 @@ curl -X GET http://skynet.im/localdevices --header "skynet_auth_uuid: {my uuid}"
 => {"devices":[{"autoRegister":true,"online":false,"timestamp":"2014-08-05T20:38:31.139Z","ipAddress":"184.98.43.115","protocol":"websocket","secure":false,"uuid":"76537331-1ce0-11e4-861d-89322229e557","channel":"main"},{"autoRegister":true,"online":true,"timestamp":"2014-08-05T16:50:52.492Z","ipAddress":"184.98.43.115","protocol":"websocket","secure":false,"uuid":"a92350c1-1cc0-11e4-861d-89322229e557","channel":"main"}]}
 ```
 
-GET /claimdevice/:uuid 
+GET /claimdevice/:uuid
 
-Adds the skynet_auth_uuid as the owner of this device UUID allowing a user or device to claim ownership of another device. 
+Adds the skynet_auth_uuid as the owner of this device UUID allowing a user or device to claim ownership of another device.
 
 ```
 curl -X PUT http://skynet.im/claimdevice/{:uuid} --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
@@ -618,10 +618,10 @@ If `log: true` in config.js, all transactions are logged to skynet.txt.  Here ar
 * 205 = Unsubscribe
 * 300 = Incoming message
 * 301 = Incoming SMS message
-* 302 = Outgoung SMS message
+* 302 = Outgoing SMS message
 * 303 = Incoming Yo message
-* 304 = Outgoung Yo message
-* 305 = Outgoung Push Notification message
+* 304 = Outgoing Yo message
+* 305 = Outgoing Push Notification message
 * 400 = Register device
 * 401 = Update device
 * 402 = Delete device

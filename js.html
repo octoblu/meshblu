@@ -5,6 +5,8 @@
 
   <script>
     var conn = skynet.createConnection({
+      uuid: localStorage.jsconsoleUuid,
+      token: localStorage.jsconsoleToken,
       server: 'ws://meshblu.octoblu.com',
       port: 80
       // server: 'ws://localhost',
@@ -14,6 +16,9 @@
 
     conn.on('ready', function(device){
       console.log('Ready', device);  
+      localStorage.jsconsoleUuid = device.uuid;
+      localStorage.jsconsoleToken = device.token;
+
       $('#status').html('Connected to Meshblu!');
       $("#uuid").html('UUID: ' + device.uuid);
       $("#instructions").html('Now open your developer console and start interacting with our javascript websocket API using "conn._______"')

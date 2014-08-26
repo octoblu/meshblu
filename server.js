@@ -314,13 +314,24 @@ console.log('\Meshblu (formerly skynet.im) %s environment loaded... ', app.envir
 // coapServer.listen(coapPort, function () {
 //   console.log('CoAP listening at coap://' + coapHost + ':' + coapPort);
 // });
-
-server.listen(process.env.PORT || config.port, function() {
+var serverPort = process.env.PORT || config.port;
+server.listen(serverPort, function() {
   console.log('HTTP listening at %s', server.url);
 });
+
+
 
 if(useHTTPS){
   https_server.listen(process.env.SSLPORT || config.tls.sslPort, function() {
     console.log('HTTPS listening at %s', https_server.url);
   });
+}
+
+try{
+  //optional dependency for private clouds that can broadcast their presence locally.
+  var mdns = require('mdns');
+  var ad = mdns.createAdvertisement(mdns.tcp('meshblu'), parseInt(serverPort, 10));
+  ad.start();
+}catch(mdnsE){
+  //console.log('mdns', mdnsE);
 }

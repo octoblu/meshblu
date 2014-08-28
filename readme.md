@@ -14,6 +14,8 @@ Visit [meshblu.octoblu.com](http://meshblu.octoblu.com) for up-to-the-latest doc
 
 ======
 
+[![Build Status](https://travis-ci.org/octoblu/meshblu.svg?branch=master)](https://travis-ci.org/octoblu/meshblu)
+
 Introduction
 ------------
 

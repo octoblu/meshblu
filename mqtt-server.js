@@ -12,6 +12,8 @@ var wrapMqttMessage = require('./lib/wrapMqttMessage');
 var securityImpl = require('./lib/getSecurityImpl');
 var updateFromClient = require('./lib/updateFromClient');
 
+var parentConnection = require('./lib/getParentConnection');
+
 var server;
 var io;
 if(config.redis && config.redis.host){
@@ -110,7 +112,17 @@ function emitToClient(topic, device, msg){
 
 }
 
-var sendMessage = sendMessageCreator(socketEmitter, mqttEmitter);
+var sendMessage = sendMessageCreator(socketEmitter, mqttEmitter, parentConnection);
+if(parentConnection){
+  parentConnection.on('message', function(data, fn){
+    if(data){
+      console.log('on message', data);
+      if(!Array.isArray(data.devices) && data.devices !== config.parentConnection.uuid){
+        sendMessage({uuid: data.fromUuid}, data, fn);
+      }
+    }
+  });
+}
 
 function clientAck(fromDevice, data){
   if(fromDevice && data && data.ack){

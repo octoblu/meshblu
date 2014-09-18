@@ -32,7 +32,6 @@ var sendMessage = sendMessageCreator(socketEmitter, mqttEmitter, parentConnectio
 if(parentConnection){
   parentConnection.on('message', function(data, fn){
     if(data){
-      console.log('on message', data);
       if(!Array.isArray(data.devices) && data.devices !== config.parentConnection.uuid){
         sendMessage({uuid: data.fromUuid}, data, fn);
       }
@@ -48,7 +47,6 @@ var coapRouter = require('./lib/coapRouter'),
 function emitToClient(topic, device, msg){
   if(device.protocol === "mqtt"){
     // MQTT handler
-    console.log('sending mqtt', device);
     mqttEmitter(device.uuid, wrapMqttMessage(topic, msg), {qos:msg.qos || 0});
   }
   else{

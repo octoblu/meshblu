@@ -123,7 +123,6 @@ var sendMessage = sendMessageCreator(socketEmitter, mqttEmitter, parentConnectio
 if(parentConnection){
   parentConnection.on('message', function(data, fn){
     if(data){
-      console.log('on message', data);
       if(!Array.isArray(data.devices) && data.devices !== config.parentConnection.uuid){
         sendMessage({uuid: data.fromUuid}, data, fn);
       }
@@ -135,7 +134,6 @@ if(parentConnection){
 function emitToClient(topic, device, msg){
   if(device.protocol === "mqtt"){
     // MQTT handler
-    console.log('sending mqtt', device);
     mqttEmitter(device.uuid, wrapMqttMessage(topic, msg), {qos:msg.qos || 0});
   }
   else{
@@ -156,12 +154,7 @@ var skynet = {
 };
 
 function checkConnection(socket, secure){
-  //console.log(socket);
-  // var ip = socket.handshake.address.address;
-  console.log('SOCKET HEADERS', socket.handshake);
   var ip = socket.handshake.headers["x-forwarded-for"] || socket.request.connection.remoteAddress;
-  // var ip = socket.request.connection.remoteAddress
-  // console.log(ip);
 
   if(_.contains(throttles.unthrottledIps, ip)){
     socketLogic(socket, secure, skynet);
@@ -171,7 +164,6 @@ function checkConnection(socket, secure){
         socket.emit('notReady',{error: 'rate limit exceeded ' + ip});
         socket.disconnect();
       }else{
-        console.log('io connected');
         socketLogic(socket, secure, skynet);
       }
     });
@@ -180,7 +172,6 @@ function checkConnection(socket, secure){
 
 io.on('connection', function (socket) {
   checkConnection(socket, false);
-  console.log('CONNECTED', socket.handshake.address);
 });
 
 if(useHTTPS){

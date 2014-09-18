@@ -94,16 +94,13 @@ function mqttEmitter(uuid, wrappedData, options){
   };
 
   server.publish(message, function() {
-    //console.log('done!');
   });
 
 }
 
 function emitToClient(topic, device, msg){
-  console.log('emtting to client', topic, device, msg);
   if(device.protocol === "mqtt"){
     // MQTT handler
-    console.log('sending mqtt', device);
     mqttEmitter(device.uuid, wrapMqttMessage(topic, msg), {qos: msg.qos || 0});
   }
   else{
@@ -116,7 +113,6 @@ var sendMessage = sendMessageCreator(socketEmitter, mqttEmitter, parentConnectio
 if(parentConnection){
   parentConnection.on('message', function(data, fn){
     if(data){
-      console.log('on message', data);
       if(!Array.isArray(data.devices) && data.devices !== config.parentConnection.uuid){
         sendMessage({uuid: data.fromUuid}, data, fn);
       }
@@ -148,8 +144,6 @@ function serverAck(fromDevice, ack, resp){
 
 // Accepts the connection if the username and password are valid
 function authenticate(client, username, password, callback) {
-  //console.log('\nauthenticate username:', username.toString(),'password', password.toString(),'client.id:', client.id, client.clientId, client.client_id);
-
   if(username && username.toString() === 'skynet' && password){
     if(password && password.toString() === config.mqtt.skynetPass){
       client.skynetDevice = {
@@ -168,13 +162,9 @@ function authenticate(client, username, password, callback) {
       online: 'true'
     };
 
-    console.log('attempting authenticate', data);
-
-
     updateSocketId(data, function(auth){
       if (auth.device){
           client.skynetDevice = auth.device;
-          console.log('authenticated: ' + auth.device.uuid);
           callback(null, true);
 
       } else {
@@ -193,11 +183,8 @@ function authenticate(client, username, password, callback) {
 // the username from the topic and verifing it is the same of the authorized user
 function authorizePublish(client, topic, payload, callback) {
 
-  //console.log('authorizePublish', topic, 'typeof:', typeof payload, 'payload:', payload, payload.toString());
-
   function reject(reason){
     callback('unauthorized');
-    console.log('\nunauthorized Publish', typeof topic, '-'+topic+'-', client.id, payload, reason);
   }
 
   //TODO refactor this mess
@@ -209,7 +196,6 @@ function authorizePublish(client, topic, payload, callback) {
         var payloadObj = payload.toString();
         try{
           payloadObj = JSON.parse(payload.toString());
-          //console.log('pre publish', payloadObj);
           payloadObj.fromUuid = client.skynetDevice.uuid;
           callback(null, new Buffer(JSON.stringify(payloadObj)));
         }catch(exp){
@@ -235,9 +221,7 @@ function authorizeSubscribe(client, topic, callback) {
   if(endsWith(topic, '_bc') || endsWith(topic, '_tb') ||
     (client.skynetDevice &&
       ((client.skynetDevice.uuid === 'skynet') || (client.skynetDevice.uuid === topic)))){
-    console.log('\n subscribed', topic);
     callback(null, true);
-    //console.log('authorized subscribe', topic, client.skynetDevice);
   }else{
     callback('unauthorized');
   }
@@ -258,7 +242,6 @@ server = new mosca.Server(settings);
 server.on('ready', setup);
 
 server.on('published', function(packet, client) {
-  console.log('\nPublished payload:', packet.payload, ' topic:', packet.topic);
   try{
     var msg, ack;
     if('message' === packet.topic){
@@ -299,35 +282,16 @@ server.on('published', function(packet, client) {
       msg.uuid = client.skynetDevice.uuid;
 
       logData(msg, function(results){
-        console.log('data log', results);
-
         // Send messsage regarding data update
         var message = {};
         message.payload = msg;
         // message.devices = data.uuid;
         message.devices = "*";
 
-        console.log('message: ' + JSON.stringify(message));
-
         sendMessage(client.skynetDevice, message);
-
       });
     }
-
-    //var payload = JSON.parse(packet.payload.toString());
-    //console.log('payload', payload);
   }catch(ex){
     console.log('error publishing');
   }
-
-});
-
-// fired when a client connects or disconnects
-server.on('clientConnected', function(client) {
-  console.log('Client Connected:', client.id, client.skynetDevice);
-  //console.log('Client Connected:', client.connection.stream);
-});
-
-server.on('clientDisconnected', function(client) {
-  console.log('Client Disconnected:', client.id);
 });

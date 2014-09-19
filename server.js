@@ -1,6 +1,3 @@
-/* Setup command line parsing and options
- * See: https://github.com/visionmedia/commander.js
- */
 var _ = require('lodash');
 var app = require('commander');
 var tokenthrottle = require("tokenthrottle");
@@ -29,7 +26,6 @@ var parentConnection;
 var useHTTPS = config.tls && config.tls.cert;
 
 if(config.parentConnection){
-  //console.log('logging into parent cloud', config.parentConnection, skynetClient);
   parentConnection = skynetClient.createConnection(config.parentConnection);
   parentConnection.on('notReady', function(data){
     console.log('Failed authenitication to parent cloud', data);
@@ -54,8 +50,6 @@ app
   .option('-e, --environment', 'Set the environment (defaults to development)')
   .parse(process.argv);
 
-// console.log(app.environment || "running in development mode");
-// if(!app.environment) app.environment = 'development';
 if(app.args[0]){
   app.environment = app.args[0];
 } else if(process.env.NODE_ENV){
@@ -63,20 +57,6 @@ if(app.args[0]){
 } else {
   app.environment = 'development';
 }
-
-
-// Create a throttle with 10 access limit per second.
-// https://github.com/brycebaril/node-tokenthrottle
-// var throttle = require("tokenthrottle")({
-//   rate: 10,       // replenish actions at 10 per second
-//   burst: 20,      // allow a maximum burst of 20 actions per second
-//   window: 60000,   // set the throttle window to a minute
-//   overrides: {
-//     "127.0.0.1": {rate: 0}, // No limit for localhost
-//     "Joe Smith": {rate: 10}, // token "Joe Smith" gets 10 actions per second (Note defaults apply here, does not inherit)
-//     "2da0f39": {rate: 1000, burst: 2000, window: 1000}, // Allow a lot more actions to this token.
-//   }
-// });
 
 config.rateLimits = config.rateLimits || {};
 // rate per second
@@ -88,7 +68,6 @@ var throttles = {
   whoami : tokenthrottle({rate: config.rateLimits.whoami || 10}),
   unthrottledIps : config.rateLimits.unthrottledIps || []
 };
-
 
 // Instantiate our two servers (http & https)
 var server = restify.createServer();
@@ -138,26 +117,13 @@ restify.CORS.ALLOW_HEADERS.push('origin');
 restify.CORS.ALLOW_HEADERS.push('withcredentials');
 restify.CORS.ALLOW_HEADERS.push('x-requested-with');
 
-// server.use(restify.acceptParser(server.acceptable));
+// http params
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 server.use(restify.CORS({ headers: [ 'skynet_auth_uuid', 'skynet_auth_token' ], origins: ['*'] }));
 server.use(restify.fullResponse());
 
-// Add throttling to HTTP API requests
-// server.use(restify.throttle({
-//   burst: 100,
-//   rate: 50,
-//   ip: true, // throttle based on source ip address
-//   overrides: {
-//     '127.0.0.1': {
-//       rate: 0, // unlimited
-//       burst: 0
-//     }
-//   }
-//
-
-// for https params
+// https params
 if (useHTTPS) {
   https_server.use(restify.queryParser());
   https_server.use(restify.bodyParser());
@@ -165,11 +131,9 @@ if (useHTTPS) {
   https_server.use(restify.fullResponse());
 }
 
-
 process.on("uncaughtException", function(error) {
   return console.log(error.stack);
 });
-
 
 var socketEmitter = createSocketEmitter(io, ios);
 
@@ -193,19 +157,6 @@ function emitToClient(topic, device, msg){
 
 }
 
-
-
-// function forwardMessage(message, fn){
-//   if(parentConnection){
-//     try{
-//       parentConnection.message(message, fn);
-//     }catch(ex){
-//       console.log('error forwarding message', ex);
-//     }
-//   }
-// }
-
-
 var skynet = {
   sendMessage: sendMessage,
   gateway : setupGatewayConfig(emitToClient),
@@ -217,16 +168,14 @@ var skynet = {
 };
 
 function checkConnection(socket, secure){
-  //console.log(socket);
-  // var ip = socket.handshake.address.address;
   console.log('SOCKET HEADERS', socket.handshake);
   var ip = socket.handshake.headers["x-forwarded-for"] || socket.request.connection.remoteAddress;
-  // var ip = socket.request.connection.remoteAddress
-  // console.log(ip);
 
   if(_.contains(throttles.unthrottledIps, ip)){
+    socket.throttled = false;
     socketLogic(socket, secure, skynet);
   }else{
+    socket.throttled = true;
     throttles.connection.rateLimit(ip, function (err, limited) {
       if(limited){
         socket.emit('notReady',{error: 'rate limit exceeded ' + ip});
@@ -251,39 +200,8 @@ if(useHTTPS){
   });
 }
 
-
 var qos = 0;
-
 var mqttclient = setupMqttClient(skynet, config);
-
-
-// Redirect www subdomain to root domain for https cert
-// if(config.tls){
-//   server.get(/^\/.*/, function(req, res, next) {
-//     if (req.headers.host.match(/^www/) !== null) {
-//       // return res.redirect("https://" + req.headers.host.replace(/www\./i, "") + req.url);
-//       res.send(302, "https://" + req.headers.host.replace(/www\./i, "") + req.url);
-//     } else {
-//       return next;
-//     }
-//   });
-// };
-
-// Integrate coap
-// var coap       = require('coap');
-
-// coap.registerOption('skynet_auth_uuid');
-// coap.registerOption('skynet_auth_token');
-
-// var coapRouter = require('./lib/coapRouter'),
-//     coapServer = coap.createServer(),
-//     coapConfig = config.coap || {};
-
-
-// setupCoapRoutes(coapRouter, skynet);
-
-// coapServer.on('request', coapRouter.process);
-
 
 // Now, setup both servers in one step
 setupRestfulRoutes(server, skynet);
@@ -291,12 +209,6 @@ setupRestfulRoutes(server, skynet);
 if(useHTTPS){
   setupRestfulRoutes(https_server, skynet);
 }
-
-
-
-
-
-
 
 console.log("\nMM    MM              hh      bb      lll         ");
 console.log("MMM  MMM   eee   sss  hh      bb      lll uu   uu ");
@@ -306,20 +218,10 @@ console.log("MM    MM  eeeee     s hh   hh bbbbbb  lll  uuuu u ");
 console.log("                 sss                              ");
 console.log('\Meshblu (formerly skynet.im) %s environment loaded... ', app.environment);
 
-// Start our restful servers to listen on the appropriate ports
-
-// var coapPort = coapConfig.port || 5683;
-// var coapHost = coapConfig.host || 'localhost';
-
-// coapServer.listen(coapPort, function () {
-//   console.log('CoAP listening at coap://' + coapHost + ':' + coapPort);
-// });
 var serverPort = process.env.PORT || config.port;
 server.listen(serverPort, function() {
   console.log('HTTP listening at %s', server.url);
 });
-
-
 
 if(useHTTPS){
   https_server.listen(process.env.SSLPORT || config.tls.sslPort, function() {

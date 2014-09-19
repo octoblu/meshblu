@@ -3,23 +3,15 @@ function connectionListener(socket) {
     var options = {};
     var self = this, realEmit = socket.emit, history = [], protocolError = false;
 
-    // TODO: Support <= 0.8 streams interface
-    //function ondata() {}
-    //if (legacy) socket.once('data', ondata);
-
     // override the socket's event emitter so we can process data (and discard the PROXY protocol header) before the underlying Server gets it
     socket.emit = function(event, data) {
       history.push(Array.prototype.slice.call(arguments));
-      /*if (event == 'data') {
-        console.log('got a data event :(');
-        socket.destroy();
-      } else*/ if (event == 'readable') {
+      if (event == 'readable') {
         onReadable();
       }
     }
 
     function restore() {
-      //if (legacy) socket.removeListener('data', ondata);
       // restore normal socket functionality, and fire any events that were emitted while we had control of emit()
       socket.emit = realEmit;
       for (var i = 0; i < history.length; i++) {

@@ -2,19 +2,19 @@
 var coap       = require('coap');
 var config = require('./config');
 var redis = require('./lib/redis');
-var tokenthrottle = require("tokenthrottle");
+var throttles = require('./lib/getThrottles');
 var sendMessageCreator = require('./lib/sendMessage');
 
+var setupMqttClient = require('./lib/setupMqttClient');
+
 var setupCoapRoutes = require('./lib/setupCoapRoutes');
-var whoAmI = require('./lib/whoAmI');
-var logData = require('./lib/logData');
-var updateSocketId = require('./lib/updateSocketId');
-var securityImpl = require('./lib/getSecurityImpl');
 var setupGatewayConfig = require('./lib/setupGatewayConfig');
 var sendActivity = require('./lib/sendActivity');
 var createSocketEmitter = require('./lib/createSocketEmitter');
+var wrapMqttMessage = require('./lib/wrapMqttMessage');
 
-var server;
+var parentConnection = require('./lib/getParentConnection');
+
 var io;
 if(config.redis && config.redis.host){
   io = require('socket.io-emitter')(redis.client);
@@ -28,29 +28,25 @@ function mqttEmitter(uuid, wrappedData, options){
   }
 }
 
-var sendMessage = sendMessageCreator(socketEmitter, mqttEmitter);
-
+var sendMessage = sendMessageCreator(socketEmitter, mqttEmitter, parentConnection);
+if(parentConnection){
+  parentConnection.on('message', function(data, fn){
+    if(data){
+      if(!Array.isArray(data.devices) && data.devices !== config.parentConnection.uuid){
+        sendMessage({uuid: data.fromUuid}, data, fn);
+      }
+    }
+  });
+}
 
 var coapRouter = require('./lib/coapRouter'),
     coapServer = coap.createServer(),
     coapConfig = config.coap || {};
 
 
-config.rateLimits = config.rateLimits || {};
-// rate per second
-var throttles = {
-  connection : tokenthrottle({rate: config.rateLimits.connection || 3}),
-  message : tokenthrottle({rate: config.rateLimits.message || 10}),
-  data : tokenthrottle({rate: config.rateLimits.data || 10}),
-  query : tokenthrottle({rate: config.rateLimits.query || 2}),
-  whoami : tokenthrottle({rate: config.rateLimits.whoami || 10}),
-  unthrottledIps : config.rateLimits.unthrottledIps || []
-};
-
 function emitToClient(topic, device, msg){
   if(device.protocol === "mqtt"){
     // MQTT handler
-    console.log('sending mqtt', device);
     mqttEmitter(device.uuid, wrapMqttMessage(topic, msg), {qos:msg.qos || 0});
   }
   else{
@@ -66,6 +62,8 @@ var skynet = {
   io: io,
   emitToClient: emitToClient
 };
+
+var mqttclient = setupMqttClient(skynet, config);
 
 process.on("uncaughtException", function(error) {
   return console.log(error.stack);

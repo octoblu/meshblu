@@ -1,30 +1,28 @@
 var _ = require('lodash');
 var app = require('commander');
-var tokenthrottle = require("tokenthrottle");
-var http = require('http');
 
-var config = require(process.env.SKYNET_CONFIG || './config');
+var config = require('./config');
 var restify = require('restify');
 var socketio = require('socket.io');
-var skynetClient = require('skynet'); //skynet npm client
 var proxyListener = require('./proxyListener');
 var redis = require('./lib/redis');
 var setupRestfulRoutes = require('./lib/setupHttpRoutes');
-var setupCoapRoutes = require('./lib/setupCoapRoutes');
 var setupMqttClient = require('./lib/setupMqttClient');
 var socketLogic = require('./lib/socketLogic');
 var sendMessageCreator = require('./lib/sendMessage');
 var wrapMqttMessage = require('./lib/wrapMqttMessage');
 var createSocketEmitter = require('./lib/createSocketEmitter');
 var sendActivity = require('./lib/sendActivity');
+var throttles = require('./lib/getThrottles');
 
 var fs = require('fs');
 var setupGatewayConfig = require('./lib/setupGatewayConfig');
 
-var parentConnection;
+var parentConnection = require('./lib/getParentConnection');
 
 var useHTTPS = config.tls && config.tls.cert;
 
+<<<<<<< HEAD
 if(config.parentConnection){
   parentConnection = skynetClient.createConnection(config.parentConnection);
   parentConnection.on('notReady', function(data){
@@ -45,6 +43,8 @@ if(config.parentConnection){
   });
 }
 
+=======
+>>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 // sudo NODE_ENV=production forever start server.js --environment production
 app
   .option('-e, --environment', 'Set the environment (defaults to development)')
@@ -58,6 +58,7 @@ if(app.args[0]){
   app.environment = 'development';
 }
 
+<<<<<<< HEAD
 config.rateLimits = config.rateLimits || {};
 // rate per second
 var throttles = {
@@ -68,6 +69,9 @@ var throttles = {
   whoami : tokenthrottle({rate: config.rateLimits.whoami || 10}),
   unthrottledIps : config.rateLimits.unthrottledIps || []
 };
+=======
+
+>>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 
 // Instantiate our two servers (http & https)
 var server = restify.createServer();
@@ -123,7 +127,12 @@ server.use(restify.bodyParser());
 server.use(restify.CORS({ headers: [ 'skynet_auth_uuid', 'skynet_auth_token' ], origins: ['*'] }));
 server.use(restify.fullResponse());
 
+<<<<<<< HEAD
 // https params
+=======
+
+// for https params
+>>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 if (useHTTPS) {
   https_server.use(restify.queryParser());
   https_server.use(restify.bodyParser());
@@ -143,12 +152,21 @@ function mqttEmitter(uuid, wrappedData, options){
   }
 }
 
-var sendMessage = sendMessageCreator(socketEmitter, mqttEmitter);
+var sendMessage = sendMessageCreator(socketEmitter, mqttEmitter, parentConnection);
+if(parentConnection){
+  parentConnection.on('message', function(data, fn){
+    if(data){
+      if(!Array.isArray(data.devices) && data.devices !== config.parentConnection.uuid){
+        sendMessage({uuid: data.fromUuid}, data, fn);
+      }
+    }
+  });
+}
+
 
 function emitToClient(topic, device, msg){
   if(device.protocol === "mqtt"){
     // MQTT handler
-    console.log('sending mqtt', device);
     mqttEmitter(device.uuid, wrapMqttMessage(topic, msg), {qos:msg.qos || 0});
   }
   else{
@@ -157,6 +175,10 @@ function emitToClient(topic, device, msg){
 
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 var skynet = {
   sendMessage: sendMessage,
   gateway : setupGatewayConfig(emitToClient),
@@ -168,7 +190,10 @@ var skynet = {
 };
 
 function checkConnection(socket, secure){
+<<<<<<< HEAD
   console.log('SOCKET HEADERS', socket.handshake);
+=======
+>>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
   var ip = socket.handshake.headers["x-forwarded-for"] || socket.request.connection.remoteAddress;
 
   if(_.contains(throttles.unthrottledIps, ip)){
@@ -181,7 +206,6 @@ function checkConnection(socket, secure){
         socket.emit('notReady',{error: 'rate limit exceeded ' + ip});
         socket.disconnect();
       }else{
-        console.log('io connected');
         socketLogic(socket, secure, skynet);
       }
     });
@@ -190,8 +214,6 @@ function checkConnection(socket, secure){
 
 io.on('connection', function (socket) {
   checkConnection(socket, false);
-  var client = socket.conn.request;
-  console.log('CONNECTED', socket.handshake.address);
 });
 
 if(useHTTPS){
@@ -200,9 +222,17 @@ if(useHTTPS){
   });
 }
 
+<<<<<<< HEAD
 var qos = 0;
 var mqttclient = setupMqttClient(skynet, config);
 
+=======
+
+var mqttclient = setupMqttClient(skynet, config);
+
+
+
+>>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 // Now, setup both servers in one step
 setupRestfulRoutes(server, skynet);
 
@@ -210,13 +240,25 @@ if(useHTTPS){
   setupRestfulRoutes(https_server, skynet);
 }
 
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 console.log("\nMM    MM              hh      bb      lll         ");
 console.log("MMM  MMM   eee   sss  hh      bb      lll uu   uu ");
 console.log("MM MM MM ee   e s     hhhhhh  bbbbbb  lll uu   uu ");
 console.log("MM    MM eeeee   sss  hh   hh bb   bb lll uu   uu ");
 console.log("MM    MM  eeeee     s hh   hh bbbbbb  lll  uuuu u ");
 console.log("                 sss                              ");
+<<<<<<< HEAD
 console.log('\Meshblu (formerly skynet.im) %s environment loaded... ', app.environment);
+=======
+console.log('\nMeshblu (formerly skynet.im) %s environment loaded... ', app.environment);
+
+>>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 
 var serverPort = process.env.PORT || config.port;
 server.listen(serverPort, function() {

@@ -22,7 +22,6 @@ var parentConnection = require('./lib/getParentConnection');
 
 var useHTTPS = config.tls && config.tls.cert;
 
-<<<<<<< HEAD
 if(config.parentConnection){
   parentConnection = skynetClient.createConnection(config.parentConnection);
   parentConnection.on('notReady', function(data){
@@ -43,8 +42,6 @@ if(config.parentConnection){
   });
 }
 
-=======
->>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 // sudo NODE_ENV=production forever start server.js --environment production
 app
   .option('-e, --environment', 'Set the environment (defaults to development)')
@@ -58,20 +55,7 @@ if(app.args[0]){
   app.environment = 'development';
 }
 
-<<<<<<< HEAD
 config.rateLimits = config.rateLimits || {};
-// rate per second
-var throttles = {
-  connection : tokenthrottle({rate: config.rateLimits.connection || 3}),
-  message : tokenthrottle({rate: config.rateLimits.message || 10}),
-  data : tokenthrottle({rate: config.rateLimits.data || 10}),
-  query : tokenthrottle({rate: config.rateLimits.query || 2}),
-  whoami : tokenthrottle({rate: config.rateLimits.whoami || 10}),
-  unthrottledIps : config.rateLimits.unthrottledIps || []
-};
-=======
-
->>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 
 // Instantiate our two servers (http & https)
 var server = restify.createServer();
@@ -127,12 +111,7 @@ server.use(restify.bodyParser());
 server.use(restify.CORS({ headers: [ 'skynet_auth_uuid', 'skynet_auth_token' ], origins: ['*'] }));
 server.use(restify.fullResponse());
 
-<<<<<<< HEAD
 // https params
-=======
-
-// for https params
->>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 if (useHTTPS) {
   https_server.use(restify.queryParser());
   https_server.use(restify.bodyParser());
@@ -175,10 +154,6 @@ function emitToClient(topic, device, msg){
 
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 var skynet = {
   sendMessage: sendMessage,
   gateway : setupGatewayConfig(emitToClient),
@@ -190,10 +165,7 @@ var skynet = {
 };
 
 function checkConnection(socket, secure){
-<<<<<<< HEAD
   console.log('SOCKET HEADERS', socket.handshake);
-=======
->>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
   var ip = socket.handshake.headers["x-forwarded-for"] || socket.request.connection.remoteAddress;
 
   if(_.contains(throttles.unthrottledIps, ip)){
@@ -222,17 +194,9 @@ if(useHTTPS){
   });
 }
 
-<<<<<<< HEAD
 var qos = 0;
 var mqttclient = setupMqttClient(skynet, config);
 
-=======
-
-var mqttclient = setupMqttClient(skynet, config);
-
-
-
->>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 // Now, setup both servers in one step
 setupRestfulRoutes(server, skynet);
 
@@ -240,25 +204,13 @@ if(useHTTPS){
   setupRestfulRoutes(https_server, skynet);
 }
 
-<<<<<<< HEAD
-=======
-
-
-
-
->>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 console.log("\nMM    MM              hh      bb      lll         ");
 console.log("MMM  MMM   eee   sss  hh      bb      lll uu   uu ");
 console.log("MM MM MM ee   e s     hhhhhh  bbbbbb  lll uu   uu ");
 console.log("MM    MM eeeee   sss  hh   hh bb   bb lll uu   uu ");
 console.log("MM    MM  eeeee     s hh   hh bbbbbb  lll  uuuu u ");
 console.log("                 sss                              ");
-<<<<<<< HEAD
 console.log('\Meshblu (formerly skynet.im) %s environment loaded... ', app.environment);
-=======
-console.log('\nMeshblu (formerly skynet.im) %s environment loaded... ', app.environment);
-
->>>>>>> e6f36d33ff4b0c78e065259cd2e13e473efc1c70
 
 var serverPort = process.env.PORT || config.port;
 server.listen(serverPort, function() {

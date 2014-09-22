@@ -1,3 +1,15 @@
+var _ = require('lodash');
+
+var getElasticSearchHosts = function() {
+  var hosts = (process.env.ELASTIC_SEARCH_HOST || '').split(',');
+  return _.map(hosts, function(host) {
+    return {
+      host: host,
+      port: process.env.ELASTIC_SEARCH_PORT
+    };
+  });
+}
+
 module.exports = {
   mongo: {
     databaseUrl: process.env.MONGODB_URI
@@ -13,8 +25,7 @@ module.exports = {
   broadcastActivity: (process.env.BROADCAST_ACTIVITY || "false").toLowerCase() == "true",
   log: (process.env.USE_LOG || "true").toLowerCase() == "true",
   elasticSearch: {
-    host: process.env.ELASTIC_SEARCH_HOST,
-    port: parseInt(process.env.ELASTIC_SEARCH_PORT)
+    hosts: getElasticSearchHosts()
   },
   splunk: {
     protocol: process.env.SPLUNK_PROTOCOL || "http", 	//This should be "http" OR "https"

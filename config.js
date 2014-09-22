@@ -1,6 +1,6 @@
 module.exports = {
   mongo: {
-    databaseUrl: process.env.MONGODB_URI || process.env.MONGOHQ_URL
+    databaseUrl: process.env.MONGODB_URI
   },
   port: parseInt(process.env.PORT) || 80,
   tls: {

@@ -378,14 +378,24 @@ curl -X GET "http://skynet.im/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=
 => {"events":[{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"lnHHS06ijWUXEzb01ZRy","timestamp":1382632438785,"eventCode":101,"_id":"52694bf6ad11379eec00003f"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"BuwnWQ_oLmpk5R3m1ZRv","timestamp":1382561240563,"eventCode":101,"_id":"526835d8ad11379eec000017"}]}
 ```
 
-GET /subscribe/uuid?token=token
+GET /subscribe
 
 This is a streaming API that returns device/node mesages as they are sent and received. Notice the comma at the end of the response. Meshblu doesn't close the stream.
 
 ```
-curl -X GET "http://skynet.im/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
+curl -X GET "http://skynet.im/subscribe" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => [{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"on"},"timestamp":1388768270795,"eventCode":300,"_id":"52c6ec0e4f67671e44000001"},{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"on"},"timestamp":1388768277473,"eventCode":300,"_id":"52c6ec154f67671e44000002"},
+```
+
+GET /subscribe/uuid
+
+This is a streaming API that returns device/node broadcast mesages as they are sent. Notice the comma at the end of the response. Meshblu doesn't close the stream.
+
+```
+curl -X GET "http://skynet.im/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
+
+=> [{"fromUuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","devices":"*",message":{"red":"on"},"timestamp":1388768270795,"eventCode":300,"_id":"52c6ec0e4f67671e44000001"},{"fromUuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","devices":"*",,"message":{"red":"on"},"timestamp":1388768277473,"eventCode":300,"_id":"52c6ec154f67671e44000002"},
 ```
 
 GET /authenticate/uuid?token=token

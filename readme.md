@@ -461,7 +461,9 @@ coap post -p '{"devices": "*", "payload": {"yellow":"off"}}' -H "skynet_auth_uui
 
 coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123
 
-coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123 -o
+coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/subscribe -o
+
+coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b -o
 
 coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/ipaddress
 

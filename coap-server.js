@@ -17,6 +17,13 @@ var parentConnection = require('./lib/getParentConnection');
 
 var io;
 if(config.redis && config.redis.host){
+  var store = redis.createIoStore();
+  store.subClient.psubscribe('socket.io#*', function(err){
+    if (err){
+      console.log('error setting up socket.io subcription', err);
+    }
+  });
+
   io = require('socket.io-emitter')(redis.client);
 }
 

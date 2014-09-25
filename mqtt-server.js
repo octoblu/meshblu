@@ -158,6 +158,7 @@ function authenticate(client, username, password, callback) {
       uuid: username.toString(),
       token: password.toString(),
       socketid: username.toString(),
+      ipAddress: client.connection.stream.remoteAddress,
       protocol: 'mqtt',
       online: 'true'
     };
@@ -239,6 +240,13 @@ function setup() {
 // // fired when a message is published
 
 server = new mosca.Server(settings);
+
+if (config.useProxyProtocol) {
+  _.each(server.servers, function(server){
+    proxyListener.resetListeners(server);
+  })
+}
+
 server.on('ready', setup);
 
 server.on('published', function(packet, client) {

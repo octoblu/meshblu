@@ -11,7 +11,7 @@ var sendMessageCreator = require('./lib/sendMessage');
 var wrapMqttMessage = require('./lib/wrapMqttMessage');
 var securityImpl = require('./lib/getSecurityImpl');
 var updateFromClient = require('./lib/updateFromClient');
-
+var proxyListener = require('./proxyListener');
 var parentConnection = require('./lib/getParentConnection');
 
 var server;

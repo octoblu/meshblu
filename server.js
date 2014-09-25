@@ -165,7 +165,6 @@ var skynet = {
 };
 
 function checkConnection(socket, secure){
-  console.log('SOCKET HEADERS', socket.handshake);
   var ip = socket.handshake.headers["x-forwarded-for"] || socket.request.connection.remoteAddress;
 
   if(_.contains(throttles.unthrottledIps, ip)){

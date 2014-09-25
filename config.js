@@ -1,14 +1,16 @@
 var _ = require('lodash');
 
 var getElasticSearchHosts = function() {
-  var hosts = (process.env.ELASTIC_SEARCH_HOST || '').split(',');
-  return _.map(hosts, function(host) {
-    return {
-      host: host,
-      port: process.env.ELASTIC_SEARCH_PORT
-    };
-  });
-}
+  if(process.env.ELASTIC_SEARCH_HOST){
+    var hosts = process.env.ELASTIC_SEARCH_HOST.split(',');
+    return _.map(hosts, function(host) {
+      return {
+        host: host,
+        port: process.env.ELASTIC_SEARCH_PORT
+      };
+    });
+  }
+};
 
 module.exports = {
   mongo: {

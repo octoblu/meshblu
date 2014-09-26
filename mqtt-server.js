@@ -160,24 +160,20 @@ function authenticate(client, username, password, callback) {
       socketid: username.toString(),
       ipAddress: client.connection.stream.remoteAddress,
       protocol: 'mqtt',
-      online: 'true'
+      online: true
     };
 
     updateSocketId(data, function(auth){
       if (auth.device){
           client.skynetDevice = auth.device;
           callback(null, true);
-
       } else {
         callback('unauthorized');
       }
-
     });
   }else{
     callback('unauthorized');
   }
-
-
 }
 
 // In this case the client authorized as alice can publish to /users/alice taking
@@ -212,7 +208,6 @@ function authorizePublish(client, topic, payload, callback) {
   }else{
     reject('no skynet device');
   }
-
 }
 
 // In this case the client authorized as alice can subscribe to /users/alice taking

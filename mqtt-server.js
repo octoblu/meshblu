@@ -231,6 +231,12 @@ function authorizeSubscribe(client, topic, callback) {
 
 // fired when the mqtt server is ready
 function setup() {
+  if (config.useProxyProtocol) {
+    _.each(server.servers, function(server){
+      proxyListener.resetListeners(server);
+    })
+  }
+
   console.log('Skynet MQTT server started on port', config.mqtt.port || 1883);
   server.authenticate = authenticate;
   server.authorizePublish = authorizePublish;
@@ -240,12 +246,6 @@ function setup() {
 // // fired when a message is published
 
 server = new mosca.Server(settings);
-
-if (config.useProxyProtocol) {
-  _.each(server.servers, function(server){
-    proxyListener.resetListeners(server);
-  })
-}
 
 server.on('ready', setup);
 

@@ -73,7 +73,7 @@ var skynet = {
 var mqttclient = setupMqttClient(skynet, config);
 
 process.on("uncaughtException", function(error) {
-  return console.log(error.stack);
+  return console.log(error.message, error.stack);
 });
 
 setupCoapRoutes(coapRouter, skynet);

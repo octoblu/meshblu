@@ -74,7 +74,7 @@ function endsWith(str, suffix) {
 }
 
 process.on("uncaughtException", function(error) {
-  return console.log(error.stack);
+  return console.log(error.message, error.stack);
 });
 
 

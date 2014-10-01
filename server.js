@@ -1,6 +1,5 @@
 var _ = require('lodash');
 var app = require('commander');
-
 var config = require('./config');
 var restify = require('restify');
 var socketio = require('socket.io');
@@ -14,12 +13,9 @@ var wrapMqttMessage = require('./lib/wrapMqttMessage');
 var createSocketEmitter = require('./lib/createSocketEmitter');
 var sendActivity = require('./lib/sendActivity');
 var throttles = require('./lib/getThrottles');
-
 var fs = require('fs');
 var setupGatewayConfig = require('./lib/setupGatewayConfig');
-
 var parentConnection = require('./lib/getParentConnection');
-
 var useHTTPS = config.tls && config.tls.cert;
 
 if(config.parentConnection){
@@ -34,10 +30,15 @@ if(config.parentConnection){
 
   parentConnection.on('message', function(data, fn){
     if(data){
-      console.log('on message', data);
-      if(!Array.isArray(data.devices) && data.devices !== config.parentConnection.uuid){
-        sendMessage({uuid: data.fromUuid}, data, fn);
+      var devices = data.devices;
+      if (!_.isArray(devices)) {
+        devices = [devices];
       }
+      _.each(devices, function(device) {
+        if(device !== config.parentConnection.uuid){
+          sendMessage({uuid: data.fromUuid}, data, fn);
+        }
+      });
     }
   });
 }
@@ -120,7 +121,7 @@ if (useHTTPS) {
 }
 
 process.on("uncaughtException", function(error) {
-  return console.log(error.stack);
+  return console.log(error.message, error.stack);
 });
 
 var socketEmitter = createSocketEmitter(io, ios);
@@ -135,9 +136,15 @@ var sendMessage = sendMessageCreator(socketEmitter, mqttEmitter, parentConnectio
 if(parentConnection){
   parentConnection.on('message', function(data, fn){
     if(data){
-      if(!Array.isArray(data.devices) && data.devices !== config.parentConnection.uuid){
-        sendMessage({uuid: data.fromUuid}, data, fn);
+      var devices = data.devices;
+      if (!_.isArray(devices)) {
+        devices = [devices];
       }
+      _.each(devices, function(device) {
+        if(device !== config.parentConnection.uuid){
+          sendMessage({uuid: data.fromUuid}, data, fn);
+        }
+      });
     }
   });
 }

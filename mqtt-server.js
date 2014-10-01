@@ -1,7 +1,6 @@
 'use strict';
-var mosca = require('mosca');
 var _ = require('lodash');
-
+var mosca = require('mosca');
 var config = require('./config');
 var redis = require('./lib/redis');
 var whoAmI = require('./lib/whoAmI');
@@ -11,7 +10,7 @@ var sendMessageCreator = require('./lib/sendMessage');
 var wrapMqttMessage = require('./lib/wrapMqttMessage');
 var securityImpl = require('./lib/getSecurityImpl');
 var updateFromClient = require('./lib/updateFromClient');
-
+var proxyListener = require('./proxyListener');
 var parentConnection = require('./lib/getParentConnection');
 
 var server;
@@ -74,7 +73,7 @@ function endsWith(str, suffix) {
 }
 
 process.on("uncaughtException", function(error) {
-  return console.log(error.stack);
+  return console.log(error.message, error.stack);
 });
 
 
@@ -113,9 +112,15 @@ var sendMessage = sendMessageCreator(socketEmitter, mqttEmitter, parentConnectio
 if(parentConnection){
   parentConnection.on('message', function(data, fn){
     if(data){
-      if(!Array.isArray(data.devices) && data.devices !== config.parentConnection.uuid){
-        sendMessage({uuid: data.fromUuid}, data, fn);
+      var devices = data.devices;
+      if (!_.isArray(devices)) {
+        devices = [devices];
       }
+      _.each(devices, function(device) {
+        if(device !== config.parentConnection.uuid){
+          sendMessage({uuid: data.fromUuid}, data, fn);
+        }
+      });
     }
   });
 }
@@ -158,25 +163,22 @@ function authenticate(client, username, password, callback) {
       uuid: username.toString(),
       token: password.toString(),
       socketid: username.toString(),
+      ipAddress: client.connection.stream.remoteAddress,
       protocol: 'mqtt',
-      online: 'true'
+      online: true
     };
 
     updateSocketId(data, function(auth){
       if (auth.device){
           client.skynetDevice = auth.device;
           callback(null, true);
-
       } else {
         callback('unauthorized');
       }
-
     });
   }else{
     callback('unauthorized');
   }
-
-
 }
 
 // In this case the client authorized as alice can publish to /users/alice taking
@@ -211,7 +213,6 @@ function authorizePublish(client, topic, payload, callback) {
   }else{
     reject('no skynet device');
   }
-
 }
 
 // In this case the client authorized as alice can subscribe to /users/alice taking
@@ -230,6 +231,12 @@ function authorizeSubscribe(client, topic, callback) {
 
 // fired when the mqtt server is ready
 function setup() {
+  if (config.useProxyProtocol) {
+    _.each(server.servers, function(server){
+      proxyListener.resetListeners(server);
+    })
+  }
+
   console.log('Skynet MQTT server started on port', config.mqtt.port || 1883);
   server.authenticate = authenticate;
   server.authorizePublish = authorizePublish;
@@ -239,6 +246,7 @@ function setup() {
 // // fired when a message is published
 
 server = new mosca.Server(settings);
+
 server.on('ready', setup);
 
 server.on('published', function(packet, client) {

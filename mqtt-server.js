@@ -1,7 +1,6 @@
 'use strict';
-var mosca = require('mosca');
 var _ = require('lodash');
-
+var mosca = require('mosca');
 var config = require('./config');
 var redis = require('./lib/redis');
 var whoAmI = require('./lib/whoAmI');
@@ -74,7 +73,7 @@ function endsWith(str, suffix) {
 }
 
 process.on("uncaughtException", function(error) {
-  return console.log(error.stack);
+  return console.log(error.message, error.stack);
 });
 
 
@@ -113,9 +112,15 @@ var sendMessage = sendMessageCreator(socketEmitter, mqttEmitter, parentConnectio
 if(parentConnection){
   parentConnection.on('message', function(data, fn){
     if(data){
-      if(!Array.isArray(data.devices) && data.devices !== config.parentConnection.uuid){
-        sendMessage({uuid: data.fromUuid}, data, fn);
+      var devices = data.devices;
+      if (!_.isArray(devices)) {
+        devices = [devices];
       }
+      _.each(devices, function(device) {
+        if(device !== config.parentConnection.uuid){
+          sendMessage({uuid: data.fromUuid}, data, fn);
+        }
+      });
     }
   });
 }

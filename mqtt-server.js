@@ -251,7 +251,7 @@ server.on('published', function(packet, client) {
       sendMessage(client.skynetDevice, JSON.parse(packet.payload.toString()));
     }
     else if('tb' === packet.topic){
-      sendMessage(client.skynetDevice, packet.payload.toString(), 'tb');
+      sendMessage(client.skynetDevice, {payload: packet.payload.toString(), devices: ['*']}, 'tb');
     }
     else if('directText' === packet.topic){
       sendMessage(client.skynetDevice, JSON.parse(packet.payload.toString()), 'tb');
@@ -295,6 +295,6 @@ server.on('published', function(packet, client) {
       });
     }
   }catch(ex){
-    console.log('error publishing');
+    console.log('error publishing', ex.stack);
   }
 });

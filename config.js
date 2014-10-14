@@ -72,11 +72,11 @@ module.exports = {
   },
   skynet_override_token: process.env.OVERRIDE_TOKEN,
   useProxyProtocol: (process.env.USE_PROXY_PROTOCOL || "false").toLowerCase() == "true"
-//    ,
-//  parentConnection: {
-//    uuid: process.env.PARENT_CONNECTION_UUID,
-//    token: process.env.PARENT_CONNECTION_TOKEN,
-//    server: process.env.PARENT_CONNECTION_SERVER,
-//    port: parseInt(process.env.PARENT_CONNECTION_PORT)
-//  }
+   ,
+ parentConnection: {
+   uuid: process.env.PARENT_CONNECTION_UUID,
+   token: process.env.PARENT_CONNECTION_TOKEN,
+   server: process.env.PARENT_CONNECTION_SERVER,
+   port: parseInt(process.env.PARENT_CONNECTION_PORT)
+ }
 };

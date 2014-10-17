@@ -1,0 +1,41 @@
+<html>
+<head>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//meshblu.octoblu.com/js/skynet.js"></script>
+
+  <script>
+    var conn = skynet.createConnection({
+      uuid: localStorage.jsconsoleUuid,
+      token: localStorage.jsconsoleToken,
+      server: 'localhost',
+      port: 3000
+    });
+
+    conn.on('ready', function(device){
+      console.log('Ready', device);
+      localStorage.jsconsoleUuid = device.uuid;
+      localStorage.jsconsoleToken = device.token;
+
+      $('#status').html('Connected to Meshblu!');
+      $("#uuid").html('UUID: ' + device.uuid);
+      $("#instructions").html('Now open your developer console and start interacting with our javascript websocket API using "conn._______"')
+
+      conn.on('message', function(message){
+        console.log('message received', message);
+        $("#device").append(message);
+      });
+
+    });
+  </script>
+</head>
+<body>
+  <h2>
+    <span id="status">
+      Connecting to Meshblu...
+    </span>
+  </h2>
+  <h2><span id="uuid"></span></h2>
+  <h2><span id="instructions"></span></h2>
+  <div id="device"></div>
+</body>
+</html>

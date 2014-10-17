@@ -12,6 +12,7 @@ var sendMessageCreator = require('./lib/sendMessage');
 var wrapMqttMessage = require('./lib/wrapMqttMessage');
 var createSocketEmitter = require('./lib/createSocketEmitter');
 var sendActivity = require('./lib/sendActivity');
+var sendConfigActivity = require('./lib/sendConfigActivity');
 var throttles = require('./lib/getThrottles');
 var fs = require('fs');
 var setupGatewayConfig = require('./lib/setupGatewayConfig');
@@ -165,6 +166,7 @@ var skynet = {
   sendMessage: sendMessage,
   gateway : setupGatewayConfig(emitToClient),
   sendActivity: sendActivity,
+  sendConfigActivity: sendConfigActivity,
   throttles: throttles,
   io: io,
   ios: ios,

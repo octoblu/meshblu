@@ -159,7 +159,6 @@ function emitToClient(topic, device, msg){
   else{
     socketEmitter(device.uuid, topic, msg);
   }
-
 }
 
 var skynet = {

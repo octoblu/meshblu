@@ -272,6 +272,9 @@ server.on('published', function(packet, client) {
         delete msg.ack;
         updateFromClient(client.skynetDevice, msg, function(resp){
           serverAck(client.skynetDevice, ack, resp);
+          whoAmI(client.skynetDevice.uuid, true, function(data){
+            emitToClient('config', client.skynetDevice, data);
+          })
         });
       }
     }

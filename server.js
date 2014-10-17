@@ -18,6 +18,7 @@ var fs = require('fs');
 var setupGatewayConfig = require('./lib/setupGatewayConfig');
 var parentConnection = require('./lib/getParentConnection');
 var useHTTPS = config.tls && config.tls.cert;
+var skynetClient = require("skynet");
 
 if(config.parentConnection){
   parentConnection = skynetClient.createConnection(config.parentConnection);

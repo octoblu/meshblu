@@ -9,6 +9,7 @@ var setupMqttClient = require('./lib/setupMqttClient');
 var setupCoapRoutes = require('./lib/setupCoapRoutes');
 var setupGatewayConfig = require('./lib/setupGatewayConfig');
 var sendActivity = require('./lib/sendActivity');
+var sendConfigActivity = require('./lib/sendConfigActivity');
 var createSocketEmitter = require('./lib/createSocketEmitter');
 var wrapMqttMessage = require('./lib/wrapMqttMessage');
 var parentConnection = require('./lib/getParentConnection');
@@ -69,6 +70,7 @@ var skynet = {
   sendMessage: sendMessage,
   gateway : setupGatewayConfig(emitToClient),
   sendActivity: sendActivity,
+  sendConfigActivity: sendConfigActivity,
   throttles: throttles,
   io: io,
   emitToClient: emitToClient

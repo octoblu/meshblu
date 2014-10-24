@@ -29,8 +29,6 @@ if (process.env.AIRBRAKE_KEY) {
   });
 }
 
-throw new Error("SUP");
-
 if(config.parentConnection){
   parentConnection = skynetClient.createConnection(config.parentConnection);
   parentConnection.on('notReady', function(data){

@@ -15,11 +15,21 @@ var wrapMqttMessage = require('./lib/wrapMqttMessage');
 var parentConnection = require('./lib/getParentConnection');
 
 var io;
+
+if (process.env.AIRBRAKE_KEY) {
+  var airbrakeErrors = require("./lib/airbrakeErrors");
+  airbrakeErrors.handleExceptions()
+} else {
+  process.on("uncaughtException", function(error) {
+    return console.error(error.message, error.stack);
+  });
+}
+
 if(config.redis && config.redis.host){
   var store = redis.createIoStore();
   store.subClient.psubscribe('socket.io#*', function(err){
     if (err){
-      console.log('error setting up socket.io subcription', err);
+      console.error('error setting up socket.io subcription', err);
     }
   });
 
@@ -77,10 +87,6 @@ var skynet = {
 };
 
 var mqttclient = setupMqttClient(skynet, config);
-
-process.on("uncaughtException", function(error) {
-  return console.log(error.message, error.stack);
-});
 
 setupCoapRoutes(coapRouter, skynet);
 

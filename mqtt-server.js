@@ -12,9 +12,18 @@ var securityImpl = require('./lib/getSecurityImpl');
 var updateFromClient = require('./lib/updateFromClient');
 var proxyListener = require('./proxyListener');
 var parentConnection = require('./lib/getParentConnection');
-
 var server;
 var io;
+
+if (process.env.AIRBRAKE_KEY) {
+  var airbrakeErrors = require("./lib/airbrakeErrors");
+  airbrakeErrors.handleExceptions()
+} else {
+  process.on("uncaughtException", function(error) {
+    return console.error(error.message, error.stack);
+  });
+}
+
 if(config.redis && config.redis.host){
   io = require('socket.io-emitter')(redis.client);
 }
@@ -72,10 +81,6 @@ var skynetTopics = ['message',
 function endsWith(str, suffix) {
   return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
-
-process.on("uncaughtException", function(error) {
-  return console.log(error.message, error.stack);
-});
 
 
 function socketEmitter(uuid, topic, data){
@@ -250,6 +255,16 @@ server = new mosca.Server(settings);
 
 server.on('ready', setup);
 
+server.servers.forEach(function(s){
+  s.on('error', console.error);
+  s.on('client', console.log);
+})
+
+
+server.on('clientConnected', function(client){
+  console.log('Client: ' + client.id);
+});
+
 server.on('published', function(packet, client) {
   try{
     var msg, ack;
@@ -304,6 +319,6 @@ server.on('published', function(packet, client) {
       });
     }
   }catch(ex){
-    console.log('error publishing', ex.stack);
+    console.error(ex);
   }
 });

@@ -20,6 +20,17 @@ var parentConnection = require('./lib/getParentConnection');
 var useHTTPS = config.tls && config.tls.cert;
 var skynetClient = require("skynet");
 
+if (process.env.AIRBRAKE_KEY) {
+  var airbrakeErrors = require("./lib/airbrakeErrors");
+  airbrakeErrors.handleExceptions()
+} else {
+  process.on("uncaughtException", function(error) {
+    return console.error(error.message, error.stack);
+  });
+}
+
+throw new Error("SUP");
+
 if(config.parentConnection){
   parentConnection = skynetClient.createConnection(config.parentConnection);
   parentConnection.on('notReady', function(data){
@@ -121,10 +132,6 @@ if (useHTTPS) {
   https_server.use(restify.CORS({ headers: [ 'skynet_auth_uuid', 'skynet_auth_token' ], origins: ['*'] }));
   https_server.use(restify.fullResponse());
 }
-
-process.on("uncaughtException", function(error) {
-  return console.log(error.message, error.stack);
-});
 
 var socketEmitter = createSocketEmitter(io, ios);
 

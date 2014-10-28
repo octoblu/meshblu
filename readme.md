@@ -116,13 +116,13 @@ parentConnection: {
 Start the server use:
 
 ```bash
-$ node server.js
+$ node server.js --http
 ```
 
 You may also run something like [forever](https://www.npmjs.org/package/forever) to keep it up and running:
 
 ```bash
-$ forever start server.js
+$ forever start server.js --http
 ```
 
 MQTT Broker
@@ -131,13 +131,13 @@ MQTT Broker
 MQTT is an optional SkyNet protocol.  If you would like to run our MQTT broker with your private Meshblu cloud, open another console tab and run:
 
 ```bash
-$ node mqtt-server.js
+$ node server.js --http --mqtt
 ```
 
  or using forever
 
  ```bash
- $ forever start mqtt-server.js
+ $ forever start server.js --http --mqtt
  ```
 
 Note: Our MQTT Broker defaults to using Mongo; however, you can run it in memory by removing the databaseUrl from the config.js.
@@ -155,13 +155,13 @@ CoAP
 CoAP is an optional SkyNet protocol.  If you would like to run our CoAP protocol with your private Meshblu cloud, open another console tab and run:
 
 ```bash
-$ node coap-server.js
+$ node server.js --http --coap
 ```
 
  or using forever
 
  ```bash
- $ forever start coap-server.js
+ $ forever start server.js --http --coap
  ```
 
 Note: Our CoAP protocol defaults to using Mongo; however, you can run it in memory by removing the databaseUrl from the config.js.

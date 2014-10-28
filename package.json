@@ -10,7 +10,7 @@
   "dependencies": {
     "JSONStream": "~0.9.0",
     "coap": "~0.6.1",
-    "commander": "~2.3.0",
+    "commander": "^2.3.0",
     "elasticsearch": "~2.4.0",
     "lodash": "~2.4.1",
     "moment": "~2.8.1",

@@ -19,7 +19,7 @@
     "mqtt": "~0.3.11",
     "msgpack-js": "^0.3.0",
     "nedb": "~0.10.11",
-    "node-static": "~0.7.4",
+    "node-static": "~0.7.6",
     "node-uuid": "~1.4.1",
     "qs": "~0.6.6",
     "redis": "~0.10.3",

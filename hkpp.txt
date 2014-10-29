@@ -1,0 +1,5106 @@
+{
+   "devices" : [
+      {
+         "online" : true,
+         "token" : "07ftcs4g9xh9qkt9hgvpxqc7mttq33di",
+         "uuid" : "bad6a911-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee88cef7edd5c6121eba2",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:52.833Z"
+      },
+      {
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:52.686Z",
+         "online" : true,
+         "uuid" : "bac03ae1-4b29-11e4-8283-937dc03f5319",
+         "token" : "00szf5ls8lqsrftj4i9577y1gwwjnhfr",
+         "_id" : "542ee88cef7edd5c6121eb9f"
+      },
+      {
+         "token" : "ty9tdu4smvjnstt9694dbwpf5gwj0pb9",
+         "uuid" : "baadeb60-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee88cef7edd5c6121eb9b",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:52.565Z",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT"
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "_id" : "542ee88cef7edd5c6121eb97",
+         "token" : "bgy0fubvrmvon7b9ov0ke8tpt7rv0a4i",
+         "uuid" : "ba9cfb71-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:52.455Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile"
+      },
+      {
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "secure" : false,
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "plugins" : [],
+         "timestamp" : "2014-10-03T18:50:11.614Z",
+         "online" : false,
+         "platform" : "Android",
+         "token" : "0ctvl5oeqovq5b3xrlpvnuhrs8shh0k9",
+         "uuid" : "ba8a0fb1-4b29-11e4-8283-937dc03f5319",
+         "subdevices" : [],
+         "_id" : "542ee88cef7edd5c6121eb94",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "socketid" : "FY-XQ4SlhMtL4YgbAAB5",
+         "channel" : "main",
+         "protocol" : "websocket"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:52.189Z",
+         "channel" : "main",
+         "type" : "octobluMobile",
+         "geo" : {
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "uuid" : "ba7464d0-4b29-11e4-8283-937dc03f5319",
+         "token" : "00jflkbcxiugvqjjor7yhe2eftju4n29",
+         "_id" : "542ee88cef7edd5c6121eb91",
+         "online" : true
+      },
+      {
+         "online" : true,
+         "_id" : "542ee88cef7edd5c6121eb8e",
+         "uuid" : "ba6103e0-4b29-11e4-8283-937dc03f5319",
+         "token" : "yh4ku56vr65el8fro8z1vnl560mb1emi",
+         "type" : "octobluMobile",
+         "geo" : {
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "timestamp" : "2014-10-03T18:18:52.061Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "online" : true,
+         "uuid" : "ba4f77b1-4b29-11e4-8283-937dc03f5319",
+         "token" : "l59kix6upr13v7vizihbjbjxpl3j714i",
+         "_id" : "542ee88bef7edd5c6121eb8a",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:51.947Z"
+      },
+      {
+         "_id" : "542ee88bef7edd5c6121eb87",
+         "token" : "c5sz1ridqgvkuik9ky8ibp8tuglrqkt9",
+         "uuid" : "ba3f2401-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:51.840Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile"
+      },
+      {
+         "online" : true,
+         "token" : "0imbs2ytwr9xdpldi2mt803yu76wdn29",
+         "uuid" : "ba2ea941-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee88bef7edd5c6121eb84",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:51.732Z",
+         "channel" : "main"
+      },
+      {
+         "_id" : "542ee88bef7edd5c6121eb81",
+         "token" : "0kw24u11yia9hehfrx62rtq2g5cul3di",
+         "uuid" : "ba1e0771-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "timestamp" : "2014-10-03T18:18:51.623Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "online" : true,
+         "uuid" : "ba0c2d21-4b29-11e4-8283-937dc03f5319",
+         "token" : "cbknux3uuyz4zpvilqy2wkw8r6b3mcxr",
+         "_id" : "542ee88bef7edd5c6121eb7d",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:51.506Z"
+      },
+      {
+         "token" : "00dwo28dys3bthjjornpm2gvzxj0dx6r",
+         "uuid" : "b9fb3d31-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee88bef7edd5c6121eb79",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:51.395Z",
+         "channel" : "main",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile"
+      },
+      {
+         "online" : true,
+         "uuid" : "b9e89f91-4b29-11e4-8283-937dc03f5319",
+         "token" : "i55eto0efx3zbyb9hc33goj9x3x72e29",
+         "_id" : "542ee88bef7edd5c6121eb76",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:51.273Z",
+         "channel" : "main"
+      },
+      {
+         "timestamp" : "2014-10-03T18:18:51.165Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "_id" : "542ee88bef7edd5c6121eb73",
+         "token" : "p4q5helktgap2e297d2ey5zei26b6gvi",
+         "uuid" : "b9d824d1-4b29-11e4-8283-937dc03f5319",
+         "online" : true
+      },
+      {
+         "_id" : "542ee88bef7edd5c6121eb70",
+         "token" : "tryrfsxcm669wwmi95iguzoltqu59udi",
+         "uuid" : "b9c7aa11-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:51.057Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "type" : "octobluMobile",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "_id" : "542ee88aef7edd5c6121eb6c",
+         "token" : "00ovgmjjc66tbakyb914nvr9tyddvx6r",
+         "uuid" : "b9b66c01-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:50.944Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile"
+      },
+      {
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT"
+         },
+         "name" : "Octoblu Mobile",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:50.834Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee88aef7edd5c6121eb69",
+         "token" : "00rfd833dkpb5fusoraw5wxj5bq08uxr",
+         "uuid" : "b9a5ca30-4b29-11e4-8283-937dc03f5319"
+      },
+      {
+         "_id" : "542ee88aef7edd5c6121eb66",
+         "token" : "lcbg4hg9echrrudiin56hktr4c34ygb9",
+         "uuid" : "b9948c20-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:50.722Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "type" : "octobluMobile",
+         "geo" : {
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:50.588Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee88aef7edd5c6121eb62",
+         "uuid" : "b98019c1-4b29-11e4-8283-937dc03f5319",
+         "token" : "0eidwkyfudwy7gb97phza2v6pmp74x6r"
+      },
+      {
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:50.430Z",
+         "online" : true,
+         "uuid" : "b967fde1-4b29-11e4-8283-937dc03f5319",
+         "token" : "dnutpbdedmpfogvilr4hflnqe5ovfgvi",
+         "_id" : "542ee88aef7edd5c6121eb5e"
+      },
+      {
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "timestamp" : "2014-10-03T18:18:50.312Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee88aef7edd5c6121eb5b",
+         "token" : "0t79bpv53ochgds4it7datykm6hnz5mi",
+         "uuid" : "b955fc81-4b29-11e4-8283-937dc03f5319"
+      },
+      {
+         "token" : "o4n3au617vwy7gb9opki23feusnbqpvi",
+         "uuid" : "b9447050-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee88aef7edd5c6121eb58",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:50.196Z",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "token" : "vadpsn0hrfk9y66rpgmimoolywnah5mi",
+         "uuid" : "b933a771-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee88aef7edd5c6121eb55",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:50.087Z",
+         "channel" : "main",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT"
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "online" : true,
+         "_id" : "542ee889ef7edd5c6121eb52",
+         "token" : "0ygdg3puoutedn29ertsxed6xlf8ncdi",
+         "uuid" : "b922de91-4b29-11e4-8283-937dc03f5319",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "timestamp" : "2014-10-03T18:18:49.977Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "_id" : "542ee889ef7edd5c6121eb4e",
+         "token" : "3fbu25kkdz1o47vife18ekxd77tu766r",
+         "uuid" : "b91263d1-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "timestamp" : "2014-10-03T18:18:49.869Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "token" : "0zdlnzg0p3dhadcxr3xmggtdu3vaq0k9",
+         "uuid" : "b901e911-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee889ef7edd5c6121eb4b",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:49.761Z",
+         "channel" : "main",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile"
+      },
+      {
+         "uuid" : "b8f0d211-4b29-11e4-8283-937dc03f5319",
+         "token" : "00ixfaa1svyg4uc8frwvhuk053unxw29",
+         "_id" : "542ee889ef7edd5c6121eb48",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:49.649Z",
+         "channel" : "main",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "type" : "octobluMobile",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile"
+      },
+      {
+         "timestamp" : "2014-10-03T18:18:49.541Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "_id" : "542ee889ef7edd5c6121eb44",
+         "uuid" : "b8e05751-4b29-11e4-8283-937dc03f5319",
+         "token" : "3ty2el7qtl5trzfrfdg9l96hsaj4te29",
+         "online" : true
+      },
+      {
+         "online" : true,
+         "token" : "0x5q6qolu594quxrxb7yof0yzycwstt9",
+         "uuid" : "b8cfdc91-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee889ef7edd5c6121eb40",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "type" : "octobluMobile",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:49.433Z"
+      },
+      {
+         "token" : "nkgbey5jmv0ftj4iv0hjr7f9jvan61or",
+         "uuid" : "b8bf88e1-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee889ef7edd5c6121eb3d",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:49.326Z",
+         "channel" : "main",
+         "type" : "octobluMobile",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:49.221Z",
+         "channel" : "main",
+         "online" : true,
+         "uuid" : "b8af8351-4b29-11e4-8283-937dc03f5319",
+         "token" : "2y1bnbgkv2uo9a4i6n37irkesmvd9529",
+         "_id" : "542ee889ef7edd5c6121eb3a"
+      },
+      {
+         "token" : "0thh6xij80wcow294snquyj21eswnrk9",
+         "uuid" : "b89e6c51-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee889ef7edd5c6121eb37",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:49.109Z",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile"
+      },
+      {
+         "_id" : "542ee888ef7edd5c6121eb34",
+         "token" : "m011qxqvem31sjor1o4kfnl946e3tyb9",
+         "uuid" : "b88c6af1-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "timestamp" : "2014-10-03T18:18:48.991Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile"
+      },
+      {
+         "_id" : "542ee888ef7edd5c6121eb30",
+         "token" : "4frko6b5nn42huxrzy3dkazztmxwdn29",
+         "uuid" : "b87a6991-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:48.873Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "timestamp" : "2014-10-03T18:18:48.762Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "_id" : "542ee888ef7edd5c6121eb2d",
+         "uuid" : "b86979a1-4b29-11e4-8283-937dc03f5319",
+         "token" : "0f2qryywgrt87iudij0y7v6q8q3bx1or",
+         "online" : true
+      },
+      {
+         "online" : true,
+         "_id" : "542ee888ef7edd5c6121eb2a",
+         "token" : "00007flyubhvgyzaor1zzqoe9u73c8fr",
+         "uuid" : "b858d7d1-4b29-11e4-8283-937dc03f5319",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:48.653Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:48.540Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee888ef7edd5c6121eb26",
+         "uuid" : "b84799c1-4b29-11e4-8283-937dc03f5319",
+         "token" : "0dpsikrd3fxx647viafst4v31xcoko6r"
+      },
+      {
+         "token" : "tkvbk8gy4ju7hkt90p7fm0frbu2wewmi",
+         "uuid" : "b82bad51-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee888ef7edd5c6121eb22",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:48.357Z",
+         "channel" : "main",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile"
+      },
+      {
+         "timestamp" : "2014-10-03T18:18:48.250Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "_id" : "542ee888ef7edd5c6121eb1f",
+         "uuid" : "b81b59a1-4b29-11e4-8283-937dc03f5319",
+         "token" : "00697bls0of7p66rafxyw8xo2lbit3xr",
+         "online" : true
+      },
+      {
+         "timestamp" : "2014-10-03T18:18:48.139Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "_id" : "542ee888ef7edd5c6121eb1c",
+         "token" : "nsijb0c6u7v3rf6rbkjzgnpr4csrlik9",
+         "uuid" : "b80a69b1-4b29-11e4-8283-937dc03f5319",
+         "online" : true
+      },
+      {
+         "online" : true,
+         "token" : "r4bndt566syh9f6ruvkayx0u4k1brzfr",
+         "uuid" : "b7f979c1-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee888ef7edd5c6121eb19",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:48.028Z",
+         "channel" : "main"
+      },
+      {
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:47.922Z",
+         "online" : true,
+         "uuid" : "b7e94d21-4b29-11e4-8283-937dc03f5319",
+         "token" : "0ot1puv1kfzb05290kcf9fn761l6usor",
+         "_id" : "542ee887ef7edd5c6121eb16"
+      },
+      {
+         "_id" : "542ee887ef7edd5c6121eb12",
+         "token" : "000uk20ymasya54s4ik04afiqibjra4i",
+         "uuid" : "b7d83621-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "timestamp" : "2014-10-03T18:18:47.810Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "online" : true,
+         "uuid" : "b7c79451-4b29-11e4-8283-937dc03f5319",
+         "token" : "dh1bh65sl03blnmim3sbr5l29hz4obt9",
+         "_id" : "542ee887ef7edd5c6121eb0f",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT"
+         },
+         "name" : "Octoblu Mobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:47.701Z"
+      },
+      {
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:47.576Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "_id" : "542ee887ef7edd5c6121eb0b",
+         "uuid" : "b7b48181-4b29-11e4-8283-937dc03f5319",
+         "token" : "f8tg9uc61ni5dn29pfg1igqxs4r96bt9",
+         "online" : true
+      },
+      {
+         "token" : "0000pvdtm0o89tfbt9dqzl5g3ffrms4i",
+         "uuid" : "b7a2a731-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee887ef7edd5c6121eb08",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:47.459Z",
+         "channel" : "main",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile"
+      },
+      {
+         "_id" : "542ee887ef7edd5c6121eb04",
+         "token" : "00lwhv471rsjnbqpvi5u7bh0iwy1ra4i",
+         "uuid" : "b786bac1-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "timestamp" : "2014-10-03T18:18:47.276Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:47.155Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee887ef7edd5c6121eb01",
+         "uuid" : "b7744431-4b29-11e4-8283-937dc03f5319",
+         "token" : "i45nwdt3htjwz5mi37scbo4p7sy5vcxr"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:46.987Z",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "token" : "tj0qnnmdqmklz0k9u4lfbezrrecul3di",
+         "uuid" : "b75aa1b1-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee886ef7edd5c6121eafe",
+         "online" : true
+      },
+      {
+         "uuid" : "b7487941-4b29-11e4-8283-937dc03f5319",
+         "token" : "0hfdpr1kvwr35wmimwulbep0mh9nqaor",
+         "_id" : "542ee886ef7edd5c6121eafb",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:46.868Z",
+         "channel" : "main",
+         "type" : "octobluMobile",
+         "geo" : {
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "uuid" : "b7376241-4b29-11e4-8283-937dc03f5319",
+         "token" : "853o7a7nl0ffajormo5pq46lsjl6usor",
+         "_id" : "542ee886ef7edd5c6121eaf7",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:46.756Z",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "token" : "0lb3eeb13j8zlrf6rwf9fth3imx3whfr",
+         "uuid" : "b725d611-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee886ef7edd5c6121eaf4",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:46.641Z",
+         "channel" : "main",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:46.535Z",
+         "channel" : "main",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "uuid" : "b715a971-4b29-11e4-8283-937dc03f5319",
+         "token" : "0000n9hdo7d2huxrm73e2ippwe7phkt9",
+         "_id" : "542ee886ef7edd5c6121eaf0",
+         "online" : true
+      },
+      {
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:46.427Z",
+         "online" : true,
+         "token" : "0a0239th7w0icnmiqt5oepjvv0smunmi",
+         "uuid" : "b7052eb1-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee886ef7edd5c6121eaed"
+      },
+      {
+         "uuid" : "b6f3a281-4b29-11e4-8283-937dc03f5319",
+         "token" : "0zvpbssl23sy06bt9rty9h9schfo5hfr",
+         "_id" : "542ee886ef7edd5c6121eae9",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:46.312Z",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:46.201Z",
+         "channel" : "main",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "uuid" : "b6e2b291-4b29-11e4-8283-937dc03f5319",
+         "token" : "uo39y8mq2ledbo6rrhip817816hwipb9",
+         "_id" : "542ee886ef7edd5c6121eae6",
+         "online" : true
+      },
+      {
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:46.092Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee886ef7edd5c6121eae3",
+         "token" : "00dblk4ym5abtep14i7be5kcy2kgwrk9",
+         "uuid" : "b6d210c1-4b29-11e4-8283-937dc03f5319"
+      },
+      {
+         "_id" : "542ee885ef7edd5c6121eae0",
+         "uuid" : "b6c0f9c1-4b29-11e4-8283-937dc03f5319",
+         "token" : "0dbbwt8h4c0418aornqr51xyngs98uxr",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:45.980Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT"
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "token" : "glhrqc5813ndygb9g79cl0yodhl1sjor",
+         "uuid" : "b6acfc91-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee885ef7edd5c6121eadd",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:45.849Z",
+         "geo" : {
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "online" : true,
+         "_id" : "542ee885ef7edd5c6121ead9",
+         "uuid" : "b69be591-4b29-11e4-8283-937dc03f5319",
+         "token" : "0k1t6qyu1wa8m2t91pitmp4h0hrara4i",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:45.737Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "timestamp" : "2014-10-03T18:18:45.602Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "type" : "octobluMobile",
+         "geo" : {
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "_id" : "542ee885ef7edd5c6121ead6",
+         "token" : "gp1gvf7t8conipb9mg5djronsg3w61or",
+         "uuid" : "b6874c21-4b29-11e4-8283-937dc03f5319",
+         "online" : true
+      },
+      {
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:45.466Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee885ef7edd5c6121ead2",
+         "token" : "cvmjlt3y7thdunmi8srbkkiabkoqolxr",
+         "uuid" : "b6728ba1-4b29-11e4-8283-937dc03f5319"
+      },
+      {
+         "online" : true,
+         "_id" : "542ee885ef7edd5c6121eacf",
+         "uuid" : "b66174a1-4b29-11e4-8283-937dc03f5319",
+         "token" : "nz40j1rw7sowp14i3glhpicw38ruow29",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "timestamp" : "2014-10-03T18:18:45.354Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "online" : true,
+         "_id" : "542ee885ef7edd5c6121eacb",
+         "uuid" : "b64f4c31-4b29-11e4-8283-937dc03f5319",
+         "token" : "grhrzl79rp1a714icdji53xn5ue1xlxr",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:45.235Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "timestamp" : "2014-10-03T18:18:45.127Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "_id" : "542ee885ef7edd5c6121eac8",
+         "token" : "07o0ajwhkb6nzsemi0nh52j9ilqe61or",
+         "uuid" : "b63ed171-4b29-11e4-8283-937dc03f5319",
+         "online" : true
+      },
+      {
+         "online" : true,
+         "token" : "0h9ze2l66zpycik9m175eshen9l4bo6r",
+         "uuid" : "b62d6c51-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee885ef7edd5c6121eac5",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:45.013Z",
+         "channel" : "main"
+      },
+      {
+         "online" : true,
+         "_id" : "542ee884ef7edd5c6121eac2",
+         "uuid" : "b61ca371-4b29-11e4-8283-937dc03f5319",
+         "token" : "039eh8836ath5b3xryv8igg8chctmx6r",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "timestamp" : "2014-10-03T18:18:44.903Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:44.791Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee884ef7edd5c6121eabf",
+         "token" : "0214qaed6f69wwmij8hyx68hujv8ia4i",
+         "uuid" : "b60b8c71-4b29-11e4-8283-937dc03f5319"
+      },
+      {
+         "timestamp" : "2014-10-03T18:18:44.675Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "_id" : "542ee884ef7edd5c6121eabb",
+         "token" : "0eep4dtokkresif6rr6beqz1xteuq5mi",
+         "uuid" : "b5fa0040-4b29-11e4-8283-937dc03f5319",
+         "online" : true
+      },
+      {
+         "uuid" : "b5e95e71-4b29-11e4-8283-937dc03f5319",
+         "token" : "03l3au7l2yddvx6rantjlyi3eekit3xr",
+         "_id" : "542ee884ef7edd5c6121eab7",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:44.567Z",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "online" : true,
+         "uuid" : "b5d7ab30-4b29-11e4-8283-937dc03f5319",
+         "token" : "0urk64o1i8c2l0udin6yt95o131bgldi",
+         "_id" : "542ee884ef7edd5c6121eab4",
+         "geo" : {
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:44.450Z",
+         "channel" : "main"
+      },
+      {
+         "_id" : "542ee884ef7edd5c6121eab1",
+         "uuid" : "b5c73071-4b29-11e4-8283-937dc03f5319",
+         "token" : "lo02ip2qydg0t3xrihr7qhwwv35cow29",
+         "online" : true,
+         "timestamp" : "2014-10-03T18:18:44.343Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile"
+      },
+      {
+         "online" : true,
+         "token" : "02bvd73vwjauivn29gy0iwlb525fusor",
+         "uuid" : "b5b61971-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee884ef7edd5c6121eaad",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:44.231Z"
+      },
+      {
+         "online" : true,
+         "token" : "r91jf7dq0tbro1orl4u40lmilzaj1yvi",
+         "uuid" : "b5a48d41-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee884ef7edd5c6121eaaa",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:44.116Z",
+         "channel" : "main"
+      },
+      {
+         "timestamp" : "2014-10-03T18:18:44.012Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT"
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "_id" : "542ee884ef7edd5c6121eaa7",
+         "token" : "r0ezh3fezln5ewmir4mcn4zc6y00ms4i",
+         "uuid" : "b594aec1-4b29-11e4-8283-937dc03f5319",
+         "online" : true
+      },
+      {
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "type" : "octobluMobile",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:43.895Z",
+         "channel" : "main",
+         "online" : true,
+         "token" : "tk4vivxjoboz85mi4v1mq83nbicqh0k9",
+         "uuid" : "b582d471-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee883ef7edd5c6121eaa4"
+      },
+      {
+         "uuid" : "b57232a1-4b29-11e4-8283-937dc03f5319",
+         "token" : "plu5aoy3ad5tgldi046d3rh511xg8pvi",
+         "_id" : "542ee883ef7edd5c6121eaa1",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:43.786Z",
+         "channel" : "main",
+         "geo" : {
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "_id" : "542ee883ef7edd5c6121ea9d",
+         "uuid" : "b5611ba1-4b29-11e4-8283-937dc03f5319",
+         "token" : "qcs8ls1d1taqncdipp5d650wvn9daemi",
+         "online" : true,
+         "timestamp" : "2014-10-03T18:18:43.674Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:43.565Z",
+         "channel" : "main",
+         "type" : "octobluMobile",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "uuid" : "b55079d1-4b29-11e4-8283-937dc03f5319",
+         "token" : "k77q9znr83pfzuxrakln79c5ayf4j9k9",
+         "_id" : "542ee883ef7edd5c6121ea99",
+         "online" : true
+      },
+      {
+         "_id" : "542ee883ef7edd5c6121ea96",
+         "token" : "84j048mz0k2lc8frkvz38yzmq1e5ewmi",
+         "uuid" : "b53eeda0-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "timestamp" : "2014-10-03T18:18:43.449Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ]
+         },
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "_id" : "542ee883ef7edd5c6121ea93",
+         "uuid" : "b52d6171-4b29-11e4-8283-937dc03f5319",
+         "token" : "sltr6s69ikucv7vig074gj7dq7meipb9",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:43.335Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "_id" : "542ee883ef7edd5c6121ea8f",
+         "token" : "15s2wnybf9urqkt990gxa1khm66zjjor",
+         "uuid" : "b51d0dc1-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:43.228Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile"
+      },
+      {
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:43.107Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "_id" : "542ee883ef7edd5c6121ea8c",
+         "uuid" : "b50a9731-4b29-11e4-8283-937dc03f5319",
+         "token" : "00gsb2w1kheka9k9r7vdbv95tvpzm2t9",
+         "online" : true
+      },
+      {
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:42.982Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "name" : "Octoblu Mobile",
+         "_id" : "542ee882ef7edd5c6121ea89",
+         "uuid" : "b4f78461-4b29-11e4-8283-937dc03f5319",
+         "token" : "007mt1f3cdtkgwrk9g54zyb7tyajdcxr",
+         "online" : true
+      },
+      {
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:42.873Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee882ef7edd5c6121ea86",
+         "token" : "000tkg6cznis5rk96nppatlmhnjhsemi",
+         "uuid" : "b4e6e291-4b29-11e4-8283-937dc03f5319"
+      },
+      {
+         "online" : true,
+         "token" : "on9xjnd6h6cu9pb9n7j06geymmj10pb9",
+         "uuid" : "b4d57d71-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee882ef7edd5c6121ea83",
+         "geo" : {
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:42.759Z",
+         "channel" : "main"
+      },
+      {
+         "online" : true,
+         "uuid" : "b4c46671-4b29-11e4-8283-937dc03f5319",
+         "token" : "000wf60utofjr9evcxrazs1dd0ybvs4i",
+         "_id" : "542ee882ef7edd5c6121ea7f",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:42.647Z"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:42.539Z",
+         "channel" : "main",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "token" : "06yglprg4h63l3di1f5qi6ubeg4rhpvi",
+         "uuid" : "b4b3ebb1-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee882ef7edd5c6121ea7b",
+         "online" : true
+      },
+      {
+         "timestamp" : "2014-10-03T18:18:42.422Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "_id" : "542ee882ef7edd5c6121ea78",
+         "uuid" : "b4a21161-4b29-11e4-8283-937dc03f5319",
+         "token" : "tri7ig9whmovquxrd8so7du1vm7mygb9",
+         "online" : true
+      },
+      {
+         "online" : true,
+         "_id" : "542ee882ef7edd5c6121ea75",
+         "uuid" : "b48e3b41-4b29-11e4-8283-937dc03f5319",
+         "token" : "jh9s87azk0lfpqfr30e944y3iqaug14i",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "timestamp" : "2014-10-03T18:18:42.292Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:42.174Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "_id" : "542ee882ef7edd5c6121ea71",
+         "uuid" : "b47c39e1-4b29-11e4-8283-937dc03f5319",
+         "token" : "lkzzfi5tdp99t3xrx4krx25z3ktep14i",
+         "online" : true
+      },
+      {
+         "online" : true,
+         "_id" : "542ee882ef7edd5c6121ea6e",
+         "uuid" : "b46b49f1-4b29-11e4-8283-937dc03f5319",
+         "token" : "eh4cdfnmo9urqkt97jaxwbvm69au4n29",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "timestamp" : "2014-10-03T18:18:42.063Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:41.952Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "_id" : "542ee881ef7edd5c6121ea6b",
+         "uuid" : "b45a5a01-4b29-11e4-8283-937dc03f5319",
+         "token" : "olibivghds5x9a4id7chc0eb5bem6lxr",
+         "online" : true
+      },
+      {
+         "uuid" : "b449b831-4b29-11e4-8283-937dc03f5319",
+         "token" : "0hg69i5dj2359udie9q9i0ugxqmh1tt9",
+         "_id" : "542ee881ef7edd5c6121ea68",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:41.843Z",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "_id" : "542ee881ef7edd5c6121ea65",
+         "token" : "cg9fmxjttx0z4cxr21k10q5c0rvsra4i",
+         "uuid" : "b438c841-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:41.732Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile"
+      },
+      {
+         "online" : true,
+         "uuid" : "b4282671-4b29-11e4-8283-937dc03f5319",
+         "token" : "001p6wyplss7xvfgvi5jlsrwttl3ow29",
+         "_id" : "542ee881ef7edd5c6121ea61",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT"
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:41.623Z"
+      },
+      {
+         "online" : true,
+         "token" : "000obn8xp1qchj8aorlybqsap5265hfr",
+         "uuid" : "b4173681-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee881ef7edd5c6121ea5d",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:41.512Z"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:41.405Z",
+         "channel" : "main",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "token" : "006ab4gufb88y3nmiqu01o10g0h08uxr",
+         "uuid" : "b406e2d1-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee881ef7edd5c6121ea5a",
+         "online" : true
+      },
+      {
+         "_id" : "542ee881ef7edd5c6121ea57",
+         "token" : "052cofmn04ihsq0k936ezqym6rzlg14i",
+         "uuid" : "b3f46c41-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:41.284Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile"
+      },
+      {
+         "token" : "iiok45g5uqiftj4icsr9r3k8i8vndn29",
+         "uuid" : "b3e10b51-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee881ef7edd5c6121ea53",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:41.157Z",
+         "channel" : "main",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:41.040Z",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "uuid" : "b3cf3101-4b29-11e4-8283-937dc03f5319",
+         "token" : "oxdy6cdjxa0grpb9opoanindgysw0zfr",
+         "_id" : "542ee881ef7edd5c6121ea50",
+         "online" : true
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:40.930Z",
+         "channel" : "main",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "uuid" : "b3be6821-4b29-11e4-8283-937dc03f5319",
+         "token" : "0rq3dlv3mfdukrzfrhjm4bzrtj8rrudi",
+         "_id" : "542ee880ef7edd5c6121ea4d",
+         "online" : true
+      },
+      {
+         "token" : "00udrum8c368wljtt9zoeaa6ubf8yqfr",
+         "uuid" : "b3a93271-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee880ef7edd5c6121ea4a",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:40.791Z",
+         "channel" : "main",
+         "geo" : {
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:40.678Z",
+         "channel" : "main",
+         "type" : "octobluMobile",
+         "geo" : {
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "uuid" : "b397f461-4b29-11e4-8283-937dc03f5319",
+         "token" : "0zxime5l7dpge3ik9e2pt2ut7vrysyvi",
+         "_id" : "542ee880ef7edd5c6121ea47",
+         "online" : true
+      },
+      {
+         "online" : true,
+         "uuid" : "b383a911-4b29-11e4-8283-937dc03f5319",
+         "token" : "cjd2ll22joytx1orw3tra5czghp30udi",
+         "_id" : "542ee880ef7edd5c6121ea42",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:40.545Z"
+      },
+      {
+         "online" : true,
+         "uuid" : "b36ec181-4b29-11e4-8283-937dc03f5319",
+         "token" : "8llh3v5jwlt2zkt94971xqzs3a1exw29",
+         "_id" : "542ee880ef7edd5c6121ea3f",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:40.408Z",
+         "channel" : "main"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:40.296Z",
+         "channel" : "main",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "uuid" : "b35daa81-4b29-11e4-8283-937dc03f5319",
+         "token" : "0f21g7fd0er35wmi7vu9sfy1twmqjjor",
+         "_id" : "542ee880ef7edd5c6121ea3c",
+         "online" : true
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:40.183Z",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "token" : "tgxqwz7223d3rf6rbwi0b4ole1edygb9",
+         "uuid" : "b34c6c71-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee880ef7edd5c6121ea39",
+         "online" : true
+      },
+      {
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "timestamp" : "2014-10-03T18:18:40.071Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee880ef7edd5c6121ea35",
+         "uuid" : "b33b5571-4b29-11e4-8283-937dc03f5319",
+         "token" : "j1wtgbuvzlfbhuxrb8p8qyeus2i3haor"
+      },
+      {
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:39.962Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee87fef7edd5c6121ea32",
+         "token" : "50uer5rrfowjc3dik2np2j3mnxe9izfr",
+         "uuid" : "b32ab3a1-4b29-11e4-8283-937dc03f5319"
+      },
+      {
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:39.853Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee87fef7edd5c6121ea2f",
+         "uuid" : "b31a11d1-4b29-11e4-8283-937dc03f5319",
+         "token" : "xa4aeingvi6enrk9q06ru5zjm9nklnmi"
+      },
+      {
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "timestamp" : "2014-10-03T18:18:39.718Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee87fef7edd5c6121ea2c",
+         "token" : "00p8bv7kbso35fjemizv6lfejzepzaor",
+         "uuid" : "b3057861-4b29-11e4-8283-937dc03f5319"
+      },
+      {
+         "_id" : "542ee87fef7edd5c6121ea29",
+         "uuid" : "b2f524b1-4b29-11e4-8283-937dc03f5319",
+         "token" : "nwykhq5azxl59udio2iwlf9yaoj62yb9",
+         "online" : true,
+         "timestamp" : "2014-10-03T18:18:39.611Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile"
+      },
+      {
+         "_id" : "542ee87fef7edd5c6121ea24",
+         "uuid" : "b2e40db1-4b29-11e4-8283-937dc03f5319",
+         "token" : "0000kx98bxdm18aoryrgwuv5q7ntrzfr",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:39.499Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile"
+      },
+      {
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "timestamp" : "2014-10-03T18:18:39.375Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee87fef7edd5c6121ea21",
+         "token" : "0k2baxnuyb5m9ggb9zee49tvra2d42t9",
+         "uuid" : "b2d121f1-4b29-11e4-8283-937dc03f5319"
+      },
+      {
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:39.262Z",
+         "channel" : "main",
+         "online" : true,
+         "uuid" : "b2bfe3e1-4b29-11e4-8283-937dc03f5319",
+         "token" : "puuf7eedi4g6i529hyy8102sja5lv7vi",
+         "_id" : "542ee87fef7edd5c6121ea1e"
+      },
+      {
+         "token" : "m4tnj0yebhaaif6re2e808iz2b95p14i",
+         "uuid" : "b2ac5be1-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee87fef7edd5c6121ea1b",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:39.134Z",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "online" : true,
+         "token" : "rnj7x1vthj6vfgvij109xi6nex5pzaor",
+         "uuid" : "b29acfb1-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee87fef7edd5c6121ea17",
+         "geo" : {
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:39.019Z"
+      },
+      {
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:38.860Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "geo" : {
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "_id" : "542ee87eef7edd5c6121ea14",
+         "uuid" : "b2828cc1-4b29-11e4-8283-937dc03f5319",
+         "token" : "016a3im3ee9b5ipb99wiwg3wk298jjor",
+         "online" : true
+      },
+      {
+         "online" : true,
+         "uuid" : "b271c3e1-4b29-11e4-8283-937dc03f5319",
+         "token" : "00ci9307qs4avpldiy7jd0orztgctyb9",
+         "_id" : "542ee87eef7edd5c6121ea11",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:38.750Z",
+         "channel" : "main"
+      },
+      {
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "name" : "Octoblu Mobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:38.629Z",
+         "online" : true,
+         "token" : "00r00co0yscg6tj4i13ek1mrfhs8xgvi",
+         "uuid" : "b25f4d51-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee87eef7edd5c6121ea0e"
+      },
+      {
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:38.511Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "geo" : {
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "_id" : "542ee87eef7edd5c6121ea09",
+         "uuid" : "b24d4bf1-4b29-11e4-8283-937dc03f5319",
+         "token" : "005d0l9vhg7zw1m7viux9y1e9725ipb9",
+         "online" : true
+      },
+      {
+         "token" : "g4cr6ojqpsh2rzfrcdkr7e06brnc23xr",
+         "uuid" : "b23c8311-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee87eef7edd5c6121ea06",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:38.401Z",
+         "channel" : "main",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT"
+         },
+         "type" : "octobluMobile"
+      },
+      {
+         "_id" : "542ee87eef7edd5c6121ea03",
+         "uuid" : "b2299751-4b29-11e4-8283-937dc03f5319",
+         "token" : "0000vu54kfordiy66rbkdavypcf03sor",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:38.277Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "geo" : {
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "type" : "octobluMobile",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:38.147Z",
+         "channel" : "main",
+         "online" : true,
+         "uuid" : "b215c131-4b29-11e4-8283-937dc03f5319",
+         "token" : "0009qd2hpfiy919k9hsgzow1uzfiggb9",
+         "_id" : "542ee87eef7edd5c6121ea00"
+      },
+      {
+         "online" : true,
+         "_id" : "542ee87eef7edd5c6121e9fc",
+         "uuid" : "b2054671-4b29-11e4-8283-937dc03f5319",
+         "token" : "qryjup9g6yvcayvid0kyrr9i5hqfflxr",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "name" : "Octoblu Mobile",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:38.039Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "online" : true,
+         "_id" : "542ee87def7edd5c6121e9f9",
+         "token" : "ymq9h0el9q7aatt9afkt7azjps73z0k9",
+         "uuid" : "b1f3ba41-4b29-11e4-8283-937dc03f5319",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:37.924Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "timestamp" : "2014-10-03T18:18:37.769Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee87def7edd5c6121e9f6",
+         "uuid" : "b1dc1391-4b29-11e4-8283-937dc03f5319",
+         "token" : "zewve5gmht8iwwmis2a6iaq12o5bqpvi"
+      },
+      {
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "timestamp" : "2014-10-03T18:18:37.654Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee87def7edd5c6121e9f3",
+         "token" : "rhfjhf641v97wrk9dgknjxaa9yue4s4i",
+         "uuid" : "b1ca8761-4b29-11e4-8283-937dc03f5319"
+      },
+      {
+         "token" : "wwefm757fkdibe29j5emr8kxfyxh6w29",
+         "uuid" : "b1b9e591-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee87def7edd5c6121e9ee",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:37.545Z",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:37.427Z",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT"
+         },
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "token" : "00gi4mh18l6ry66rmbn7at4j3gsw0zfr",
+         "uuid" : "b1a7e431-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee87def7edd5c6121e9eb",
+         "online" : true
+      },
+      {
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:37.315Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee87def7edd5c6121e9e8",
+         "token" : "sk75rlla26672e29r75lqrqkmfx8yqfr",
+         "uuid" : "b196cd31-4b29-11e4-8283-937dc03f5319"
+      },
+      {
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:37.204Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee87def7edd5c6121e9e5",
+         "token" : "4keclidyjls7nwmimjidv7wwcueopqfr",
+         "uuid" : "b185dd41-4b29-11e4-8283-937dc03f5319"
+      },
+      {
+         "_id" : "542ee87def7edd5c6121e9e2",
+         "uuid" : "b1751461-4b29-11e4-8283-937dc03f5319",
+         "token" : "01j4tyg4lj2rcnmi5ghmp2cyaz7low29",
+         "online" : true,
+         "timestamp" : "2014-10-03T18:18:37.094Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile"
+      },
+      {
+         "token" : "0guj9sdpduslwhfr8z74qfvrhrh5xw29",
+         "uuid" : "b1642471-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee87cef7edd5c6121e9de",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:36.983Z",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:36.870Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "_id" : "542ee87cef7edd5c6121e9db",
+         "token" : "9nvrqank92bakyb95cub6u8pu7jpp66r",
+         "uuid" : "b152e661-4b29-11e4-8283-937dc03f5319",
+         "online" : true
+      },
+      {
+         "_id" : "542ee87cef7edd5c6121e9d8",
+         "token" : "0b2s16uwuioirudiufpwoukk4bgctyb9",
+         "uuid" : "b13ec221-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:36.738Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT"
+         },
+         "name" : "Octoblu Mobile"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:36.612Z",
+         "type" : "octobluMobile",
+         "geo" : {
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "uuid" : "b12b8841-4b29-11e4-8283-937dc03f5319",
+         "token" : "dn1dsxbg0v2f0f6rlysevl0032ivygb9",
+         "_id" : "542ee87cef7edd5c6121e9d5",
+         "online" : true
+      },
+      {
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:36.504Z",
+         "online" : true,
+         "uuid" : "b11b0d80-4b29-11e4-8283-937dc03f5319",
+         "token" : "cauiuohhuwok1emialmp5pgh0u1eb3xr",
+         "_id" : "542ee87cef7edd5c6121e9d0"
+      },
+      {
+         "online" : true,
+         "token" : "aow9hbr1usb81tt9flagbcr2s8vbzkt9",
+         "uuid" : "b108be01-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee87cef7edd5c6121e9cd",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:36.384Z",
+         "channel" : "main"
+      },
+      {
+         "_id" : "542ee87cef7edd5c6121e9ca",
+         "uuid" : "b0f7f521-4b29-11e4-8283-937dc03f5319",
+         "token" : "96fkrt0c7c8lg14irj9815lhpbqsq0k9",
+         "online" : true,
+         "timestamp" : "2014-10-03T18:18:36.274Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "type" : "octobluMobile",
+         "geo" : {
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:36.165Z",
+         "geo" : {
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "token" : "43ll6mrpm71ll3diovodd82e6h66flxr",
+         "uuid" : "b0e75351-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee87cef7edd5c6121e9c7",
+         "online" : true
+      },
+      {
+         "_id" : "542ee87cef7edd5c6121e9c4",
+         "token" : "8aksyis3woqg2e29mvktqtzai14kuik9",
+         "uuid" : "b0d6b181-4b29-11e4-8283-937dc03f5319",
+         "online" : true,
+         "timestamp" : "2014-10-03T18:18:36.056Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "timestamp" : "2014-10-03T18:18:35.946Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "online" : true,
+         "_id" : "542ee87bef7edd5c6121e9c0",
+         "uuid" : "b0c5e8a1-4b29-11e4-8283-937dc03f5319",
+         "token" : "003gzrpq0hzb2zkt9bx7qxfucw3wstt9"
+      },
+      {
+         "timestamp" : "2014-10-03T18:18:35.435Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "_id" : "542ee87bef7edd5c6121e9bb",
+         "uuid" : "b077efb1-4b29-11e4-8283-937dc03f5319",
+         "token" : "uxgknpnyfdfmkj4i38ac2j7jmg8n0zfr",
+         "online" : true
+      },
+      {
+         "online" : true,
+         "token" : "tfqjygzsanxt7qfrag5atdoe4xzxs9k9",
+         "uuid" : "b065a031-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee87bef7edd5c6121e9b8",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:35.315Z",
+         "channel" : "main"
+      },
+      {
+         "online" : true,
+         "_id" : "542ee87bef7edd5c6121e9b5",
+         "uuid" : "b0548931-4b29-11e4-8283-937dc03f5319",
+         "token" : "00w9ve19ay808uxr73gcf5vpfggjsjor",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "timestamp" : "2014-10-03T18:18:35.203Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "uuid" : "b041c481-4b29-11e4-8283-937dc03f5319",
+         "token" : "0lyegtqvqjda38fr5wtc8a5q0zk0rudi",
+         "_id" : "542ee87bef7edd5c6121e9b2",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:35.080Z",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ]
+         },
+         "type" : "octobluMobile"
+      },
+      {
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:34.965Z",
+         "geo" : {
+            "country" : "US",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "uuid" : "b0303851-4b29-11e4-8283-937dc03f5319",
+         "token" : "3gzt68giapi1wcdifjkp3zvq0jps0pb9",
+         "_id" : "542ee87aef7edd5c6121e9af",
+         "online" : true
+      },
+      {
+         "token" : "093inreixxllnb3xr43l0e749467p66r",
+         "uuid" : "b01fbd91-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee87aef7edd5c6121e9ab",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:34.857Z",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "online" : true,
+         "token" : "d34jpv620jh8h0k9w9u5vu5lkg8k6gvi",
+         "uuid" : "b00ef4b1-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee87aef7edd5c6121e9a8",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT"
+         },
+         "type" : "octobluMobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:34.747Z"
+      },
+      {
+         "uuid" : "affe79f1-4b29-11e4-8283-937dc03f5319",
+         "token" : "cipidz4lqi9evcxrilmlbm3m8z6t7qfr",
+         "_id" : "542ee87aef7edd5c6121e9a5",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:34.639Z",
+         "channel" : "main",
+         "type" : "octobluMobile",
+         "geo" : {
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "uuid" : "afec5181-4b29-11e4-8283-937dc03f5319",
+         "token" : "0wu1ve66pcqe61orkwphg2fc79khjjor",
+         "_id" : "542ee87aef7edd5c6121e9a1",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:34.520Z",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68"
+      },
+      {
+         "_id" : "542ee87aef7edd5c6121e99d",
+         "uuid" : "afbdee81-4b29-11e4-8283-937dc03f5319",
+         "token" : "au48r4e9tr2otj4iureouxf0m312x1or",
+         "online" : true,
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:34.216Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "geo" : {
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "country" : "US",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+      },
+      {
+         "online" : true,
+         "uuid" : "af9de361-4b29-11e4-8283-937dc03f5319",
+         "token" : "04d3dxpgfn6f7p66rl8yljmbn9418aor",
+         "_id" : "542ee87aef7edd5c6121e99a",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "type" : "octobluMobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:34.006Z"
+      },
+      {
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:33.428Z",
+         "channel" : "main",
+         "online" : true,
+         "uuid" : "af45b141-4b29-11e4-8283-937dc03f5319",
+         "token" : "few5901hrds7cik9v3m0lyckdium1jor",
+         "_id" : "542ee879ef7edd5c6121e995"
+      },
+      {
+         "online" : true,
+         "_id" : "542ee879ef7edd5c6121e991",
+         "token" : "0czp5c2nc1cpfzuxrsrghbvmxw0tqpvi",
+         "uuid" : "af224ac1-4b29-11e4-8283-937dc03f5319",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "timestamp" : "2014-10-03T18:18:33.196Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "online" : true,
+         "token" : "l81qm564cghhyqfr9jricdh4yqmvaemi",
+         "uuid" : "af10e5a1-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee879ef7edd5c6121e98e",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "type" : "octobluMobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT"
+         },
+         "name" : "Octoblu Mobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:33.082Z",
+         "channel" : "main"
+      },
+      {
+         "online" : true,
+         "_id" : "542ee878ef7edd5c6121e98a",
+         "uuid" : "aef0b371-4b29-11e4-8283-937dc03f5319",
+         "token" : "0vfno3zes4l0x80k949nxloeiqk3mcxr",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "country" : "US"
+         },
+         "type" : "octobluMobile",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:32.871Z",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "online" : true,
+         "_id" : "542ee878ef7edd5c6121e987",
+         "uuid" : "aec50f91-4b29-11e4-8283-937dc03f5319",
+         "token" : "04dcoubydca98uxraalrumb2z36xn7b9",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile",
+         "timestamp" : "2014-10-03T18:18:32.585Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh"
+      },
+      {
+         "token" : "00gc73uorndck81tt949s8gzwmfv42t9",
+         "uuid" : "ae85e3b1-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee878ef7edd5c6121e982",
+         "online" : true,
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:32.171Z",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "region" : "UT",
+            "city" : "Ogden",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "country" : "US"
+         },
+         "name" : "Octoblu Mobile",
+         "type" : "octobluMobile"
+      },
+      {
+         "online" : true,
+         "uuid" : "ae62f261-4b29-11e4-8283-937dc03f5319",
+         "token" : "66ph5xz6vkmon7b910ko7ioqyz5pcik9",
+         "_id" : "542ee877ef7edd5c6121e97f",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "name" : "Octoblu Mobile",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "region" : "UT",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden"
+         },
+         "type" : "octobluMobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "channel" : "main",
+         "timestamp" : "2014-10-03T18:18:31.942Z"
+      },
+      {
+         "timestamp" : "2014-10-03T18:18:31.685Z",
+         "channel" : "main",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "octobluMobile",
+         "geo" : {
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "name" : "Octoblu Mobile",
+         "_id" : "542ee877ef7edd5c6121e97a",
+         "token" : "0000ra8gv00vbo6rxw6r4klb36vibe29",
+         "uuid" : "ae3bbb51-4b29-11e4-8283-937dc03f5319",
+         "online" : true
+      },
+      {
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "208.186.6.68",
+         "geo" : {
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT",
+            "range" : [
+               3501851648,
+               3501852671
+            ]
+         },
+         "type" : "octobluMobile",
+         "name" : "Octoblu Mobile",
+         "socketid" : "WZOPeuE7RMzQ6UbSAABh",
+         "timestamp" : "2014-10-03T18:18:31.430Z",
+         "channel" : "main",
+         "online" : false,
+         "token" : "0jodubrweiyqtzkt9htvhhl4l262mx6r",
+         "uuid" : "ae14d261-4b29-11e4-8283-937dc03f5319",
+         "_id" : "542ee877ef7edd5c6121e976"
+      },
+      {
+         "online" : false,
+         "subtype" : "cloud",
+         "_id" : "540a2681c0da0c8b1fc45457",
+         "token" : "vcq6roa8hw8qia4ipiqkkhxby3lhm2t9",
+         "uuid" : "e811b091-3540-11e4-836c-35bea1db2f39",
+         "ipAddress" : "184.98.60.236",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "geo" : {
+            "region" : "AZ",
+            "ll" : [
+               33.4484,
+               -112.074
+            ],
+            "city" : "Phoenix",
+            "country" : "US",
+            "range" : [
+               3093445120,
+               3093449727
+            ]
+         },
+         "type" : "skynet",
+         "name" : "moonisland",
+         "timestamp" : "2014-09-05T21:09:21.561Z",
+         "channel" : "main",
+         "socketid" : "pmS99tSEgD12oxoYAAEY"
+      },
+      {
+         "channel" : "main",
+         "socketid" : "rxmVMZRmdmElIQvMAADl",
+         "protocol" : "websocket",
+         "timestamp" : "2014-08-21T02:57:38.942Z",
+         "flows" : [
+            {
+               "id" : "a12319b-5d4f-ad87-a90a-198e92833335",
+               "wait" : false,
+               "payload" : "",
+               "name" : "Flow Preset A"
+            },
+            {
+               "name" : "Flow Preset B",
+               "payload" : "",
+               "id" : "a112di9b-5dsf-ad82-a90a-198e928123335",
+               "wait" : false
+            },
+            {
+               "id" : "ad2ea712-f2d5-9c53-f7d5-cbc301bc5050",
+               "name" : "movie"
+            }
+         ],
+         "plugins" : [
+            {
+               "name" : "skynet-mobile-plugin-greeting",
+               "bundle" : "https://raw.githubusercontent.com/octoblu/skynet-mobile-plugin-greeting/master/bundle.js",
+               "messageSchema" : {
+                  "properties" : {
+                     "text" : {
+                        "type" : "string",
+                        "required" : true
+                     }
+                  },
+                  "type" : "object"
+               },
+               "author" : "peterdemartini",
+               "homepage" : "https://github.com/octoblu/skynet-mobile-plugin-greeting",
+               "optionsSchema" : {
+                  "type" : "object",
+                  "properties" : {
+                     "greetingPrefix" : {
+                        "required" : true,
+                        "type" : "string"
+                     }
+                  }
+               },
+               "repository" : "git://github.com/octoblu/skynet-mobile-plugin-greeting.git",
+               "description" : "Skynet Mobile Greeting Plugin",
+               "enabled" : true,
+               "_url" : "file:///var/mobile/Applications/506117A1-CAE2-495B-9342-83749ED4C2F7/Documents/plugins/skynet-mobile-plugin-greeting/bundle.js",
+               "_path" : "/plugins/skynet-mobile-plugin-greeting/bundle.js",
+               "$$hashKey" : "08Q",
+               "dependencies" : [],
+               "subdevices" : [
+                  {
+                     "type" : "skynet-mobile-plugin-greeting",
+                     "name" : "skynet-mobile-plugin-greeting",
+                     "options" : {
+                        "greetingPrefix" : "Hello"
+                     },
+                     "uuid" : "9c5c48ca-af2f-f9f5-e50e-90c34f27ba2c"
+                  },
+                  {
+                     "type" : "skynet-mobile-plugin-greeting",
+                     "name" : "skynet-mobile-plugin-greeting 2",
+                     "options" : {
+                        "greetingPrefix" : "hello"
+                     },
+                     "uuid" : "bec5bf01-9a84-69af-17f4-acba3232fc61"
+                  }
+               ]
+            }
+         ],
+         "type" : "octobluMobile",
+         "name" : "Mobiblu2",
+         "secure" : false,
+         "ipAddress" : "166.137.209.40",
+         "setting" : {
+            "geolocation" : false,
+            "update_interval" : 3,
+            "compass" : false,
+            "bg_updates" : false,
+            "developer_mode" : false,
+            "accelerometer" : false
+         },
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "_id" : "53f3e71ec4f4b68a3d9452a3",
+         "uuid" : "30f5d071-27fe-11e4-a6e3-8715a7fb11e1",
+         "subdevices" : [
+            {
+               "uuid" : "9c5c48ca-af2f-f9f5-e50e-90c34f27ba2c",
+               "options" : {
+                  "greetingPrefix" : "Hello"
+               },
+               "type" : "skynet-mobile-plugin-greeting",
+               "name" : "skynet-mobile-plugin-greeting"
+            },
+            {
+               "name" : "skynet-mobile-plugin-greeting 2",
+               "type" : "skynet-mobile-plugin-greeting",
+               "options" : {
+                  "greetingPrefix" : "hello"
+               },
+               "uuid" : "bec5bf01-9a84-69af-17f4-acba3232fc61"
+            }
+         ],
+         "token" : "nksblplnl7jpp66r9sm2kl3re5wpcik9",
+         "platform" : "iOS",
+         "pushID" : "fa2fc45b949a8bdc23fd4c306761070e2965e53e5fe687706c6c0bb843751be7",
+         "autoRegister" : true,
+         "online" : false
+      },
+      {
+         "token" : "ncclfylbliti6bt9zrgu2hgq2mgta9k9",
+         "uuid" : "c43462d1-1cea-11e4-861d-89322229e557",
+         "_id" : "53e152104ffe930e641cf2ab",
+         "subtype" : "cloud",
+         "online" : false,
+         "protocol" : "websocket",
+         "socketid" : "pJbKT8LnmSC6FRNKAAJ6",
+         "timestamp" : "2014-09-07T23:46:41.234Z",
+         "channel" : "main",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "24.120.218.98",
+         "secure" : false,
+         "geo" : {
+            "range" : [
+               410573326,
+               410573567
+            ],
+            "country" : "US",
+            "city" : "Las Vegas",
+            "ll" : [
+               36.144,
+               -115.0323
+            ],
+            "region" : "NV"
+         },
+         "type" : "skynet",
+         "name" : "LocalMotors"
+      },
+      {
+         "ipAddress" : null,
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "name" : "microblu",
+         "type" : "device",
+         "secure" : null,
+         "channel" : "main",
+         "timestamp" : "2014-08-05T01:20:50.533Z",
+         "socketid" : "73425c81-1c39-11e4-861d-89322229e557",
+         "protocol" : "mqtt",
+         "subtype" : "other",
+         "online" : true,
+         "_id" : "53e028944ffe930e641ba0c6",
+         "uuid" : "73425c81-1c39-11e4-861d-89322229e557",
+         "token" : "3niox09k0rnyu8frlanut6s21y0vygb9"
+      },
+      {
+         "ipAddress" : "174.26.219.34",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "yo",
+         "timestamp" : "2014-07-29T16:29:59.443Z",
+         "channel" : "main",
+         "yoUser" : "christoffe",
+         "socketid" : null,
+         "online" : false,
+         "_id" : "53d7cc0797c0d60c1bf81789",
+         "uuid" : "955ef631-173d-11e4-a76f-ef198c503315",
+         "token" : "8bktf6d2u1tyy14indyzh2r43oe9izfr"
+      },
+      {
+         "socketid" : "4TDJQmgwvvd0O8icAAbV",
+         "channel" : "main",
+         "timestamp" : "2014-07-24T23:22:54.590Z",
+         "type" : "inboundSMS",
+         "name" : "insms",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "172.31.34.73",
+         "token" : "w8vl7oicdqwd0a4izd1romlndc102j4i",
+         "uuid" : "7071a1e0-1389-11e4-a504-5b6c46ce5bac",
+         "_id" : "53d1954efabcee7f41eeb108",
+         "online" : false
+      },
+      {
+         "channel" : "main",
+         "timestamp" : "2014-07-29T21:55:23.210Z",
+         "socketid" : "cffe24a1-1378-11e4-a504-5b6c46ce5bac",
+         "name" : "chris' dog",
+         "type" : "device",
+         "secure" : null,
+         "ipAddress" : null,
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "_id" : "53d17969fabcee7f41eea39f",
+         "token" : "09micx97s0639pb9isk0rfl835oskyb9",
+         "uuid" : "cffe24a1-1378-11e4-a504-5b6c46ce5bac",
+         "autoRegister" : true,
+         "subtype" : "beaglebone",
+         "online" : true,
+         "protocol" : "mqtt"
+      },
+      {
+         "ipAddress" : "208.186.6.68",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "device",
+         "geo" : {
+            "range" : [
+               3501851648,
+               3501852671
+            ],
+            "country" : "US",
+            "ll" : [
+               41.1828,
+               -111.915
+            ],
+            "city" : "Ogden",
+            "region" : "UT"
+         },
+         "name" : "mydog",
+         "secure" : null,
+         "channel" : "main",
+         "timestamp" : "2014-10-13T22:52:03.025Z",
+         "socketid" : "aa4f9fe1-0ed7-11e4-ba98-ed547cf24cbd",
+         "online" : true,
+         "subtype" : "beaglebone",
+         "protocol" : "mqtt",
+         "_id" : "53c9b510841e25353b1664c0",
+         "uuid" : "aa4f9fe1-0ed7-11e4-ba98-ed547cf24cbd",
+         "token" : "zlolqmvobl8oajormboq7dvaq8kkpgb9"
+      },
+      {
+         "updateWhitelist" : [],
+         "online" : false,
+         "uuid" : "da2543c1-0926-11e4-bc5b-6f80edbe1aed",
+         "token" : "00ze3yaryb2y5jyvih5us1v4cifz85mi",
+         "_id" : "53c028f0c23fbbef308fddab",
+         "receiveWhitelist" : [],
+         "name" : "newpi",
+         "type" : "device",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "174.26.219.34",
+         "timestamp" : "2014-07-17T17:19:38.172Z",
+         "viewWhitelist" : [
+            "2827b1d0-0dd6-11e4-a9c5-e75609c5451b",
+            "4e98f671-dab5-11e3-a065-0b9815260ada"
+         ],
+         "subtype" : "raspberrypi",
+         "sendWhitelist" : [
+            "2827b1d0-0dd6-11e4-a9c5-e75609c5451b",
+            "4e98f671-dab5-11e3-a065-0b9815260ada"
+         ],
+         "socketid" : "kjOp-To5DDtj1SbOAAFp",
+         "channel" : "main"
+      },
+      {
+         "token" : "v3pwpg5oo9ksxlxr3cfsmeuphzxv42t9",
+         "uuid" : "9dd49c91-078c-11e4-900d-a729bec7bfcf",
+         "_id" : "53bd78ada455273b2f42ec35",
+         "online" : false,
+         "plivoAuthToken" : "NDI3NzQ1ZDE5NzQxMjNlNmJiOTk1ZThmOGIwNjA0",
+         "phoneNumber" : "14803813574",
+         "socketid" : "xFN9io4U5YSlGz2zAABr",
+         "timestamp" : "2014-08-21T18:10:18.240Z",
+         "channel" : "main",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "72.44.240.228",
+         "plivoAuthId" : "MAYTQ3YZKYMJI1MJAXYT",
+         "name" : "SMS(outbound)",
+         "type" : "outboundSMS"
+      },
+      {
+         "updateWhitelist" : [],
+         "online" : false,
+         "uuid" : "679717d1-05f1-11e4-afad-b385edf7dff5",
+         "token" : "jbpuay0afkulerk9b9eo38u4l0kep14i",
+         "test" : "123",
+         "_id" : "53bac6c78848baea4e2a58e7",
+         "receiveWhitelist" : [],
+         "type" : "device",
+         "name" : "ok",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "174.26.219.34",
+         "timestamp" : "2014-07-17T17:19:38.170Z",
+         "viewWhitelist" : [
+            "2827b1d0-0dd6-11e4-a9c5-e75609c5451b",
+            "4e98f671-dab5-11e3-a065-0b9815260ada"
+         ],
+         "subtype" : "other",
+         "sendWhitelist" : [
+            "2827b1d0-0dd6-11e4-a9c5-e75609c5451b",
+            "4e98f671-dab5-11e3-a065-0b9815260ada"
+         ],
+         "socketid" : "bmQJfiBwQ1-Q8VgUFj7a",
+         "channel" : "main"
+      },
+      {
+         "_id" : "53b5c9e5100d7a3e67f81cad",
+         "uuid" : "530ec7a1-02f8-11e4-a1b9-fd8f2922fbb0",
+         "token" : "0fjgbygjftyyqr529yoqgaeu6b7w4s4i",
+         "online" : false,
+         "subtype" : "cloud",
+         "timestamp" : "2014-08-19T23:02:41.069Z",
+         "channel" : "main",
+         "ipAddress" : "174.26.219.34",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "skynet",
+         "name" : "SkynetCloud"
+      },
+      {
+         "socketid" : "YZL2GTyWiyMrHSKCrNZL",
+         "channel" : "main",
+         "protocol" : "websocket",
+         "secure" : false,
+         "plugins" : [],
+         "type" : "octobluMobile",
+         "name" : "simulator",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "174.26.219.34",
+         "timestamp" : "2014-07-03T18:35:10.967Z",
+         "online" : false,
+         "subdevices" : [],
+         "uuid" : "ad40b010-02c8-11e4-a1b9-fd8f2922fbb0",
+         "token" : "0z6ttyyn3lbk8d7vi8ywqq18xlohto6r",
+         "_id" : "53b579f5100d7a3e67f68bd7",
+         "platform" : "iOS"
+      },
+      {
+         "ipAddress" : "172.31.12.136",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "gateway",
+         "name" : "office hub",
+         "secure" : false,
+         "timestamp" : "2014-08-12T06:20:19.861Z",
+         "online" : true,
+         "resource" : {
+            "uuid" : "b5355d76-832b-43c6-9f8d-7d12e254a29f",
+            "properties" : {
+               "uuid" : "b5355d76-832b-43c6-9f8d-7d12e254a29f",
+               "name" : "test hub",
+               "type" : "gateway",
+               "online" : true,
+               "localhost" : "192.168.112.55",
+               "ipAddress" : "174.26.219.34"
+            },
+            "type" : "device",
+            "owner" : {}
+         },
+         "_id" : "53b34dde100d7a3e67ec3ab2",
+         "token" : "fd77a44f502e48e1b7312aebf11eb20",
+         "uuid" : "b5355d76-832b-43c6-9f8d-7d12e254a29f",
+         "localhost" : "192.168.112.55",
+         "channel" : "main",
+         "socketid" : "7n89RpBvkQrz4bIWAAA7",
+         "protocol" : "websocket",
+         "port" : 8888
+      },
+      {
+         "online" : false,
+         "protocol" : "websocket",
+         "uuid" : "f0af1a01-fd5d-11e3-a290-ef9910e207d9",
+         "token" : "0wyjcbbffnely2e29zuz9ygnoaymygb9",
+         "_id" : "53ac63665128e1d5032288b8",
+         "secure" : false,
+         "name" : "test2",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "184.98.43.115",
+         "socketid" : "ITloWzBNzg6ylOEkAAAC",
+         "channel" : "main",
+         "timestamp" : "2014-08-12T16:14:05.489Z"
+      },
+      {
+         "protocol" : "websocket",
+         "online" : false,
+         "_id" : "53ac55ae5128e1d503223b94",
+         "token" : "0avr9lpll33w0cnmirsghi79omie8kt9",
+         "uuid" : "c33e14c0-fd55-11e3-a290-ef9910e207d9",
+         "ipAddress" : "72.44.240.228",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "name" : "test",
+         "secure" : false,
+         "channel" : "main",
+         "timestamp" : "2014-08-06T17:19:05.360Z",
+         "socketid" : "bcVgnCzXxjQG6paBAAB8"
+      },
+      {
+         "timestamp" : "2014-07-15T19:24:10.748Z",
+         "channel" : "main",
+         "socketid" : "ZM04zBW9cuFDDd931MSL",
+         "ipAddress" : "71.36.180.147",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "name" : "tuan",
+         "type" : "device",
+         "_id" : "53a882015128e1d503fde429",
+         "token" : "4j0d3cefe5m0wwmi4fdjkzphc83nb3xr",
+         "uuid" : "d4df2fb1-fb0d-11e3-a290-ef9910e207d9",
+         "resource" : {
+            "owner" : {
+               "type" : "user",
+               "uuid" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+            },
+            "type" : "device",
+            "properties" : {
+               "type" : "user",
+               "name" : "tuan",
+               "ipAddress" : "71.36.180.147",
+               "online" : false,
+               "uuid" : "d4df2fb1-fb0d-11e3-a290-ef9910e207d9",
+               "token" : "4j0d3cefe5m0wwmi4fdjkzphc83nb3xr"
+            },
+            "uuid" : "d4df2fb1-fb0d-11e3-a290-ef9910e207d9"
+         },
+         "subtype" : "other",
+         "online" : true
+      },
+      {
+         "type" : "device",
+         "name" : "tessel",
+         "secure" : false,
+         "ipAddress" : "70.171.192.231",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "timestamp" : "2014-10-18T00:40:18.332Z",
+         "resource" : {
+            "uuid" : "d4d49501-f441-11e3-8737-039ac005852a",
+            "properties" : {
+               "token" : "0s7d03t0nvtb7qfrgm0udcnuwc9xusor",
+               "uuid" : "d4d49501-f441-11e3-8737-039ac005852a",
+               "online" : false,
+               "ipAddress" : "70.171.192.231",
+               "type" : "tessel",
+               "name" : "tessel"
+            },
+            "type" : "device",
+            "owner" : {
+               "uuid" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+               "type" : "user"
+            }
+         },
+         "online" : true,
+         "_id" : "539d1ac5be31cfa2720f4ca6",
+         "uuid" : "d4d49501-f441-11e3-8737-039ac005852a",
+         "token" : "0s7d03t0nvtb7qfrgm0udcnuwc9xusor",
+         "geo" : {
+            "city" : "Phoenix",
+            "ll" : [
+               33.3413,
+               -112.0598
+            ],
+            "region" : "AZ",
+            "country" : "US",
+            "range" : [
+               1185661056,
+               1185661183
+            ]
+         },
+         "channel" : "main",
+         "socketid" : "d4d49501-f441-11e3-8737-039ac005852a",
+         "protocol" : "mqtt",
+         "subtype" : "tessel"
+      },
+      {
+         "protocol" : "websocket",
+         "online" : false,
+         "autoRegister" : "true",
+         "token" : "0b84dh9iedp0q9f6rcqub3kfuy0ysyvi",
+         "uuid" : "613f8b90-c9a8-11e3-aa24-e1cb42c326cd",
+         "_id" : "5355a275d1ad90a55f0182ea",
+         "secure" : false,
+         "socketId" : "TFqB71zEI8Q8wjV2q2Su",
+         "name" : "skynetsensor",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "184.98.43.115",
+         "socketid" : "scLUpcwxcBr-4zxNAAD1",
+         "timestamp" : "2014-08-12T15:22:42.929Z",
+         "channel" : "main"
+      },
+      {
+         "name" : "firmwaretest",
+         "receiveWhitelist" : [
+            "4e98f671-dab5-11e3-a065-0b9815260ada",
+            "d4d49501-f441-11e3-8737-039ac005852a"
+         ],
+         "socketId" : "JjLuhWroWEVNQjwrR1Td",
+         "secure" : false,
+         "ipAddress" : "70.171.192.231",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "timestamp" : "2014-07-07T17:47:26.146Z",
+         "settings" : {
+            "sensor" : true,
+            "GPS" : false
+         },
+         "colors" : [
+            "blue",
+            "red"
+         ],
+         "online" : false,
+         "updateWhitelist" : [
+            "4e98f671-dab5-11e3-a065-0b9815260ada",
+            "d4d49501-f441-11e3-8737-039ac005852a"
+         ],
+         "_id" : "533b3a8941abbe647b00106a",
+         "uuid" : "26cc6770-b9eb-11e3-a3c6-0b41aaf824e3",
+         "viewPermissions" : [
+            ""
+         ],
+         "token" : "g9ydhs699d9ozuxrwgrt1ov52gap2e29",
+         "obj" : {
+            "color" : "black",
+            "test" : true
+         },
+         "sendWhitelist" : [
+            "4e98f671-dab5-11e3-a065-0b9815260ada",
+            "d4d49501-f441-11e3-8737-039ac005852a"
+         ],
+         "myArray" : [
+            "test1",
+            "test2"
+         ],
+         "myname" : "chris",
+         "channel" : "main",
+         "updatePermissions" : [
+            ""
+         ],
+         "socketid" : "R2MCepYWVsf7lkCYFj8I",
+         "viewWhitelist" : [
+            "4e98f671-dab5-11e3-a065-0b9815260ada",
+            "d4d49501-f441-11e3-8737-039ac005852a"
+         ],
+         "protocol" : "websocket",
+         "sendPermissions" : [
+            ""
+         ]
+      },
+      {
+         "timestamp" : "2014-09-19T22:20:59.698Z",
+         "name" : "home",
+         "type" : "gateway",
+         "plugins" : [
+            {
+               "description" : "Greeting plugin for Skynet Gateway",
+               "repository" : {
+                  "type" : "git",
+                  "url" : "git@github.com:monteslu/skynet-greeting.git"
+               },
+               "license" : "MIT",
+               "bugs" : {
+                  "url" : "https://github.com/monteslu/skynet-greeting/issues"
+               },
+               "_from" : "skynet-greeting@~0.6.0",
+               "messageSchema" : {
+                  "type" : "object",
+                  "properties" : {
+                     "text" : {
+                        "type" : "string",
+                        "required" : "true"
+                     }
+                  }
+               },
+               "readme" : "skynet-greeting\n===============\n\nSkynet Gateway plugin example\n",
+               "author" : {
+                  "name" : "Luis Montes"
+               },
+               "keywords" : [
+                  "skynet-plugin"
+               ],
+               "main" : "index.js",
+               "readmeFilename" : "README.md",
+               "_id" : "skynet-greeting@0.6.0",
+               "version" : "0.6.0",
+               "homepage" : "https://github.com/monteslu/skynet-greeting",
+               "optionsSchema" : {
+                  "properties" : {
+                     "greetingPrefix" : {
+                        "required" : "true",
+                        "type" : "string"
+                     }
+                  },
+                  "type" : "object"
+               },
+               "name" : "skynet-greeting",
+               "scripts" : {
+                  "test" : "echo \"Error: no test specified\" && exit 1"
+               }
+            },
+            {
+               "_from" : "skynet-hue@",
+               "repository" : {
+                  "url" : "https://github.com/monteslu/skynet-hue.git",
+                  "type" : "git"
+               },
+               "description" : "Skynet Gateway plugin to control a phillips hue lighting system",
+               "bugs" : {
+                  "url" : "https://github.com/monteslu/skynet-hue/issues"
+               },
+               "license" : "MIT",
+               "keywords" : [
+                  "skynet-plugin",
+                  "hue"
+               ],
+               "main" : "index.js",
+               "readmeFilename" : "README.md",
+               "messageSchema" : {
+                  "type" : "object",
+                  "properties" : {
+                     "setState" : {
+                        "type" : "object",
+                        "properties" : {
+                           "lightNumber" : {
+                              "required" : "true",
+                              "type" : "number"
+                           },
+                           "options" : {
+                              "required" : "true",
+                              "properties" : {
+                                 "on" : {
+                                    "type" : "boolean"
+                                 },
+                                 "bri" : {
+                                    "type" : "number"
+                                 },
+                                 "hue" : {
+                                    "type" : "number"
+                                 },
+                                 "transitiontime" : {
+                                    "type" : "number"
+                                 },
+                                 "sat" : {
+                                    "type" : "number"
+                                 }
+                              },
+                              "type" : "object"
+                           }
+                        }
+                     },
+                     "getState" : {
+                        "type" : "number"
+                     }
+                  }
+               },
+               "readme" : "skynet-hue\n==========\n\nSkynet Gateway plugin to control hue light bulbs.\n",
+               "author" : {
+                  "name" : "Luis Montes"
+               },
+               "_id" : "skynet-hue@0.6.0",
+               "version" : "0.6.0",
+               "scripts" : {
+                  "test" : "echo \"Error: no test specified\" && exit 1"
+               },
+               "name" : "skynet-hue",
+               "homepage" : "https://github.com/monteslu/skynet-hue",
+               "optionsSchema" : {
+                  "type" : "object",
+                  "properties" : {
+                     "apiUsername" : {
+                        "type" : "string",
+                        "required" : "true"
+                     },
+                     "ipAddress" : {
+                        "type" : "string",
+                        "required" : "true"
+                     }
+                  }
+               }
+            }
+         ],
+         "secure" : false,
+         "socketId" : "jmu8RDlL12sU05llR1e9",
+         "ipAddress" : "184.98.242.118",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "_id" : "5329e76d728390827201361e",
+         "uuid" : "feadee3e-7cb5-4fb5-93bd-1bcdba8de1c5",
+         "token" : "c1b066c28d1f4a4aa42b53fe514519d",
+         "subdevices" : [
+            {
+               "_id" : "i2aXxkPxMXJYPxQM",
+               "options" : {
+                  "greetingPrefix" : "holla"
+               },
+               "name" : "greeting",
+               "type" : "skynet-greeting"
+            }
+         ],
+         "online" : false,
+         "channel" : "main",
+         "socketid" : "Dm67f2CisXo42gn4AABP",
+         "geo" : {
+            "country" : "US",
+            "city" : "Glendale",
+            "ll" : [
+               33.5386,
+               -112.186
+            ],
+            "region" : "AZ",
+            "range" : [
+               3093492224,
+               3093492479
+            ]
+         },
+         "localhost" : "192.168.112.21",
+         "port" : 8888,
+         "protocol" : "websocket"
+      },
+      {
+         "protocol" : "websocket",
+         "subtype" : "arduino",
+         "viewWhitelist" : [
+            "4e98f671-dab5-11e3-a065-0b9815260ada"
+         ],
+         "sendWhitelist" : [
+            "4e98f671-dab5-11e3-a065-0b9815260ada"
+         ],
+         "channel" : "main",
+         "socketid" : "o9CiEACYKNtSRK3QAAAA",
+         "updateWhitelist" : [
+            "4e98f671-dab5-11e3-a065-0b9815260ada"
+         ],
+         "resource" : {
+            "type" : "device",
+            "properties" : {
+               "token" : "2715lxsogusdcxrmtqdj7hwzcdz33di",
+               "uuid" : "a587eb41-a292-11e3-ad2d-c5fcbb05136c",
+               "online" : false,
+               "ipAddress" : null,
+               "name" : "arduino"
+            },
+            "owner" : {
+               "uuid" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+               "type" : "user"
+            },
+            "uuid" : "a587eb41-a292-11e3-ad2d-c5fcbb05136c"
+         },
+         "online" : false,
+         "_id" : "53140f9fec23d8ba7a000938",
+         "token" : "2715lxsogusdcxrmtqdj7hwzcdz33di",
+         "uuid" : "a587eb41-a292-11e3-ad2d-c5fcbb05136c",
+         "ipAddress" : null,
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "type" : "device",
+         "name" : "arduino",
+         "socketId" : "eoM6vfGaHf9aKwRYR1Tp",
+         "receiveWhitelist" : [
+            "4e98f671-dab5-11e3-a065-0b9815260ada"
+         ],
+         "secure" : false,
+         "timestamp" : "2014-07-15T19:14:18.765Z"
+      },
+      {
+         "online" : false,
+         "resource" : {
+            "uuid" : "7ca1a4a1-a292-11e3-ad2d-c5fcbb05136c",
+            "type" : "device",
+            "properties" : {
+               "uuid" : "7ca1a4a1-a292-11e3-ad2d-c5fcbb05136c",
+               "token" : "cvtpz3iomdl8r529jhmryyz4a38fr",
+               "ipAddress" : "70.171.192.231",
+               "online" : false,
+               "name" : "SMS",
+               "type" : "sms"
+            },
+            "owner" : {
+               "type" : "user",
+               "uuid" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0"
+            }
+         },
+         "plivoAuthToken" : "NDI3NzQ1ZDE5NzQxMjNlNmJiOTk1ZThmOGIwNjA0",
+         "token" : "cvtpz3iomdl8r529jhmryyz4a38fr",
+         "uuid" : "7ca1a4a1-a292-11e3-ad2d-c5fcbb05136c",
+         "_id" : "53140f5bec23d8ba7a00092c",
+         "socketId" : "_zPhrkIWQiMQhyeBvgW4",
+         "name" : "SMS(inbound)",
+         "type" : "inboundSMS",
+         "owner" : "5d6e9c91-820e-11e3-a399-f5b85b6b9fd0",
+         "ipAddress" : "70.171.192.231",
+         "plivoAuthId" : "MAYTQ3YZKYMJI1MJAXYT",
+         "timestamp" : "2014-07-09T02:21:02.070Z",
+         "phoneNumber" : "17144625921",
+         "protocol" : "websocket",
+         "channel" : "main"
+      }
+   ],
+   "timestamp" : "2014-10-28T22:24:40.928Z",
+   "eventCode" : 403
+}

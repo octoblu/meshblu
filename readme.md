@@ -223,7 +223,7 @@ Nodeblu is Octoblu's fork of the popular [NodeRED](https://github.com/node-red/n
 
 <p align="center">
   <a href="https://chrome.google.com/webstore/detail/nodeblu/aanmmiaepnlibdlobmbhmfemjioahilm">
-    <img width="100%" src="http://skynet.im/img/nodeblu.png"/>
+    <img width="100%" src="https://pbs.twimg.com/media/BqXMR8ECAAEvzFf.png"/>
   </a>
 </p>
 

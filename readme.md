@@ -113,7 +113,7 @@ parentConnection: {
 },
 ```
 
-Start the server use:
+Start the Meshblu server running HTTP and WebSocket protocols use:
 
 ```bash
 $ node server.js --http

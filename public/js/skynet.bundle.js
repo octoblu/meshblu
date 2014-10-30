@@ -1004,7 +1004,7 @@ function Connection(opt){
   this.options.options = this.options.options || {};
 
   // this.options.options.transports = this.options.options.transports || ['websocket'];
-  this.options.options.transports = this.options.options.transports;
+
   this.options.forceNew = (opt.forceNew != null) ? opt.forceNew : false;
 
   this.options.server = this.options.server || 'ws://meshblu.octoblu.com';

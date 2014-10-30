@@ -25,7 +25,7 @@
     "redis": "~0.10.3",
     "request": "~2.40.0",
     "restify": "~2.8.3",
-    "skynet": "1.4.0",
+    "skynet": "1.5.0",
     "socket.io": "1.2.0",
     "socket.io-emitter": "^0.2.0",
     "socket.io-redis": "^0.1.3",

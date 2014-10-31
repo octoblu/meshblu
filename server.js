@@ -43,6 +43,15 @@ console.log("                 sss                              ");
 console.log('\Meshblu (formerly skynet.im) %s environment loaded... ', program.environment);
 console.log("");
 
+if (process.env.AIRBRAKE_KEY) {
+  var airbrakeErrors = require("./lib/airbrakeErrors");
+  airbrakeErrors.handleExceptions()
+} else {
+  process.on("uncaughtException", function(error) {
+    return console.error(error.message, error.stack);
+  });
+}
+
 if (program.parent) {
   process.stdout.write('Starting Parent connection...');
   parentConnection = require('./lib/parentConnection')(config);

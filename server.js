@@ -64,7 +64,7 @@ if (program.coap) {
   console.log(' done.');
 }
 
-if (program.http || program.https) {
+if (true || program.http || program.https) {
   process.stdout.write('Starting HTTP/HTTPS...');
   var httpServer = require('./lib/httpServer')(config, parentConnection);
   console.log(' done.');

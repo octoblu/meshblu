@@ -1,11 +1,12 @@
 'use strict';
-var program = require('commander');
-var pjson = require('./package.json');
-var config = require('./config');
 
 if ((process.env.USE_NEWRELIC  || 'false').toLowerCase() === 'true') {
   require('newrelic');
 }
+
+var program = require('commander');
+var pjson = require('./package.json');
+var config = require('./config');
 
 var parentConnection;
 

@@ -8,11 +8,11 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name : ['My Application'],
+  app_name : ['Meshblu'],
   /**
    * Your New Relic license key.
    */
-  license_key : 'license key here',
+  license_key : 'e70989cafd562b1ba49653bcf0629fea323c8b4d',
   logging : {
     /**
      * Level at which to log. 'trace' is most useful to New Relic when diagnosing

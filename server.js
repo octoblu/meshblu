@@ -3,6 +3,10 @@ var program = require('commander');
 var pjson = require('./package.json');
 var config = require('./config');
 
+if ((process.env.USE_NEWRELIC  || 'false').toLowerCase() === 'true') {
+  require('newrelic');
+}
+
 var parentConnection;
 
 program

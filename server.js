@@ -52,7 +52,7 @@ if (process.env.AIRBRAKE_KEY) {
   airbrakeErrors.handleExceptions()
 } else {
   process.on("uncaughtException", function(error) {
-    return console.error(error.message, error.stack);
+    console.error(error.message, error.stack);
   });
 }
 

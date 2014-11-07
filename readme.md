@@ -186,7 +186,7 @@ Use the button above to deploy to the [Heroku](http://heroku.com/) cloud for Fre
 DigitalOcean
 ------------
 
-[![Install on DigitalOcean](http://installer.71m.us/button.svg)](http://installer.71m.us/install?url=https://github.com/churchio/onebody)
+[![Install on DigitalOcean](http://installer.71m.us/button.svg)](http://installer.71m.us/install?url=https://github.com/octoblu/meshblu)
 
 Use the button above to deploy to the [DigitalOcean](https://www.digitalocean.com/) cloud for as little as $5/month! The app.json / config.js can be modified to allow for more protocols and storage systems.
 

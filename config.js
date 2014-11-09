@@ -1,6 +1,20 @@
+var _ = require('lodash');
+
+var getElasticSearchHosts = function() {
+  if(process.env.ELASTIC_SEARCH_HOST){
+    var hosts = process.env.ELASTIC_SEARCH_HOST.split(',');
+    return _.map(hosts, function(host) {
+      return {
+        host: host,
+        port: process.env.ELASTIC_SEARCH_PORT
+      };
+    });
+  }
+};
+
 module.exports = {
   mongo: {
-    databaseUrl: process.env.MONGODB_URI || process.env.MONGOHQ_URL
+    databaseUrl: process.env.MONGODB_URI
   },
   port: parseInt(process.env.PORT) || 80,
   tls: {
@@ -13,8 +27,7 @@ module.exports = {
   broadcastActivity: (process.env.BROADCAST_ACTIVITY || "false").toLowerCase() == "true",
   log: (process.env.USE_LOG || "true").toLowerCase() == "true",
   elasticSearch: {
-    host: process.env.ELASTIC_SEARCH_HOST,
-    port: parseInt(process.env.ELASTIC_SEARCH_PORT)
+    hosts: getElasticSearchHosts()
   },
   splunk: {
     protocol: process.env.SPLUNK_PROTOCOL || "http", 	//This should be "http" OR "https"
@@ -59,11 +72,11 @@ module.exports = {
   },
   skynet_override_token: process.env.OVERRIDE_TOKEN,
   useProxyProtocol: (process.env.USE_PROXY_PROTOCOL || "false").toLowerCase() == "true"
-//    ,
-//  parentConnection: {
-//    uuid: process.env.PARENT_CONNECTION_UUID,
-//    token: process.env.PARENT_CONNECTION_TOKEN,
-//    server: process.env.PARENT_CONNECTION_SERVER,
-//    port: parseInt(process.env.PARENT_CONNECTION_PORT)
-//  }
+   ,
+ parentConnection: {
+   uuid: process.env.PARENT_CONNECTION_UUID,
+   token: process.env.PARENT_CONNECTION_TOKEN,
+   server: process.env.PARENT_CONNECTION_SERVER,
+   port: parseInt(process.env.PARENT_CONNECTION_PORT)
+ }
 };

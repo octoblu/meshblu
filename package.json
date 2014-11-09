@@ -1,42 +1,49 @@
 {
-  "name": "skynet-server",
+  "name": "meshblu-server",
   "description": "communications platform and api for iot",
-  "version": "0.0.1-35",
-  "author": "Chris Matthieu",
+  "version": "1.0.0",
+  "author": "Octoblu, Inc.",
   "private": true,
   "engines": {
     "node": ">=0.6"
   },
   "dependencies": {
-    "JSONStream": "*",
-    "coap": "^0.6.1",
-    "commander": "*",
-    "elasticsearch": "*",
-    "lodash": "*",
-    "moment": "*",
-    "mongojs": "*",
-    "mosca": "*",
-    "mqtt": "*",
-    "nedb": "~0.10.4",
-    "node-static": "*",
-    "node-uuid": "*",
-    "qs": "^0.6.6",
+    "JSONStream": "~0.9.0",
+    "coap": "~0.6.1",
+    "commander": "^2.3.0",
+    "elasticsearch": "~2.4.0",
+    "lodash": "~2.4.1",
+    "moment": "~2.8.1",
+    "mongojs": "~0.13.1",
+    "mosca": "~0.24.0",
+    "mqtt": "~0.3.11",
+    "msgpack-js": "^0.3.0",
+    "nedb": "~0.10.11",
+    "newrelic": "^1.13.0",
+    "node-static": "~0.7.6",
+    "node-uuid": "~1.4.1",
+    "qs": "~0.6.6",
     "redis": "~0.10.3",
-    "request": "*",
-    "restify": "*",
-    "skynet": "0.0.41",
+    "request": "~2.40.0",
+    "restify": "~2.8.3",
+    "skynet": "1.5.0",
     "socket.io": "1.0.6",
     "socket.io-emitter": "^0.2.0",
     "socket.io-redis": "^0.1.3",
-    "tokenthrottle": "*",
-    "when": "^3.1.0",
-    "splunk-sdk": "latest"
+    "splunk-sdk": "latest",
+    "tokenthrottle": "~1.1.0",
+    "when": "~3.4.4"
+  },
+  "optionalDependencies": {
+    "airbrake": "^0.3.8",
+    "geoip-lite": "^1.1.3",
+    "mdns": "^2.2.0"
   },
   "subdomain": "skynet",
   "domains": [
     "skynet.im"
   ],
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js --http --mqtt"
   }
 }

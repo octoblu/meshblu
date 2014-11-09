@@ -1,6 +1,8 @@
 language: node_js
 node_js:
 - '0.10'
+notifications:
+  flowdock: e7454f5285e7b9ab67009802d5560490
 deploy:
   - provider: opsworks
     access_key_id: AKIAIT4X4NDGM2WVL6VA

@@ -1,0 +1,14 @@
+name: Meshblu
+image: ubuntu-14-04-x64
+min_size: 1gb
+config:
+  #cloud-config
+  users:
+    - name: meshblu
+      groups: sudo
+      shell: /bin/bash
+      sudo: ['ALL=(ALL) NOPASSWD:ALL']
+  packages:
+    - git
+  runcmd:
+    - cd /home/meshblu && git clone git://github.com/octoblu/meshblu.git && cd meshblu && bash build/ubuntu/14.04/provision.sh

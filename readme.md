@@ -1,10 +1,10 @@
 ```
-MM    MM              hh      bb      lll         
-MMM  MMM   eee   sss  hh      bb      lll uu   uu 
-MM MM MM ee   e s     hhhhhh  bbbbbb  lll uu   uu 
-MM    MM eeeee   sss  hh   hh bb   bb lll uu   uu 
-MM    MM  eeeee     s hh   hh bbbbbb  lll  uuuu u 
-                 sss                                                                              
+MM    MM              hh      bb      lll
+MMM  MMM   eee   sss  hh      bb      lll uu   uu
+MM MM MM ee   e s     hhhhhh  bbbbbb  lll uu   uu
+MM    MM eeeee   sss  hh   hh bb   bb lll uu   uu
+MM    MM  eeeee     s hh   hh bbbbbb  lll  uuuu u
+                 sss
 ```
 Formerly SkyNet.im
 
@@ -14,12 +14,14 @@ Visit [meshblu.octoblu.com](http://meshblu.octoblu.com) for up-to-the-latest doc
 
 ======
 
+[![Build Status](https://travis-ci.org/octoblu/meshblu.svg?branch=master)](https://travis-ci.org/octoblu/meshblu)
+
 Introduction
 ------------
 
-Meshblu is an open source machine-to-machine instant messaging network and API. Our API is available on HTTP REST, realtime Web Sockets via RPC (remote procedure calls), [MQTT](http://mqtt.org), and [CoAP](http://en.wikipedia.org/wiki/Constrained_Application_Protocol).  We seamlessly bridge all of these protocols. For instance, an MQTT device can communicate with any CoAP or HTTP or WebSocket connected device on Meshblu.  
+Meshblu is an open source machine-to-machine instant messaging network and API. Our API is available on HTTP REST, realtime Web Sockets via RPC (remote procedure calls), [MQTT](http://mqtt.org), and [CoAP](http://en.wikipedia.org/wiki/Constrained_Application_Protocol).  We seamlessly bridge all of these protocols. For instance, an MQTT device can communicate with any CoAP or HTTP or WebSocket connected device on Meshblu.
 
-Meshblu auto-assigns 36 character UUIDs and secret tokens to each registered device connected to the network. These device "credentials" are used to authenticate with Meshblu and maintain your device's JSON description in the device directory.  
+Meshblu auto-assigns 36 character UUIDs and secret tokens to each registered device connected to the network. These device "credentials" are used to authenticate with Meshblu and maintain your device's JSON description in the device directory.
 
 Meshblu allows you to discover/query devices such as drones, hue light bulbs, weemos, insteons, raspberry pis, arduinos, server nodes, etc. that meet your criteria and send IM messages to 1 or all devices.
 
@@ -111,16 +113,16 @@ parentConnection: {
 },
 ```
 
-Start the server use:
+Start the Meshblu server running HTTP and WebSocket protocols use:
 
 ```bash
-$ node server.js
+$ node server.js --http
 ```
 
 You may also run something like [forever](https://www.npmjs.org/package/forever) to keep it up and running:
 
 ```bash
-$ forever start server.js
+$ forever start server.js --http
 ```
 
 MQTT Broker
@@ -129,13 +131,13 @@ MQTT Broker
 MQTT is an optional SkyNet protocol.  If you would like to run our MQTT broker with your private Meshblu cloud, open another console tab and run:
 
 ```bash
-$ node mqtt-server.js
+$ node server.js --http --mqtt
 ```
 
  or using forever
 
  ```bash
- $ forever start mqtt-server.js
+ $ forever start server.js --http --mqtt
  ```
 
 Note: Our MQTT Broker defaults to using Mongo; however, you can run it in memory by removing the databaseUrl from the config.js.
@@ -153,13 +155,13 @@ CoAP
 CoAP is an optional SkyNet protocol.  If you would like to run our CoAP protocol with your private Meshblu cloud, open another console tab and run:
 
 ```bash
-$ node coap-server.js
+$ node server.js --http --coap
 ```
 
  or using forever
 
  ```bash
- $ forever start coap-server.js
+ $ forever start server.js --http --coap
  ```
 
 Note: Our CoAP protocol defaults to using Mongo; however, you can run it in memory by removing the databaseUrl from the config.js.
@@ -179,6 +181,15 @@ Heroku
 Use the button above to deploy to the [Heroku](http://heroku.com/) cloud for Free! Starts out with a basic implementation of Meshblu with only MongoDB. The app.json / config.js can be modified to allow for more protocols and storage systems.
 
 [Heroku](http://heroku.com/) allows you scale with a touch of a button.
+
+
+DigitalOcean
+------------
+
+[![Install on DigitalOcean](http://installer.71m.us/button.svg)](http://installer.71m.us/install?url=https://github.com/octoblu/meshblu)
+
+Use the button above to deploy to the [DigitalOcean](https://www.digitalocean.com/) cloud for as little as $5/month! The app.json / config.js can be modified to allow for more protocols and storage systems.
+
 
 Docker
 ------
@@ -221,7 +232,7 @@ Nodeblu is Octoblu's fork of the popular [NodeRED](https://github.com/node-red/n
 
 <p align="center">
   <a href="https://chrome.google.com/webstore/detail/nodeblu/aanmmiaepnlibdlobmbhmfemjioahilm">
-    <img width="100%" src="http://skynet.im/img/nodeblu.png"/>
+    <img width="100%" src="https://pbs.twimg.com/media/BqXMR8ECAAEvzFf.png"/>
   </a>
 </p>
 
@@ -316,9 +327,9 @@ curl -X DELETE -d "token=123" "http://localhost:3000/devices/01404680-2539-11e3-
 => {"uuid":"8220cff0-2939-11e3-88cd-0b8e5fdfd7d4","timestamp":1380481567799}
 ```
 
-GET /localdevices 
+GET /localdevices
 
-Returns a list of unclaimed devices that are on the same network as the requesting resource. 
+Returns a list of unclaimed devices that are on the same network as the requesting resource.
 
 ```
 curl -X GET http://skynet.im/localdevices --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
@@ -326,9 +337,9 @@ curl -X GET http://skynet.im/localdevices --header "skynet_auth_uuid: {my uuid}"
 => {"devices":[{"autoRegister":true,"online":false,"timestamp":"2014-08-05T20:38:31.139Z","ipAddress":"184.98.43.115","protocol":"websocket","secure":false,"uuid":"76537331-1ce0-11e4-861d-89322229e557","channel":"main"},{"autoRegister":true,"online":true,"timestamp":"2014-08-05T16:50:52.492Z","ipAddress":"184.98.43.115","protocol":"websocket","secure":false,"uuid":"a92350c1-1cc0-11e4-861d-89322229e557","channel":"main"}]}
 ```
 
-GET /claimdevice/:uuid 
+GET /claimdevice/:uuid
 
-Adds the skynet_auth_uuid as the owner of this device UUID allowing a user or device to claim ownership of another device. 
+Adds the skynet_auth_uuid as the owner of this device UUID allowing a user or device to claim ownership of another device.
 
 ```
 curl -X PUT http://skynet.im/claimdevice/{:uuid} --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
@@ -376,14 +387,24 @@ curl -X GET "http://skynet.im/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=
 => {"events":[{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"lnHHS06ijWUXEzb01ZRy","timestamp":1382632438785,"eventCode":101,"_id":"52694bf6ad11379eec00003f"},{"uuid":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","socketid":"BuwnWQ_oLmpk5R3m1ZRv","timestamp":1382561240563,"eventCode":101,"_id":"526835d8ad11379eec000017"}]}
 ```
 
-GET /subscribe/uuid?token=token
+GET /subscribe
 
 This is a streaming API that returns device/node mesages as they are sent and received. Notice the comma at the end of the response. Meshblu doesn't close the stream.
 
 ```
-curl -X GET "http://skynet.im/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
+curl -X GET "http://skynet.im/subscribe" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
 
 => [{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"on"},"timestamp":1388768270795,"eventCode":300,"_id":"52c6ec0e4f67671e44000001"},{"devices":"0d3a53a0-2a0b-11e3-b09c-ff4de847b2cc","message":{"red":"on"},"timestamp":1388768277473,"eventCode":300,"_id":"52c6ec154f67671e44000002"},
+```
+
+GET /subscribe/uuid
+
+This is a streaming API that returns device/node broadcast mesages as they are sent. Notice the comma at the end of the response. Meshblu doesn't close the stream.
+
+```
+curl -X GET "http://skynet.im/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b" --header "skynet_auth_uuid: {my uuid}" --header "skynet_auth_token: {my token}"
+
+=> [{"fromUuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","devices":"*",message":{"red":"on"},"timestamp":1388768270795,"eventCode":300,"_id":"52c6ec0e4f67671e44000001"},{"fromUuid":"ad698900-2546-11e3-87fb-c560cb0ca47b","devices":"*",,"message":{"red":"on"},"timestamp":1388768277473,"eventCode":300,"_id":"52c6ec154f67671e44000002"},
 ```
 
 GET /authenticate/uuid?token=token
@@ -449,7 +470,9 @@ coap post -p '{"devices": "*", "payload": {"yellow":"off"}}' -H "skynet_auth_uui
 
 coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/events/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123
 
-coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b?token=123 -o
+coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/subscribe -o
+
+coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/subscribe/ad698900-2546-11e3-87fb-c560cb0ca47b -o
 
 coap get -H "skynet_auth_uuid={:UUID}&skynet_auth_token={:TOKEN}" coap://coap.octoblu.com/ipaddress
 
@@ -618,10 +641,10 @@ If `log: true` in config.js, all transactions are logged to skynet.txt.  Here ar
 * 205 = Unsubscribe
 * 300 = Incoming message
 * 301 = Incoming SMS message
-* 302 = Outgoung SMS message
+* 302 = Outgoing SMS message
 * 303 = Incoming Yo message
-* 304 = Outgoung Yo message
-* 305 = Outgoung Push Notification message
+* 304 = Outgoing Yo message
+* 305 = Outgoing Push Notification message
 * 400 = Register device
 * 401 = Update device
 * 402 = Delete device

@@ -1,4 +1,9 @@
 'use strict';
+
+if ((process.env.USE_NEWRELIC  || 'false').toLowerCase() === 'true') {
+  require('newrelic');
+}
+
 var program = require('commander');
 var pjson = require('./package.json');
 var config = require('./config');
@@ -48,7 +53,7 @@ if (process.env.AIRBRAKE_KEY) {
   airbrakeErrors.handleExceptions()
 } else {
   process.on("uncaughtException", function(error) {
-    return console.error(error.message, error.stack);
+    console.error(error.message, error.stack);
   });
 }
 
@@ -64,7 +69,7 @@ if (program.coap) {
   console.log(' done.');
 }
 
-if (true || program.http || program.https) {
+if (program.http || program.https) {
   process.stdout.write('Starting HTTP/HTTPS...');
   var httpServer = require('./lib/httpServer')(config, parentConnection);
   console.log(' done.');

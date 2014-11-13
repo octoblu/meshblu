@@ -13,6 +13,7 @@ OPEN HTTP, WebSocket, MQTT, & CoAP COMMUNICATIONS NETWORK & API FOR THE INTERNET
 Visit [meshblu.octoblu.com](http://meshblu.octoblu.com) for up-to-the-latest documentation and screencasts.
 
 ======
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/octoblu/meshblu?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Build Status](https://travis-ci.org/octoblu/meshblu.svg?branch=master)](https://travis-ci.org/octoblu/meshblu)
 

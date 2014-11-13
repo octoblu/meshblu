@@ -3,7 +3,6 @@
   "description": "communications platform and api for iot",
   "version": "1.0.0",
   "author": "Octoblu, Inc.",
-  "private": true,
   "engines": {
     "node": ">=0.6"
   },

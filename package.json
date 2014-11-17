@@ -31,7 +31,10 @@
     "socket.io-redis": "^0.1.3",
     "splunk-sdk": "latest",
     "tokenthrottle": "~1.1.0",
-    "when": "~3.4.4"
+    "when": "~3.4.4",
+    "airbrake": "^0.3.8",
+    "geoip-lite": "^1.1.3",
+    "mdns": "^2.2.0"
   },
   "optionalDependencies": {
     "airbrake": "^0.3.8",
@@ -44,5 +47,16 @@
   ],
   "scripts": {
     "start": "node server.js --http --mqtt"
-  }
+  },
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/octoblu/meshblu.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/octoblu/meshblu/issues"
+  },
+  "homepage": "https://github.com/octoblu/meshblu"
 }

@@ -6,11 +6,11 @@ MM    MM eeeee   sss  hh   hh bb   bb lll uu   uu
 MM    MM  eeeee     s hh   hh bbbbbb  lll  uuuu u
                  sss
 ```
-Formerly meshblu.octoblu.com
+meshblu.octoblu.com
 
 OPEN HTTP, WebSocket, MQTT, & CoAP COMMUNICATIONS NETWORK & API FOR THE INTERNET OF THINGS (IoT)!
 
-Visit [meshblu.octoblu.com](http://meshblu.octoblu.com) for up-to-the-latest documentation and screencasts.
+Visit [developer.octoblu.com](http://developer.octoblu.com) for up-to-the-latest documentation and screencasts.
 
 ======
 
@@ -27,7 +27,7 @@ Meshblu allows you to discover/query devices such as drones, hue light bulbs, we
 
 You can also subscribe to messages being sent to/from devices and their sensor activities.
 
-Meshblu offers a Node.JS NPM module called [SkyNet](https://www.npmjs.org/package/skynet) and a [SkyNet.js](http://meshblu.octoblu.com/#javascript) file for simplifying Node.JS and mobile/client-side connectivity to Meshblu.
+Meshblu offers a Node.JS NPM module called [Meshblu](https://www.npmjs.org/package/meshblu) and a [meshblu.js](http://meshblu.octoblu.com/#javascript) file for simplifying Node.JS and mobile/client-side connectivity to Meshblu.
 
 
 Press
@@ -61,7 +61,7 @@ Roadmap
 * Phase 2 - Connect all of the thingz.
 * Phase 3 - Become self-aware!
 
-Installing/Running SkyNet private cloud
+Installing/Running Meshblu private cloud
 ----------
 
 Clone the git repository, then:
@@ -128,7 +128,7 @@ $ forever start server.js --http
 MQTT Broker
 -----------
 
-MQTT is an optional SkyNet protocol.  If you would like to run our MQTT broker with your private Meshblu cloud, open another console tab and run:
+MQTT is an optional Meshblu protocol.  If you would like to run our MQTT broker with your private Meshblu cloud, open another console tab and run:
 
 ```bash
 $ node server.js --http --mqtt
@@ -152,7 +152,7 @@ mqtt: {
 CoAP
 ----
 
-CoAP is an optional SkyNet protocol.  If you would like to run our CoAP protocol with your private Meshblu cloud, open another console tab and run:
+CoAP is an optional Meshblu protocol.  If you would like to run our CoAP protocol with your private Meshblu cloud, open another console tab and run:
 
 ```bash
 $ node server.js --http --coap
@@ -212,7 +212,7 @@ $ docker run -i -t -p 3000 skynet
 
 This will run Meshblu (formerly skynet) and expose port 3000 from the container on a random host port that you can find by running docker ps.
 
-If you want to do development and run without rebuilding the image you can bind mount your source directory including node_modules onto the container. This example also binds a directory to hold the log of stdout & stderr from the Skynet node process.
+If you want to do development and run without rebuilding the image you can bind mount your source directory including node_modules onto the container. This example also binds a directory to hold the log of stdout & stderr from the Meshblu node process.
 
 ```
 $ docker run -d -p 3000 --name=skynet_dev -v /path/to/your/skynet:/var/www -v /path/to/your/logs:/var/log/skynet skynet
@@ -246,7 +246,7 @@ Gateblu has an extensible [plugin](https://github.com/octoblu/gateblu/blob/maste
 Microblu Operating System
 -----------------------
 
-As in [Terminator - (video)](https://www.youtube.com/watch?v=Ky7K3Je-NBo), Meshblu includes a micro-controller operating system that is compatible with [Arduino](http://www.arduino.cc/), [Spark](https://www.spark.io/), and [Pinoccio](https://pinocc.io/)!  The OS is available on [GitHub](https://github.com/octoblu/microblu_mqtt) and comes with firmata built-in.
+Meshblu includes a micro-controller operating system that is compatible with [Arduino](http://www.arduino.cc/), [Spark](https://www.spark.io/), and [Pinoccio](https://pinocc.io/)!  The OS is available on [GitHub](https://github.com/octoblu/microblu_mqtt) and comes with firmata built-in.
 
 On power-on, the Microblu OS connects to Meshblu, obtains a UUID, and awaits your instructions! You can message the micro-controller to turn on/off pins and servos as well as request streaming analog sensor data from various pins.
 

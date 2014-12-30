@@ -1,5 +1,12 @@
 'use strict';
 
+if (process.env.NODETIME_ACCOUNT_KEY) {
+  require('nodetime').profile({
+    accountKey: NODETIME_ACCOUNT_KEY,
+    appName: NODETIME_APP_NAME
+  });
+}
+
 if ((process.env.USE_NEWRELIC  || 'false').toLowerCase() === 'true') {
   require('newrelic');
 }

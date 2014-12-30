@@ -2,8 +2,8 @@
 
 if (process.env.NODETIME_ACCOUNT_KEY) {
   require('nodetime').profile({
-    accountKey: NODETIME_ACCOUNT_KEY,
-    appName: NODETIME_APP_NAME
+    accountKey: process.env.NODETIME_ACCOUNT_KEY,
+    appName: process.env.NODETIME_APP_NAME
   });
 }
 

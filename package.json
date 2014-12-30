@@ -44,7 +44,7 @@
     "skynet.im"
   ],
   "scripts": {
-    "start": "node server.js --http --mqtt"
+    "start": "node ${NODE_FLAGS} server.js --http --mqtt"
   },
   "main": "server.js",
   "devDependencies": {},

@@ -11,7 +11,7 @@
     "coap": "~0.8.0",
     "commander": "^2.3.0",
     "elasticsearch": "~2.4.0",
-    "lodash": "~2.4.1",
+    "lodash": "^2.4.1",
     "moment": "~2.8.1",
     "mongojs": "~0.13.1",
     "mosca": "~0.25.1",
@@ -44,10 +44,17 @@
     "skynet.im"
   ],
   "scripts": {
-    "start": "node ${NODE_FLAGS} server.js --http --mqtt"
+    "start": "node ${NODE_FLAGS} server.js --http --mqtt",
+    "test": "mocha"
   },
   "main": "server.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "coffee-script": "^1.8.0",
+    "mocha": "^2.1.0",
+    "sinon": "^1.12.2",
+    "sinon-chai": "^2.6.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/octoblu/meshblu.git"

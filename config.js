@@ -27,6 +27,7 @@ module.exports = {
   broadcastActivity: (process.env.BROADCAST_ACTIVITY || "false").toLowerCase() == "true",
   log: (process.env.USE_LOG || "true").toLowerCase() == "true",
   logToRedis: (process.env.USE_REDIS_LOG || "false").toLowerCase() == "true",
+  logEvents: (process.env.LOG_EVENTS || "true").toLowerCase() == "true",
   elasticSearch: {
     hosts: getElasticSearchHosts()
   },

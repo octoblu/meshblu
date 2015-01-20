@@ -1,5 +1,4 @@
 config = require './../config'
-{devices} = require './database'
 redis = require './redis'
 cacheDevice = require './cacheDevice'
 
@@ -16,14 +15,30 @@ findCachedDevice = (uuid, callback) ->
     data = JSON.parse data if data
     callback null, data
 
-findDevice = (uuid, callback) ->
+findDevice = (uuid, callback, database) ->
+  database ?= require './database'
+  devices = database.devices
+
   devices.findOne {uuid: uuid}, (error, data) ->
-    delete data.token
-    delete data._id
-    cacheDevice data
+    if data
+      delete data.token
+      delete data._id
+      cacheDevice data
     callback null, data
 
-module.exports = (uuid, callback) ->
+
+module.exports = (uuid, callback=(->), database=null) ->
+  deviceFound = (error, data) ->
+    if error || !data
+      callback
+        error:
+          uuid: uuid
+          message: 'Device not found'
+          code: 404
+      return
+
+    callback null, data
+
   findCachedDevice uuid, (error, data) ->
     if error
       callback error
@@ -33,14 +48,4 @@ module.exports = (uuid, callback) ->
       callback null, data
       return
 
-    findDevice uuid, (error, data) ->
-      if error || !data
-        callback
-          error:
-            uuid: uuid
-            message: 'Device not found'
-            code: 404
-        return
-
-      callback null, data
-
+    findDevice uuid, deviceFound, database

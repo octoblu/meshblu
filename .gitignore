@@ -17,3 +17,4 @@ skynet.txt
 *.db
 v8.log
 coverage
+*.sublime-workspace

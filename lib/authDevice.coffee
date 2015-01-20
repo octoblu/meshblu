@@ -7,6 +7,7 @@ module.exports = (uuid, token, callback=(->), database=null) ->
 
   devices.findOne uuid: uuid, (error, device)->
     if device? && bcrypt.compareSync token, device.token
+      delete device.token
       return callback null, device
 
     callback error, null

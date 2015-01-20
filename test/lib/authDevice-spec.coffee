@@ -36,3 +36,6 @@ describe 'authDevice', ->
       it 'should call the callback with a device', ->
         expect(@device).to.exist
 
+      it 'should not pass the token back', ->
+        expect(@device.token).to.not.exist
+

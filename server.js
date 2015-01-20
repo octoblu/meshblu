@@ -1,4 +1,5 @@
 'use strict';
+require('coffee-script/register');
 
 if (process.env.NODETIME_ACCOUNT_KEY) {
   require('nodetime').profile({

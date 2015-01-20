@@ -24,7 +24,7 @@ findDevice = (uuid, callback) ->
     callback null, data
 
 module.exports = (uuid, callback) ->
-  findCachedDevice, (error, data) ->
+  findCachedDevice uuid, (error, data) ->
     if error
       callback error
       return

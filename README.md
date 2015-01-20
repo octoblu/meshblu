@@ -1,20 +1,14 @@
-```
-MM    MM              hh      bb      lll
-MMM  MMM   eee   sss  hh      bb      lll uu   uu
-MM MM MM ee   e s     hhhhhh  bbbbbb  lll uu   uu
-MM    MM eeeee   sss  hh   hh bb   bb lll uu   uu
-MM    MM  eeeee     s hh   hh bbbbbb  lll  uuuu u
-                 sss
-```
-meshblu.octoblu.com
+# meshblu
+
+[![Build Status](https://travis-ci.org/octoblu/meshblu.svg?branch=master)](https://travis-ci.org/octoblu/meshblu)
+[![Code Climate](https://codeclimate.com/github/octoblu/meshblu/badges/gpa.svg)](https://codeclimate.com/github/octoblu/meshblu)
+[![Test Coverage](https://codeclimate.com/github/octoblu/meshblu/badges/coverage.svg)](https://codeclimate.com/github/octoblu/meshblu)
 
 OPEN HTTP, WebSocket, MQTT, & CoAP COMMUNICATIONS NETWORK & API FOR THE INTERNET OF THINGS (IoT)!
 
 Visit [developer.octoblu.com](http://developer.octoblu.com) for up-to-the-latest documentation and screencasts.
 
 ======
-
-[![Build Status](https://travis-ci.org/octoblu/meshblu.svg?branch=master)](https://travis-ci.org/octoblu/meshblu)
 
 Introduction
 ------------

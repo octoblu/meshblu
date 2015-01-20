@@ -16,4 +16,5 @@ skynet.txt
 #NEDB files
 *.db
 v8.log
+coverage
 *.sublime-workspace

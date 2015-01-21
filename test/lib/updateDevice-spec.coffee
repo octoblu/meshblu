@@ -6,9 +6,11 @@ TestDatabase = require '../test-database'
 describe 'Update Device', ->
   beforeEach (done) ->
     @sut = require '../../lib/updateDevice'
+    @getDevice = sinon.stub()
     TestDatabase.open (error, database) =>
       @database = database
       @devices  = @database.collection 'devices'
+      @dependencies = {database: @database, getDevice: @getDevice}
       done error
 
   afterEach ->
@@ -19,16 +21,18 @@ describe 'Update Device', ->
 
   describe 'when called with nothing', ->
     beforeEach (done) ->
+      @getDevice.yields null
       storeError = (@error, device) => done()
-      @sut null, null, storeError, @database
+      @sut null, null, storeError, @dependencies
 
     it 'should call its callback with an error', ->
       expect(@error).to.exist
 
   describe 'when called with a uuid that doesnt exist', ->
     beforeEach (done) ->
+      @getDevice.yields null
       storeError = (@error, device) => done()
-      @sut 'not-real', null, storeError, @database
+      @sut 'not-real', null, storeError, @dependencies
 
     it 'should call its callback with an error', ->
       expect(@error).to.exist
@@ -43,7 +47,8 @@ describe 'Update Device', ->
 
     describe 'when update is called with that uuid and different name', ->
       beforeEach (done) ->
-        @sut @uuid, {name: 'shakunetsu'}, done, @database
+        @getDevice.yields null
+        @sut @uuid, {name: 'shakunetsu'}, done, @dependencies
 
       it 'should update the record', (done) ->
         @devices.findOne {uuid: @uuid}, (error, device) ->
@@ -53,7 +58,8 @@ describe 'Update Device', ->
 
     describe 'when update is called with that uuid and the same name', ->
       beforeEach (done) ->
-        @sut @uuid, {name: 'hadoken'}, done, @database
+        @getDevice.yields null
+        @sut @uuid, {name: 'hadoken'}, done, @dependencies
 
       it 'should update the record', (done) ->
         @devices.findOne {uuid: @uuid}, (error, device) ->
@@ -63,7 +69,8 @@ describe 'Update Device', ->
 
     describe 'when update is called with one good and one bad param', ->
       beforeEach (done) ->
-        @sut @uuid, {name: 'guile', '$natto': 'fermented soybeans'}, done, @database
+        @getDevice.yields null
+        @sut @uuid, {name: 'guile', '$natto': 'fermented soybeans'}, done, @dependencies
 
       it 'should update the record', (done) ->
         @devices.findOne {uuid: @uuid}, (error, device) ->
@@ -74,7 +81,8 @@ describe 'Update Device', ->
 
     describe 'when update is called with a nested bad param', ->
       beforeEach (done) ->
-        @sut @uuid, {name: 'guile', foo: {'$natto': 'fermented soybeans'}}, done, @database
+        @getDevice.yields null
+        @sut @uuid, {name: 'guile', foo: {'$natto': 'fermented soybeans'}}, done, @dependencies
 
       it 'should update the record', (done) ->
         @devices.findOne {uuid: @uuid}, (error, device) ->
@@ -85,16 +93,21 @@ describe 'Update Device', ->
 
     describe 'when update is called with that uuid and the same name', ->
       beforeEach (done) ->
+        @getDevice.yields null
         storeDevice = (@error, @device) => done()
-        @sut @uuid, {name: 'hadoken'}, storeDevice, @database
+        @sut @uuid, {name: 'hadoken'}, storeDevice, @dependencies
 
-      it 'should update the record', ->
-        expect(@device.name).to.equal 'hadoken'
+      it 'should update the record', (done) ->
+        @devices.findOne {uuid: @uuid}, (error, device) =>
+          return done error if error?
+          expect(device.name).to.equal 'hadoken'
+          done()
 
     describe 'when updated with a token', ->
       beforeEach (done) ->
+        @getDevice.yields null
         @device = { name: 'ken masters', token : 'masters ken' }
-        @sut @uuid, @device, done, @database
+        @sut @uuid, @device, done, @dependencies
 
       it 'should update a hash of the token', (done) ->
         @database.devices.findOne { uuid: @uuid }, (error, storeDevice) =>
@@ -104,8 +117,9 @@ describe 'Update Device', ->
 
     describe 'when updated without a token', ->
       beforeEach (done) ->
+        @getDevice.yields null
         @device = { name: 'shin akuma' }
-        @sut @uuid, @device, done, @database
+        @sut @uuid, @device, done, @dependencies
 
       it 'should not update the token', (done) ->
         @database.devices.findOne { uuid: @uuid }, (error, storeDevice) =>
@@ -115,7 +129,8 @@ describe 'Update Device', ->
 
     describe 'when updated with an online of "false"', ->
       beforeEach (done) ->
-        @sut @uuid, {online: 'false'}, done, @database
+        @getDevice.yields null
+        @sut @uuid, {online: 'false'}, done, @dependencies
 
       it 'should create a device with an online of true', (done) ->
         @devices.findOne (error, device) =>
@@ -124,7 +139,8 @@ describe 'Update Device', ->
 
     describe 'when updated with an online of false', ->
       beforeEach (done) ->
-        @sut @uuid, {online: false}, done, @database
+        @getDevice.yields null
+        @sut @uuid, {online: false}, done, @dependencies
 
       it 'should create a device with an online of true', (done) ->
         @devices.findOne (error, device) =>
@@ -133,7 +149,8 @@ describe 'Update Device', ->
 
     describe 'when updated without a timestamp', ->
       beforeEach (done) ->
-        @sut @uuid, {}, done, @database
+        @getDevice.yields null
+        @sut @uuid, {}, done, @dependencies
 
       it 'should create a timestamp', (done) ->
         @devices.findOne (error, device) =>
@@ -147,11 +164,11 @@ describe 'Update Device', ->
 
     describe 'when called without online', ->
       beforeEach (done) ->
-        @sut @uuid, {}, done, @database
+        @getDevice.yields null
+        @sut @uuid, {}, done, @dependencies
 
       it 'should not modify online', (done) ->
         @devices.findOne {uuid: @uuid}, (error, device) =>
           done error if error?
           expect(device.online).to.be.true
           done()
-

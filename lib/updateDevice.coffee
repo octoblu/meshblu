@@ -1,18 +1,17 @@
 _      = require 'lodash'
 moment = require 'moment'
 bcrypt = require 'bcrypt'
-getDevice = require './getDevice'
 clearCache = require './clearCache'
 
 NOT_UPDATED_ERROR = new Error 'device not updated'
 
 invalidKey = (value, key) -> key[0] == '$'
 
-sanatize = (params) =>
+sanitize = (params) =>
   return params unless _.isObject(params) || _.isArray(params)
 
   params = _.omit params, invalidKey
-  _.mapValues params, sanatize
+  _.mapValues params, sanitize
 
 hashTokenIfNeeded = (token=null, callback) =>
   return _.defer callback, null, null unless token?
@@ -23,10 +22,11 @@ setDefaults = (params) =>
   params.timestamp = moment().toISOString()
   params
 
-module.exports = (uuid, params={}, callback=_.noop, database=null)->
-  {devices} = database ? require('./database')
+module.exports = (uuid, params={}, callback=_.noop, dependencies={})->
+  {devices} = dependencies.database ? require './database'
+  getDevice = dependencies.getDevice ? require './getDevice'
 
-  params = setDefaults(sanatize(params))
+  params = setDefaults(sanitize(params))
 
   hashTokenIfNeeded params.token, (error, hashedToken) =>
     params.token = hashedToken if hashedToken?
@@ -41,4 +41,3 @@ module.exports = (uuid, params={}, callback=_.noop, database=null)->
 
       getDevice uuid, (error, device) =>
         callback null, device
-      , database

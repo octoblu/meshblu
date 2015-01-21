@@ -133,13 +133,13 @@ describe 'Update Device', ->
           expect(device.online).to.be.false
           done()
 
-    xdescribe 'when updated without a timestamp', ->
+    describe 'when updated without a timestamp', ->
       beforeEach (done) ->
         @sut @uuid, {}, done, @database
 
-      it 'should create a device with an online of true', (done) ->
+      it 'should create a timestamp', (done) ->
         @devices.findOne (error, device) =>
-          expect(device.online).to.be.false
+          expect(device.timestamp).to.exist
           done()
 
   describe 'when a device exists with online = true', ->

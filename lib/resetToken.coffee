@@ -5,9 +5,9 @@ generateToken = ->
 
 
 resetToken  = (fromDevice, uuid, callback=(->), securityImpl, getDevice, updateDevice) ->
-  securityImpl = require './getSecurityImpl' unless securityImpl?
-  getDevice = require './getDevice' unless getDevice?
-  updateDevice = require './updateDevice' unless updateDevice?
+  securityImpl ?= require './getSecurityImpl'
+  getDevice ?= require './getDevice'
+  updateDevice ?= require './updateDevice'
   
   getDevice uuid, (error, device)->    
     return callback 'invalid device' if error?

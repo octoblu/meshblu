@@ -7,7 +7,7 @@ describe 'resetToken', ->
     @updateDevice = sinon.stub()
 
     #currying, yo
-    @sut = (fromDevice, uuid, callback) ->
+    @sut = (fromDevice, uuid, callback) =>
       resetToken fromDevice, uuid, callback, @securityImpl, @getDevice, @updateDevice
 
   it 'should exist', ->

@@ -18,3 +18,4 @@ skynet.txt
 v8.log
 coverage
 *.sublime-workspace
+.idea

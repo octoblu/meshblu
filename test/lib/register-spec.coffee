@@ -1,5 +1,6 @@
-_            = require 'lodash'
-bcrypt       = require 'bcrypt'
+_      = require 'lodash'
+bcrypt = require 'bcrypt'
+moment = require 'moment'
 TestDatabase = require '../test-database'
 
 describe 'register', ->
@@ -21,7 +22,8 @@ describe 'register', ->
 
   describe 'when called with no params', ->
     beforeEach (done) ->
-      @updateDevice.yields null
+      @timestamp = moment().toISOString()
+      @updateDevice.yields null, timestamp: @timestamp
       storeDevice = (@error, @device) => done()
       @sut null, storeDevice, @dependencies
 
@@ -34,8 +36,11 @@ describe 'register', ->
         expect(count).to.equal 1
         done()
 
-    it 'should generate a new uuid', ->
-      expect(@device.uuid).to.exist
+    it 'should generate a new uuid', (done) ->
+      @database.devices.findOne (error, device) =>
+        return done error if error?
+        expect(device.uuid).to.exist
+        done()
 
     it 'should generate a new token', ->
       expect(@device.token).to.exist
@@ -43,10 +48,12 @@ describe 'register', ->
     it 'should call updateDevice', ->
       expect(@updateDevice).to.have.been.called
 
+    it 'should merge in the timestamp from update Device', ->
+      expect(@device.timestamp).to.equal @timestamp
 
     describe 'when called again with no params', ->
       beforeEach (done) ->
-        @updateDevice.yields null
+        @updateDevice.yields null, {}
         storeDevice = (error, @newerDevice) => done()
         @sut null, storeDevice, @dependencies
 
@@ -58,7 +65,7 @@ describe 'register', ->
 
   describe 'when called with a specific uuid', ->
     beforeEach (done) ->
-      @updateDevice.yields null
+      @updateDevice.yields null, {}
       @sut {uuid: 'some-uuid'}, done, @dependencies
 
     it 'should create a device with that uuid', (done) ->
@@ -68,16 +75,17 @@ describe 'register', ->
 
   describe 'when called with a specific token', ->
     beforeEach (done) ->
-      @updateDevice.yields null
+      @updateDevice.yields null, {}
       storeDevice = (error, @device) => done()
       @sut {token: 'mah-secrets'}, storeDevice, @dependencies
 
     it 'should call update device with that token', ->
-      expect(@updateDevice).to.be.calledWith @device.uuid, {token: 'mah-secrets', uuid: @device.uuid}
+      @devices.findOne (error, device) =>
+        expect(@updateDevice).to.be.calledWith device.uuid, {token: 'mah-secrets', uuid: device.uuid}
 
   describe 'when called without an online', ->
     beforeEach (done) ->
-      @updateDevice.yields null
+      @updateDevice.yields null, {}
       @sut {}, done, @dependencies
 
     it 'should create a device with an online of false', (done) ->
@@ -91,7 +99,7 @@ describe 'register', ->
 
     describe 'trying to create a new device with the same uuid', ->
       beforeEach (done) ->
-        @updateDevice.yields null
+        @updateDevice.yields null, {}
         storeDevice = (@error, @device) => done()
         @sut {uuid: 'some-uuid', name: 'Nobody.'}, storeDevice, @dependencies
 
@@ -100,7 +108,7 @@ describe 'register', ->
 
     describe 'trying to create a new device with a different uuid', ->
       beforeEach (done) ->
-        @updateDevice.yields null
+        @updateDevice.yields null, {}
         storeDevice = (@error, @device) => done()
         @sut {uuid: 'some-other-uuid'}, storeDevice, @dependencies
 
@@ -112,7 +120,7 @@ describe 'register', ->
 
   describe 'when called with just a name', ->
     beforeEach (done) ->
-      @updateDevice.yields null
+      @updateDevice.yields null, {}
       storeDevice = (error, @device) => done()
       @params = {name: 'bobby'}
       @originalParams = _.cloneDeep @params

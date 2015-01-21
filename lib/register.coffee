@@ -28,7 +28,8 @@ module.exports = (device={}, callback=_.noop, dependencies={}) ->
 
       device.token ?= generateToken()
 
-      updateDevice newDevice.uuid, device, (error) =>
+      updateDevice newDevice.uuid, device, (error, savedDevice) =>
         return callback new Error('Device not registered 3') if error?
+        savedDevice.token = device.token
 
-        callback null, device
+        callback null, savedDevice

@@ -1,9 +1,6 @@
 _      = require 'lodash'
 moment = require 'moment'
 bcrypt = require 'bcrypt'
-clearCache = require './clearCache'
-
-NOT_UPDATED_ERROR = new Error 'device not updated'
 
 invalidKey = (value, key) -> key[0] == '$'
 
@@ -25,6 +22,9 @@ setDefaults = (params) =>
 module.exports = (uuid, params={}, callback=_.noop, dependencies={})->
   {devices} = dependencies.database ? require './database'
   getDevice = dependencies.getDevice ? require './getDevice'
+  clearCache = dependencies.clearCache ? require './clearCache'
+
+  clearCache 'DEVICE_' + uuid
 
   params = setDefaults(sanitize(params))
 
@@ -35,7 +35,7 @@ module.exports = (uuid, params={}, callback=_.noop, dependencies={})->
       return callback error if error?
 
       numberOfRecords = result?.n
-      return callback NOT_UPDATED_ERROR unless numberOfRecords == 1
+      return callback new Error 'device not updated' unless numberOfRecords == 1
 
       clearCache(uuid)
 

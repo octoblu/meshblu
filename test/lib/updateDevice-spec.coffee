@@ -7,10 +7,11 @@ describe 'Update Device', ->
   beforeEach (done) ->
     @sut = require '../../lib/updateDevice'
     @getDevice = sinon.stub()
+    @clearCache = sinon.stub()
     TestDatabase.open (error, database) =>
       @database = database
       @devices  = @database.collection 'devices'
-      @dependencies = {database: @database, getDevice: @getDevice}
+      @dependencies = {database: @database, getDevice: @getDevice, clearCache: @clearCache}
       done error
 
   afterEach ->
@@ -28,7 +29,7 @@ describe 'Update Device', ->
     it 'should call its callback with an error', ->
       expect(@error).to.exist
 
-  describe 'when called with a uuid that doesnt exist', ->
+  describe 'when called with a uuid that doesn\'t exist', ->
     beforeEach (done) ->
       @getDevice.yields null
       storeError = (@error, device) => done()
@@ -45,6 +46,14 @@ describe 'Update Device', ->
       @originalDevice = {uuid: @uuid, name: 'hadoken', token : @token, online :true}
       @devices.insert _.clone(@originalDevice), done
 
+    describe 'when updateDevice is called', ->
+      beforeEach (done) ->
+        @getDevice.yields null
+        @sut @uuid, {name: 'shakunetsu'}, done, @dependencies
+
+      it 'should call clearCache with uuid', ->
+        expect(@clearCache).to.be.calledWith 'DEVICE_' + @uuid
+
     describe 'when update is called with that uuid and different name', ->
       beforeEach (done) ->
         @getDevice.yields null
@@ -55,7 +64,6 @@ describe 'Update Device', ->
           done error if error?
           expect(device.name).to.equal 'shakunetsu'
           done()
-
 
     describe 'when update is called with that uuid and the same name', ->
       beforeEach (done) ->

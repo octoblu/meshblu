@@ -1,5 +1,4 @@
 _      = require 'lodash'
-bcrypt = require 'bcrypt'
 moment = require 'moment'
 TestDatabase = require '../test-database'
 

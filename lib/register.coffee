@@ -1,5 +1,4 @@
 _            = require 'lodash'
-bcrypt       = require 'bcrypt'
 crypto       = require 'crypto'
 uuid         = require 'node-uuid'
 

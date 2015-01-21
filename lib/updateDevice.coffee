@@ -1,4 +1,5 @@
 _      = require 'lodash'
+moment = require 'moment'
 bcrypt = require 'bcrypt'
 getDevice = require './getDevice'
 clearCache = require './clearCache'
@@ -19,6 +20,7 @@ hashTokenIfNeeded = (token=null, callback) =>
 
 setDefaults = (params) =>
   params.online = !!params.online if params.online?
+  params.timestamp = moment().toISOString()
   params
 
 module.exports = (uuid, params={}, callback=_.noop, database=null)->

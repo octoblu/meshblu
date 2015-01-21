@@ -5,9 +5,12 @@ TestDatabase = require '../test-database'
 describe 'register', ->
   beforeEach (done) ->
     @sut = require '../../lib/register'
+    @updateDevice = sinon.stub()
     TestDatabase.open (error, database) =>
       @database = database
       @devices  = @database.collection 'devices'
+
+      @dependencies = {database: @database, updateDevice: @updateDevice}
       done error
 
   afterEach ->
@@ -18,11 +21,9 @@ describe 'register', ->
 
   describe 'when called with no params', ->
     beforeEach (done) ->
+      @updateDevice.yields null
       storeDevice = (@error, @device) => done()
-      @sut null, storeDevice, @database
-
-    it 'should not return an error', ->
-      expect(@error).not.to.exist
+      @sut null, storeDevice, @dependencies
 
     it 'should return a device', ->
       expect(@device).to.exist
@@ -39,16 +40,15 @@ describe 'register', ->
     it 'should generate a new token', ->
       expect(@device.token).to.exist
 
-    it 'should store a hash of the token', (done) ->
-      @database.devices.findOne (error, storeDevice) =>
-        return done error if error?
-        expect(bcrypt.compareSync(@device.token, storeDevice.token)).to.be.true
-        done()
+    it 'should call updateDevice', ->
+      expect(@updateDevice).to.have.been.called
+
 
     describe 'when called again with no params', ->
       beforeEach (done) ->
+        @updateDevice.yields null
         storeDevice = (error, @newerDevice) => done()
-        @sut null, storeDevice, @database
+        @sut null, storeDevice, @dependencies
 
       it 'should create a new device', ->
         expect(@newerDevice).to.exist
@@ -58,7 +58,8 @@ describe 'register', ->
 
   describe 'when called with a specific uuid', ->
     beforeEach (done) ->
-      @sut {uuid: 'some-uuid'}, done, @database
+      @updateDevice.yields null
+      @sut {uuid: 'some-uuid'}, done, @dependencies
 
     it 'should create a device with that uuid', (done) ->
       @devices.findOne uuid: 'some-uuid', (error, device) =>
@@ -67,27 +68,19 @@ describe 'register', ->
 
   describe 'when called with a specific token', ->
     beforeEach (done) ->
-      @sut {token: 'mah-secrets'}, done, @database
+      @updateDevice.yields null
+      storeDevice = (error, @device) => done()
+      @sut {token: 'mah-secrets'}, storeDevice, @dependencies
 
-    it 'should create a device with that token', (done) ->
-      @devices.findOne (error, device) =>
-        expect(bcrypt.compareSync('mah-secrets', device.token)).to.be.true
-        done()
+    it 'should call update device with that token', ->
+      expect(@updateDevice).to.be.calledWith @device.uuid, {token: 'mah-secrets', uuid: @device.uuid}
 
-  describe 'when called with an online of "false"', ->
+  describe 'when called without an online', ->
     beforeEach (done) ->
-      @sut {online: 'false'}, done, @database
+      @updateDevice.yields null
+      @sut {}, done, @dependencies
 
-    it 'should create a device with an online of true', (done) ->
-      @devices.findOne (error, device) =>
-        expect(device.online).to.be.true
-        done()
-
-  describe 'when called with an online of false', ->
-    beforeEach (done) ->
-      @sut {online: false}, done, @database
-
-    it 'should create a device with an online of true', (done) ->
+    it 'should create a device with an online of false', (done) ->
       @devices.findOne (error, device) =>
         expect(device.online).to.be.false
         done()
@@ -98,16 +91,18 @@ describe 'register', ->
 
     describe 'trying to create a new device with the same uuid', ->
       beforeEach (done) ->
+        @updateDevice.yields null
         storeDevice = (@error, @device) => done()
-        @sut {uuid: 'some-uuid', name: 'Nobody.'}, storeDevice, @database
+        @sut {uuid: 'some-uuid', name: 'Nobody.'}, storeDevice, @dependencies
 
       it 'it should call the callback with an error', ->
         expect(@error).to.exist
 
     describe 'trying to create a new device with a different uuid', ->
       beforeEach (done) ->
+        @updateDevice.yields null
         storeDevice = (@error, @device) => done()
-        @sut {uuid: 'some-other-uuid'}, storeDevice, @database
+        @sut {uuid: 'some-other-uuid'}, storeDevice, @dependencies
 
       it 'it create a second device', (done) ->
         @database.devices.count (error, count) =>
@@ -117,6 +112,7 @@ describe 'register', ->
 
   describe 'when called with just a name', ->
     beforeEach (done) ->
+      @updateDevice.yields null
       storeDevice = (error, @device) => done()
       @params = {name: 'bobby'}
       @originalParams = _.cloneDeep @params
@@ -124,4 +120,3 @@ describe 'register', ->
 
     it 'should not mutate the params', ->
       expect(@params).to.deep.equal @originalParams
-

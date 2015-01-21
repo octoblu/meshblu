@@ -1,3 +1,4 @@
+_            = require 'lodash'
 uuid         = require 'node-uuid'
 bcrypt       = require 'bcrypt'
 TestDatabase = require '../test-database'
@@ -37,8 +38,8 @@ describe 'Update Device', ->
       @uuid = uuid.v1()
       @rawToken = 'akuma'
       @token = bcrypt.hashSync(@rawToken, 8)
-      @orginalDevice = {uuid: @uuid, name: 'hadoken', token : @token, online :true}
-      @devices.insert @orginalDevice, done
+      @originalDevice = {uuid: @uuid, name: 'hadoken', token : @token, online :true}
+      @devices.insert _.clone(@originalDevice), done
 
     describe 'when update is called with that uuid and different name', ->
       beforeEach (done) ->
@@ -129,3 +130,28 @@ describe 'Update Device', ->
         @devices.findOne (error, device) =>
           expect(device.online).to.be.false
           done()
+
+    xdescribe 'when updated without a timestamp', ->
+      beforeEach (done) ->
+        @sut @uuid, {}, done, @database
+
+      it 'should create a device with an online of true', (done) ->
+        @devices.findOne (error, device) =>
+          expect(device.online).to.be.false
+          done()
+
+  describe 'when a device exists with online = true', ->
+    beforeEach (done) ->
+      @uuid = uuid.v1()
+      @devices.insert {uuid: @uuid, online: true}, done
+
+    describe 'when called without online', ->
+      beforeEach (done) ->
+        @sut @uuid, {}, done, @database
+
+      it 'should not modify online', (done) ->
+        @devices.findOne {uuid: @uuid}, (error, device) =>
+          done error if error?
+          expect(device.online).to.be.true
+          done()
+

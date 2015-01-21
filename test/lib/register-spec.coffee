@@ -18,8 +18,11 @@ describe 'register', ->
 
   describe 'when called with no params', ->
     beforeEach (done) ->
-      storeDevice = (error, @device) => done()
+      storeDevice = (@error, @device) => done()
       @sut null, storeDevice, @database
+
+    it 'should not return an error', ->
+      expect(@error).not.to.exist
 
     it 'should return a device', ->
       expect(@device).to.exist

@@ -18,7 +18,7 @@ hashTokenIfNeeded = (token=null, callback) =>
   bcrypt.hash token, 8, callback
 
 setDefaults = (params) =>
-  params.online = !!params.online
+  params.online = !!params.online if params.online?
   params
 
 module.exports = (uuid, params={}, callback=_.noop, database=null)->

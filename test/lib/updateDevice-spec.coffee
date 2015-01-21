@@ -56,6 +56,7 @@ describe 'Update Device', ->
           expect(device.name).to.equal 'shakunetsu'
           done()
 
+
     describe 'when update is called with that uuid and the same name', ->
       beforeEach (done) ->
         @getDevice.yields null
@@ -93,7 +94,7 @@ describe 'Update Device', ->
 
     describe 'when update is called with that uuid and the same name', ->
       beforeEach (done) ->
-        @getDevice.yields null
+        @getDevice.yields null, {foo: 'bar'}
         storeDevice = (@error, @device) => done()
         @sut @uuid, {name: 'hadoken'}, storeDevice, @dependencies
 
@@ -102,6 +103,10 @@ describe 'Update Device', ->
           return done error if error?
           expect(device.name).to.equal 'hadoken'
           done()
+
+      it 'should call the callback with the updated device', ->
+        expect(@device.foo).to.equal 'bar'
+
 
     describe 'when updated with a token', ->
       beforeEach (done) ->

@@ -124,7 +124,7 @@ describe 'register', ->
       storeDevice = (error, @device) => done()
       @params = {name: 'bobby'}
       @originalParams = _.cloneDeep @params
-      @sut @params, storeDevice, @database
+      @sut @params, storeDevice, @dependencies
 
     it 'should not mutate the params', ->
       expect(@params).to.deep.equal @originalParams

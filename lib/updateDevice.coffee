@@ -39,5 +39,4 @@ module.exports = (uuid, params={}, callback=_.noop, dependencies={})->
 
       clearCache(uuid)
 
-      getDevice uuid, (error, device) =>
-        callback null, device
+      getDevice uuid, callback

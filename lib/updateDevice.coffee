@@ -7,8 +7,10 @@ invalidKey = (value, key) -> key[0] == '$'
 sanitize = (params) =>
   return params unless _.isObject(params) || _.isArray(params)
 
+  return _.map params, sanitize if _.isArray params
+
   params = _.omit params, invalidKey
-  _.mapValues params, sanitize
+  return _.mapValues params, sanitize
 
 hashTokenIfNeeded = (token=null, callback) =>
   return _.defer callback, null, null unless token?

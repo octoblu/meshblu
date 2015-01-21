@@ -84,13 +84,11 @@ describe 'Update Device', ->
 
     describe 'when update is called with that uuid and the same name', ->
       beforeEach (done) ->
-        @sut @uuid, {name: 'hadoken'}, done, @database
+        storeDevice = (@error, @device) => done()
+        @sut @uuid, {name: 'hadoken'}, storeDevice, @database
 
-      it 'should update the record', (done) ->
-        @devices.findOne {uuid: @uuid}, (error, device) ->
-          done error if error?
-          expect(device.name).to.equal 'hadoken'
-          done()
+      it 'should update the record', ->
+        expect(@device.name).to.equal 'hadoken'
 
     describe 'when updated with a token', ->
       beforeEach (done) ->

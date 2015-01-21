@@ -1,7 +1,9 @@
 _      = require 'lodash'
 bcrypt = require 'bcrypt'
+getDevice = require './getDevice'
+clearCache = require './clearCache'
 
-NOT_UPDATED_ERROR = new Error('device not updated')
+NOT_UPDATED_ERROR = new Error 'device not updated'
 
 invalidKey = (value, key) -> key[0] == '$'
 
@@ -32,4 +34,9 @@ module.exports = (uuid, params={}, callback=_.noop, database=null)->
 
       numberOfRecords = result?.n
       return callback NOT_UPDATED_ERROR unless numberOfRecords == 1
-      callback null
+
+      clearCache(uuid)
+
+      getDevice uuid, (error, device) =>
+        callback null, device
+      , database

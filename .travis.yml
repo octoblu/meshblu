@@ -2,6 +2,8 @@ sudo: false
 language: node_js
 node_js:
   - '0.10'
+services:
+  - mongodb
 cache:
   bundler: true
   directories:

@@ -12,11 +12,11 @@ resetToken  = (fromDevice, uuid, callback=(->), securityImpl, getDevice, updateD
   getDevice uuid, (error, device)->    
     return callback 'invalid device' if error?
 
-    return callback "unauthorized" unless securityImpl.canUpdate fromDevice, device            
+    return callback "unauthorized" unless securityImpl.canConfigure fromDevice, device            
     token = generateToken()  
 
     updateDevice device.uuid, token: token, (error, device) ->
       return callback "error updating device" if error?
-      return callback token
+      return callback null, token
 
 module.exports = resetToken

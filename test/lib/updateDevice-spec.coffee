@@ -10,12 +10,9 @@ describe 'Update Device', ->
     @clearCache = sinon.stub()
     TestDatabase.open (error, database) =>
       @database = database
-      @devices  = @database.collection 'devices'
+      @devices  = @database.devices
       @dependencies = {database: @database, getDevice: @getDevice, clearCache: @clearCache}
       done error
-
-  afterEach ->
-    @database.close()
 
   it 'should be a function', ->
     expect(@sut).to.be.a 'function'
@@ -158,7 +155,7 @@ describe 'Update Device', ->
         @sut @uuid, {online: 'false'}, done, @dependencies
 
       it 'should create a device with an online of true', (done) ->
-        @devices.findOne (error, device) =>
+        @devices.findOne {}, (error, device) =>
           expect(device.online).to.be.true
           done()
 
@@ -168,7 +165,7 @@ describe 'Update Device', ->
         @sut @uuid, {online: false}, done, @dependencies
 
       it 'should create a device with an online of true', (done) ->
-        @devices.findOne (error, device) =>
+        @devices.findOne {}, (error, device) =>
           expect(device.online).to.be.false
           done()
 
@@ -178,7 +175,7 @@ describe 'Update Device', ->
         @sut @uuid, {}, done, @dependencies
 
       it 'should create a timestamp', (done) ->
-        @devices.findOne (error, device) =>
+        @devices.findOne {}, (error, device) =>
           expect(device.timestamp).to.exist
           done()
 

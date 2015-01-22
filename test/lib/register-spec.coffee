@@ -8,13 +8,10 @@ describe 'register', ->
     @updateDevice = sinon.stub()
     TestDatabase.open (error, database) =>
       @database = database
-      @devices  = @database.collection 'devices'
+      @devices  = @database.devices
 
       @dependencies = {database: @database, updateDevice: @updateDevice}
       done error
-
-  afterEach ->
-    @database.close()
 
   it 'should be a function', ->
     expect(@sut).to.be.a 'function'
@@ -30,13 +27,13 @@ describe 'register', ->
       expect(@device).to.exist
 
     it 'should create a device', (done) ->
-      @database.devices.count (error, count) =>
+      @database.devices.count {}, (error, count) =>
         return done error if error?
         expect(count).to.equal 1
         done()
 
     it 'should generate a new uuid', (done) ->
-      @database.devices.findOne (error, device) =>
+      @database.devices.findOne {}, (error, device) =>
         return done error if error?
         expect(device.uuid).to.exist
         done()
@@ -88,7 +85,7 @@ describe 'register', ->
       @sut {}, done, @dependencies
 
     it 'should create a device with an online of false', (done) ->
-      @devices.findOne (error, device) =>
+      @devices.findOne {}, (error, device) =>
         expect(device.online).to.be.false
         done()
 
@@ -112,7 +109,7 @@ describe 'register', ->
         @sut {uuid: 'some-other-uuid'}, storeDevice, @dependencies
 
       it 'it create a second device', (done) ->
-        @database.devices.count (error, count) =>
+        @database.devices.count {}, (error, count) =>
           return done error if error?
           expect(count).to.equal 2
           done()

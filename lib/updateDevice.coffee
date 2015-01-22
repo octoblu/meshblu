@@ -36,7 +36,7 @@ module.exports = (uuid, params={}, callback=_.noop, dependencies={})->
     devices.update {uuid: uuid}, {$set: params}, (error, result) =>
       return callback error if error?
 
-      numberOfRecords = result?.n
+      numberOfRecords = result?.n ? result
       return callback new Error 'device not updated' unless numberOfRecords == 1
 
       clearCache(uuid)

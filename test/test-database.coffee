@@ -1,10 +1,10 @@
-_       = require 'lodash'
-mongojs = require 'mongojs'
+Datastore = require 'nedb'
 
 class TestDatabase
   @open: (callback=->) =>
-    db = mongojs 'meshblu-test', ['devices']
-    db.devices.remove (error) =>
-      callback error, db
+    datastore = new Datastore
+      inMemoryOnly: true
+      autoload: true
+      onload: => callback null, {devices: datastore}
 
 module.exports = TestDatabase

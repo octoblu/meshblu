@@ -8,9 +8,6 @@ describe 'getDevice', ->
       @database = database
       done error
 
-  afterEach ->
-    @database.close()
-
   describe 'when a device does not exist', ->
     beforeEach (done) ->
       storeDevice = (@error, @device) => done()
@@ -24,7 +21,7 @@ describe 'getDevice', ->
 
   describe 'when a device exists', ->
     beforeEach (done) ->
-      @devices = @database.collection 'devices'
+      @devices = @database.devices
       @devices.insert uuid: 'valid-uuid', done
 
     describe 'when passed a valid uuid', ->

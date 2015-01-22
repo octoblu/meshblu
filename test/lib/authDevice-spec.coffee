@@ -9,9 +9,6 @@ describe 'authDevice', ->
       @database = database
       done error
 
-  afterEach ->
-    @database.close()
-
   it 'should be a function', ->
     expect(@sut).to.be.a 'function'
 
@@ -28,7 +25,7 @@ describe 'authDevice', ->
 
   describe 'when there is a device', ->
     beforeEach (done) ->
-      @devices = @database.collection 'devices'
+      @devices = @database.devices
       @devices.insert uuid: 'valid-uuid', token: bcrypt.hashSync('valid-token', 8), done
 
     describe 'when passed a valid token and uuid', ->

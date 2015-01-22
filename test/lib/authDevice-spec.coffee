@@ -17,11 +17,14 @@ describe 'authDevice', ->
 
   describe 'when passed an invalid token and uuid (cause theres nothing in the database)', ->
     beforeEach (done) ->
-      storeDevice = (error, @device) => done error
+      storeDevice = (@error, @device) => done()
       @sut 'invalid-uuid', 'invalid-token', storeDevice, @database
 
     it 'should call the callback with no device', ->
       expect(@device).to.not.exist
+
+    it 'should call the callback with no error', ->
+      expect(@error).to.not.exist
 
   describe 'when there is a device', ->
     beforeEach (done) ->
@@ -39,3 +42,13 @@ describe 'authDevice', ->
       it 'should not pass the token back', ->
         expect(@device.token).to.not.exist
 
+    describe 'when passed a valid uuid and invalid token', ->
+      beforeEach (done) ->
+        storeDevice = (@error, @device) => done()
+        @sut 'valid-uuid', 'invalid-token', storeDevice, @database
+
+      it 'should call the callback with no device', ->
+        expect(@device).not.to.exist
+
+      it 'should call the callback with no error', ->
+        expect(@error).not.to.exist

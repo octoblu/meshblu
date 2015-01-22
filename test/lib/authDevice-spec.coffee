@@ -9,6 +9,9 @@ describe 'authDevice', ->
       @database = database
       done error
 
+  afterEach ->
+    @database.close?()
+
   it 'should be a function', ->
     expect(@sut).to.be.a 'function'
 

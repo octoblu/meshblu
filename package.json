@@ -8,8 +8,11 @@
   },
   "dependencies": {
     "JSONStream": "~0.9.0",
+    "bcrypt": "^0.8.1",
     "coap": "~0.8.0",
+    "coffee-script": "^1.8.0",
     "commander": "^2.3.0",
+    "debug": "^2.1.1",
     "elasticsearch": "~2.4.0",
     "lodash": "^2.4.1",
     "moment": "~2.8.1",
@@ -36,6 +39,8 @@
     "airbrake": "^0.3.8",
     "geoip-lite": "^1.1.3",
     "mdns": "^2.2.0",
+    "mocha-blink1-reporter": "^0.2.0",
+    "mocha-multi": "^0.6.0",
     "newrelic": "^1.13.0",
     "nodetime": "^0.8.15"
   },
@@ -51,7 +56,6 @@
   "devDependencies": {
     "chai": "^1.10.0",
     "codeclimate-test-reporter": "0.0.4",
-    "coffee-script": "^1.8.0",
     "istanbul": "^0.3.5",
     "mocha": "^2.1.0",
     "mocha-istanbul": "^0.2.0",

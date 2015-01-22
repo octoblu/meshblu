@@ -37,3 +37,9 @@ deploy:
     app-id: 3110aaa3-dd25-49d1-be43-6c0ac5c0a8ad 
     on:
       branch: staging
+addons:
+  code_climate:
+    repo_token: 8e3f39fe338fe8465f0400555fcbf8a2a3293f9c586b64588e8ce198e64bda58
+after_script:
+  - cat coverage/lcov.info | codeclimate
+

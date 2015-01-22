@@ -15,7 +15,7 @@ describe 'resetToken', ->
 
   describe 'when it is called with a fromDevice and a uuid', ->
     beforeEach ->
-      @securityImpl.canUpdate = sinon.stub()
+      @securityImpl.canConfigure = sinon.stub()
       @fromDevice = {}
 
     it 'should call getDevice', ->
@@ -35,35 +35,35 @@ describe 'resetToken', ->
         @sut @fromDevice, 1, callback
         expect(callback).to.be.calledWith 'invalid device'
 
-      it 'should not call securityImpl.canUpdate', ->
+      it 'should not call securityImpl.canConfigure', ->
         @sut @fromDevice, 1, ->
-        expect(@securityImpl.canUpdate).to.not.have.been.called
+        expect(@securityImpl.canConfigure).to.not.have.been.called
 
     describe 'when getDevice returns a device', ->
       beforeEach ->
         @device = uuid: 'uuid', name: 'blah'
         @getDevice.yields null, @device
 
-      it 'should call securityImpl.canUpdate', -> 
+      it 'should call securityImpl.canConfigure', -> 
         @sut @fromDevice, 1     
-        expect(@securityImpl.canUpdate).to.have.been.called
+        expect(@securityImpl.canConfigure).to.have.been.called
 
       it 'should have been called with the device from getDevice and fromDevice', ->
         @sut @fromDevice, 'uuid'
-        expect(@securityImpl.canUpdate).to.have.been.calledWith @fromDevice, @device
+        expect(@securityImpl.canConfigure).to.have.been.calledWith @fromDevice, @device
 
-      describe 'when securityImpl.canUpdate returns false', ->
+      describe 'when securityImpl.canConfigure returns false', ->
         beforeEach ->
-          @securityImpl.canUpdate.returns false
+          @securityImpl.canConfigure.returns false
 
         it 'should call the callback with "unauthorized"', ->
           callback = sinon.spy()
           @sut @fromDevice, 3, callback
           expect(callback).to.have.been.calledWith 'unauthorized'
 
-      describe 'when securityImpl.canUpdate returns true', ->
+      describe 'when securityImpl.canConfigure returns true', ->
         beforeEach ->
-          @securityImpl.canUpdate.returns true
+          @securityImpl.canConfigure.returns true
         
         it 'should not call the callback with "unauthorized"', ->
           callback = sinon.spy()
@@ -111,12 +111,12 @@ describe 'resetToken', ->
           it 'should return a token', ->
             callback = sinon.spy()
             @sut @fromDevice, 3, callback
-            expect(callback).to.be.calledWith @updateDevice.args[0][1].token
+            expect(callback).to.be.calledWith null, @updateDevice.args[0][1].token
 
   describe 'when it is called with a different fromDevice and uuid', ->
     beforeEach ->
       @fromDevice = a: 'different', one : 'true'
-      @securityImpl.canUpdate = sinon.spy()
+      @securityImpl.canConfigure = sinon.spy()
       @device = uuid: '2', name: 'Koshin'
       @getDevice.yields null, @device
 
@@ -124,6 +124,6 @@ describe 'resetToken', ->
       @sut @fromDevice, 2
       expect(@getDevice).to.have.been.calledWith 2
 
-    it 'should call securityImpl.canUpdate with the different fromDevice & uuid', ->      
+    it 'should call securityImpl.canConfigure with the different fromDevice & uuid', ->      
       @sut @fromDevice, '2'
-      expect(@securityImpl.canUpdate).to.have.been.calledWith @fromDevice, @device
+      expect(@securityImpl.canConfigure).to.have.been.calledWith @fromDevice, @device

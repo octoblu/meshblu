@@ -1,3 +1,4 @@
+_ = require 'lodash'
 config = require './../config'
 redis = require './redis'
 cacheDevice = require './cacheDevice'
@@ -27,7 +28,7 @@ findDevice = (uuid, callback, database) ->
     callback null, data
 
 
-module.exports = (uuid, callback=(->), database=null) ->
+module.exports = (uuid, callback=_.noop, database=null) ->
   deviceFound = (error, data) ->
     if error || !data
       callback

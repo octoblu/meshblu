@@ -25,20 +25,23 @@ module.exports = (uuid, params={}, callback=_.noop, dependencies={})->
   {devices} = dependencies.database ? require './database'
   getDevice = dependencies.getDevice ? require './getDevice'
   clearCache = dependencies.clearCache ? require './clearCache'
+  getGeo = dependencies.getGeo ? require './getGeo'
 
   clearCache 'DEVICE_' + uuid
 
   params = setDefaults(sanitize(params))
+  getGeo params.ipAddress, (error, geo) =>
+    params.geo = geo if geo?
 
-  hashTokenIfNeeded params.token, (error, hashedToken) =>
-    params.token = hashedToken if hashedToken?
+    hashTokenIfNeeded params.token, (error, hashedToken) =>
+      params.token = hashedToken if hashedToken?
 
-    devices.update {uuid: uuid}, {$set: params}, (error, result) =>
-      return callback error if error?
+      devices.update {uuid: uuid}, {$set: params}, (error, result) =>
+        return callback error if error?
 
-      numberOfRecords = result?.n ? result
-      return callback new Error 'device not updated' unless numberOfRecords == 1
+        numberOfRecords = result?.n ? result
+        return callback new Error 'device not updated' unless numberOfRecords == 1
 
-      clearCache(uuid)
+        clearCache(uuid)
 
-      getDevice uuid, callback
+        getDevice uuid, callback

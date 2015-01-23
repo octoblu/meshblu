@@ -27,7 +27,6 @@ findDevice = (uuid, callback, database) ->
       cacheDevice data
     callback null, data
 
-
 module.exports = (uuid, callback=_.noop, database=null) ->
   deviceFound = (error, data) ->
     if error || !data

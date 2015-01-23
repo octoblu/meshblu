@@ -8,10 +8,12 @@ describe 'Update Device', ->
     @sut = require '../../lib/updateDevice'
     @getDevice = sinon.stub()
     @clearCache = sinon.stub()
+    @getGeo = sinon.stub()
+    @getGeo.yields null, null
     TestDatabase.open (error, database) =>
       @database = database
       @devices  = @database.devices
-      @dependencies = {database: @database, getDevice: @getDevice, clearCache: @clearCache}
+      @dependencies = {database: @database, getDevice: @getDevice, clearCache: @clearCache, getGeo: @getGeo}
       done error
 
   afterEach ->
@@ -180,6 +182,17 @@ describe 'Update Device', ->
       it 'should create a timestamp', (done) ->
         @devices.findOne {}, (error, device) =>
           expect(device.timestamp).to.exist
+          done()
+
+    describe 'when updated without geo', ->
+      beforeEach (done) ->
+        @getDevice.yields null
+        @getGeo.yields null, {foo: 'bar'}
+        @sut @uuid, {}, done, @dependencies
+
+      it 'should add a geo', (done) ->
+        @devices.findOne {}, (error, device) =>
+          expect(device.geo).to.exist
           done()
 
   describe 'when a device exists with online = true', ->

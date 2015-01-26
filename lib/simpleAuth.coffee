@@ -23,7 +23,7 @@ module.exports =
     checkLists fromDevice, toDevice, toDevice?.receiveWhitelist, toDevice?.receiveBlacklist, false
 
   canSend: (fromDevice, toDevice) ->
-    checkLists fromDevice, toDevice, toDevice?.sendWhitelist, toDevice?.sendBlacklist, false
+    checkLists fromDevice, toDevice, toDevice?.sendWhitelist, toDevice?.sendBlacklist, true
 
   canConfigure: (fromDevice, toDevice, message) ->
     return false if !fromDevice or !toDevice

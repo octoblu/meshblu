@@ -35,4 +35,4 @@ module.exports =
 
     return toDevice.owner == fromDevice.uuid if toDevice.owner
 
-    return util.sameLAN fromDevice.ipAddress, toDevice.ipAddress
+    return util.sameLAN fromDevice.ipAddress, toDevice.ipAddre

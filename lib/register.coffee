@@ -26,6 +26,7 @@ module.exports = (device={}, callback=_.noop, dependencies={}) ->
       return callback new Error('Device not registered 2') if error?
 
       device.token ?= generateToken()
+      device.discoverWhitelist ?= [device.owner] if device.owner
 
       updateDevice newDevice.uuid, device, (error, savedDevice) =>
         return callback new Error('Device not registered 3') if error?

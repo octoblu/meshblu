@@ -31,7 +31,7 @@ module.exports = (uuid, params={}, callback=_.noop, dependencies={})->
 
   params = setDefaults(sanitize(params))
   getGeo params.ipAddress, (error, geo) =>
-    params.geo = geo if geo?
+    params.geo ?= geo if geo?
 
     hashTokenIfNeeded params.token, (error, hashedToken) =>
       params.token = hashedToken if hashedToken?

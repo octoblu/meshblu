@@ -79,6 +79,21 @@ describe 'register', ->
       @devices.findOne (error, device) =>
         expect(@updateDevice).to.be.calledWith device.uuid, {token: 'mah-secrets', uuid: device.uuid}
 
+  describe 'when called with an owner id', ->
+    beforeEach (done) ->
+      @updateDevice.yields null, {}
+      @params = {uuid: 'some-uuid', token: 'token', owner: 'other-uuid'}
+      @sut @params, done, @dependencies
+
+    it 'should set the discoverWhitelist to the owners UUID',  ->
+      expect(@updateDevice).to.have.been.calledWith 'some-uuid', {
+        uuid:  'some-uuid'
+        token: 'token'
+        owner: 'other-uuid'
+        discoverWhitelist: ['other-uuid']
+      }
+
+
   describe 'when called without an online', ->
     beforeEach (done) ->
       @updateDevice.yields null, {}

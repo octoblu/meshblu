@@ -26,13 +26,13 @@ module.exports =
     checkLists fromDevice, toDevice, toDevice?.sendWhitelist, toDevice?.sendBlacklist, true
 
   canConfigure: (fromDevice, toDevice, message) ->
-    return false if !fromDevice or !toDevice
+    return false if !fromDevice || !toDevice
 
-    if toDevice.token and message and message.token
+    if toDevice.token && message && message.token
       return true if bcrypt.compareSync message.token, toDevice.token
 
     return true if fromDevice.uuid == toDevice.uuid
 
     return toDevice.owner == fromDevice.uuid if toDevice.owner
 
-    return util.sameLAN fromDevice.ipAddress, toDevice.ipAddre
+    return util.sameLAN fromDevice.ipAddress, toDevice.ipAddress

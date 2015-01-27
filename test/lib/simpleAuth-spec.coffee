@@ -112,15 +112,22 @@ describe 'simpleAuth', ->
         @fromDevice = uuid: 1
         @toDevice = uuid: 2
         util.sameLAN = sinon.stub().returns true
+
       it 'should return true', ->
         expect(@sut.canConfigure @fromDevice, @toDevice).to.be.true
 
+
+
     describe 'when a device is unclaimed, and exists on a different lan than the configuring device', ->
       beforeEach ->
-        @fromDevice = uuid: 1
-        @toDevice = uuid: 2
+        @fromDevice = uuid: 1, ipAddress: '127.0.0.1'
+        @toDevice = uuid: 2, ipAddress: '192.168.0.1'
         util.sameLAN = sinon.stub().returns false
-      it 'should return true', ->
-        expect(@sut.canConfigure @fromDevice, @toDevice).to.be.false
+        @result = @sut.canConfigure @fromDevice, @toDevice
 
+      it 'should return false', ->
+        expect(@result).to.be.false
+
+      it 'should call sameLan with the ipAddresses of both devices', ->
+        expect(util.sameLAN).to.have.been.calledWith '127.0.0.1', '192.168.0.1'
 

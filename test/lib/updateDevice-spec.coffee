@@ -129,7 +129,6 @@ describe 'Update Device', ->
       it 'should call the callback with the updated device', ->
         expect(@device.foo).to.equal 'bar'
 
-
     describe 'when updated with a token', ->
       beforeEach (done) ->
         @getDevice.yields null
@@ -198,7 +197,9 @@ describe 'Update Device', ->
   describe 'when a device exists with online = true', ->
     beforeEach (done) ->
       @uuid = uuid.v1()
-      @devices.insert {uuid: @uuid, online: true}, done
+      oneHour = 60 * 60 * 1000
+      @date = new Date(Date.now() - oneHour)
+      @devices.insert {uuid: @uuid, online: true, onlineSince: @date}, done
 
     describe 'when called without online', ->
       beforeEach (done) ->
@@ -209,4 +210,49 @@ describe 'Update Device', ->
         @devices.findOne {uuid: @uuid}, (error, device) =>
           done error if error?
           expect(device.online).to.be.true
+          done()
+
+      it 'should not modify onlineSince', (done) ->
+        @devices.findOne { uuid: @uuid }, (error, device) =>
+          done error if error?
+          expect(device.onlineSince).to.equal @date
+          done()
+
+    describe 'when updated with online = true', ->
+      beforeEach (done) ->
+        @getDevice.yields null
+        @sut @uuid, { online : true }, done, @dependencies
+
+      it 'should not modify online', (done) ->
+        @devices.findOne {uuid: @uuid}, (error, device) =>
+          done error if error?
+          expect(device.onlineSince).to.equal @date
+          done()
+
+    describe 'when called with an online of false', ->
+      beforeEach (done) ->
+        @getDevice.yields null
+        @sut @uuid, {online: false}, done, @dependencies
+
+      it 'should not modify onlineSince', (done) ->
+        @devices.findOne { uuid: @uuid }, (error, device) =>
+          done error if error?
+          expect(device.onlineSince).to.equal @date
+          done()
+
+  describe 'when a device exists with an online = false', ->
+    beforeEach (done) ->
+      @uuid = uuid.v1()
+      @devices.insert {uuid: @uuid, online: true}, done
+
+    describe 'when called with an online of true', ->
+      beforeEach (done) ->
+        @getDevice.yields null
+        @sut @uuid, {online: true}, done, @dependencies
+
+      xit 'should set onlineSince', (done) ->
+        @devices.findOne {uuid: @uuid}, (error, device) =>
+          done error if error?
+          time = device.onlineSince.getTime()
+          expect(time).to.be.closeTo Date.now(), 1000
           done()

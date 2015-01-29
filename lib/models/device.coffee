@@ -1,6 +1,7 @@
 async  = require 'async'
 bcrypt = require 'bcrypt'
 _      = require 'lodash'
+debug  = require('debug')('meshblu:model:device')
 
 class Device
   constructor: (attributes={}, dependencies={}) ->
@@ -21,26 +22,27 @@ class Device
 
   save: (callback=->) =>
     return callback @error unless @validate()
-
     async.series [
       @addGeo
       @addHashedToken
       @addOnlineSince
     ], (error) =>
       return callback error if error?
-      @devices.update {}, {$set: @attributes}, callback
+      debug 'save', @attributes
+      @devices.update {uuid: @uuid}, {$set: @attributes}, (error, data) =>
+        callback error
 
   sanitize: (params) =>
     return params unless _.isObject(params) || _.isArray(params)
 
-    return _.map params, sanitize if _.isArray params
+    return _.map params, @sanitize if _.isArray params
 
     params = _.omit params, (value, key) -> key[0] == '$'
     return _.mapValues params, @sanitize
 
   set: (attributes)=>
     @attributes ?= {}
-    @attributes = _.extend @attributes, @sanitize(attributes)
+    @attributes = _.extend {}, @attributes, @sanitize(attributes)
     @attributes.online = !!@attributes.online if @attributes.online?
     @attributes.timestamp = new Date()
 
@@ -56,7 +58,7 @@ class Device
 
     @getGeo @attributes.ipAddress, (error, geo) =>
       @attributes.geo = geo
-      callback(error)
+      callback()
 
   addHashedToken: (callback=->) =>
     token = @attributes.token

@@ -8,8 +8,7 @@ resetToken  = (fromDevice, uuid, callback=(->), securityImpl, getDevice, updateD
   securityImpl ?= require './getSecurityImpl'
   getDevice ?= require './getDevice'
   updateDevice ?= require './updateDevice'
-  
-  getDevice uuid, (error, device)->    
+  getDevice uuid, (error, device)->
     return callback 'invalid device' if error?
 
     return callback "unauthorized" unless securityImpl.canConfigure fromDevice, device            

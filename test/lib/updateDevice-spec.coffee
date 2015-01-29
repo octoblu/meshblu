@@ -78,42 +78,6 @@ describe 'Update Device', ->
           expect(device.name).to.equal 'hadoken'
           done()
 
-    describe 'when update is called with one good and one bad param', ->
-      beforeEach (done) ->
-        @getDevice.yields null
-        @sut @uuid, {name: 'guile', '$natto': 'fermented soybeans'}, done, @dependencies
-
-      it 'should update the record', (done) ->
-        @devices.findOne {uuid: @uuid}, (error, device) ->
-          done error if error?
-          expect(device.name).to.equal 'guile'
-          expect(device['$natto']).to.not.exist
-          done()
-
-    describe 'when update is called with a nested bad param', ->
-      beforeEach (done) ->
-        @getDevice.yields null
-        @sut @uuid, {name: 'guile', foo: {'$natto': 'fermented soybeans'}}, done, @dependencies
-
-      it 'should update the record', (done) ->
-        @devices.findOne {uuid: @uuid}, (error, device) ->
-          done error if error?
-          expect(device.name).to.equal 'guile'
-          expect(device.foo).to.deep.equal {}
-          done()
-
-    describe 'when update is called with a bad param nested in an object in an array', ->
-      beforeEach (done) ->
-        @getDevice.yields null
-        @sut @uuid, {name: 'guile', foo: [{'$natto': 'fermented soybeans'}]}, done, @dependencies
-
-      it 'should update the record', (done) ->
-        @devices.findOne {uuid: @uuid}, (error, device) ->
-          done error if error?
-          expect(device.name).to.equal 'guile'
-          expect(device.foo).to.deep.equal [{}]
-          done()
-
     describe 'when update is called with that uuid and the same name', ->
       beforeEach (done) ->
         @getDevice.yields null, {foo: 'bar'}
@@ -187,7 +151,7 @@ describe 'Update Device', ->
       beforeEach (done) ->
         @getDevice.yields null
         @getGeo.yields null, {foo: 'bar'}
-        @sut @uuid, {}, done, @dependencies
+        @sut @uuid, {ipAddress: '127.0.0.1'}, done, @dependencies
 
       it 'should add a geo', (done) ->
         @devices.findOne {}, (error, device) =>
@@ -215,7 +179,8 @@ describe 'Update Device', ->
       it 'should not modify onlineSince', (done) ->
         @devices.findOne { uuid: @uuid }, (error, device) =>
           done error if error?
-          expect(device.onlineSince).to.equal @date
+          onlineSinceTime = device.onlineSince.getTime()
+          expect(onlineSinceTime).to.equal @date.getTime()
           done()
 
     describe 'when updated with online = true', ->
@@ -226,7 +191,8 @@ describe 'Update Device', ->
       it 'should not modify online', (done) ->
         @devices.findOne {uuid: @uuid}, (error, device) =>
           done error if error?
-          expect(device.onlineSince).to.equal @date
+          onlineSinceTime = device.onlineSince.getTime()
+          expect(onlineSinceTime).to.equal @date.getTime()
           done()
 
     describe 'when called with an online of false', ->
@@ -237,22 +203,6 @@ describe 'Update Device', ->
       it 'should not modify onlineSince', (done) ->
         @devices.findOne { uuid: @uuid }, (error, device) =>
           done error if error?
-          expect(device.onlineSince).to.equal @date
-          done()
-
-  describe 'when a device exists with an online = false', ->
-    beforeEach (done) ->
-      @uuid = uuid.v1()
-      @devices.insert {uuid: @uuid, online: true}, done
-
-    describe 'when called with an online of true', ->
-      beforeEach (done) ->
-        @getDevice.yields null
-        @sut @uuid, {online: true}, done, @dependencies
-
-      xit 'should set onlineSince', (done) ->
-        @devices.findOne {uuid: @uuid}, (error, device) =>
-          done error if error?
-          time = device.onlineSince.getTime()
-          expect(time).to.be.closeTo Date.now(), 1000
+          onlineSinceTime = device.onlineSince.getTime()
+          expect(onlineSinceTime).to.equal @date.getTime()
           done()

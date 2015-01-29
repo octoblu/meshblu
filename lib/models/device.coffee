@@ -1,6 +1,7 @@
 async  = require 'async'
 bcrypt = require 'bcrypt'
 _      = require 'lodash'
+debug  = require('debug')('meshblu:model:device')
 
 class Device
   constructor: (attributes={}, dependencies={}) ->
@@ -10,10 +11,14 @@ class Device
     {@uuid} = attributes
 
   fetch: (callback=->) =>
+    debug 'Fetching Device'
     if @fetch.cache?
+      debug 'Using cache', @fetch.cache
       return _.defer callback, null, @fetch.cache
 
+    debug 'findOne', @uuid
     @devices.findOne uuid: @uuid, (error, device) =>
+      debug 'found', device
       @fetch.cache = device
       unless device?
         error = new Error('Device not found')
@@ -28,7 +33,10 @@ class Device
       @addOnlineSince
     ], (error) =>
       return callback error if error?
-      @devices.update {}, {$set: @attributes}, callback
+      debug 'updating device', @attributes
+      @devices.update uuid: @uuid, {$set: @attributes}, (error, data) =>
+        debug 'updated device', @attributes, error, data
+        callback error
 
   sanitize: (params) =>
     return params unless _.isObject(params) || _.isArray(params)
@@ -40,7 +48,7 @@ class Device
 
   set: (attributes)=>
     @attributes ?= {}
-    @attributes = _.extend @attributes, @sanitize(attributes)
+    @attributes = _.extend {}, @attributes, @sanitize(attributes)
     @attributes.online = !!@attributes.online if @attributes.online?
     @attributes.timestamp = new Date()
 
@@ -56,13 +64,15 @@ class Device
 
     @getGeo @attributes.ipAddress, (error, geo) =>
       @attributes.geo = geo
-      callback(null)
+      callback()
 
   addHashedToken: (callback=->) =>
     token = @attributes.token
     return _.defer callback, null, null unless token?
 
+    debug 'about to fetch'
     @fetch (error, device) =>
+      debug 'fetched', error, device
       return callback error if error?
       return callback null, null if device.token == token
 

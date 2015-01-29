@@ -78,42 +78,6 @@ describe 'Update Device', ->
           expect(device.name).to.equal 'hadoken'
           done()
 
-    describe 'when update is called with one good and one bad param', ->
-      beforeEach (done) ->
-        @getDevice.yields null
-        @sut @uuid, {name: 'guile', '$natto': 'fermented soybeans'}, done, @dependencies
-
-      it 'should update the record', (done) ->
-        @devices.findOne {uuid: @uuid}, (error, device) ->
-          done error if error?
-          expect(device.name).to.equal 'guile'
-          expect(device['$natto']).to.not.exist
-          done()
-
-    describe 'when update is called with a nested bad param', ->
-      beforeEach (done) ->
-        @getDevice.yields null
-        @sut @uuid, {name: 'guile', foo: {'$natto': 'fermented soybeans'}}, done, @dependencies
-
-      it 'should update the record', (done) ->
-        @devices.findOne {uuid: @uuid}, (error, device) ->
-          done error if error?
-          expect(device.name).to.equal 'guile'
-          expect(device.foo).to.deep.equal {}
-          done()
-
-    describe 'when update is called with a bad param nested in an object in an array', ->
-      beforeEach (done) ->
-        @getDevice.yields null
-        @sut @uuid, {name: 'guile', foo: [{'$natto': 'fermented soybeans'}]}, done, @dependencies
-
-      it 'should update the record', (done) ->
-        @devices.findOne {uuid: @uuid}, (error, device) ->
-          done error if error?
-          expect(device.name).to.equal 'guile'
-          expect(device.foo).to.deep.equal [{}]
-          done()
-
     describe 'when update is called with that uuid and the same name', ->
       beforeEach (done) ->
         @getDevice.yields null, {foo: 'bar'}

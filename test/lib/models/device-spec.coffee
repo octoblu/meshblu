@@ -45,6 +45,30 @@ describe 'Device', ->
       it 'should call getGeo', ->
         expect(@getGeo).to.have.been.called
 
+    describe 'when update is called with one good and one bad param', ->
+      beforeEach ->
+        @sut = new Device { uuid: @uuid, name: 'guile', '$natto': 'fermented soybeans'}, @dependencies
+
+      it 'should update the record', ->
+        expect(@sut.attributes.name).to.equal 'guile'
+        expect(@sut.attributes['$natto']).to.not.exist
+
+    describe 'when update is called with a nested bad param', ->
+      beforeEach ->
+        @sut = new Device {uuid: @uuid, name: 'guile', foo: {'$natto': 'fermented soybeans'}}, @dependencies
+
+      it 'should update the record', ->
+          expect(@sut.attributes.name).to.equal 'guile'
+          expect(@sut.attributes.foo).to.deep.equal {}
+
+    describe 'when update is called with a bad param nested in an object in an array', ->
+      beforeEach ->
+        @sut = new Device {uuid: @uuid, name: 'guile', foo: [{'$natto': 'fermented soybeans'}]}, @dependencies
+
+      it 'should update the record', ->
+        expect(@sut.attributes.name).to.equal 'guile'
+        expect(@sut.attributes.foo).to.deep.equal [{}]
+
     describe 'when a device is saved with a different name', ->
       beforeEach (done) ->
         @sut.set name: 'Corvette Stingray'

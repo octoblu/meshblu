@@ -127,6 +127,7 @@ describe 'Device', ->
 
     describe 'when the device is saved with no new token', ->
       beforeEach (done) ->
+        @sut = new Device uuid: @uuid, @dependencies
         @sut.save done
 
       it 'should not modify the token', (done) ->
@@ -148,6 +149,7 @@ describe 'Device', ->
 
   describe 'when a device exists with online', ->
     beforeEach (done) ->
+      @uuid = 'dab71557-c8a4-45d9-95ae-8dfd963a2661'
       @onlineSince = new Date(1422484953078)
       @attributes = {uuid: @uuid, online: true, onlineSince: @onlineSince}
       @devices.insert @attributes, done

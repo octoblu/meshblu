@@ -239,20 +239,3 @@ describe 'Update Device', ->
           done error if error?
           expect(device.onlineSince).to.equal @date
           done()
-
-  describe 'when a device exists with an online = false', ->
-    beforeEach (done) ->
-      @uuid = uuid.v1()
-      @devices.insert {uuid: @uuid, online: true}, done
-
-    describe 'when called with an online of true', ->
-      beforeEach (done) ->
-        @getDevice.yields null
-        @sut @uuid, {online: true}, done, @dependencies
-
-      xit 'should set onlineSince', (done) ->
-        @devices.findOne {uuid: @uuid}, (error, device) =>
-          done error if error?
-          time = device.onlineSince.getTime()
-          expect(time).to.be.closeTo Date.now(), 1000
-          done()

@@ -1,5 +1,6 @@
 bcrypt = require 'bcrypt'
 moment = require 'moment'
+async  = require 'async'
 Device = require '../../../lib/models/device'
 TestDatabase = require '../../test-database'
 
@@ -224,3 +225,30 @@ describe 'Device', ->
     it 'should not set onlineSince', ->
       expect(@sut.attributes.onlineSince).to.not.exist
 
+  describe 'when updating multiple devices', ->
+    beforeEach (done) ->
+      @uuid1 = '8172bd75-905f-409e-91d7-121ac0456229'
+      @uuid2 = '190f8795-cc33-46d4-834e-f6b91920af77'
+      createDevice1 = (callback) => 
+        @devices.insert {uuid: @uuid1}, =>
+          @device1 = new Device uuid: @uuid1, token: '123', foo: 'bar', {database : @database}
+          @device1.save (error) ->
+            callback error
+
+      createDevice2 = (callback) =>
+        @devices.insert {uuid: @uuid2}, =>
+          @device2 = new Device uuid: @uuid2, token: '123', bar: 'baz', {database : @database}
+          @device2.save (error) ->
+            callback error
+
+      async.series [createDevice1, createDevice2], done
+
+    it 'should update the correct device, because this would never happen in real life', (done) ->
+      @devices.findOne {uuid: @uuid1}, (error, device) =>
+        expect(device.foo).to.equal 'bar'
+        done()
+
+    it 'should update the correct device, because this would never happen in real life', (done) ->
+      @devices.findOne {uuid: @uuid2}, (error, device) =>
+        expect(device.bar).to.equal 'baz'
+        done()

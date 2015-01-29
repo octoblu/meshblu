@@ -11,14 +11,10 @@ class Device
     {@uuid} = attributes
 
   fetch: (callback=->) =>
-    debug 'Fetching Device'
     if @fetch.cache?
-      debug 'Using cache', @fetch.cache
       return _.defer callback, null, @fetch.cache
 
-    debug 'findOne', @uuid
     @devices.findOne uuid: @uuid, (error, device) =>
-      debug 'found', device
       @fetch.cache = device
       unless device?
         error = new Error('Device not found')
@@ -26,16 +22,14 @@ class Device
 
   save: (callback=->) =>
     return callback @error unless @validate()
-
     async.series [
       @addGeo
       @addHashedToken
       @addOnlineSince
     ], (error) =>
       return callback error if error?
-      debug 'updating device', @attributes
-      @devices.update uuid: @uuid, {$set: @attributes}, (error, data) =>
-        debug 'updated device', @attributes, error, data
+      debug 'save', @attributes
+      @devices.update {uuid: @uuid}, {$set: @attributes}, (error, data) =>
         callback error
 
   sanitize: (params) =>
@@ -70,9 +64,7 @@ class Device
     token = @attributes.token
     return _.defer callback, null, null unless token?
 
-    debug 'about to fetch'
     @fetch (error, device) =>
-      debug 'fetched', error, device
       return callback error if error?
       return callback null, null if device.token == token
 

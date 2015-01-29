@@ -56,7 +56,7 @@ class Device
 
     @getGeo @attributes.ipAddress, (error, geo) =>
       @attributes.geo = geo
-      callback(error)
+      callback(null)
 
   addHashedToken: (callback=->) =>
     token = @attributes.token
@@ -67,7 +67,9 @@ class Device
       return callback null, null if device.token == token
 
       bcrypt.hash token, 8, (error, hashedToken) =>
+        console.log('before', @attributes)
         @attributes.token = hashedToken if hashedToken?
+        console.log('after', @attributes)
         callback error
 
   addOnlineSince: (callback=->) =>

@@ -4,8 +4,6 @@ redis = require './redis'
 cacheDevice = require './cacheDevice'
 
 findCachedDevice = (uuid, callback) ->
-  return callback null, null
-
   unless config.redis && config.redis.host
     callback(null, null)
     return

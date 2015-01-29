@@ -9,6 +9,8 @@ cache:
 env:
   - USE_MONGO=true
   - USE_MONGO=false
+services:
+  - mongodb
 notifications:
   flowdock: e7454f5285e7b9ab67009802d5560490
 deploy:

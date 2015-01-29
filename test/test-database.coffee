@@ -1,7 +1,7 @@
 
 class TestDatabase
   @open: (callback=->) =>
-    if process.env.USE_MONGO
+    if process.env.USE_MONGO == 'true'
       mongojs = require 'mongojs'
       db = mongojs 'meshblu-test', ['devices']
       db.devices.remove (error) =>

@@ -187,7 +187,8 @@ describe 'Device', ->
       it 'should not update onlineSince', (done) ->
         @devices.findOne uuid: @uuid, (error, device) =>
           return done error if error?
-          expect(device.onlineSince).to.equal @onlineSince
+          onlineSinceTime = device.onlineSince.getTime()
+          expect(onlineSinceTime).to.equal @onlineSince.getTime()
           done()
 
   describe 'when set is called with an online of "false"', ->
@@ -229,7 +230,7 @@ describe 'Device', ->
     beforeEach (done) ->
       @uuid1 = '8172bd75-905f-409e-91d7-121ac0456229'
       @uuid2 = '190f8795-cc33-46d4-834e-f6b91920af77'
-      createDevice1 = (callback) => 
+      createDevice1 = (callback) =>
         @devices.insert {uuid: @uuid1}, =>
           @device1 = new Device uuid: @uuid1, token: '123', foo: 'bar', {database : @database}
           @device1.save (error) ->

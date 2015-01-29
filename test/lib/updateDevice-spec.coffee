@@ -179,7 +179,8 @@ describe 'Update Device', ->
       it 'should not modify onlineSince', (done) ->
         @devices.findOne { uuid: @uuid }, (error, device) =>
           done error if error?
-          expect(device.onlineSince).to.equal @date
+          onlineSinceTime = device.onlineSince.getTime()
+          expect(onlineSinceTime).to.equal @date.getTime()
           done()
 
     describe 'when updated with online = true', ->
@@ -190,7 +191,8 @@ describe 'Update Device', ->
       it 'should not modify online', (done) ->
         @devices.findOne {uuid: @uuid}, (error, device) =>
           done error if error?
-          expect(device.onlineSince).to.equal @date
+          onlineSinceTime = device.onlineSince.getTime()
+          expect(onlineSinceTime).to.equal @date.getTime()
           done()
 
     describe 'when called with an online of false', ->
@@ -201,5 +203,6 @@ describe 'Update Device', ->
       it 'should not modify onlineSince', (done) ->
         @devices.findOne { uuid: @uuid }, (error, device) =>
           done error if error?
-          expect(device.onlineSince).to.equal @date
+          onlineSinceTime = device.onlineSince.getTime()
+          expect(onlineSinceTime).to.equal @date.getTime()
           done()

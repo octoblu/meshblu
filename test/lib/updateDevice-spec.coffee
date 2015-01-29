@@ -54,7 +54,7 @@ describe 'Update Device', ->
         @sut @uuid, {name: 'shakunetsu'}, done, @dependencies
 
       it 'should call clearCache with uuid', ->
-        expect(@clearCache).to.be.calledWith 'DEVICE_' + @uuid
+        expect(@clearCache).to.be.calledWith @uuid
 
     describe 'when update is called with that uuid and different name', ->
       beforeEach (done) ->

@@ -33,7 +33,7 @@ class Device
   sanitize: (params) =>
     return params unless _.isObject(params) || _.isArray(params)
 
-    return _.map params, sanitize if _.isArray params
+    return _.map params, @sanitize if _.isArray params
 
     params = _.omit params, (value, key) -> key[0] == '$'
     return _.mapValues params, @sanitize

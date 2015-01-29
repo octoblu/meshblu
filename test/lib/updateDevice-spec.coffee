@@ -187,7 +187,7 @@ describe 'Update Device', ->
       beforeEach (done) ->
         @getDevice.yields null
         @getGeo.yields null, {foo: 'bar'}
-        @sut @uuid, {}, done, @dependencies
+        @sut @uuid, {ipAddress: '127.0.0.1'}, done, @dependencies
 
       it 'should add a geo', (done) ->
         @devices.findOne {}, (error, device) =>

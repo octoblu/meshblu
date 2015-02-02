@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var winston = require('winston');
 
 var getElasticSearchHosts = function() {
   if(process.env.ELASTIC_SEARCH_HOST){
@@ -11,6 +12,48 @@ var getElasticSearchHosts = function() {
     });
   }
 };
+
+var setupEventLoggers = function() {
+  var loggers = _((process.env.LOGGERS || 'console').split(','));
+
+  var eventLoggers = {}
+
+  if ((process.env.USE_LOG || "true").toLowerCase() == "true") {
+    if (!loggers.contains('file')) {
+      loggers.push('file');
+    }
+  }
+
+  if (loggers.contains('splunk')) {
+    var splunkOptions = {
+    };
+    eventLoggers.splunk = new (winston.Logger);
+    // eventLoggers.splunk.remove(winston.transports.Console)
+    eventLoggers.splunk.add(require('winston-splunk').splunk, splunkOptions);
+  }
+
+  if (loggers.contains('elasticsearch')) {
+    var elasticSearchOptions = {
+      index: 'skynet_trans_log',
+    };
+    eventLoggers.elasticSearch = new (winston.Logger);
+    // eventLoggers.elasticSearch.remove(winston.transports.Console)
+    eventLoggers.elasticSearch.add(require('winston-elasticsearch'), elasticSearchOptions);
+  }
+
+  if (loggers.contains('file')) {
+    eventLoggers.file = new (winston.Logger);
+    // eventLoggers.file.remove(winston.transports.Console);
+    eventLoggers.file.add(winston.transports.File, { filename: './skynet.txt' });
+  }
+
+  if (loggers.contains('console')) {
+    eventLoggers.console = new (winston.Logger);
+    eventLoggers.console.add(winston.transports.Console);
+  }
+
+  return eventLoggers;
+}
 
 module.exports = {
   mongo: {
@@ -31,6 +74,7 @@ module.exports = {
   elasticSearch: {
     hosts: getElasticSearchHosts()
   },
+  eventLoggers: setupEventLoggers(),
   splunk: {
     protocol: process.env.SPLUNK_PROTOCOL || "http", 	//This should be "http" OR "https"
     host: process.env.SPLUNK_HOST, 			//The Host to connect to

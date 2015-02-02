@@ -34,7 +34,10 @@
     "socket.io-redis": "^0.1.4",
     "splunk-sdk": "^1.6.0",
     "tokenthrottle": "~1.1.0",
-    "when": "~3.4.4"
+    "when": "~3.4.4",
+    "winston": "^0.8.3",
+    "winston-elasticsearch": "^0.1.1",
+    "winston-splunk": "^0.1.0"
   },
   "optionalDependencies": {
     "airbrake": "^0.3.8",

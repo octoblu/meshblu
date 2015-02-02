@@ -2,7 +2,7 @@ var _ = require('lodash');
 var winston = require('winston');
 
 var setupEventLoggers = function() {
-  var loggers = _((process.env.LOGGERS || 'console').split(','));
+  var loggers = _((process.env.LOGGERS || '').split(','));
 
   var eventLoggers = {}
 
@@ -14,6 +14,7 @@ var setupEventLoggers = function() {
 
   if (loggers.contains('splunk')) {
     var splunkOptions = {
+      splunkHostname: process.env.SPLUNK_HOST
     };
     eventLoggers.splunk = new (winston.Logger);
     eventLoggers.splunk.add(require('winston-splunk').splunk, splunkOptions);

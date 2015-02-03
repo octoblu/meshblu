@@ -14,7 +14,7 @@ var setupEventLoggers = function() {
 
   if (loggers.contains('splunk')) {
     var splunkOptions = {
-      splunkHostname: process.env.SPLUNK_HOST
+      splunkHost: process.env.SPLUNK_HOST
     };
     eventLoggers.splunk = new (winston.Logger);
     eventLoggers.splunk.add(require('winston-splunk').splunk, splunkOptions);

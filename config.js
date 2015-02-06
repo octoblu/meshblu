@@ -34,7 +34,7 @@ var setupEventLoggers = function() {
 
   if (loggers.contains('elasticsearch')) {
     var elasticSearchOptions = {
-      index: 'skynet_trans_log',
+      indexName: 'skynet_trans_log',
     };
     eventLoggers.elasticSearch = new (winston.Logger);
     // eventLoggers.elasticSearch.remove(winston.transports.Console)
@@ -124,5 +124,6 @@ module.exports = {
    token: process.env.PARENT_CONNECTION_TOKEN,
    server: process.env.PARENT_CONNECTION_SERVER,
    port: parseInt(process.env.PARENT_CONNECTION_PORT)
- }
+ },
+ preservedDeviceProperties: ['geo', 'ipAddress', 'lastOnline', 'onlineSince', 'owner', 'timestamp']
 };

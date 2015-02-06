@@ -1,20 +1,8 @@
 var _ = require('lodash');
 var winston = require('winston');
 
-var getElasticSearchHosts = function() {
-  if(process.env.ELASTIC_SEARCH_HOST){
-    var hosts = process.env.ELASTIC_SEARCH_HOST.split(',');
-    return _.map(hosts, function(host) {
-      return {
-        host: host,
-        port: process.env.ELASTIC_SEARCH_PORT
-      };
-    });
-  }
-};
-
 var setupEventLoggers = function() {
-  var loggers = _((process.env.LOGGERS || 'console').split(','));
+  var loggers = _((process.env.LOGGERS || '').split(','));
 
   var eventLoggers = {}
 
@@ -26,25 +14,25 @@ var setupEventLoggers = function() {
 
   if (loggers.contains('splunk')) {
     var splunkOptions = {
+      splunkHost: process.env.SPLUNK_HOST
     };
     eventLoggers.splunk = new (winston.Logger);
-    // eventLoggers.splunk.remove(winston.transports.Console)
     eventLoggers.splunk.add(require('winston-splunk').splunk, splunkOptions);
   }
 
   if (loggers.contains('elasticsearch')) {
     var elasticSearchOptions = {
       indexName: 'skynet_trans_log',
+      host: process.env.ELASTIC_SEARCH_HOST,
+      port: process.env.ELASTIC_SEARCH_PORT
     };
     eventLoggers.elasticSearch = new (winston.Logger);
-    // eventLoggers.elasticSearch.remove(winston.transports.Console)
     eventLoggers.elasticSearch.add(require('winston-elasticsearch'), elasticSearchOptions);
   }
 
   if (loggers.contains('file')) {
     eventLoggers.file = new (winston.Logger);
-    // eventLoggers.file.remove(winston.transports.Console);
-    eventLoggers.file.add(winston.transports.File, { filename: './skynet.txt' });
+    eventLoggers.file.add(winston.transports.File, { filename: process.env.LOG_FILE_NAME || './skynet.txt' });
   }
 
   if (loggers.contains('console')) {
@@ -71,9 +59,6 @@ module.exports = {
   log: (process.env.USE_LOG || "true").toLowerCase() == "true",
   logToRedis: (process.env.USE_REDIS_LOG || "false").toLowerCase() == "true",
   logEvents: (process.env.LOG_EVENTS || "true").toLowerCase() == "true",
-  elasticSearch: {
-    hosts: getElasticSearchHosts()
-  },
   eventLoggers: setupEventLoggers(),
   splunk: {
     protocol: process.env.SPLUNK_PROTOCOL || "http", 	//This should be "http" OR "https"

@@ -11,7 +11,8 @@ module.exports = (eventCode, data, dependencies={}) ->
   if data.payload && !_.isPlainObject data.payload
     data.payload = message: data.payload
 
-  config.eventLoggers.console.log 'info', data if config.eventLoggers.console
-  config.eventLoggers.file.log 'info', data if config.eventLoggers.file
-  config.eventLoggers.elasticSearch.log 'info', data if config.eventLoggers.elasticSearch
-  config.eventLoggers.splunk.log 'info', data if config.eventLoggers.splunk
+  if config.eventLoggers?
+    config.eventLoggers.console.log 'info', data if config.eventLoggers.console
+    config.eventLoggers.file.log 'info', data if config.eventLoggers.file
+    config.eventLoggers.elasticSearch.log 'info', data if config.eventLoggers.elasticSearch
+    config.eventLoggers.splunk.log 'info', data if config.eventLoggers.splunk

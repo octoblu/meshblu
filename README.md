@@ -63,7 +63,6 @@ Clone the git repository, then:
 
 ```bash
 $ npm install
-$ cp config.js.sample config.js
 ```
 
 [Meshblu](http://meshblu.octoblu.com) uses Mongo, Redis, ElasticSearch, and Splunk; however, we have made this infrastructure optional for you.  Meshblu falls back to file system and memory storage if these services are not configured allowing you to deploy a private Meshblu cloud to a Raspberry Pi or other mini-computer!

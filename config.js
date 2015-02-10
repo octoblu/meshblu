@@ -22,12 +22,11 @@ var setupEventLoggers = function() {
 
   if (loggers.contains('elasticsearch')) {
     var elasticSearchOptions = {
-      indexName: 'skynet_trans_log',
-      host: process.env.ELASTIC_SEARCH_HOST,
-      port: process.env.ELASTIC_SEARCH_PORT
+      host: 'http://' + process.env.ELASTIC_SEARCH_HOST + ':' + process.env.ELASTIC_SEARCH_PORT,
+      version: '1.4.2'
     };
-    eventLoggers.elasticSearch = new (winston.Logger);
-    eventLoggers.elasticSearch.add(require('winston-elasticsearch'), elasticSearchOptions);
+    var ElasticSearch = require('./lib/logElasticSearch');
+    eventLoggers.elasticSearch = new ElasticSearch(elasticSearchOptions);
   }
 
   if (loggers.contains('file')) {

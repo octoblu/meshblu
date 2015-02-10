@@ -14,5 +14,5 @@ module.exports = (eventCode, data, dependencies={}) ->
   if config.eventLoggers?
     config.eventLoggers.console.log 'info', data if config.eventLoggers.console
     config.eventLoggers.file.log 'info', data if config.eventLoggers.file
-    config.eventLoggers.elasticSearch.log 'info', data if config.eventLoggers.elasticSearch
+    config.eventLoggers.elasticSearch.log eventCode, _.omit(data, 'eventCode') if config.eventLoggers.elasticSearch
     config.eventLoggers.splunk.log 'info', data if config.eventLoggers.splunk

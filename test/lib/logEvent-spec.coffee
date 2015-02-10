@@ -51,23 +51,22 @@ describe 'logEvent', ->
 
     describe 'when payload is not an object', =>
       beforeEach =>
-        @eventCode = 201
         @data = something: 'here', uuid: 'd0269f1f-214f-4a2f-9e79-bc248f229ec1', payload: '1234'
-        @sut @eventCode, @data, @dependencies
+        @sut 333, @data, @dependencies
 
       it 'should wrap payload', =>
-        dataWithAdditions = _.extend {}, @data, timestamp: @fakeTimestamp, eventCode: @eventCode, payload: {message: '1234'}
-        expect(@fakeElasticSearchLogger.log).to.have.been.calledWith 'info', dataWithAdditions
+        dataWithAdditions = _.extend {}, @data, timestamp: @fakeTimestamp, payload: {message: '1234'}
+        expect(@fakeElasticSearchLogger.log).to.have.been.calledWith 333, dataWithAdditions
 
     describe 'when eventCode is defined', =>
       beforeEach =>
-        @eventCode = 201
         @data = something: 'here', uuid: 'd0269f1f-214f-4a2f-9e79-bc248f229ec1'
-        @sut @eventCode, @data, @dependencies
+        @sut 201, @data, @dependencies
 
-      it 'should log with the uuid as the type, adding timestamp and eventCode', =>
-        dataWithAdditions = _.extend {}, @data, timestamp: @fakeTimestamp, eventCode: @eventCode
-        expect(@fakeElasticSearchLogger.log).to.have.been.calledWith 'info', dataWithAdditions
+      it 'should log with the eventCode and the data with timestamp mixed in', =>
+        dataWithAdditions = _.extend {}, @data, timestamp: @fakeTimestamp
+        expect(@fakeElasticSearchLogger.log).to.have.been.calledWith 201, dataWithAdditions
+
 
   describe 'when splunk logging enabled', =>
     beforeEach =>

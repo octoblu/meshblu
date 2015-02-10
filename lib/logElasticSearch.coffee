@@ -6,6 +6,12 @@ class LogElasticSearch
 
   log: (eventCode, body) =>
     @elasticsearch.create index: "meshblu_events_#{eventCode}", type: 'event', body: body, (error) =>
-      @console.error error if error?
+      return unless error?
+
+      try
+        throw error
+      catch error
+        error.createParams = index: "meshblu_events_#{eventCode}", type: 'event', body: body
+        @console.error error
 
 module.exports = LogElasticSearch

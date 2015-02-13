@@ -26,9 +26,14 @@ class Device
 
   storeSessionId: (sessionId, callback=_.noop)=>
     @fetch (error, attributes) =>
-      @attributes.sessionIds = attributes.sessionIds ? []
-      @attributes.sessionIds.push id: sessionId unless _.any @attributes.sessionIds, id: sessionId
-      @save callback
+      return callback error if error?
+
+      bcrypt.hash sessionId, 8, (error, hashedSessionId) =>
+        return callback error if error?
+
+        @attributes.sessionIds = attributes.sessionIds ? []
+        @attributes.sessionIds.push hash: hashedSessionId unless _.any @attributes.sessionIds, hash: hashedSessionId
+        @save callback
 
   save: (callback=->) =>
     return callback @error unless @validate()

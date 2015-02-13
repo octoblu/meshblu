@@ -1,8 +1,8 @@
 USE_MONGO = process.env.USE_MONGO == 'true'
 
-console.log "=============================================="
-console.log "using #{if USE_MONGO then 'mongo' else 'nedb'}"
-console.log "=============================================="
+console.log "================================================"
+console.log "  using #{if USE_MONGO then 'mongo' else 'nedb'}"
+console.log "================================================"
 
 class TestDatabase
   @open: (callback=->) =>

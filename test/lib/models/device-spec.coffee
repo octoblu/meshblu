@@ -1,6 +1,6 @@
+_ = require 'lodash'
 bcrypt = require 'bcrypt'
 moment = require 'moment'
-async  = require 'async'
 Device = require '../../../lib/models/device'
 TestDatabase = require '../../test-database'
 
@@ -212,12 +212,14 @@ describe 'Device', ->
           @sut.storeSessionId 'mystery-token', done
 
         it 'should hash the session id and add it to the attributes', ->
-          expect(@sut.attributes.sessionIds).to.contain {id: 'mystery-token'} 
+          sessionId = _.first @sut.attributes.sessionIds
+          expect(bcrypt.compareSync 'mystery-token', sessionId.hash).to.be.true
 
         it 'should store the session id in the database', (done) ->
           @devices.findOne uuid: @uuid, (error, device) =>
             return done error if error?
-            expect(device.sessionIds).to.contain.deep {id: 'mystery-token'}
+            sessionId = _.first @sut.attributes.sessionIds
+            expect(bcrypt.compareSync 'mystery-token', sessionId.hash).to.be.true
             done()
 
       describe 'when called with session id smart-token', ->
@@ -225,28 +227,34 @@ describe 'Device', ->
           @sut.storeSessionId 'smart-token', done
 
         it 'should store the session id', ->
-          expect(@sut.attributes.sessionIds).to.contain {id: 'smart-token'} 
+          sessionId = _.first @sut.attributes.sessionIds
+          expect(bcrypt.compareSync 'smart-token', sessionId.hash).to.be.true
 
         describe 'when called with a different session id', ->
           beforeEach (done) ->
             @sut = new Device uuid: @uuid, @dependencies
             @sut.storeSessionId 'smart-token-number-two', done
 
-          it 'should equal smart-token-number-two', ->
-            expect(@sut.attributes.sessionIds).to.contain.deep.members [{id: 'smart-token'}, {id: 'smart-token-number-two'}] 
+          it 'should contain smart-token-number-two', ->
+            match = _.any @sut.attributes.sessionIds, (sessionId) => bcrypt.compareSync 'smart-token-number-two', sessionId.hash
+            expect(match).to.be.true
+
+          it 'should contain smart-token', ->
+            match = _.any @sut.attributes.sessionIds, (sessionId) => bcrypt.compareSync 'smart-token', sessionId.hash
+            expect(match).to.be.true
 
         describe 'when called with the same session id', ->
           beforeEach (done) ->
             @sut.storeSessionId 'smart-token', done
 
-          it 'should equal smart-token', ->
-            expect(@sut.attributes.sessionIds).to.deep.equal [{id: 'smart-token'}] 
+          it 'should not add anything', ->
+            expect(@sut.attributes.sessionIds).to.have.a.lengthOf 1
 
 
     describe 'when a device already has a session token', ->
       beforeEach (done) ->
         @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
-        @devices.insert uuid: @uuid, sessionIds: [{id: 'foo'}], done
+        @devices.insert uuid: @uuid, sessionIds: [{hash: bcrypt.hashSync('foo', 8)}], done
 
       beforeEach ->
         @sut = new Device uuid: @uuid, @dependencies
@@ -255,11 +263,20 @@ describe 'Device', ->
         beforeEach (done) ->
           @sut.storeSessionId 'mystery-tolkein', done
 
-        it 'should add the session id to the attributes in the database', (done) ->
+        it 'should have foo in the database', (done) ->
           @devices.findOne uuid: @uuid, (error, device) =>
             return done error if error?
-            expect(device.sessionIds).to.contain.deep.members [{id: 'mystery-tolkein'}, {id: 'foo'}]
+            match = _.any device.sessionIds, (sessionId) => bcrypt.compareSync 'foo', sessionId.hash
+            expect(match).to.be.true
             done()
+
+        it 'should have mystery-tolkein in the database', (done) ->
+          @devices.findOne uuid: @uuid, (error, device) =>
+            return done error if error?
+            match = _.any device.sessionIds, (sessionId) => bcrypt.compareSync 'mystery-tolkein', sessionId.hash
+            expect(match).to.be.true
+            done()
+
         
   describe '->validate', ->
     describe 'when created with a different uuid', ->

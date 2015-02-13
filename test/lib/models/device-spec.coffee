@@ -38,6 +38,16 @@ describe 'Device', ->
       it 'should respond with no error', ->
         expect(@error).not.to.exist
 
+  describe '->generateSessionId', ->
+    describe 'when generateToken is injected', ->
+      beforeEach ->
+        @dependencies.generateToken = sinon.spy()
+        @sut = new Device {}, @dependencies
+
+      it 'should call generateToken', ->
+        @sut.generateSessionId()
+        expect(@dependencies.generateToken).to.have.been.called
+
   describe '->sanitize', ->
     describe 'when update is called with one good and one bad param', ->
       beforeEach ->
@@ -187,6 +197,41 @@ describe 'Device', ->
 
       it 'should leave online alone', ->
         expect(@sut.attributes.online).to.not.exist
+
+  describe '->storeSessionId', ->
+    beforeEach (done) ->
+      @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
+      @devices.insert uuid: @uuid, done
+
+    beforeEach ->
+      @sut = new Device uuid: @uuid, @dependencies
+
+    describe 'when called with session id mystery-token', ->
+      beforeEach (done) ->
+        @sut.storeSessionId 'mystery-token', done
+
+      it 'should add the session id to the attributes', ->
+        expect(@sut.attributes.sessionIds).to.deep.equal {'mystery-token': null} 
+
+      it 'should store the session id in the database', (done) ->
+        @devices.findOne uuid: @uuid, (error, device) =>
+          return done error if error?
+          expect(device.sessionIds).to.deep.equal 'mystery-token': null
+          done()
+
+    describe 'when called with session id smart-token', ->
+      beforeEach ->
+        @sut.storeSessionId('smart-token')
+
+      it 'should store the session id', ->
+        expect(@sut.attributes.sessionIds).to.deep.equal {'smart-token': null} 
+
+      describe 'when called with a different session id', ->
+        beforeEach ->
+          @sut.storeSessionId('smart-token-number-two')
+
+        it 'should equal smart-token-number-two', ->
+          expect(@sut.attributes.sessionIds).to.deep.equal {'smart-token': null, 'smart-token-number-two': null} 
 
   describe '->validate', ->
     describe 'when created with a different uuid', ->

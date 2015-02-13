@@ -1,10 +1,8 @@
 _            = require 'lodash'
-crypto       = require 'crypto'
 uuid         = require 'node-uuid'
 debug        = require('debug')('meshblu:register')
+generateToken = require './generateToken'
 
-generateToken = ->
-  return crypto.createHash('sha1').update((new Date()).valueOf().toString() + Math.random().toString()).digest('hex');
 
 module.exports = (device={}, callback=_.noop, dependencies={}) ->
   database     = dependencies.database ? require './database'

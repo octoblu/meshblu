@@ -7,6 +7,7 @@ class Device
   constructor: (attributes={}, dependencies={}) ->
     @devices = dependencies.database?.devices ? require('../database').devices
     @getGeo = dependencies.getGeo ? require('../getGeo')
+    @generateToken = dependencies.generateToken ? require('../generateToken')
     @set attributes
     {@uuid} = attributes
 
@@ -19,6 +20,14 @@ class Device
       unless device?
         error = new Error('Device not found')
       callback error, @fetch.cache
+
+  generateSessionId: =>
+    return @generateToken()
+
+  storeSessionId: (sessionId, callback=_.noop)=>
+    @attributes.sessionIds ?= {}
+    @attributes.sessionIds[sessionId] = null
+    @save callback
 
   save: (callback=->) =>
     return callback @error unless @validate()

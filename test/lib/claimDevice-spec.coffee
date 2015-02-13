@@ -2,9 +2,9 @@ describe 'claimDevice', ->
   beforeEach ->
     @updateDevice = sinon.stub()
     @canConfigure = sinon.stub()
-    @getDevice    = sinon.stub()
+    @getDeviceWithToken    = sinon.stub()
     @canConfigure.returns true
-    @dependencies = {updateDevice: @updateDevice, canConfigure: @canConfigure, getDevice: @getDevice}
+    @dependencies = {updateDevice: @updateDevice, canConfigure: @canConfigure, getDeviceWithToken: @getDeviceWithToken}
     @sut = require '../../lib/claimDevice'
 
   it 'should be a function', ->
@@ -31,7 +31,7 @@ describe 'claimDevice', ->
       @fromDevice = {uuid: '89e9cd5f-dfff-4771-b821-d35614b7a506'}
       @device     = {uuid: '07a4ed85-acc5-4495-b3d7-2d93439c04fa'}
 
-      @getDevice.yields null, {ipAddress: '192.168.1.1'}
+      @getDeviceWithToken.yields null, {ipAddress: '192.168.1.1'}
       @updateDevice.yields null, @device
       @sut @fromDevice, @device, done, @dependencies
 
@@ -43,7 +43,7 @@ describe 'claimDevice', ->
       @fromDevice = {uuid: '89e9cd5f-dfff-4771-b821-d35614b7a506'}
       @device     = {uuid: '07a4ed85-acc5-4495-b3d7-2d93439c04fa', name: 'Cookie Crisp'}
 
-      @getDevice.yields null, {ipAddress: '192.168.1.1'}
+      @getDeviceWithToken.yields null, {ipAddress: '192.168.1.1'}
       @updateDevice.yields null, @device
       @sut @fromDevice, @device, done, @dependencies
 
@@ -55,7 +55,7 @@ describe 'claimDevice', ->
       @fromDevice = {uuid: 'e33c1844-6888-4698-852a-7be584327a1d'}
       @device     = {uuid: '9b97159e-63c2-4a71-9327-8fadad97f1e9', name: 'Fruit Loops', owner: 'wrong'}
 
-      @getDevice.yields null, {ipAddress: '192.168.1.1'}
+      @getDeviceWithToken.yields null, {ipAddress: '192.168.1.1'}
       @updateDevice.yields null, @device
       @sut @fromDevice, @device, done, @dependencies
 
@@ -70,7 +70,7 @@ describe 'claimDevice', ->
       storeError = (@error) => done()
 
       @canConfigure.returns false
-      @getDevice.yields null, {ipAddress: '192.168.1.1'}
+      @getDeviceWithToken.yields null, {ipAddress: '192.168.1.1'}
       @sut @fromDevice, @device, storeError, @dependencies
 
     it 'should call canConfigure with fromDevice, device with the ipAddress mixed in', ->

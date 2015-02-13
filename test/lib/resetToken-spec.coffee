@@ -1,14 +1,15 @@
 resetToken = require '../../lib/resetToken'
 
 describe 'resetToken', ->
-  beforeEach ->    
+  beforeEach ->
     @securityImpl = {}
     @getDevice = sinon.stub()
     @updateDevice = sinon.stub()
+    @emitToClient = sinon.stub()
 
     #currying, yo
     @sut = (fromDevice, uuid, callback) =>
-      resetToken fromDevice, uuid, callback, @securityImpl, @getDevice, @updateDevice
+      resetToken fromDevice, uuid, @emitToClient, callback, @securityImpl, @getDevice, @updateDevice
 
   it 'should exist', ->
     expect(@sut).to.exist
@@ -44,8 +45,8 @@ describe 'resetToken', ->
         @device = uuid: 'uuid', name: 'blah'
         @getDevice.yields null, @device
 
-      it 'should call securityImpl.canConfigure', -> 
-        @sut @fromDevice, 1     
+      it 'should call securityImpl.canConfigure', ->
+        @sut @fromDevice, 1
         expect(@securityImpl.canConfigure).to.have.been.called
 
       it 'should have been called with the device from getDevice and fromDevice', ->
@@ -64,7 +65,7 @@ describe 'resetToken', ->
       describe 'when securityImpl.canConfigure returns true', ->
         beforeEach ->
           @securityImpl.canConfigure.returns true
-        
+
         it 'should not call the callback with "unauthorized"', ->
           callback = sinon.spy()
           @sut @fromDevice, 3, callback
@@ -92,7 +93,6 @@ describe 'resetToken', ->
           token = args[1].token
           @sut @fromDevice, 3
           args = @updateDevice.args[1]
-          
           expect(token).to.not.deep.equal(args[1].token)
 
         describe 'when updateDevice returns with an error', ->
@@ -113,6 +113,11 @@ describe 'resetToken', ->
             @sut @fromDevice, 3, callback
             expect(callback).to.be.calledWith null, @updateDevice.args[0][1].token
 
+          it 'should call emitToClient', ->
+            @sut @fromDevice, 3
+            expect(@emitToClient).to.have.been.calledWith('notReady', @fromDevice)
+
+
   describe 'when it is called with a different fromDevice and uuid', ->
     beforeEach ->
       @fromDevice = a: 'different', one : 'true'
@@ -124,6 +129,6 @@ describe 'resetToken', ->
       @sut @fromDevice, 2
       expect(@getDevice).to.have.been.calledWith 2
 
-    it 'should call securityImpl.canConfigure with the different fromDevice & uuid', ->      
+    it 'should call securityImpl.canConfigure with the different fromDevice & uuid', ->
       @sut @fromDevice, '2'
       expect(@securityImpl.canConfigure).to.have.been.calledWith @fromDevice, @device

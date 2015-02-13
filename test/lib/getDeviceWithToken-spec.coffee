@@ -1,9 +1,9 @@
 _            = require 'lodash'
 TestDatabase = require '../test-database'
 
-describe 'getDevice', ->
+describe 'getDeviceWithToken', ->
   beforeEach (done) ->
-    @sut = require '../../lib/getDevice'
+    @sut = require '../../lib/getDeviceWithToken'
     TestDatabase.open (error, database) =>
       @database = database
       done error
@@ -35,9 +35,9 @@ describe 'getDevice', ->
       it 'should have a device', ->
         expect(@device).to.exist
 
+      it 'should have a token', ->
+        expect(@device.token).to.equal 'some-token'
+
       it 'should not have an error', ->
         expect(@error).to.not.exist
-
-      it 'should not have a token', ->
-        expect(@device.token).to.not.exist
 

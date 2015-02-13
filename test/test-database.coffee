@@ -1,7 +1,12 @@
+USE_MONGO = process.env.USE_MONGO == 'true'
+
+console.log "=============================================="
+console.log "using #{if USE_MONGO then 'mongo' else 'nedb'}"
+console.log "=============================================="
 
 class TestDatabase
   @open: (callback=->) =>
-    if process.env.USE_MONGO == 'true'
+    if USE_MONGO
       mongojs = require 'mongojs'
       db = mongojs 'meshblu-test', ['devices']
       db.devices.remove (error) =>

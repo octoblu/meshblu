@@ -211,7 +211,7 @@ describe 'Device', ->
         beforeEach (done) ->
           @sut.storeSessionId 'mystery-token', done
 
-        it 'should add the session id to the attributes', ->
+        it 'should hash the session id and add it to the attributes', ->
           expect(@sut.attributes.sessionIds).to.contain {id: 'mystery-token'} 
 
         it 'should store the session id in the database', (done) ->
@@ -229,6 +229,7 @@ describe 'Device', ->
 
         describe 'when called with a different session id', ->
           beforeEach (done) ->
+            @sut = new Device uuid: @uuid, @dependencies
             @sut.storeSessionId 'smart-token-number-two', done
 
           it 'should equal smart-token-number-two', ->

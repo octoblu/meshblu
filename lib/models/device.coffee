@@ -26,8 +26,7 @@ class Device
 
   storeSessionId: (sessionId, callback=_.noop)=>
     @fetch (error, attributes) =>
-      @attributes = attributes
-      @attributes.sessionIds ?= []
+      @attributes.sessionIds = attributes.sessionIds ? []
       @attributes.sessionIds.push id: sessionId unless _.any @attributes.sessionIds, id: sessionId
       @save callback
 

@@ -199,40 +199,67 @@ describe 'Device', ->
         expect(@sut.attributes.online).to.not.exist
 
   describe '->storeSessionId', ->
-    beforeEach (done) ->
-      @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
-      @devices.insert uuid: @uuid, done
-
-    beforeEach ->
-      @sut = new Device uuid: @uuid, @dependencies
-
-    describe 'when called with session id mystery-token', ->
+    describe 'when a device exists', ->
       beforeEach (done) ->
-        @sut.storeSessionId 'mystery-token', done
+        @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
+        @devices.insert uuid: @uuid, done
 
-      it 'should add the session id to the attributes', ->
-        expect(@sut.attributes.sessionIds).to.deep.equal {'mystery-token': null} 
-
-      it 'should store the session id in the database', (done) ->
-        @devices.findOne uuid: @uuid, (error, device) =>
-          return done error if error?
-          expect(device.sessionIds).to.deep.equal 'mystery-token': null
-          done()
-
-    describe 'when called with session id smart-token', ->
       beforeEach ->
-        @sut.storeSessionId('smart-token')
+        @sut = new Device uuid: @uuid, @dependencies
 
-      it 'should store the session id', ->
-        expect(@sut.attributes.sessionIds).to.deep.equal {'smart-token': null} 
+      describe 'when called with session id mystery-token', ->
+        beforeEach (done) ->
+          @sut.storeSessionId 'mystery-token', done
 
-      describe 'when called with a different session id', ->
-        beforeEach ->
-          @sut.storeSessionId('smart-token-number-two')
+        it 'should add the session id to the attributes', ->
+          expect(@sut.attributes.sessionIds).to.contain {id: 'mystery-token'} 
 
-        it 'should equal smart-token-number-two', ->
-          expect(@sut.attributes.sessionIds).to.deep.equal {'smart-token': null, 'smart-token-number-two': null} 
+        it 'should store the session id in the database', (done) ->
+          @devices.findOne uuid: @uuid, (error, device) =>
+            return done error if error?
+            expect(device.sessionIds).to.contain.deep {id: 'mystery-token'}
+            done()
 
+      describe 'when called with session id smart-token', ->
+        beforeEach (done) ->
+          @sut.storeSessionId 'smart-token', done
+
+        it 'should store the session id', ->
+          expect(@sut.attributes.sessionIds).to.contain {id: 'smart-token'} 
+
+        describe 'when called with a different session id', ->
+          beforeEach (done) ->
+            @sut.storeSessionId 'smart-token-number-two', done
+
+          it 'should equal smart-token-number-two', ->
+            expect(@sut.attributes.sessionIds).to.contain.deep.members [{id: 'smart-token'}, {id: 'smart-token-number-two'}] 
+
+        describe 'when called with the same session id', ->
+          beforeEach (done) ->
+            @sut.storeSessionId 'smart-token', done
+
+          it 'should equal smart-token', ->
+            expect(@sut.attributes.sessionIds).to.deep.equal [{id: 'smart-token'}] 
+
+
+    describe 'when a device already has a session token', ->
+      beforeEach (done) ->
+        @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
+        @devices.insert uuid: @uuid, sessionIds: [{id: 'foo'}], done
+
+      beforeEach ->
+        @sut = new Device uuid: @uuid, @dependencies
+
+      describe 'when called with session id mystery-token', ->
+        beforeEach (done) ->
+          @sut.storeSessionId 'mystery-tolkein', done
+
+        it 'should add the session id to the attributes in the database', (done) ->
+          @devices.findOne uuid: @uuid, (error, device) =>
+            return done error if error?
+            expect(device.sessionIds).to.contain.deep.members [{id: 'mystery-tolkein'}, {id: 'foo'}]
+            done()
+        
   describe '->validate', ->
     describe 'when created with a different uuid', ->
       beforeEach ->

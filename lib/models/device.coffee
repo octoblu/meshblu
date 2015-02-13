@@ -25,9 +25,11 @@ class Device
     return @generateToken()
 
   storeSessionId: (sessionId, callback=_.noop)=>
-    @attributes.sessionIds ?= {}
-    @attributes.sessionIds[sessionId] = null
-    @save callback
+    @fetch (error, attributes) =>
+      @attributes = attributes
+      @attributes.sessionIds ?= []
+      @attributes.sessionIds.push id: sessionId unless _.any @attributes.sessionIds, id: sessionId
+      @save callback
 
   save: (callback=->) =>
     return callback @error unless @validate()

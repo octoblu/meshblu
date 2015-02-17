@@ -38,14 +38,14 @@ describe 'Device', ->
       it 'should respond with no error', ->
         expect(@error).not.to.exist
 
-  describe '->generateSessionId', ->
+  describe '->generateToken', ->
     describe 'when generateToken is injected', ->
       beforeEach ->
         @dependencies.generateToken = sinon.spy()
         @sut = new Device {}, @dependencies
 
       it 'should call generateToken', ->
-        @sut.generateSessionId()
+        @sut.generateToken()
         expect(@dependencies.generateToken).to.have.been.called
 
   describe '->sanitize', ->
@@ -198,7 +198,7 @@ describe 'Device', ->
       it 'should leave online alone', ->
         expect(@sut.attributes.online).to.not.exist
 
-  describe '->storeSessionId', ->
+  describe '->storeToken', ->
     describe 'when a device exists', ->
       beforeEach (done) ->
         @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
@@ -207,73 +207,77 @@ describe 'Device', ->
       beforeEach ->
         @sut = new Device uuid: @uuid, @dependencies
 
-      describe 'when called with session id mystery-token', ->
+      describe 'when called with token mystery-token', ->
         beforeEach (done) ->
-          @sut.storeSessionId 'mystery-token', done
+          @sut.storeToken 'mystery-token', done
 
-        it 'should hash the session id and add it to the attributes', ->
-          sessionId = _.first @sut.attributes.sessionIds
-          expect(bcrypt.compareSync 'mystery-token', sessionId.hash).to.be.true
+        it 'should hash the token and add it to the attributes', ->
+          token = _.first @sut.attributes.tokens
+          expect(bcrypt.compareSync 'mystery-token', token.hash).to.be.true
 
-        it 'should store the session id in the database', (done) ->
+        it 'should add a timestamp to the token', ->
+          token = _.first @sut.attributes.tokens
+          expect(token.createdAt.getTime()).to.be.closeTo Date.now(), 1000
+
+        it 'should store the token in the database', (done) ->
           @devices.findOne uuid: @uuid, (error, device) =>
             return done error if error?
-            sessionId = _.first @sut.attributes.sessionIds
-            expect(bcrypt.compareSync 'mystery-token', sessionId.hash).to.be.true
+            token = _.first @sut.attributes.tokens
+            expect(bcrypt.compareSync 'mystery-token', token.hash).to.be.true
             done()
 
-      describe 'when called with session id smart-token', ->
+      describe 'when called with token smart-token', ->
         beforeEach (done) ->
-          @sut.storeSessionId 'smart-token', done
+          @sut.storeToken 'smart-token', done
 
-        it 'should store the session id', ->
-          sessionId = _.first @sut.attributes.sessionIds
-          expect(bcrypt.compareSync 'smart-token', sessionId.hash).to.be.true
+        it 'should store the token', ->
+          token = _.first @sut.attributes.tokens
+          expect(bcrypt.compareSync 'smart-token', token.hash).to.be.true
 
-        describe 'when called with a different session id', ->
+        describe 'when called with a different token', ->
           beforeEach (done) ->
             @sut = new Device uuid: @uuid, @dependencies
-            @sut.storeSessionId 'smart-token-number-two', done
+            @sut.storeToken 'smart-token-number-two', done
 
           it 'should contain smart-token-number-two', ->
-            match = _.any @sut.attributes.sessionIds, (sessionId) => bcrypt.compareSync 'smart-token-number-two', sessionId.hash
+            match = _.any @sut.attributes.tokens, (token) => bcrypt.compareSync 'smart-token-number-two', token.hash
             expect(match).to.be.true
 
           it 'should contain smart-token', ->
-            match = _.any @sut.attributes.sessionIds, (sessionId) => bcrypt.compareSync 'smart-token', sessionId.hash
+            match = _.any @sut.attributes.tokens, (token) => bcrypt.compareSync 'smart-token', token.hash
             expect(match).to.be.true
 
-        describe 'when called with the same session id', ->
+        describe 'when called with the same token', ->
           beforeEach (done) ->
-            @sut.storeSessionId 'smart-token', done
+            @sut.storeToken 'smart-token', done
 
           it 'should not add anything', ->
-            expect(@sut.attributes.sessionIds).to.have.a.lengthOf 1
+            expect(@sut.attributes.tokens).to.have.a.lengthOf 1
 
 
     describe 'when a device already has a session token', ->
       beforeEach (done) ->
         @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
-        @devices.insert uuid: @uuid, sessionIds: [{hash: bcrypt.hashSync('foo', 8)}], done
+        @devices.insert uuid: @uuid, tokens: [{hash: bcrypt.hashSync('foo', 8)}], done
 
       beforeEach ->
         @sut = new Device uuid: @uuid, @dependencies
 
-      describe 'when called with session id mystery-token', ->
+      describe 'when called with token mystery-token', ->
         beforeEach (done) ->
-          @sut.storeSessionId 'mystery-tolkein', done
+          @sut.storeToken 'mystery-tolkein', done
 
         it 'should have foo in the database', (done) ->
           @devices.findOne uuid: @uuid, (error, device) =>
             return done error if error?
-            match = _.any device.sessionIds, (sessionId) => bcrypt.compareSync 'foo', sessionId.hash
+            match = _.any device.tokens, (token) => bcrypt.compareSync 'foo', token.hash
             expect(match).to.be.true
             done()
 
         it 'should have mystery-tolkein in the database', (done) ->
           @devices.findOne uuid: @uuid, (error, device) =>
             return done error if error?
-            match = _.any device.sessionIds, (sessionId) => bcrypt.compareSync 'mystery-tolkein', sessionId.hash
+            match = _.any device.tokens, (token) => bcrypt.compareSync 'mystery-tolkein', token.hash
             expect(match).to.be.true
             done()
 

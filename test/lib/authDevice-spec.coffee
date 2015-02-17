@@ -17,8 +17,8 @@ describe 'authDevice', ->
 
   describe 'when passed an invalid token and uuid (cause theres nothing in the database)', ->
     beforeEach (done) ->
-      storeDevice = (@error, @device) => done()
-      @sut 'invalid-uuid', 'invalid-token', storeDevice, @database
+      storeResults = (@error, @device) => done()
+      @sut 'invalid-uuid', 'invalid-token', storeResults, @database
 
     it 'should call the callback with no device', ->
       expect(@device).to.not.exist
@@ -33,8 +33,8 @@ describe 'authDevice', ->
 
     describe 'when passed a valid token and uuid', ->
       beforeEach (done) ->
-        storeDevice = (error, @device) => done error
-        @sut 'valid-uuid', 'valid-token', storeDevice, @database
+        storeResults = (error, @device) => done error
+        @sut 'valid-uuid', 'valid-token', storeResults, @database
 
       it 'should call the callback with a device', ->
         expect(@device).to.exist
@@ -44,11 +44,44 @@ describe 'authDevice', ->
 
     describe 'when passed a valid uuid and invalid token', ->
       beforeEach (done) ->
-        storeDevice = (@error, @device) => done()
-        @sut 'valid-uuid', 'invalid-token', storeDevice, @database
+        storeResults = (@error, @device) => done()
+        @sut 'valid-uuid', 'invalid-token', storeResults, @database
 
       it 'should call the callback with no device', ->
         expect(@device).not.to.exist
 
       it 'should call the callback with no error', ->
         expect(@error).not.to.exist
+
+  describe 'when the device in the database has tokens', ->
+    beforeEach (done) ->
+      @devices = @database.devices
+      @devices.insert uuid: 'scrooge', tokens: [{hash: bcrypt.hashSync('money', 8)}], done
+
+    describe 'when passed a valid uuid and token', ->
+      beforeEach (done) ->
+        storeResults = (@error, @device) => done()
+        @sut 'scrooge', 'money', storeResults, @database
+
+      it 'should call the callback with a device', ->
+        expect(@device).to.exist 
+
+      it 'should call the callback with no error', ->
+        expect(@error).not.to.exist 
+
+    describe 'when passed a valid uuid and an invalid token', ->
+      beforeEach (done) ->
+        storeResults = (@error, @device) => done()
+        @sut 'scrooge', 'pants', storeResults, @database
+
+      it 'should call the callback with no device', ->
+        expect(@device).not.to.exist
+
+      it 'should call the callback with no error', ->
+        expect(@error).not.to.exist 
+        
+      
+      
+        
+      
+      

@@ -1,5 +1,8 @@
 _      = require 'lodash'
+async  = require 'async'
 bcrypt = require 'bcrypt'
+debug  = require('debug')('meshblu:authDevice')
+
 
 module.exports = (uuid, token, callback=(->), database=null) ->
   database ?= require './database'
@@ -8,9 +11,18 @@ module.exports = (uuid, token, callback=(->), database=null) ->
   devices.findOne uuid: uuid, (error, device) =>
     return callback error, null unless device?
 
-    bcrypt.compare token, device.token, (error, result) =>
-      return callback error, null if error?
-      return callback null, null unless result
+    hashedTokens = _.pluck(device.tokens, 'hash') ? []
+    hashedTokens.push device.token if device.token?
 
-      delete device.token
-      return callback null, device
+    delete device.token
+
+    compareToken = (hashedToken, next=->) =>
+      debug token, hashedToken
+      bcrypt.compare token, hashedToken, (@error, result) =>
+        return callback @error if @error?
+        return callback null, device if result
+        next()
+
+    async.eachSeries hashedTokens, compareToken, =>
+      return callback null, null
+

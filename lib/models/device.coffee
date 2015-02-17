@@ -21,18 +21,18 @@ class Device
         error = new Error('Device not found')
       callback error, @fetch.cache
 
-  generateSessionId: =>
-    return @generateToken()
-
-  storeSessionId: (sessionId, callback=_.noop)=>
+  storeToken: (token, callback=_.noop)=>
     @fetch (error, attributes) =>
       return callback error if error?
 
-      bcrypt.hash sessionId, 8, (error, hashedSessionId) =>
+      bcrypt.hash token, 8, (error, hashedToken) =>
         return callback error if error?
 
-        @attributes.sessionIds = attributes.sessionIds ? []
-        @attributes.sessionIds.push hash: hashedSessionId unless _.any @attributes.sessionIds, hash: hashedSessionId
+        @attributes.tokens = attributes.tokens ? []
+
+        unless _.any(@attributes.tokens, hash: hashedToken)
+          @attributes.tokens.push hash: hashedToken, createdAt: new Date()
+
         @save callback
 
   save: (callback=->) =>

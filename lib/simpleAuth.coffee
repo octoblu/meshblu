@@ -9,9 +9,9 @@ checkLists = (fromDevice, toDevice, whitelist, blacklist, openByDefault) ->
 
   return true if toDevice.owner == fromDevice.uuid
 
-  return  _.contains(whitelist, fromDevice.uuid) if whitelist and whitelist.length
+  return  _.contains(whitelist, fromDevice.uuid) if whitelist?
 
-  return !_.contains(blacklist, fromDevice.uuid) if blacklist and blacklist.length
+  return !_.contains(blacklist, fromDevice.uuid) if blacklist?
 
   openByDefault
 

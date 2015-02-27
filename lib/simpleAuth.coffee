@@ -2,30 +2,33 @@ util = require "./util"
 bcrypt = require "bcrypt"
 _ = require "lodash"
 
-checkLists = (fromDevice, toDevice, whitelist, blacklist, openByDefault) ->
-  return false if !fromDevice or !toDevice
+class SimpleAuth
 
-  return true if toDevice.uuid == fromDevice.uuid
+  checkLists: (fromDevice, toDevice, whitelist, blacklist, openByDefault) =>
+    return false if !fromDevice or !toDevice
 
-  return true if toDevice.owner == fromDevice.uuid
+    return true if toDevice.uuid == fromDevice.uuid
 
-  return  _.contains(whitelist, fromDevice.uuid) if whitelist and whitelist.length
+    return true if toDevice.owner == fromDevice.uuid
 
-  return !_.contains(blacklist, fromDevice.uuid) if blacklist and blacklist.length
+    return  _.contains(whitelist, fromDevice.uuid) if whitelist and whitelist.length
 
-  openByDefault
+    return !_.contains(blacklist, fromDevice.uuid) if blacklist and blacklist.length
 
-module.exports =
-  canDiscover: (fromDevice, toDevice) ->
-    checkLists fromDevice, toDevice, toDevice?.discoverWhitelist, toDevice?.discoverBlacklist, true
+    openByDefault
 
-  canReceive: (fromDevice, toDevice) ->
-    checkLists fromDevice, toDevice, toDevice?.receiveWhitelist, toDevice?.receiveBlacklist, true
+  canDiscover: (fromDevice, toDevice) =>
+    @checkLists fromDevice, toDevice, toDevice?.discoverWhitelist, toDevice?.discoverBlacklist, true
 
-  canSend: (fromDevice, toDevice) ->
-    checkLists fromDevice, toDevice, toDevice?.sendWhitelist, toDevice?.sendBlacklist, true
+  canReceive: (fromDevice, toDevice) =>
+    @checkLists fromDevice, toDevice, toDevice?.receiveWhitelist, toDevice?.receiveBlacklist, true
 
-  canConfigure: (fromDevice, toDevice, message) ->
+  canSend: (fromDevice, toDevice) =>
+    @checkLists fromDevice, toDevice, toDevice?.sendWhitelist, toDevice?.sendBlacklist, true
+
+  canConfigure: (fromDevice, toDevice, message) =>
+    return true if @checkLists fromDevice, toDevice, toDevice?.configureWhitelist, toDevice?.configureBlacklist, false
+
     return false if !fromDevice || !toDevice
 
     if toDevice.token && message && message.token
@@ -36,3 +39,5 @@ module.exports =
     return toDevice.owner == fromDevice.uuid if toDevice.owner
 
     return util.sameLAN fromDevice.ipAddress, toDevice.ipAddress
+
+module.exports = new SimpleAuth

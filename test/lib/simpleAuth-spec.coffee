@@ -116,7 +116,39 @@ describe 'simpleAuth', ->
       it 'should return true', ->
         expect(@sut.canConfigure @fromDevice, @toDevice).to.be.true
 
+    describe 'when a device is in the configureWhitelist', ->
+      beforeEach ->
+        @fromDevice = uuid: 1
+        @sut.checkLists = sinon.stub().returns true
+        @toDevice = uuid: 8, configureWhitelist: [7], configureBlacklist: [6]
+        @result = @sut.canConfigure(@fromDevice, @toDevice)
 
+      it 'should call checkLists', ->
+        expect(@sut.checkLists).to.have.been.called
+
+      it 'should call checkLists', ->
+        expect(@sut.checkLists).to.have.been.calledWith @fromDevice, @toDevice, @toDevice.configureWhitelist, @toDevice.configureBlacklist, false
+
+      it 'should have a result of true', ->
+        expect(@result).to.be.true
+
+    describe 'when a different device is in the configureWhitelist', ->
+      beforeEach ->
+        @sut.checkLists = sinon.stub().returns false
+        @result = @sut.canConfigure()
+
+      it 'should have a result of false', ->
+        expect(@result).to.be.false
+
+    describe 'when a different device is in the configureWhitelist', ->
+      beforeEach ->
+        @fromDevice = uuid: 7
+        @toDevice = uuid: 8, configureWhitelist: [5], configureBlacklist: [6]
+        @sut.checkLists = sinon.stub().returns false
+        @result = @sut.canConfigure(@fromDevice, @toDevice)
+
+      it 'should call checkLists', ->
+        expect(@sut.checkLists).to.have.been.calledWith @fromDevice, @toDevice, @toDevice.configureWhitelist, @toDevice.configureBlacklist, false
 
     describe 'when a device is unclaimed, and exists on a different lan than the configuring device', ->
       beforeEach ->

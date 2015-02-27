@@ -9,11 +9,9 @@ class SimpleAuth
 
     return true if toDevice.uuid == fromDevice.uuid
 
-    return true if toDevice.owner == fromDevice.uuid
+    return  _.contains(whitelist, fromDevice.uuid) if whitelist?
 
-    return  _.contains(whitelist, fromDevice.uuid) if whitelist and whitelist.length
-
-    return !_.contains(blacklist, fromDevice.uuid) if blacklist and blacklist.length
+    return !_.contains(blacklist, fromDevice.uuid) if blacklist?
 
     openByDefault
 

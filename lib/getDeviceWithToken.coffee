@@ -8,7 +8,7 @@ findCachedDevice = (uuid, callback) ->
     callback(null, null)
     return
 
-  redis.get 'DEVICE_' + uuid, (error, data) ->
+  redis.get redis.CACHE_KEY + uuid, (error, data) ->
     if error
       callback error
       return

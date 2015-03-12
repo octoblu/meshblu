@@ -3,6 +3,6 @@ redis = require './redis'
 
 cacheDevice = (device) ->
   if device
-    redis.set "DEVICE_" + device.uuid, JSON.stringify(device), _.noop
+    redis.setex redis.CACHE_KEY + device.uuid, redis.CACHE_TIMEOUT, JSON.stringify(device), _.noop
 
 module.exports = cacheDevice

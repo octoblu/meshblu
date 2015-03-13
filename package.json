@@ -10,6 +10,7 @@
     "JSONStream": "~0.9.0",
     "async": "^0.9.0",
     "bcrypt": "^0.8.1",
+    "circular": "^1.0.5",
     "coap": "~0.8.0",
     "coffee-script": "^1.8.0",
     "commander": "^2.3.0",

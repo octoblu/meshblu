@@ -85,3 +85,17 @@ describe 'claimDevice', ->
 
     it 'should call the callback with an error', ->
       expect(@error).to.exist
+
+  describe 'when called', ->
+    beforeEach (done) ->
+      fromDevice = {uuid: '1267b0fe-407a-4872-b09d-dd4853d59d76'}
+      device     = {uuid: '9b97159e-63c2-4a71-9327-8fadad97f1e9'}
+
+      storeError = (@error) => done()
+
+      @notFoundError = new Error 'Device not found'
+      @getDeviceWithToken.yields @notFoundError, null
+      @sut fromDevice, device, storeError, @dependencies
+
+    it 'should call yield the device not found error', ->
+      expect(@error).to.equal @notFoundError

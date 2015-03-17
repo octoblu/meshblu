@@ -9,6 +9,7 @@ module.exports = (fromDevice, data, callback=_.noop, dependencies={}) ->
   canConfigure = dependencies.canConfigure ? require('./getSecurityImpl').canConfigure
 
   getDeviceWithToken data.uuid, (error, device) => # have to getDevice to verify the ip address
+    return callback error if error?
     data = _.defaults {ipAddress: device.ipAddress}, data
     return callback new Error('not authorized to claim this device') unless canConfigure fromDevice, data
 

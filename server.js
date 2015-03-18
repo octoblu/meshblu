@@ -12,6 +12,19 @@ if ((process.env.USE_NEWRELIC  || 'false').toLowerCase() === 'true') {
   require('newrelic');
 }
 
+if ((process.env.USE_APP_DYNAMICS || 'false').toLowerCase() === 'true') {
+  var os = require('os');
+  require("appdynamics").profile({
+    controllerHostName: 'octoblu.saas.appdynamics.com',
+    controllerPort: 80, // If SSL, be sure to enable the next line
+    accountName: 'octoblu', // Required for a controller running in multi-tenant mode
+    accountAccessKey: process.env.APP_DYNAMICS_KEY, // Required for a controller running in multi-tenant mode
+    applicationName: 'Meshblu',
+    tierName: 'Meshblu',
+    nodeName: os.hostname(), // Node names must be unique. A unique name has been generated for you.
+  });
+}
+
 var program = require('commander');
 var pjson = require('./package.json');
 var config = require('./config');

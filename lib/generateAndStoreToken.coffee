@@ -1,12 +1,22 @@
 _ = require 'lodash'
 
-generateAndStoreToken = (uuid, callback=_.noop, dependencies={}) =>
+generateAndStoreToken = (ownerDevice, targetUuid, callback=_.noop, dependencies={}) =>
   Device = dependencies.Device ? require('./models/device')
-  device = new Device uuid: uuid
+  getDevice = dependencies.getDevice ? require('./getDevice')
+  securityImpl = dependencies.securityImpl ? require('./getSecurityImpl')
 
-  token = device.generateToken()
-  device.storeToken token, (error) =>
+  getDevice targetUuid, (error, targetDevice) =>
     return callback error if error?
-    callback null, token: token
+
+    unless securityImpl.canConfigure ownerDevice, targetDevice
+      return callback new Error 'unauthorized'
+
+    console.log 'canConfigure'
+    device = new Device uuid: targetUuid
+
+    token = device.generateToken()
+    device.storeToken token, (error) =>
+      return callback error if error?
+      callback null, token: token
 
 module.exports = generateAndStoreToken

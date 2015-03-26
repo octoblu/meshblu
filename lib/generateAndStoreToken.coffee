@@ -11,7 +11,6 @@ generateAndStoreToken = (ownerDevice, targetUuid, callback=_.noop, dependencies=
     unless securityImpl.canConfigure ownerDevice, targetDevice
       return callback new Error 'unauthorized'
 
-    console.log 'canConfigure'
     device = new Device uuid: targetUuid
 
     token = device.generateToken()

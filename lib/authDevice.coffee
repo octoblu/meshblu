@@ -9,7 +9,7 @@ module.exports = (uuid, token, callback=(->), database=null) ->
   devices = database.devices
 
   devices.findOne uuid: uuid, (error, device) =>
-    return callback error, null unless device?
+    return callback new Error('Unable to find device'), null unless device?
 
     hashedTokens = _.pluck(device.tokens, 'hash') ? []
     hashedTokens.push device.token if device.token?

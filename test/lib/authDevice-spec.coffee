@@ -23,8 +23,8 @@ describe 'authDevice', ->
     it 'should call the callback with no device', ->
       expect(@device).to.not.exist
 
-    it 'should call the callback with no error', ->
-      expect(@error).to.not.exist
+    it 'should call the callback with an error', ->
+      expect(@error).to.exist
 
   describe 'when there is a device', ->
     beforeEach (done) ->
@@ -64,10 +64,10 @@ describe 'authDevice', ->
         @sut 'scrooge', 'money', storeResults, @database
 
       it 'should call the callback with a device', ->
-        expect(@device).to.exist 
+        expect(@device).to.exist
 
       it 'should call the callback with no error', ->
-        expect(@error).not.to.exist 
+        expect(@error).not.to.exist
 
     describe 'when passed a valid uuid and an invalid token', ->
       beforeEach (done) ->
@@ -78,10 +78,10 @@ describe 'authDevice', ->
         expect(@device).not.to.exist
 
       it 'should call the callback with no error', ->
-        expect(@error).not.to.exist 
-        
-      
-      
-        
-      
-      
+        expect(@error).not.to.exist
+
+
+
+
+
+

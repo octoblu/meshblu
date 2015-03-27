@@ -35,6 +35,15 @@ class Device
 
         @save callback
 
+  revokeToken: (token, callback=_.noop)=>
+    @fetch (error, attributes) =>
+      return callback error if error?
+
+      @attributes.tokens = _.reject attributes.tokens, (data) =>
+        bcrypt.compareSync token, data.hash
+
+      @save callback
+
   save: (callback=->) =>
     return callback @error unless @validate()
     async.series [

@@ -37,20 +37,11 @@ describe 'claimDevice', ->
 
     it 'should call updateDevice with that uuid and name', ->
       expect(@updateDevice).to.have.been.calledWith @device.uuid, {
-        owner: @fromDevice.uuid,
-        uuid: @device.uuid,
+        owner: @fromDevice.uuid
+        uuid: @device.uuid
         discoverWhitelist: [
           @fromDevice.uuid
-        ],
-        configureWhitelist: [
-          @fromDevice.uuid
-        ],
-        sendWhitelist: [
-          @fromDevice.uuid
-        ],
-        receiveWhitelist: [
-          @fromDevice.uuid
-        ],
+        ]
         ipAddress: '192.168.1.1'
       }
 
@@ -71,15 +62,6 @@ describe 'claimDevice', ->
         discoverWhitelist: [
           @fromDevice.uuid
         ]
-        configureWhitelist: [
-          @fromDevice.uuid
-        ]
-        sendWhitelist: [
-          @fromDevice.uuid
-        ]
-        receiveWhitelist: [
-          @fromDevice.uuid
-        ]
         ipAddress: '192.168.1.1'
       }
 
@@ -98,15 +80,6 @@ describe 'claimDevice', ->
         name: 'Fruit Loops'
         uuid: @device.uuid
         discoverWhitelist: [
-          @fromDevice.uuid
-        ]
-        configureWhitelist: [
-          @fromDevice.uuid
-        ]
-        sendWhitelist: [
-          @fromDevice.uuid
-        ]
-        receiveWhitelist: [
           @fromDevice.uuid
         ]
         ipAddress: '192.168.1.1'

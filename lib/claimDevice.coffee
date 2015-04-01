@@ -15,8 +15,5 @@ module.exports = (fromDevice, data, callback=_.noop, dependencies={}) ->
 
     updatedData = _.defaults {owner: fromDevice.uuid}, data, {
       discoverWhitelist: [fromDevice.uuid]
-      configureWhitelist: [fromDevice.uuid]
-      sendWhitelist: [fromDevice.uuid]
-      receiveWhitelist: [fromDevice.uuid]
     }
     updateDevice data.uuid, updatedData, callback

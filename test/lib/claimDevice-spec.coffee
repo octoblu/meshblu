@@ -36,7 +36,23 @@ describe 'claimDevice', ->
       @sut @fromDevice, @device, done, @dependencies
 
     it 'should call updateDevice with that uuid and name', ->
-      expect(@updateDevice).to.have.been.calledWith @device.uuid, {owner: @fromDevice.uuid, uuid: @device.uuid, discoverWhitelist: [@fromDevice.uuid], ipAddress: '192.168.1.1'}
+      expect(@updateDevice).to.have.been.calledWith @device.uuid, {
+        owner: @fromDevice.uuid,
+        uuid: @device.uuid,
+        discoverWhitelist: [
+          @fromDevice.uuid
+        ],
+        configureWhitelist: [
+          @fromDevice.uuid
+        ],
+        sendWhitelist: [
+          @fromDevice.uuid
+        ],
+        receiveWhitelist: [
+          @fromDevice.uuid
+        ],
+        ipAddress: '192.168.1.1'
+      }
 
   describe 'when called with params other than uuid', ->
     beforeEach (done) ->
@@ -48,7 +64,24 @@ describe 'claimDevice', ->
       @sut @fromDevice, @device, done, @dependencies
 
     it 'should call updateDevice with that uuid and name', ->
-      expect(@updateDevice).to.have.been.calledWith @device.uuid, {owner: @fromDevice.uuid, name: 'Cookie Crisp', uuid: @device.uuid, discoverWhitelist: [@fromDevice.uuid], ipAddress: '192.168.1.1'}
+      expect(@updateDevice).to.have.been.calledWith @device.uuid, {
+        owner: @fromDevice.uuid
+        name: 'Cookie Crisp'
+        uuid: @device.uuid
+        discoverWhitelist: [
+          @fromDevice.uuid
+        ]
+        configureWhitelist: [
+          @fromDevice.uuid
+        ]
+        sendWhitelist: [
+          @fromDevice.uuid
+        ]
+        receiveWhitelist: [
+          @fromDevice.uuid
+        ]
+        ipAddress: '192.168.1.1'
+      }
 
   describe 'when called with an owner param', ->
     beforeEach (done) ->
@@ -60,7 +93,24 @@ describe 'claimDevice', ->
       @sut @fromDevice, @device, done, @dependencies
 
     it 'should call updateDevice with that uuid and name', ->
-      expect(@updateDevice).to.have.been.calledWith @device.uuid, {owner: @fromDevice.uuid, name: 'Fruit Loops', uuid: @device.uuid, discoverWhitelist: [@fromDevice.uuid], ipAddress: '192.168.1.1'}
+      expect(@updateDevice).to.have.been.calledWith @device.uuid, {
+        owner: @fromDevice.uuid
+        name: 'Fruit Loops'
+        uuid: @device.uuid
+        discoverWhitelist: [
+          @fromDevice.uuid
+        ]
+        configureWhitelist: [
+          @fromDevice.uuid
+        ]
+        sendWhitelist: [
+          @fromDevice.uuid
+        ]
+        receiveWhitelist: [
+          @fromDevice.uuid
+        ]
+        ipAddress: '192.168.1.1'
+      }
 
   describe 'when called by a non-authorized user', ->
     beforeEach (done) ->

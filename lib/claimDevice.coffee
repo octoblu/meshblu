@@ -13,5 +13,10 @@ module.exports = (fromDevice, data, callback=_.noop, dependencies={}) ->
     data = _.defaults {ipAddress: device.ipAddress}, data
     return callback new Error('not authorized to claim this device') unless canConfigure fromDevice, data
 
-    updatedData = _.defaults {owner: fromDevice.uuid}, data, {discoverWhitelist: [fromDevice.uuid]}
+    updatedData = _.defaults {owner: fromDevice.uuid}, data, {
+      discoverWhitelist: [fromDevice.uuid]
+      configureWhitelist: [fromDevice.uuid]
+      sendWhitelist: [fromDevice.uuid]
+      receiveWhitelist: [fromDevice.uuid]
+    }
     updateDevice data.uuid, updatedData, callback

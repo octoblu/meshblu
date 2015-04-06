@@ -69,16 +69,6 @@ describe 'register', ->
         expect(device).to.exist
         done()
 
-  describe 'when called with a specific token', ->
-    beforeEach (done) ->
-      @updateDevice.yields null, {}
-      storeDevice = (error, @device) => done()
-      @sut {token: 'mah-secrets'}, storeDevice, @dependencies
-
-    it 'should call update device with that token', ->
-      @devices.findOne (error, device) =>
-        expect(@updateDevice).to.be.calledWith device.uuid, {token: 'mah-secrets', uuid: device.uuid}
-
   describe 'when called with an owner id', ->
     beforeEach (done) ->
       @updateDevice.yields null, {}

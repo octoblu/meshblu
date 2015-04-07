@@ -47,7 +47,8 @@
     "mocha-blink1-reporter": "^0.2.0",
     "mocha-multi": "^0.6.0",
     "newrelic": "^1.13.0",
-    "nodetime": "^0.8.15"
+    "nodetime": "^0.8.15",
+    "appdynamics": "^4.0.4-local"
   },
   "subdomain": "skynet",
   "domains": [

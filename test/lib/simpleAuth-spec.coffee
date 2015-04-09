@@ -1,6 +1,6 @@
 _            = require 'lodash'
 bcrypt       = require 'bcrypt'
-util = require '../../lib/util'
+util         = require '../../lib/util'
 
 describe 'simpleAuth', ->
   beforeEach ->
@@ -43,6 +43,20 @@ describe 'simpleAuth', ->
         it 'should return false', ->
           expect(@sut.canDiscover @fromDevice, @toDevice).to.be.false
 
+      describe 'when toDevice has a descoverWhitelist containing "*"', ->
+        beforeEach ->
+          @toDevice.discoverWhitelist = ['*']
+
+        it 'should return true', ->
+          expect(@sut.canDiscover @fromDevice, @toDevice).to.be.true
+
+      describe 'when toDevice has a descoverWhitelist is "*"', ->
+        beforeEach ->
+          @toDevice.discoverWhitelist = '*'
+
+        it 'should return true', ->
+          expect(@sut.canDiscover @fromDevice, @toDevice).to.be.true
+
 
     describe 'when fromDevice owns toDevice', ->
       beforeEach ->
@@ -59,6 +73,7 @@ describe 'simpleAuth', ->
 
       it 'should return false', ->
         expect( @sut.canDiscover @fromDevice, @toDevice).to.be.false
+
 
   describe 'canConfigure', ->
     it 'should exist', ->
@@ -162,4 +177,3 @@ describe 'simpleAuth', ->
 
       it 'should call sameLan with the ipAddresses of both devices', ->
         expect(util.sameLAN).to.have.been.calledWith '127.0.0.1', '192.168.0.1'
-

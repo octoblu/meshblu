@@ -3,11 +3,12 @@ bcrypt = require "bcrypt"
 _ = require "lodash"
 
 class SimpleAuth
-
   checkLists: (fromDevice, toDevice, whitelist, blacklist, openByDefault) =>
     return false if !fromDevice or !toDevice
 
     return true if toDevice.uuid == fromDevice.uuid
+
+    return true if _.contains whitelist, '*'
 
     return  _.contains(whitelist, fromDevice.uuid) if whitelist?
 

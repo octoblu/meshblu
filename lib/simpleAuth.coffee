@@ -51,14 +51,11 @@ class SimpleAuth
     return @asyncCallback(null, toDevice.owner == fromDevice.uuid, callback) if toDevice.owner
 
     return @asyncCallback(null, true, callback) if util.sameLAN(fromDevice.ipAddress, toDevice.ipAddress)
-
-    console.log 'toDevice'
     if message?.token
       return authDevice(
         toDevice.uuid
         message.token
         (error, result) =>
-          console.log 'authDevice', error, result
           return @asyncCallback(error, false, callback) if error?
           return @asyncCallback(null, result?, callback)
 

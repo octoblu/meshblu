@@ -56,7 +56,7 @@
   ],
   "scripts": {
     "start": "node ${NODE_FLAGS} server.js --http --mqtt",
-    "test": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec"
+    "test": "REDIS_HOST='' ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec"
   },
   "main": "server.js",
   "devDependencies": {

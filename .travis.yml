@@ -1,50 +1,77 @@
-sudo: false
 language: node_js
-node_js:
-- '0.10'
+sudo: false
 cache:
   bundler: true
   directories:
   - node_modules
+node_js:
+- '0.10'
 env:
-- USE_MONGO=true
-- USE_MONGO=false
-services:
-- mongodb
-notifications:
-  slack:
-    secure: DYeEeHEW/ElN9XkUJzY0fyG+cuLKz7nuvRg5bK7QGoWs/8bcGxiIkPiJsSGQ0NZbN9jBGg8vfTUtKJJZjnYgH1C+pfFMU+QOmFTPYHa320vunoXXFCaRdRboZMfoCx6zF2fMG1dDHmsRHJy4NPb+mRrqCb1ED6lIToKiJybCzb4=
+  global:
+  - AWS_ACCESS_KEY_ID=AKIAIT4X4NDGM2WVL6VA
+  - DOCKER_USERNAME=octoblu
+  - DEPLOY_APPLICATION_NAME=meshblu-docker
+  - DEPLOY_REGION=us-west-2
+  - DEPLOY_BUCKET=octoblu-deploy
+  - DEPLOYMENT_GROUP=master
+  - DEPLOY_KEY=meshblu-docker/meshblu-docker-$TRAVIS_COMMIT.zip
+  - NODE_ENV=production
+  - MONGODB_URI=172.31.33.28,172.31.38.108:27017,172.31.32.97:27017/meshblu
+  - PORT=80
+  - BROADCAST_ACTIVITY=true
+  - USE_REDIS_LOG=false
+  - ELASTIC_SEARCH_HOST=es.octoblu.com
+  - RATE_LIMITS_MESSAGE=20
+  - RATE_LIMITS_DATA=20
+  - RATE_LIMITS_CONNECTION=6
+  - RATE_LIMITS_QUERY=20
+  - RATE_LIMITS_WHOAMI=20
+  - RATE_LIMITS_UNTHROTTLED_IPS=127.0.0.1
+  - REDIS_HOST=meshblu-redis.csy8op.0001.usw2.cache.amazonaws.com
+  - REDIS_PORT=6379
+  - COAP_PORT=5683
+  - COAP_HOST=172.31.34.201
+  - MQTT_DATABASE_URI=172.31.33.28,172.31.38.108:27017,172.31.32.97:27017/meshblu
+  - MQTT_PORT=1883
+  - USE_PROXY_PROTOCOL=TRUE
+  - USE_NEWRELIC=false
+  - USE_LOG=false
+  - LOGGERS=elasticsearch,splunk
+  - ELASTIC_SEARCH_PORT=80
+  - USE_APP_DYNAMICS=false
+  - secure: D7s+tRX1Ro5TS1lJIlKC35/o5HFEGjSIwCwdYvUI5JzrHNnVNGFWnXvy2N5A3+MgVgSYmVeujaA+b76i/BS6+7Bx3PvmsNw4yPihTnrv8WrrmDs5YahfOm4uwL6puTDG/oxkD2FbZBVbptMGoAdPzuV8sPU3KDgH0JlXn/1si4s=
+  - secure: aCIa1F9YnUzXPsO4PwsJwafkBe7fK6sE40u8s3ryON/P16eSWcCRyzeoAo/9lKQvDp84OXprsAhpSEjZnx/PkvsbikXAi3H/IVTEFpP0zrGTx5pquKWlcKU5ddAum1H7FsBnznEeP81He4eD/jKeF4UPKl+ThlGEATvNd8YyWRQ=
+  - secure: Jhu19fqz4N+qnDWvg5IdlLIE2nIhWNvSzpM5G3RREVL0r7K4vUZkKTJrYqpBRDXq5607LcMNAqXt//XY0aQGoe83E6i6/a/Iaf1ZLVeRI5HF6p9kZLGt6YR/Nt/18RtzA1R5tP64ZFnjkIK9oxdQLInEq0U6Pqi3ff5SU2uMAq4=
+  - secure: KuDk8s+d9jT0a9OwaP7O+iLxSPob97q+16hr+N2s2mWEkJ/urNz/lAVBwmRQtXaSaxsfBC49iWPWDDKEjQYKc90eZ9Q3u2i21+qXuYAKoJ86xB99uJLXkf7xP2Cq/3gimFe26baJ48e7AO0htg7nsXe9yi5cKU1F2hTsvVZ5XXU=
+  - secure: JERy4H6YAjKVFFz0nu2V0h6aATO9Z2oFWRCsAhnTbTrlQ154qnvo2mnvFtc2rFqP04n9yt200rn5syksuia+vGGeQvud8kaLtgY+jUhBTWkGYbNZ8syoHVqqhAJmy3P7Pca7IAX1Z9FjiFTPEK3LI/0YyUjLZMJdG0rJl2HOnyU=
+  - secure: QTcDN1RybjBR4rZMj82i0WU2bcTL5OgP5gFR0Tn/nw7IIXPvpd6IoF0R+xk1qrfIS5lFC0j6ACC9M44N48GOPdvn7GXXs/OMCdYzlXhQGIsXu7Uk1ICw0SIPBjsDxpBiZPpD1J6gQpwzhvE+8fI9pEC7KlZcB3UCZV2ig7vLfos=
+  - secure: YVY+HWh/PcT0r4O/vxZ1zY+IRjIbt60YPEmSEkxH1v4viqCNd4PdP1n5XI+p5PFj4jikpRCkYFyLISBwghzb9rH9Abi0kST+YS0c/V8M7QWInTsd1gA+7F+aQP+TvpViZHqzlN/5FaZae/hV6DiS6wEDrG20+TW7KKXI2rSK8NY=
+  - secure: W9CoX+86p4NRahCU/ZZWpBK3ZW457w982FWWG+cu6YX6hNq9UJLTmgfuBS5QeLiP72cFHYz3jizlJj52vXj2/tTZI5ew/VAt1xmyfvufnANH2R5kCk4rt+LABALGdNp0Bkw1d6lIBG6KkCEjKRjy9mvJbCQG8D4d94MMgJBA1dM=
+  - secure: elHltP7kScSLG2NIMT9LZr3O+4nM81CaJSAm+fEcXMM1Y8g6RhjFaKpkGUT7PGolGmhWAEg8cwueAt8gKdmW6dsCfbKRifx/8qbrgPtzijDB5KZ7ztXomH3AsHlhtR8zDlz1MV1gQmucsSR8/KAj/o8/ZtGvQ5bnEU2HSjNqOr4=
+  - secure: iQ13OuCfEPAuQXGD+9aTb7/0rdb6D6OmegbIbW9E5pTC4jkvFvwZA4UHDSxsl+Sc+Tx3HrfkERhQGIKJwz1e2+t3TDt946JRFZcegVJjSpTXI1/ymOyH35kLFwvBTDRDSGjmPHEi55VhKcQoInSarydw4Y0cyBmD836Wr5KaTVI=
+  - secure: B7B1+Msz6fZxWJ3cPsEg9JPvqksmdAs0jgctfs+SPCg102KhEPppPIFMU88OfYatiJZJ/wgK+ElO9H8FMZhe+aVA/aHvWQkIjI8rVmS72Zio0qEIIMlWdWQ1uECKYhpBwHNWnCBjQSse7sj/YPFFlnkpijrFXO2vhQxCsTNGwGQ=
+  - secure: CgGwQU3frcUfL3XILqKH9rW1pGJA6gXmtnC0ezGRRjTkBzBWLgv/Eannr/eeBjcKbrdCrZEomLVGj7YTaaF9wCt6ofv7PQaoSwt7ceNxXMtYc0FNiKtBuaCWobvjZUJikQUe9imgt0bcTu6A089oVc7alnDUdou1kNsAbwnCobw=
+  - secure: HEE0y7f6x0qGU2vC7XwZAALVFP4a46Wey+wWenNWLJQv+zOuJUClFpysmVxBQTiGp+jt43k/RUBve607ZSc004SlTpIkalbGEVh7VnX8V6Gpt5xIqXC66Td0Y5MsCaJ1Gwqa5X6/sqNWWx3mAzX5eYbLkSlfq6iwxjxYUgWlQyI=
+after_success:
+- .kubernetes/travis_after_success
 deploy:
-- provider: opsworks
+- provider: s3
   access_key_id: AKIAIT4X4NDGM2WVL6VA
-  secret_access_key:
-    secure: fqCKEwrQBo2P9G6CiQqU4dv/nwQ64FWv+TRblkvZxCsGe+VKoNYSz57B2AaX0mGvTyS7qt7GHOxcU4T64KYdXpRuYe/Z2yekp7K9mcgGCqYnprwUo7Xh67kstixjKxvs4QzYRWF0tJiaeoXgLoXxu0fO111iP8bCIQc5ThBSF+8=
-  app-id: e1883763-9db4-432f-900a-628dd84aceaa
+  secret_access_key: &70335699988320
+    secure: EbkGXcI612su+qYk4QENY5R3QN3Xv2lo2G4OGAQFWzE/1v98cjcG/YiRljBm+Uf03IjJuQh4ztLdbAspntBx/Pwyf4/7huvRX6xLsOW2n2FNPfFLrsd6NPoqsEBWxzaWveH4fYfwLUqg1yPIP3Uo6kdFfxuS7p1xI8Jy06ruao0=
+  local_dir: dpl_cd_upload
+  skip_cleanup: true
+  bucket: octoblu-deploy
   on:
     branch: master
-- provider: opsworks
+- provider: codedeploy
   access_key_id: AKIAIT4X4NDGM2WVL6VA
-  secret_access_key:
-    secure: fqCKEwrQBo2P9G6CiQqU4dv/nwQ64FWv+TRblkvZxCsGe+VKoNYSz57B2AaX0mGvTyS7qt7GHOxcU4T64KYdXpRuYe/Z2yekp7K9mcgGCqYnprwUo7Xh67kstixjKxvs4QzYRWF0tJiaeoXgLoXxu0fO111iP8bCIQc5ThBSF+8=
-  app-id: 7b21bb86-93bb-4a2b-b482-7a8a3ab4a23b
+  secret_access_key: *70335699988320
+  bucket: octoblu-deploy
+  key: docker-builder/meshblu-docker-$TRAVIS_COMMIT.zip
+  bundle_type: zip
+  region: us-west-2
+  application: docker-builder
+  deployment_group: meshblu-docker
   on:
     branch: master
-- provider: opsworks
-  access_key_id: AKIAIT4X4NDGM2WVL6VA
-  secret_access_key:
-    secure: fqCKEwrQBo2P9G6CiQqU4dv/nwQ64FWv+TRblkvZxCsGe+VKoNYSz57B2AaX0mGvTyS7qt7GHOxcU4T64KYdXpRuYe/Z2yekp7K9mcgGCqYnprwUo7Xh67kstixjKxvs4QzYRWF0tJiaeoXgLoXxu0fO111iP8bCIQc5ThBSF+8=
-  app-id: 5fcc76e4-b0cc-41d3-b794-8a8b4ff0ed9e
-  on:
-    branch: staging
-- provider: opsworks
-  access_key_id: AKIAIT4X4NDGM2WVL6VA
-  secret_access_key:
-    secure: fqCKEwrQBo2P9G6CiQqU4dv/nwQ64FWv+TRblkvZxCsGe+VKoNYSz57B2AaX0mGvTyS7qt7GHOxcU4T64KYdXpRuYe/Z2yekp7K9mcgGCqYnprwUo7Xh67kstixjKxvs4QzYRWF0tJiaeoXgLoXxu0fO111iP8bCIQc5ThBSF+8=
-  app-id: 3110aaa3-dd25-49d1-be43-6c0ac5c0a8ad
-  on:
-    branch: staging
-addons:
-  code_climate:
-    repo_token: 8e3f39fe338fe8465f0400555fcbf8a2a3293f9c586b64588e8ce198e64bda58
-after_script:
-- cat coverage/lcov.info | codeclimate

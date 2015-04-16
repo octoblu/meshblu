@@ -1,0 +1,124 @@
+id: meshblu-docker-blue-controller
+kind: ReplicationController
+apiVersion: v1beta1
+labels:
+  name: meshblu-docker-blue
+  version: "$SHORT_COMMIT"
+desiredState:
+  replicas: 2
+  replicaSelector:
+    name: meshblu-docker-blue
+    version: "$SHORT_COMMIT"
+  podTemplate:
+    labels:
+      name: meshblu-docker-blue
+      app: meshblu-docker-blue
+      version: "$SHORT_COMMIT"
+    desiredState:
+      manifest:
+        version: v1beta1
+        id: meshblu-docker-blue
+        containers:
+          - name: meshblu-docker-blue
+            image: octoblu/meshblu-docker:$SHORT_COMMIT
+            ports:
+              - containerPort: 80
+            env:
+              - name:  NODE_ENV
+                value: production
+              - name:  MONGODB_URI
+                value: $MONGODB_URI
+              - name:  PORT
+                value: 80
+              - name:  UUID
+                value: $UUID
+              - name:  TOKEN
+                value: $TOKEN
+              - name:  BROADCAST_ACTIVITY
+                value: $BROADCAST_ACTIVITY
+              - name:  USE_REDIS_LOG
+                value: $USE_REDIS_LOG
+              - name:  ELASTIC_SEARCH_HOST
+                value: $ELASTIC_SEARCH_HOST
+              - name:  RATE_LIMITS_MESSAGE
+                value: $RATE_LIMITS_MESSAGE
+              - name:  RATE_LIMITS_DATA
+                value: $RATE_LIMITS_DATA
+              - name:  RATE_LIMITS_CONNECTION
+                value: $RATE_LIMITS_CONNECTION
+              - name:  RATE_LIMITS_QUERY
+                value: $RATE_LIMITS_QUERY
+              - name:  RATE_LIMITS_WHOAMI
+                value: $RATE_LIMITS_WHOAMI
+              - name:  RATE_LIMITS_UNTHROTTLED_IPS
+                value: $RATE_LIMITS_UNTHROTTLED_IPS
+              - name:  URBAN_AIRSHIP_KEY
+                value: $URBAN_AIRSHIP_KEY
+              - name:  URBAN_AIRSHIP_SECRET
+                value: $URBAN_AIRSHIP_SECRET
+              - name:  PLIVO_AUTH_ID
+                value: $PLIVO_AUTH_ID
+              - name:  PLIVO_AUTH_TOKEN
+                value: $PLIVO_AUTH_TOKEN
+              - name:  REDIS_HOST
+                value: $REDIS_HOST
+              - name:  REDIS_PORT
+                value: $REDIS_PORT
+              - name:  REDIS_PASSWORD
+                value: $REDIS_PASSWORD
+              - name:  COAP_PORT
+                value: $COAP_PORT
+              - name:  COAP_HOST
+                value: $COAP_HOST
+              - name:  MQTT_DATABASE_URI
+                value: $MQTT_DATABASE_URI
+              - name:  MQTT_PORT
+                value: $MQTT_PORT
+              - name:  MQTT_PASSWORD
+                value: $MQTT_PASSWORD
+              - name:  YO_TOKEN
+                value: $YO_TOKEN
+              - name:  OVERRIDE_TOKEN
+                value: $OVERRIDE_TOKEN
+              - name:  PARENT_CONNECTION_UUID
+                value: $PARENT_CONNECTION_UUID
+              - name:  PARENT_CONNECTION_TOKEN
+                value: $PARENT_CONNECTION_TOKEN
+              - name:  PARENT_CONNECTION_SERVER
+                value: $PARENT_CONNECTION_SERVER
+              - name:  PARENT_CONNECTION_PORT
+                value: $PARENT_CONNECTION_PORT
+              - name:  USE_PROXY_PROTOCOL
+                value: $USE_PROXY_PROTOCOL
+              - name:  AIRBRAKE_KEY
+                value: $AIRBRAKE_KEY
+              - name:  USE_NEWRELIC
+                value: $USE_NEWRELIC
+              - name:  NODE_FLAGS_DISABLED
+                value: $NODE_FLAGS_DISABLED
+              - name:  NODETIME_ACCOUNT_KEY
+                value: $NODETIME_ACCOUNT_KEY
+              - name:  NODETIME_APP_NAME
+                value: $NODETIME_APP_NAME
+              - name:  USE_LOG
+                value: $USE_LOG
+              - name:  LOGGERS
+                value: $LOGGERS
+              - name:  SPLUNK_HOST
+                value: $SPLUNK_HOST
+              - name:  ELASTIC_SEARCH_PORT
+                value: $ELASTIC_SEARCH_PORT
+              - name:  APP_DYNAMICS_KEY
+                value: $APP_DYNAMICS_KEY
+              - name:  APP_DYNAMICS_TIER_NAME
+                value: $APP_DYNAMICS_TIER_NAME
+              - name:  APP_DYNAMICS_HOST_NAME
+                value: $APP_DYNAMICS_HOST_NAME
+              - name:  APP_DYNAMICS_ACCOUNT_NAME
+                value: $APP_DYNAMICS_ACCOUNT_NAME
+              - name:  APP_DYNAMICS_APPLICATION_NAME
+                value: $APP_DYNAMICS_APPLICATION_NAME
+              - name:  APP_DYNAMICS_PORT
+                value: $APP_DYNAMICS_PORT
+              - name:  USE_APP_DYNAMICS
+                value: $USE_APP_DYNAMICS

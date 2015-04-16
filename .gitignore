@@ -2,9 +2,6 @@
 node_modules
 npm-debug.log
 
-# Config files
-config.js
-
 # Log file
 skynet.txt
 

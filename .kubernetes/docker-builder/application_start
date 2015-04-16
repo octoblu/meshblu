@@ -1,0 +1,6 @@
+#!/bin/bash
+
+SCRIPT_DIR=`dirname $0`
+
+kubectl delete pods -l name=octoblu.meshblu-docker
+kubectl create -f $SCRIPT_DIR/docker-builder-pod.yaml

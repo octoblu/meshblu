@@ -16,7 +16,7 @@ describe 'Device', ->
   describe '->fetch', ->
     describe "when a device doesn't exist", ->
       beforeEach (done) ->
-        @sut = new Device
+        @sut = new Device {}, @dependencies
         @sut.fetch (@error) => done()
 
       it 'should respond with an error', ->

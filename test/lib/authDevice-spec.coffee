@@ -79,9 +79,3 @@ describe 'authDevice', ->
 
       it 'should call the callback with no error', ->
         expect(@error).not.to.exist
-
-
-
-
-
-

@@ -11,7 +11,7 @@ describe 'generateAndStoreToken', ->
       Device::storeToken = sinon.stub().yields null
 
       @getDevice = sinon.stub().yields null, uuid: 'ccc2f14f-3a64-4aa0-b64c-8e62fbd52eaa'
-      @securityImpl = canConfigure: => true
+      @securityImpl = canConfigure: sinon.stub().yields null, true
 
       @dependencies = Device: Device, getDevice: @getDevice, securityImpl: @securityImpl
       storeResults = (@error, @result) => done()
@@ -38,7 +38,7 @@ describe 'generateAndStoreToken', ->
       Device::storeToken = sinon.stub().yields null
 
       @getDevice = sinon.stub().yields null, uuid: '267fb089-1d2e-46cb-be13-9de4e75db441'
-      @securityImpl = canConfigure: => true
+      @securityImpl = canConfigure: sinon.stub().yields null, true
 
       @dependencies = Device: Device, getDevice: @getDevice, securityImpl: @securityImpl
       storeResults = (@error, @result) => done()
@@ -61,7 +61,7 @@ describe 'generateAndStoreToken', ->
       Device::storeToken = sinon.stub().yields new Error()
 
       @getDevice = sinon.stub().yields null, uuid: 'ccc2f14f-3a64-4aa0-b64c-8e62fbd52eaa'
-      @securityImpl = canConfigure: => true
+      @securityImpl = canConfigure: sinon.stub().yields null, true
 
       @dependencies = Device: Device, getDevice: @getDevice, securityImpl: @securityImpl
       storeResults = (@error, @result) => done()
@@ -80,7 +80,7 @@ describe 'generateAndStoreToken', ->
       Device::generateToken = => 'charizard'
 
       @getDevice = sinon.stub().yields null, uuid: 'ccc2f14f-3a64-4aa0-b64c-8e62fbd52eaa'
-      @securityImpl = canConfigure: => false
+      @securityImpl = canConfigure: sinon.stub().yields null, false
 
       @dependencies = Device: Device, getDevice: @getDevice, securityImpl: @securityImpl
       storeResults = (@error, @result) => done()

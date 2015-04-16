@@ -8,7 +8,7 @@ revokeToken = (ownerDevice, targetUuid, targetToken, callback=_.noop, dependenci
   getDevice targetUuid, (error, targetDevice) =>
     return callback error if error?
 
-    unless securityImpl.canConfigure ownerDevice, targetDevice, (error, permission) =>
+    securityImpl.canConfigure ownerDevice, targetDevice, (error, permission) =>
       return callback new Error 'unauthorized' unless permission
 
       device = new Device uuid: targetUuid

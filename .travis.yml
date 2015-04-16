@@ -23,7 +23,6 @@ env:
   - DEPLOY_BUCKET=octoblu-deploy
   - DEPLOYMENT_GROUP=master
   - DEPLOY_KEY=meshblu/meshblu-$TRAVIS_COMMIT.zip
-  - NODE_ENV=production
   - MONGODB_URI=172.31.33.28,172.31.38.108:27017,172.31.32.97:27017/meshblu
   - PORT=80
   - BROADCAST_ACTIVITY=true

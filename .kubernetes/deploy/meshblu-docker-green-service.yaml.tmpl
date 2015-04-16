@@ -1,4 +1,4 @@
-id: meshblu-docker-green
+id: meshblu-green
 kind: Service
 apiVersion: v1beta1
 port: $GREEN_PORT
@@ -9,7 +9,7 @@ publicIPs:
   - 172.20.0.12
   - 172.20.0.13
 labels:
-  name: meshblu-docker-green
+  name: meshblu-green
   version: 1.0.0
 selector:
-  name: meshblu-docker-green
+  name: meshblu-green

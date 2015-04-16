@@ -18,11 +18,11 @@ env:
   global:
   - AWS_ACCESS_KEY_ID=AKIAIT4X4NDGM2WVL6VA
   - DOCKER_USERNAME=octoblu
-  - DEPLOY_APPLICATION_NAME=meshblu-docker
+  - DEPLOY_APPLICATION_NAME=meshblu
   - DEPLOY_REGION=us-west-2
   - DEPLOY_BUCKET=octoblu-deploy
   - DEPLOYMENT_GROUP=master
-  - DEPLOY_KEY=meshblu-docker/meshblu-docker-$TRAVIS_COMMIT.zip
+  - DEPLOY_KEY=meshblu/meshblu-$TRAVIS_COMMIT.zip
   - NODE_ENV=production
   - MONGODB_URI=172.31.33.28,172.31.38.108:27017,172.31.32.97:27017/meshblu
   - PORT=80
@@ -76,11 +76,11 @@ deploy:
   access_key_id: AKIAIT4X4NDGM2WVL6VA
   secret_access_key: *70335699988320
   bucket: octoblu-deploy
-  key: docker-builder/meshblu-docker-$TRAVIS_COMMIT.zip
+  key: docker-builder/meshblu-$TRAVIS_COMMIT.zip
   bundle_type: zip
   region: us-west-2
   application: docker-builder
-  deployment_group: meshblu-docker
+  deployment_group: meshblu
   on:
     branch: master
 - provider: opsworks

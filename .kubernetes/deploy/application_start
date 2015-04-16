@@ -20,15 +20,15 @@ fi
 export BLUE_PORT GREEN_PORT OLD_PORT NEW_COLOR NEW_PORT
 
 REPLACE_REGEX='s;(\\*)(\$([a-zA-Z_][a-zA-Z_0-9]*)|\$\{([a-zA-Z_][a-zA-Z_0-9]*)\})?;substr($1,0,int(length($1)/2)).($2&&length($1)%2?$2:$ENV{$3||$4});eg'
-perl -pe $REPLACE_REGEX $SCRIPT_DIR/meshblu-docker-blue-service.yaml.tmpl > $SCRIPT_DIR/meshblu-docker-blue-service.yaml
-perl -pe $REPLACE_REGEX $SCRIPT_DIR/meshblu-docker-green-service.yaml.tmpl > $SCRIPT_DIR/meshblu-docker-green-service.yaml
+perl -pe $REPLACE_REGEX $SCRIPT_DIR/meshblu-blue-service.yaml.tmpl > $SCRIPT_DIR/meshblu-blue-service.yaml
+perl -pe $REPLACE_REGEX $SCRIPT_DIR/meshblu-green-service.yaml.tmpl > $SCRIPT_DIR/meshblu-green-service.yaml
 
-kubectl delete -f $SCRIPT_DIR/meshblu-docker-${NEW_COLOR}-service.yaml
-kubectl create -f $SCRIPT_DIR/meshblu-docker-${NEW_COLOR}-service.yaml
+kubectl delete -f $SCRIPT_DIR/meshblu-${NEW_COLOR}-service.yaml
+kubectl create -f $SCRIPT_DIR/meshblu-${NEW_COLOR}-service.yaml
 
-kubectl delete rc -lname=meshblu-docker-${NEW_COLOR}
-kubectl delete pods -lname=meshblu-docker-${NEW_COLOR}
-kubectl create -f $SCRIPT_DIR/meshblu-docker-${NEW_COLOR}-controller.yaml
+kubectl delete rc -lname=meshblu-${NEW_COLOR}
+kubectl delete pods -lname=meshblu-${NEW_COLOR}
+kubectl create -f $SCRIPT_DIR/meshblu-${NEW_COLOR}-controller.yaml
 
 
 sleep 30

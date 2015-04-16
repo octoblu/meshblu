@@ -1,4 +1,4 @@
-id: meshblu-docker-blue
+id: meshblu-blue
 kind: Service
 apiVersion: v1beta1
 port: $BLUE_PORT
@@ -9,7 +9,7 @@ publicIPs:
   - 172.20.0.12
   - 172.20.0.13
 labels:
-  name: meshblu-docker-blue
+  name: meshblu-blue
   version: 1.0.0
 selector:
-  name: meshblu-docker-blue
+  name: meshblu-blue

@@ -1,26 +1,26 @@
-id: meshblu-docker-blue-controller
+id: meshblu-blue-controller
 kind: ReplicationController
 apiVersion: v1beta1
 labels:
-  name: meshblu-docker-blue
+  name: meshblu-blue
   version: "$SHORT_COMMIT"
 desiredState:
   replicas: 2
   replicaSelector:
-    name: meshblu-docker-blue
+    name: meshblu-blue
     version: "$SHORT_COMMIT"
   podTemplate:
     labels:
-      name: meshblu-docker-blue
-      app: meshblu-docker-blue
+      name: meshblu-blue
+      app: meshblu-blue
       version: "$SHORT_COMMIT"
     desiredState:
       manifest:
         version: v1beta1
-        id: meshblu-docker-blue
+        id: meshblu-blue
         containers:
-          - name: meshblu-docker-blue
-            image: octoblu/meshblu-docker:$SHORT_COMMIT
+          - name: meshblu-blue
+            image: octoblu/meshblu:$SHORT_COMMIT
             ports:
               - containerPort: 80
             env:

@@ -71,7 +71,7 @@ deploy:
   bucket: octoblu-deploy
   on:
     branch: master
-    condition: $USE_MONGO=true
+    condition: $USE_MONGO = true
 - provider: codedeploy
   access_key_id: AKIAIT4X4NDGM2WVL6VA
   secret_access_key: *70335699988320
@@ -83,7 +83,7 @@ deploy:
   deployment_group: meshblu
   on:
     branch: master
-    condition: $USE_MONGO=true
+    condition: $USE_MONGO = true
 - provider: opsworks
   access_key_id: AKIAIT4X4NDGM2WVL6VA
   secret_access_key:
@@ -91,7 +91,7 @@ deploy:
   app-id: e1883763-9db4-432f-900a-628dd84aceaa
   on:
     branch: master
-    condition: $USE_MONGO=true
+    condition: $USE_MONGO = true
 - provider: opsworks
   access_key_id: AKIAIT4X4NDGM2WVL6VA
   secret_access_key:
@@ -99,7 +99,7 @@ deploy:
   app-id: 7b21bb86-93bb-4a2b-b482-7a8a3ab4a23b
   on:
     branch: master
-    condition: $USE_MONGO=true
+    condition: $USE_MONGO = true
 - provider: opsworks
   access_key_id: AKIAIT4X4NDGM2WVL6VA
   secret_access_key:
@@ -107,7 +107,7 @@ deploy:
   app-id: 5fcc76e4-b0cc-41d3-b794-8a8b4ff0ed9e
   on:
     branch: staging
-    condition: $USE_MONGO=true
+    condition: $USE_MONGO = true
 - provider: opsworks
   access_key_id: AKIAIT4X4NDGM2WVL6VA
   secret_access_key:
@@ -115,7 +115,7 @@ deploy:
   app-id: 3110aaa3-dd25-49d1-be43-6c0ac5c0a8ad
   on:
     branch: staging
-    condition: $USE_MONGO=true
+    condition: $USE_MONGO = true
 addons:
   code_climate:
     repo_token: 8e3f39fe338fe8465f0400555fcbf8a2a3293f9c586b64588e8ce198e64bda58

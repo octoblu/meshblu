@@ -16,7 +16,6 @@ module.exports = (device={}, callback=_.noop, dependencies={}) ->
     uuid: device.uuid
     online: false
   }
-
   debug "registering", device
 
   devices.findOne {uuid: newDevice.uuid}, (error, existingDevice) =>

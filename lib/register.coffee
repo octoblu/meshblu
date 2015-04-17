@@ -3,7 +3,6 @@ uuid         = require 'node-uuid'
 debug        = require('debug')('meshblu:register')
 generateToken = require './generateToken'
 
-
 module.exports = (device={}, callback=_.noop, dependencies={}) ->
   database     = dependencies.database ? require './database'
   updateDevice = dependencies.updateDevice ? require './updateDevice'

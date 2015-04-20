@@ -62,10 +62,13 @@ describe 'register', ->
   describe 'when called with a specific uuid', ->
     beforeEach (done) ->
       @updateDevice.yields null, {}
+      @dependencies.uuid =
+        v4: sinon.stub().returns 'some-other-uuid'
+        
       @sut {uuid: 'some-uuid'}, done, @dependencies
 
-    it 'should create a device with that uuid', (done) ->
-      @devices.findOne uuid: 'some-uuid', (error, device) =>
+    it 'should generate a new uuid for the device', (done) ->
+      @devices.findOne uuid: 'some-other-uuid', (error, device) =>
         expect(device).to.exist
         done()
 
@@ -76,12 +79,13 @@ describe 'register', ->
       @sut @params, done, @dependencies
 
     it 'should set the discoverWhitelist to the owners UUID',  ->
-      expect(@updateDevice).to.have.been.calledWith 'some-uuid', {
-        uuid:  'some-uuid'
-        token: 'token'
-        owner: 'other-uuid'
-        discoverWhitelist: ['other-uuid']
-      }
+      expect(@updateDevice).to.have.been.calledWith(
+        sinon.match.any
+        sinon.match
+          token: 'token'
+          owner: 'other-uuid'
+          discoverWhitelist: ['other-uuid']
+      )
 
 
   describe 'when called without an online', ->
@@ -97,15 +101,6 @@ describe 'register', ->
   describe 'when there is an existing device', ->
     beforeEach (done) ->
       @devices.insert {uuid : 'some-uuid', name: 'Somebody.'}, done
-
-    describe 'trying to create a new device with the same uuid', ->
-      beforeEach (done) ->
-        @updateDevice.yields null, {}
-        storeDevice = (@error, @device) => done()
-        @sut {uuid: 'some-uuid', name: 'Nobody.'}, storeDevice, @dependencies
-
-      it 'it should call the callback with an error', ->
-        expect(@error).to.exist
 
     describe 'trying to create a new device with a different uuid', ->
       beforeEach (done) ->

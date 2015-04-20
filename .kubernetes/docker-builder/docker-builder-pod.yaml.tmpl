@@ -13,7 +13,6 @@ desiredState:
     containers:
       - name: docker-builder-$SHORT_COMMIT
         image: octoblu/dind-codedeploy
-        privileged: true
         volumeMounts:
           - name: docker-sock
             mountPath: /var/run/docker.sock

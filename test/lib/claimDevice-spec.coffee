@@ -3,7 +3,7 @@ describe 'claimDevice', ->
     @updateDevice = sinon.stub()
     @canConfigure = sinon.stub()
     @getDeviceWithToken    = sinon.stub()
-    @canConfigure.returns true
+    @canConfigure.yields null, true
     @dependencies = {updateDevice: @updateDevice, canConfigure: @canConfigure, getDeviceWithToken: @getDeviceWithToken}
     @sut = require '../../lib/claimDevice'
 
@@ -85,14 +85,14 @@ describe 'claimDevice', ->
         ipAddress: '192.168.1.1'
       }
 
-  describe 'when called by a non-authorized user', ->
+  describe 'when called by an unauthorized user', ->
     beforeEach (done) ->
       @fromDevice = {uuid: '1267b0fe-407a-4872-b09d-dd4853d59d76'}
       @device     = {uuid: '9b97159e-63c2-4a71-9327-8fadad97f1e9', name: 'Fruit Loops'}
 
       storeError = (@error) => done()
 
-      @canConfigure.returns false
+      @canConfigure.yields null, false
       @getDeviceWithToken.yields null, {ipAddress: '192.168.1.1'}
       @sut @fromDevice, @device, storeError, @dependencies
 

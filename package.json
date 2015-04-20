@@ -12,7 +12,7 @@
     "bcrypt": "^0.8.1",
     "circular": "^1.0.5",
     "coap": "~0.8.0",
-    "coffee-script": "^1.8.0",
+    "coffee-script": "1.9.1",
     "commander": "^2.3.0",
     "debug": "^2.1.1",
     "elasticsearch": "~2.4.0",

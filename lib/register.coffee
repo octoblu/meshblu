@@ -3,7 +3,6 @@ uuid         = require 'node-uuid'
 debug        = require('debug')('meshblu:register')
 generateToken = require './generateToken'
 
-
 module.exports = (device={}, callback=_.noop, dependencies={}) ->
   database     = dependencies.database ? require './database'
   updateDevice = dependencies.updateDevice ? require './updateDevice'
@@ -16,7 +15,6 @@ module.exports = (device={}, callback=_.noop, dependencies={}) ->
     uuid: device.uuid
     online: false
   }
-
   debug "registering", device
 
   devices.findOne {uuid: newDevice.uuid}, (error, existingDevice) =>

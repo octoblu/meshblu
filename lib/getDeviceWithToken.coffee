@@ -2,6 +2,7 @@ _ = require 'lodash'
 config = require './../config'
 redis = require './redis'
 cacheDevice = require './cacheDevice'
+debug = require('debug')('meshblu:getDeviceWithToken')
 
 findCachedDevice = (uuid, callback) ->
   unless config.redis && config.redis.host
@@ -17,16 +18,20 @@ findCachedDevice = (uuid, callback) ->
     callback null, data
 
 findDevice = (uuid, callback, database) ->
+  debug 'findDevice', uuid
   database ?= require './database'
   devices = database.devices
 
   devices.findOne {uuid: uuid}, (error, data) ->
+    debug 'devices.findOne', uuid, error, data
+    return callback new Error ('database error while finding a device') if error?
     if data
       delete data._id
       cacheDevice data
     callback null, data
 
 module.exports = (uuid, callback=_.noop, database=null) ->
+  debug 'getDeviceWithToken', uuid, database
   deviceFound = (error, data) ->
     if error || !data
       callback

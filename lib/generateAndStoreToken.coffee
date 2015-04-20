@@ -8,14 +8,14 @@ generateAndStoreToken = (ownerDevice, targetUuid, callback=_.noop, dependencies=
   getDevice targetUuid, (error, targetDevice) =>
     return callback error if error?
 
-    unless securityImpl.canConfigure ownerDevice, targetDevice
-      return callback new Error 'unauthorized'
+    securityImpl.canConfigure ownerDevice, targetDevice, (error, permission) =>
+      return callback new Error('unauthorized') unless permission
 
-    device = new Device uuid: targetUuid
+      device = new Device uuid: targetUuid
+      token = device.generateToken()
 
-    token = device.generateToken()
-    device.storeToken token, (error) =>
-      return callback error if error?
-      callback null, token: token
+      device.storeToken token, (error) =>
+        return callback error if error?
+        callback null, token: token
 
 module.exports = generateAndStoreToken

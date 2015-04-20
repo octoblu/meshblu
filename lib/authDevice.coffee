@@ -16,13 +16,11 @@ module.exports = (uuid, token, callback=(->), database=null) ->
 
     delete device.token
 
-    compareToken = (hashedToken, next=->) =>
+    compareToken = (hashedToken, callback=->) =>
       debug token, hashedToken
-      bcrypt.compare token, hashedToken, (@error, result) =>
-        return callback @error if @error?
-        return callback null, device if result
-        next()
+      bcrypt.compare token, hashedToken, (error, result) =>
+        callback(result)
 
-    async.eachSeries hashedTokens, compareToken, =>
+    async.detect hashedTokens, compareToken, (goodToken)=>
+      return callback(null, device) if goodToken?
       return callback null, null
-

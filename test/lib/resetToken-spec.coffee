@@ -16,7 +16,7 @@ describe 'resetToken', ->
 
   describe 'when it is called with a fromDevice and a uuid', ->
     beforeEach ->
-      @securityImpl.canConfigure = sinon.stub()
+      @securityImpl.canConfigure = sinon.stub().yields null, false
       @fromDevice = {}
 
     it 'should call getDevice', ->
@@ -64,7 +64,7 @@ describe 'resetToken', ->
 
       describe 'when securityImpl.canConfigure returns true', ->
         beforeEach ->
-          @securityImpl.canConfigure.returns true
+          @securityImpl.canConfigure.yields null, true
 
         it 'should not call the callback with "unauthorized"', ->
           callback = sinon.spy()

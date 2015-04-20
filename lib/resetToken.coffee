@@ -10,12 +10,13 @@ resetToken  = (fromDevice, uuid, emitToClient, callback=(->), securityImpl, getD
   getDevice uuid, (error, device)->
     return callback 'invalid device' if error?
 
-    return callback "unauthorized" unless securityImpl.canConfigure fromDevice, device
-    token = generateToken()
+    securityImpl.canConfigure fromDevice, device, (error, permission) =>
+      return callback "unauthorized" unless permission
+      token = generateToken()
 
-    updateDevice device.uuid, token: token, (error, device) ->
-      return callback "error updating device" if error?
-      emitToClient 'notReady', device, {}
-      return callback null, token
+      updateDevice device.uuid, token: token, (error, device) ->
+        return callback "error updating device" if error?
+        emitToClient 'notReady', device, {}
+        return callback null, token
 
 module.exports = resetToken

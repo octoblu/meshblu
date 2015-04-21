@@ -19,7 +19,8 @@ module.exports = (uuid, token, callback=(->), dependencies={}) ->
       bcrypt.compare token, hashedToken, (error, result) =>
         callback(result)
 
-    async.detect hashedTokens, compareToken, (goodToken) =>
+    # this is faster than async.detect, srsly, trust me.
+    async.detectSeries hashedTokens.reverse(), compareToken, (goodToken) =>
       debug 'token matched?', goodToken?
       return callback null, device if goodToken?
       return callback null, null

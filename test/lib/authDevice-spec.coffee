@@ -3,22 +3,16 @@ bcrypt       = require 'bcrypt'
 TestDatabase = require '../test-database'
 
 describe 'authDevice', ->
-  beforeEach (done) ->
+  beforeEach ->
     @sut = require '../../lib/authDevice'
-    TestDatabase.open (error, database) =>
-      @database = database
-      done error
-
-  afterEach ->
-    @database.close?()
-
-  it 'should be a function', ->
-    expect(@sut).to.be.a 'function'
+    @dependencies =
+      getDeviceWithToken : sinon.stub()
 
   describe 'when passed an invalid token and uuid (cause theres nothing in the database)', ->
     beforeEach (done) ->
+      @dependencies.getDeviceWithToken.yields new Error(), null
       storeResults = (@error, @device) => done()
-      @sut 'invalid-uuid', 'invalid-token', storeResults, @database
+      @sut 'invalid-uuid', 'invalid-token', storeResults, @dependencies
 
     it 'should call the callback with no device', ->
       expect(@device).to.not.exist
@@ -27,14 +21,13 @@ describe 'authDevice', ->
       expect(@error).to.exist
 
   describe 'when there is a device', ->
-    beforeEach (done) ->
-      @devices = @database.devices
-      @devices.insert uuid: 'valid-uuid', token: bcrypt.hashSync('valid-token', 8), done
+    beforeEach ->
+      @dependencies.getDeviceWithToken.yields null, uuid: 'valid-uuid', token: bcrypt.hashSync('valid-token', 8)
 
     describe 'when passed a valid token and uuid', ->
       beforeEach (done) ->
         storeResults = (error, @device) => done error
-        @sut 'valid-uuid', 'valid-token', storeResults, @database
+        @sut 'valid-uuid', 'valid-token', storeResults, @dependencies
 
       it 'should call the callback with a device', ->
         expect(@device).to.exist
@@ -45,7 +38,7 @@ describe 'authDevice', ->
     describe 'when passed a valid uuid and invalid token', ->
       beforeEach (done) ->
         storeResults = (@error, @device) => done()
-        @sut 'valid-uuid', 'invalid-token', storeResults, @database
+        @sut 'valid-uuid', 'invalid-token', storeResults, @dependencies
 
       it 'should call the callback with no device', ->
         expect(@device).not.to.exist
@@ -54,14 +47,13 @@ describe 'authDevice', ->
         expect(@error).not.to.exist
 
   describe 'when the device in the database has tokens', ->
-    beforeEach (done) ->
-      @devices = @database.devices
-      @devices.insert uuid: 'scrooge', tokens: [{hash: bcrypt.hashSync('money', 8)}], done
+    beforeEach ->
+      @devices = @dependencies.getDeviceWithToken.yields null, uuid: 'scrooge', tokens: [{hash: bcrypt.hashSync('money', 8)}]
 
     describe 'when passed a valid uuid and token', ->
       beforeEach (done) ->
         storeResults = (@error, @device) => done()
-        @sut 'scrooge', 'money', storeResults, @database
+        @sut 'scrooge', 'money', storeResults, @dependencies
 
       it 'should call the callback with a device', ->
         expect(@device).to.exist
@@ -72,7 +64,7 @@ describe 'authDevice', ->
     describe 'when passed a valid uuid and an invalid token', ->
       beforeEach (done) ->
         storeResults = (@error, @device) => done()
-        @sut 'scrooge', 'pants', storeResults, @database
+        @sut 'scrooge', 'pants', storeResults, @dependencies
 
       it 'should call the callback with no device', ->
         expect(@device).not.to.exist

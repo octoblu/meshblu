@@ -58,8 +58,6 @@ class SimpleAuth
         (error, result) =>
           return @asyncCallback(error, false, callback) if error?
           return @asyncCallback(null, result?, callback)
-
-        @database
        )
 
     return @asyncCallback(null, false, callback)

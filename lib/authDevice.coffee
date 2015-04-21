@@ -3,12 +3,9 @@ async  = require 'async'
 bcrypt = require 'bcrypt'
 debug  = require('debug')('meshblu:authDevice')
 
-
-module.exports = (uuid, token, callback=(->), database=null) ->
-  database ?= require './database'
-  devices = database.devices
-
-  devices.findOne uuid: uuid, (error, device) =>
+module.exports = (uuid, token, callback=(->), dependencies={}) ->
+  @getDeviceWithToken = dependencies.getDeviceWithToken ? require('./getDeviceWithToken')
+  @getDeviceWithToken uuid: uuid, (error, device) =>
     return callback new Error('Unable to find device') unless device?
 
     hashedTokens = _.pluck(device.tokens, 'hash') ? []

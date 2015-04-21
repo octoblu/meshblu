@@ -8,7 +8,7 @@ class Device
     @devices = dependencies.database?.devices ? require('../database').devices
     @getGeo = dependencies.getGeo ? require('../getGeo')
     @generateToken = dependencies.generateToken ? require('../generateToken')
-    @clearCache = dependencies.clearCache ? require './clearCache'
+    @clearCache = dependencies.clearCache ? require '../clearCache'
     @set attributes
     {@uuid} = attributes
 

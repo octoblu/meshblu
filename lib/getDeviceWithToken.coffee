@@ -9,7 +9,11 @@ findCachedDevice = (uuid, callback) ->
     callback(null, null)
     return
 
-  redis.get redis.CACHE_KEY + uuid, (error, data) ->
+  cachedKey = redis.CACHE_KEY + uuid
+
+  debug 'checking redis cache', cachedKey
+  redis.get cachedKey, (error, data) ->
+    debug 'cache results', error, data
     if error
       callback error
       return
@@ -31,7 +35,7 @@ findDevice = (uuid, callback, database) ->
     callback null, data
 
 module.exports = (uuid, callback=_.noop, database=null) ->
-  debug 'getDeviceWithToken', uuid, database
+  debug 'getDeviceWithToken', uuid
   deviceFound = (error, data) ->
     if error || !data
       callback
@@ -44,12 +48,8 @@ module.exports = (uuid, callback=_.noop, database=null) ->
     callback null, data
 
   findCachedDevice uuid, (error, data) ->
-    if error
-      callback error
-      return
+    return callback error if error
 
-    if data
-      callback null, data
-      return
+    return callback null, data if data?
 
     findDevice uuid, deviceFound, database

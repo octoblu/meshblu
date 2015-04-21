@@ -1,9 +1,12 @@
 util = require "./util"
 bcrypt = require "bcrypt"
 _ = require "lodash"
-authDevice = require "./authDevice"
 
 class SimpleAuth
+
+  constructor: (@dependencies={}) ->
+    @authDevice = @dependencies.authDevice || require './authDevice'
+
   asyncCallback : (error, result, callback) =>
     _.defer( => callback(error, result))
 
@@ -52,7 +55,7 @@ class SimpleAuth
 
     return @asyncCallback(null, true, callback) if util.sameLAN(fromDevice.ipAddress, toDevice.ipAddress)
     if message?.token
-      return authDevice(
+      return @authDevice(
         toDevice.uuid
         message.token
         (error, result) =>
@@ -62,4 +65,4 @@ class SimpleAuth
 
     return @asyncCallback(null, false, callback)
 
-module.exports = new SimpleAuth
+module.exports = SimpleAuth

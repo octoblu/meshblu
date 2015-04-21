@@ -4,7 +4,10 @@ util         = require '../../lib/util'
 
 describe 'simpleAuth', ->
   beforeEach ->
-    @sut = require '../../lib/simpleAuth'
+    SimpleAuth = require '../../lib/simpleAuth'
+    @dependencies =
+      authDevice : sinon.stub()
+    @sut = new SimpleAuth @dependencies
 
   it 'should exist', ->
     expect(@sut).to.exist
@@ -149,11 +152,13 @@ describe 'simpleAuth', ->
           {hash: bcrypt.hashSync('5555',1)}
         ]
         @message = token: '5555'
+        @dependencies.authDevice.yields null, true
         @sut.database = @getDatabaseForDevice @toDevice
-      it 'should return true', (next) ->
+
+      it 'should return true', (done) ->
         @sut.canConfigure( @fromDevice, @toDevice, @message, (error, permission) =>
           expect(permission).to.be.true
-          next()
+          done()
         )
 
     describe 'when toDevice is different from fromMessage, and has sent a message that includes a random uuid', ->
@@ -165,6 +170,7 @@ describe 'simpleAuth', ->
           {hash: 0}
          ]
         @message = token: '5555'
+        @dependencies.authDevice.yields new Error
         @sut.database = @getDatabaseForDevice @toDevice
 
       it 'should return false', (done) ->

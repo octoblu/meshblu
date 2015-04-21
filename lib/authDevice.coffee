@@ -5,7 +5,8 @@ debug  = require('debug')('meshblu:authDevice')
 
 module.exports = (uuid, token, callback=(->), dependencies={}) ->
   @getDeviceWithToken = dependencies.getDeviceWithToken ? require('./getDeviceWithToken')
-  @getDeviceWithToken uuid: uuid, (error, device) =>
+  @getDeviceWithToken uuid, (error, device) =>
+    debug 'gotDeviceWithToken', error, device
     return callback new Error('Unable to find device') unless device?
 
     hashedTokens = _.pluck(device.tokens, 'hash') ? []
@@ -18,6 +19,7 @@ module.exports = (uuid, token, callback=(->), dependencies={}) ->
       bcrypt.compare token, hashedToken, (error, result) =>
         callback(result)
 
-    async.detect hashedTokens, compareToken, (goodToken)=>
-      return callback(null, device) if goodToken?
+    async.detect hashedTokens, compareToken, (goodToken) =>
+      debug 'token matched?', goodToken?
+      return callback null, device if goodToken?
       return callback null, null

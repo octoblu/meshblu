@@ -10,7 +10,8 @@ describe 'Device', ->
       @database = database
       @devices  = @database.devices
       @getGeo = sinon.stub().yields null, {}
-      @dependencies = {database: @database, getGeo: @getGeo}
+      @clearCache = sinon.spy()
+      @dependencies = {database: @database, getGeo: @getGeo, clearCache: @clearCache}
       done error
 
   describe '->fetch', ->
@@ -51,7 +52,7 @@ describe 'Device', ->
   describe '->sanitize', ->
     describe 'when update is called with one good and one bad param', ->
       beforeEach ->
-        @sut = new Device
+        @sut = new Device {}, @dependencies
         @result = @sut.sanitize name: 'guile', '$natto': 'fermented soybeans'
 
       it 'should strip the bad params', ->
@@ -62,7 +63,7 @@ describe 'Device', ->
 
     describe 'when update is called with a nested bad param', ->
       beforeEach ->
-        @sut = new Device
+        @sut = new Device {}, @dependencies
         @result = @sut.sanitize name: 'guile', foo: {'$natto': 'fermented soybeans'}
 
       it 'should strip the nested bad param', ->
@@ -73,7 +74,7 @@ describe 'Device', ->
 
     describe 'when update is called with a bad param nested in an object in an array', ->
       beforeEach ->
-        @sut = new Device
+        @sut = new Device {}, @dependencies
         @result = @sut.sanitize name: 'guile', foo: [{'$natto': 'fermented soybeans'}]
 
       it 'should strip the offending param', ->
@@ -160,7 +161,7 @@ describe 'Device', ->
   describe '->set', ->
     describe 'when called with a new name', ->
       beforeEach ->
-        @sut = new Device name: 'first'
+        @sut = new Device name: 'first', @dependencies
         @sut.set name: 'second'
 
       it 'should update the name', ->
@@ -168,7 +169,7 @@ describe 'Device', ->
 
     describe 'when set is called disallowed keys', ->
       beforeEach ->
-        @sut = new Device
+        @sut = new Device {}, @dependencies
         @sut.set $$hashKey: true
 
       it 'should remove keys beginning with $', ->
@@ -176,7 +177,7 @@ describe 'Device', ->
 
     describe 'when called with an online of "false"', ->
       beforeEach ->
-        @sut = new Device
+        @sut = new Device {}, @dependencies
         @sut.set online: 'false'
 
       it 'should set online to true, cause strings is truthy, yo', ->
@@ -184,7 +185,7 @@ describe 'Device', ->
 
     describe 'when set is called with an online of false', ->
       beforeEach ->
-        @sut = new Device
+        @sut = new Device {}, @dependencies
         @sut.set online: false
 
       it 'should set online to false', ->
@@ -192,7 +193,7 @@ describe 'Device', ->
 
     describe 'when set doesnt mention online', ->
       beforeEach ->
-        @sut = new Device
+        @sut = new Device {}, @dependencies
         @sut.set name: 'george'
 
       it 'should leave online alone', ->
@@ -281,11 +282,11 @@ describe 'Device', ->
             expect(match).to.be.true
             done()
 
-        
+
   describe '->validate', ->
     describe 'when created with a different uuid', ->
       beforeEach ->
-        @sut = new Device uuid: 'f853214e-69b9-4ca7-a11e-7ee7b1f8f5be'
+        @sut = new Device uuid: 'f853214e-69b9-4ca7-a11e-7ee7b1f8f5be', @dependencies
         @sut.set uuid: 'different-uuid'
         @result = @sut.validate()
 
@@ -299,7 +300,7 @@ describe 'Device', ->
     describe 'when updated with the same uuid', ->
       beforeEach ->
         @uuid = '758a080b-fd29-4413-8339-53cc5de3a649'
-        @sut = new Device uuid: @uuid
+        @sut = new Device uuid: @uuid, @dependencies
         @sut.set uuid: @uuid
         @result = @sut.validate()
 
@@ -377,6 +378,3 @@ describe 'Device', ->
 
         it 'should not update onlineSince', ->
           expect(@sut.attributes.onlineSince).not.to.exist
-
-
-

@@ -24,17 +24,14 @@ class SimpleAuth
     openByDefault
 
   canDiscover: (fromDevice, toDevice, callback) =>
-    process.exit(-1) unless callback?
     result = @checkLists fromDevice, toDevice, toDevice?.discoverWhitelist, toDevice?.discoverBlacklist, true
     @asyncCallback(null, result, callback)
 
   canReceive: (fromDevice, toDevice, callback) =>
-    process.exit(-1) unless callback?
     result = @checkLists fromDevice, toDevice, toDevice?.receiveWhitelist, toDevice?.receiveBlacklist, true
     @asyncCallback(null, result, callback)
 
   canSend: (fromDevice, toDevice, callback) =>
-    process.exit(-1) unless callback?
     result = @checkLists fromDevice, toDevice, toDevice?.sendWhitelist, toDevice?.sendBlacklist, true
     @asyncCallback(null, result, callback)
 
@@ -43,17 +40,17 @@ class SimpleAuth
       callback = message
       message = null
 
-    process.exit(-1) unless callback?
-
     return @asyncCallback(null, true, callback) if @checkLists fromDevice, toDevice, toDevice?.configureWhitelist, toDevice?.configureBlacklist, false
 
     return @asyncCallback(null, false, callback) if !fromDevice || !toDevice
 
     return @asyncCallback(null, true, callback) if fromDevice.uuid == toDevice.uuid
 
-    return @asyncCallback(null, toDevice.owner == fromDevice.uuid, callback) if toDevice.owner
+    if toDevice.owner?
+      return @asyncCallback(null, true, callback) if toDevice.owner == fromDevice.uuid
+    else
+      return @asyncCallback(null, true, callback) if util.sameLAN(fromDevice.ipAddress, toDevice.ipAddress)
 
-    return @asyncCallback(null, true, callback) if util.sameLAN(fromDevice.ipAddress, toDevice.ipAddress)
     if message?.token
       return @authDevice(
         toDevice.uuid

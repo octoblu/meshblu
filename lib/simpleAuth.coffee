@@ -23,9 +23,23 @@ class SimpleAuth
 
     openByDefault
 
-  canDiscover: (fromDevice, toDevice, callback) =>
-    result = @checkLists fromDevice, toDevice, toDevice?.discoverWhitelist, toDevice?.discoverBlacklist, true
-    @asyncCallback(null, result, callback)
+  canDiscover: (fromDevice, toDevice, message, callback) =>
+    if _.isFunction message
+      callback = message
+      message = null
+      
+    return @asyncCallback(null, true, callback) if @checkLists fromDevice, toDevice, toDevice?.discoverWhitelist, toDevice?.discoverBlacklist, true
+    if message?.token
+      return @authDevice(
+        toDevice.uuid
+        message.token
+        (error, result) =>
+          return @asyncCallback(error, false, callback) if error?
+          return @asyncCallback(null, result?, callback)
+       )
+
+    return @asyncCallback(null, false, callback)
+
 
   canReceive: (fromDevice, toDevice, callback) =>
     result = @checkLists fromDevice, toDevice, toDevice?.receiveWhitelist, toDevice?.receiveBlacklist, true

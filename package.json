@@ -1,7 +1,7 @@
 {
   "name": "meshblu-server",
   "description": "communications platform and api for iot",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "author": "Octoblu, Inc.",
   "engines": {
     "node": ">=0.6"

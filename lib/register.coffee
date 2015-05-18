@@ -1,6 +1,7 @@
-_            = require 'lodash'
-debug        = require('debug')('meshblu:register')
+_             = require 'lodash'
+debug         = require('debug')('meshblu:register')
 generateToken = require './generateToken'
+logEvent      = require './logEvent'
 
 module.exports = (device={}, callback=_.noop, dependencies={}) ->
   uuid         = dependencies.uuid || require 'node-uuid'
@@ -26,6 +27,8 @@ module.exports = (device={}, callback=_.noop, dependencies={}) ->
     debug 'about to update device', device
     updateDevice newDevice.uuid, device, (error, savedDevice) =>
       return callback new Error('Device not updated') if error?
+
+      logEvent 400, savedDevice
       savedDevice.token = device.token
 
       callback null, savedDevice

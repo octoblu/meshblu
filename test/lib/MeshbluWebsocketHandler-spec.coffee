@@ -23,6 +23,12 @@ describe 'MeshbluWebsocketHandler', ->
     it 'should listen for identity', ->
       expect(@sut.addListener).to.have.been.calledWith 'identity'
 
+    it 'should listen for update', ->
+      expect(@sut.addListener).to.have.been.calledWith 'update'
+
+    it 'should listen for subscribe', ->
+      expect(@sut.addListener).to.have.been.calledWith 'subscribe'
+
   describe 'sendFrame', ->
     describe 'sending a string', ->
       beforeEach ->
@@ -92,7 +98,7 @@ describe 'MeshbluWebsocketHandler', ->
       @sut.sendError 'bad error'
 
     it 'should create the message and call send', ->
-      expect(@sut.sendFrame).to.have.been.calledWith 'error', message: 'bad error'
+      expect(@sut.sendFrame).to.have.been.calledWith 'error', message: 'bad error', frame: undefined
 
   describe 'onMessage', ->
     beforeEach (done) ->
@@ -135,3 +141,59 @@ describe 'MeshbluWebsocketHandler', ->
 
     it 'should emit status', ->
       expect(@sut.sendFrame).to.have.been.calledWith 'status', something: true
+
+  describe 'update', ->
+    describe 'when authDevice yields an error', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields new Error
+        @updateFromDevice = sinon.spy()
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, updateFromDevice: @updateFromDevice
+        @sut.sendError = sinon.spy()
+
+        @sut.update uuid: '1345', online: true
+
+      it 'should not call updateFromDevice', ->
+        expect(@updateFromDevice).not.to.have.been.called
+
+      it 'should call sendError', ->
+        expect(@sut.sendError).to.have.been.called
+
+    describe 'when authDevice yields a device', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields null, something: true
+        @updateFromClient = sinon.spy()
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, updateFromClient: @updateFromClient
+        @sut.sendFrame = sinon.spy()
+
+        @sut.update uuid: '1345', online: true
+
+      it 'should emit update', ->
+        expect(@updateFromClient).to.have.been.calledWith {something: true}, uuid: '1345', online: true
+
+  describe 'subscribe', ->
+    describe 'when authDevice yields an error', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields new Error
+        @subscribe = sinon.spy()
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, subscribe: @subscribe
+        @sut.sendError = sinon.spy()
+
+        @sut.subscribe uuid: '1345', token: 'abcd'
+
+      it 'should not call subscribe', ->
+        expect(@subscribe).not.to.have.been.called
+
+      it 'should call sendError', ->
+        expect(@sut.sendError).to.have.been.called
+
+    describe 'when authDevice yields a device', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields null, something: true
+        @subscribe = sinon.spy()
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, subscribe: @subscribe
+        @sut.sendFrame = sinon.spy()
+
+        @sut.update uuid: '1345', token: 'dddd'
+
+      it 'should call subscribe', ->
+        expect(@subscribe).to.have.been.calledWith uuid: '1345', token: 'dddd'

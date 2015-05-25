@@ -109,5 +109,8 @@ module.exports = {
    server: process.env.PARENT_CONNECTION_SERVER,
    port: parseInt(process.env.PARENT_CONNECTION_PORT)
  },
+ messageBus: {
+   port: parseInt(process.env.MESSAGE_BUS_PORT || 7777)
+ },
  preservedDeviceProperties: ['geo', 'ipAddress', 'lastOnline', 'onlineSince', 'owner', 'timestamp']
 };

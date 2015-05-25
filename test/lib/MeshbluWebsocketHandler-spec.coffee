@@ -35,7 +35,7 @@ describe 'MeshbluWebsocketHandler', ->
       it 'should serialize data if it is an object', ->
         expect(@socket.send).to.have.been.calledWith JSON.stringify ['test', foo: 'bar']
 
-  describe.only 'parseFrame', ->
+  describe 'parseFrame', ->
     describe 'when null', ->
       beforeEach ->
         @sut.parseFrame null, (@error) =>
@@ -86,3 +86,45 @@ describe 'MeshbluWebsocketHandler', ->
 
     it 'should create the message and call send', ->
       expect(@sut.sendFrame).to.have.been.calledWith 'error', message: 'bad error'
+
+  describe 'onMessage', ->
+    beforeEach (done) ->
+      @sut.addListener 'test', (@data) => done()
+      @sut.onMessage data: '["test",{"far":"near"}]'
+
+    it 'should emit test with object', ->
+      expect(@data).to.deep.equal far: 'near'
+
+  describe 'identity', ->
+    describe 'when authDevice yields an error', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields new Error
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut.sendFrame = sinon.stub()
+
+        @sut.identity null
+
+      it 'should emit notReady', ->
+        expect(@sut.sendFrame).to.have.been.calledWith 'notReady', message: 'unauthorized', status: 401
+
+    describe 'when authDevice yields a device', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields null, uuid: '1234'
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut.sendFrame = sinon.stub()
+
+        @sut.identity uuid: '1234', token: 'abcd'
+
+      it 'should emit ready', ->
+        expect(@sut.sendFrame).to.have.been.calledWith 'ready', uuid: '1234', token: 'abcd', status: 200
+
+  describe 'status', ->
+    beforeEach ->
+      @getSystemStatus = sinon.stub().yields something: true
+      @sut = new MeshbluWebsocketHandler getSystemStatus: @getSystemStatus
+      @sut.sendFrame = sinon.stub()
+
+      @sut.status()
+
+    it 'should emit status', ->
+      expect(@sut.sendFrame).to.have.been.calledWith 'status', something: true

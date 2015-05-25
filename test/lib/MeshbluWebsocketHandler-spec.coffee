@@ -8,6 +8,7 @@ describe 'MeshbluWebsocketHandler', ->
   describe 'initialize', ->
     beforeEach ->
       @socket.on = sinon.spy()
+      @sut.addListener = sinon.spy()
       @sut.initialize @socket
 
     it 'should register message event', ->
@@ -15,6 +16,12 @@ describe 'MeshbluWebsocketHandler', ->
 
     it 'should register close event', ->
       expect(@socket.on).to.have.been.calledWith 'close'
+
+    it 'should listen for status', ->
+      expect(@sut.addListener).to.have.been.calledWith 'status'
+
+    it 'should listen for identity', ->
+      expect(@sut.addListener).to.have.been.calledWith 'identity'
 
   describe 'sendFrame', ->
     describe 'sending a string', ->

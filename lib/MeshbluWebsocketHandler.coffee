@@ -12,6 +12,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     @socket.on 'message', @onMessage
     @socket.on 'close', @onClose
     @addListener 'status', @status
+    @addListener 'identity', @identity
 
   identity: (data) =>
     data ?= {}

@@ -121,6 +121,7 @@ describe 'MeshbluWebsocketHandler', ->
         @authDevice = sinon.stub().yields new Error
         @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
         @sut.sendFrame = sinon.stub()
+        @sut.setOnlineStatus = sinon.spy()
 
         @sut.identity null
 
@@ -133,6 +134,7 @@ describe 'MeshbluWebsocketHandler', ->
         @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
         @sut.socketIOClient = @socketIOClient
         @sut.sendFrame = sinon.stub()
+        @sut.setOnlineStatus = sinon.spy()
 
         @sut.identity uuid: '1234', token: 'abcd'
 
@@ -284,11 +286,12 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, something: true
         @sendMessage = sinon.spy()
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient, sendMessage: @sendMesage
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient, sendMessage: @sendMessage
         @sut.socketIOClient = @socketIOClient
+        @sut.setOnlineStatus = sinon.spy()
         @sut.sendFrame = sinon.spy()
 
         @sut.message uuid: '5431'
 
       it 'should call message', ->
-        expect(@sendMesage).to.have.been.calledWith 'message', '5431_bc'
+        expect(@sendMessage).to.have.been.calledWith {something: true}, uuid: '5431'

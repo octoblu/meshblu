@@ -10,6 +10,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     @getSystemStatus = dependencies.getSystemStatus ? require './getSystemStatus'
     @securityImpl = dependencies.securityImpl ? require './getSecurityImpl'
     @getDevice = dependencies.getDevice ? require './getDevice'
+    @sendMessage = dependencies.sendMessage
     @updateFromClient = dependencies.updateFromClient ? require './updateFromClient'
 
   initialize: (@socket, request) =>
@@ -20,6 +21,8 @@ class MeshbluWebsocketHandler extends EventEmitter
     @addListener 'identity', @identity
     @addListener 'update', @update
     @addListener 'subscribe', @subscribe
+    @addListener 'unsubscribe', @unsubscribe
+    @addListener 'message', @message
     @socketIOClient = @SocketIOClient('ws://localhost:' + config.messageBus.port)
     @socketIOClient.on 'message', @onSocketMessage
 
@@ -29,8 +32,23 @@ class MeshbluWebsocketHandler extends EventEmitter
     @authDevice @uuid, @token, (error, device) =>
       return @sendFrame 'notReady', message: 'unauthorized', status: 401 if error?
       @sendFrame 'ready', uuid: @uuid, token: @token, status: 200
+      @setOnlineStatus device, true
       @socketIOClient.emit 'subscribe', @uuid
       @socketIOClient.emit 'subscribe', "#{@uuid}_bc"
+
+  message: (data) =>
+    @authDevice @uuid, @token, (error, device) =>
+      debug 'message', data
+      return @sendError error.message, ['message', data] if error?
+      @sendMessage device, data
+
+  setOnlineStatus: (device, online) =>
+    message =
+      devices: '*',
+      topic: 'device-status',
+      payload:
+        online: online
+    @sendMessage device, message
 
   status: =>
     @getSystemStatus (status) =>
@@ -60,9 +78,15 @@ class MeshbluWebsocketHandler extends EventEmitter
       @updateFromClient device, data
 
   # event handlers
-  onClose: (event) ->
+  onClose: (event) =>
     debug 'on.close'
-    @socket = null
+    @authDevice @uuid, @token, (error, device) =>
+      return if error?
+      @setOnlineStatus device, false
+      @socketIOClient.emit 'unsubscribe', @uuid
+      @socketIOClient.emit 'unsubscribe', "#{@uuid}_bc"
+      @socket = null
+      @socketIOClient = null
 
   onMessage: (event) =>
     debug 'onMessage', event.data
@@ -70,6 +94,7 @@ class MeshbluWebsocketHandler extends EventEmitter
       @sendError error.message, event.data if error?
       @emit type, data
 
+  # internal methods
   parseFrame: (frame, callback=->) =>
     try frame = JSON.parse frame
     debug 'parseFrame', frame

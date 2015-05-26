@@ -263,3 +263,32 @@ describe 'MeshbluWebsocketHandler', ->
 
       it 'should call unsubscribe on uuid', ->
         expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', '5431'
+
+  describe 'message', ->
+    describe 'when authDevice yields an error', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields new Error
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
+        @sut.socketIOClient = @socketIOClient
+        @sut.sendError = sinon.spy()
+
+        @sut.message uuid: '1345', token: 'abcd'
+
+      it 'should not call message', ->
+        expect(@socketIOClient.emit).not.to.have.been.called
+
+      it 'should call sendError', ->
+        expect(@sut.sendError).to.have.been.called
+
+    describe 'when authDevice yields a device', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields null, something: true
+        @sendMessage = sinon.spy()
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient, sendMessage: @sendMesage
+        @sut.socketIOClient = @socketIOClient
+        @sut.sendFrame = sinon.spy()
+
+        @sut.message uuid: '5431'
+
+      it 'should call message', ->
+        expect(@sendMesage).to.have.been.calledWith 'message', '5431_bc'

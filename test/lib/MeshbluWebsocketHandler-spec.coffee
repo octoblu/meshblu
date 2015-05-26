@@ -2,7 +2,11 @@ MeshbluWebsocketHandler = require '../../lib/MeshbluWebsocketHandler'
 
 describe 'MeshbluWebsocketHandler', ->
   beforeEach ->
-    @sut = new MeshbluWebsocketHandler
+    @socketIOClient =
+      on: sinon.spy()
+      emit: sinon.spy()
+    @SocketIOClient = sinon.spy => @socketIOClient
+    @sut = new MeshbluWebsocketHandler SocketIOClient: @SocketIOClient
     @socket = sinon.spy => @socket
 
   describe 'initialize', ->
@@ -28,6 +32,9 @@ describe 'MeshbluWebsocketHandler', ->
 
     it 'should listen for subscribe', ->
       expect(@sut.addListener).to.have.been.calledWith 'subscribe'
+
+    it 'should create a SocketIO Client', ->
+      expect(@SocketIOClient).to.have.been.calledWith 'ws://localhost:7777'
 
   describe 'sendFrame', ->
     describe 'sending a string', ->
@@ -112,7 +119,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
         @sut.sendFrame = sinon.stub()
 
         @sut.identity null
@@ -123,13 +130,20 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields a device', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, uuid: '1234'
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
+        @sut.socketIOClient = @socketIOClient
         @sut.sendFrame = sinon.stub()
 
         @sut.identity uuid: '1234', token: 'abcd'
 
       it 'should emit ready', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'ready', uuid: '1234', token: 'abcd', status: 200
+
+      it 'should emit subscribe to my uuid', ->
+        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', '1234'
+
+      it 'should emit subscribe to my uuid broadcast', ->
+        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', '1234_bc'
 
   describe 'status', ->
     beforeEach ->
@@ -174,14 +188,13 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
-        @subscribe = sinon.spy()
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, subscribe: @subscribe
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
         @sut.sendError = sinon.spy()
 
         @sut.subscribe uuid: '1345', token: 'abcd'
 
       it 'should not call subscribe', ->
-        expect(@subscribe).not.to.have.been.called
+        expect(@socketIOClient.emit).not.to.have.been.called
 
       it 'should call sendError', ->
         expect(@sut.sendError).to.have.been.called
@@ -189,11 +202,64 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields a device', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, something: true
-        @subscribe = sinon.spy()
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, subscribe: @subscribe
+        @getDevice = sinon.stub().yields null, uuid: '5431'
+        @securityImpl = canReceive: sinon.stub().yields null, true
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient, securityImpl: @securityImpl, getDevice: @getDevice
+        @sut.socketIOClient = @socketIOClient
         @sut.sendFrame = sinon.spy()
 
-        @sut.update uuid: '1345', token: 'dddd'
+        @sut.subscribe uuid: '5431'
 
-      it 'should call subscribe', ->
-        expect(@subscribe).to.have.been.calledWith uuid: '1345', token: 'dddd'
+      it 'should call subscribe _bc', ->
+        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', '5431_bc'
+
+      it 'should not call subscribe on uuid', ->
+        expect(@socketIOClient.emit).not.to.have.been.calledWith 'subscribe', '5431'
+
+    describe 'when the device is owned by the owner', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields null, uuid: '1234'
+        @getDevice = sinon.stub().yields null, uuid: '5431', owner: '1234'
+        @securityImpl = canReceive: sinon.stub().yields null, true
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient, securityImpl: @securityImpl, getDevice: @getDevice
+        @sut.socketIOClient = @socketIOClient
+        @sut.sendFrame = sinon.spy()
+
+        @sut.subscribe uuid: '5431'
+
+      it 'should call subscribe _bc', ->
+        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', '5431_bc'
+
+      it 'should call subscribe on uuid', ->
+        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', '5431'
+
+  describe 'unsubscribe', ->
+    describe 'when authDevice yields an error', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields new Error
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
+        @sut.socketIOClient = @socketIOClient
+        @sut.sendError = sinon.spy()
+
+        @sut.unsubscribe uuid: '1345', token: 'abcd'
+
+      it 'should not call unsubscribe', ->
+        expect(@socketIOClient.emit).not.to.have.been.called
+
+      it 'should call sendError', ->
+        expect(@sut.sendError).to.have.been.called
+
+    describe 'when authDevice yields a device', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields null, something: true
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
+        @sut.socketIOClient = @socketIOClient
+        @sut.sendFrame = sinon.spy()
+
+        @sut.unsubscribe uuid: '5431'
+
+      it 'should call unsubscribe _bc', ->
+        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', '5431_bc'
+
+      it 'should call unsubscribe on uuid', ->
+        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', '5431'

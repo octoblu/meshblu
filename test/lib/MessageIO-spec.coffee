@@ -1,4 +1,4 @@
-MessageIO = require '../../lib/messageIO'
+MessageIO = require '../../lib/MessageIO'
 config = require '../../config'
 
 describe 'MessageIO', ->

@@ -10,6 +10,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     @getSystemStatus = dependencies.getSystemStatus ? require './getSystemStatus'
     @securityImpl = dependencies.securityImpl ? require './getSecurityImpl'
     @getDevice = dependencies.getDevice ? require './getDevice'
+    @getDevices = dependencies.getDevices ? require './getDevices'
     @sendMessage = dependencies.sendMessage
     @updateFromClient = dependencies.updateFromClient ? require './updateFromClient'
 
@@ -24,6 +25,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     @addListener 'unsubscribe', @unsubscribe
     @addListener 'message', @message
     @addListener 'device', @device
+    @addListener 'devices', @devices
     @socketIOClient = @SocketIOClient('ws://localhost:' + config.messageBus.port)
     @socketIOClient.on 'message', @onSocketMessage
 
@@ -37,6 +39,14 @@ class MeshbluWebsocketHandler extends EventEmitter
         return @sendError error.message, ['device', data] if error?
         @securityImpl.canDiscover device, foundDevice, (error, permission) =>
           @sendFrame 'device', foundDevice
+
+  devices: (data) =>
+    @authDevice @uuid, @token, (error, device) =>
+      debug 'devices', data
+      return @sendError error.message, ['devices', data] if error?
+      @getDevices device, data, (error, foundDevices) =>
+        return @sendError error.message, ['devices', data] if error?
+        @sendFrame 'devices', foundDevices
 
   deviceWithToken: (data) =>
     @authDevice data.uuid, data.token, (error, authedDevice) =>
@@ -60,6 +70,20 @@ class MeshbluWebsocketHandler extends EventEmitter
       debug 'message', data
       return @sendError error.message, ['message', data] if error?
       @sendMessage device, data
+
+  mydevices: (data) =>
+    @authDevice @uuid, @token, (error, device) =>
+      debug 'mydevices', data
+      return @sendError error.message, ['mydevices', data] if error?
+      data.owner = device.uuid
+      @getDevices device, data, (error, foundDevices) =>
+        return @sendError error.message, ['mydevices', data] if error?
+        @sendFrame 'mydevices', foundDevices
+
+  whoami: (data) =>
+    @authDevice @uuid, @token, (error, device) =>
+      return @sendError error.message, ['whoami', data] if error?
+      @sendFrame 'whoami', device
 
   setOnlineStatus: (device, online) =>
     message =
@@ -91,7 +115,7 @@ class MeshbluWebsocketHandler extends EventEmitter
   subscribeWithToken: (data) =>
     @authDevice data.uuid, data.token, (error, authedDevice) =>
       debug 'subscribeWithToken', data
-      return @sendError error.message, ['subscribe', data] if error? || !authedDevice?
+      return @sendError error?.message, ['subscribe', data] if error? || !authedDevice?
       @socketIOClient.emit 'subscribe', authedDevice.uuid
 
   unsubscribe: (data) =>

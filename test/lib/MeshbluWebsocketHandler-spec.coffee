@@ -338,3 +338,86 @@ describe 'MeshbluWebsocketHandler', ->
 
       it 'should call device', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'device', uuid: '5431', online: true
+
+  describe 'devices', ->
+    describe 'when authDevice yields an error', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields new Error
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut.socketIOClient = @socketIOClient
+        @sut.sendError = sinon.spy()
+
+        @sut.devices uuid: '1345', token: 'abcd'
+
+      it 'should not call devices', ->
+        expect(@socketIOClient.emit).not.to.have.been.called
+
+      it 'should call sendError', ->
+        expect(@sut.sendError).to.have.been.called
+
+    describe 'when authDevice yields a devices', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields null, something: true
+        @getDevices = sinon.stub().yields null, [{uuid: '5431', color: 'green'}, {uuid: '1234', color: 'green'}]
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, getDevices: @getDevices
+        @sut.sendFrame = sinon.spy()
+
+        @sut.devices color: 'green'
+
+      it 'should call devices', ->
+        expect(@sut.sendFrame).to.have.been.calledWith 'devices', [{uuid: '5431', color: 'green'}, {uuid: '1234', color: 'green'}]
+
+  describe 'mydevices', ->
+    describe 'when authDevice yields an error', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields new Error
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut.socketIOClient = @socketIOClient
+        @sut.sendError = sinon.spy()
+
+        @sut.mydevices color: 'green'
+
+      it 'should not call devices', ->
+        expect(@socketIOClient.emit).not.to.have.been.called
+
+      it 'should call sendError', ->
+        expect(@sut.sendError).to.have.been.called
+
+    describe 'when authDevice yields a devices', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields null, uuid: '5555'
+        @getDevices = sinon.stub().yields null, [{uuid: '5431', color: 'green', owner: '5555'}, {uuid: '1234', color: 'green', owner: '5555'}]
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, getDevices: @getDevices
+        @sut.sendFrame = sinon.spy()
+
+        @sut.mydevices color: 'green'
+
+      it 'should call devices', ->
+        expect(@sut.sendFrame).to.have.been.calledWith 'mydevices', [{uuid: '5431', color: 'green', owner: '5555'}, {uuid: '1234', color: 'green', owner: '5555'}]
+
+  describe 'whoami', ->
+    describe 'when authDevice yields an error', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields new Error
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut.socketIOClient = @socketIOClient
+        @sut.sendError = sinon.spy()
+
+        @sut.whoami()
+
+      it 'should not call devices', ->
+        expect(@socketIOClient.emit).not.to.have.been.called
+
+      it 'should call sendError', ->
+        expect(@sut.sendError).to.have.been.called
+
+    describe 'when authDevice yields a devices', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields null, uuid: '5555'
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut.sendFrame = sinon.spy()
+
+        @sut.whoami()
+
+      it 'should call devices', ->
+        expect(@sut.sendFrame).to.have.been.calledWith 'whoami', uuid: '5555'

@@ -7,7 +7,7 @@ module.exports = (uuid, token, callback=(->), dependencies={}) ->
   @getDeviceWithToken = dependencies.getDeviceWithToken ? require('./getDeviceWithToken')
   @getDeviceWithToken uuid, (error, device) =>
     debug 'gotDeviceWithToken', error, device
-    return callback new Error('Unable to find device') unless device?
+    return callback new Error('Unable to find valid device') unless device?
 
     hashedTokens = _.pluck(device.tokens, 'hash') ? []
     hashedTokens.push device.token if device.token?
@@ -23,4 +23,4 @@ module.exports = (uuid, token, callback=(->), dependencies={}) ->
     async.detectSeries hashedTokens.reverse(), compareToken, (goodToken) =>
       debug 'token matched?', goodToken?
       return callback null, device if goodToken?
-      return callback null, null
+      return callback new Error('Unable to find valid device')

@@ -55,6 +55,8 @@ class MeshbluWebsocketHandler extends EventEmitter
       @sendFrame 'status', status
 
   subscribe: (data) =>
+    return @subscribeWithToken data if data.token
+
     @authDevice @uuid, @token, (error, device) =>
       return @sendError error.message, ['subscribe', data] if error?
       @getDevice data.uuid, (error, subscribedDevice) =>
@@ -65,6 +67,11 @@ class MeshbluWebsocketHandler extends EventEmitter
 
           if subscribedDevice.owner? && subscribedDevice.owner == device.uuid
             @socketIOClient.emit 'subscribe', subscribedDevice.uuid
+
+  subscribeWithToken: (data) =>
+    authDevice data.uuid, data.token, (error, authedDevice) =>
+      return @sendError error.message, ['subscribe', data] if error? || !device?
+      @socketIOClient.emit 'subscribe', authedDevice.uuid
 
   unsubscribe: (data) =>
     @authDevice @uuid, @token, (error, device) =>

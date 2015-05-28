@@ -16,3 +16,4 @@ v8.log
 *.sublime-workspace
 coverage
 .idea
+meshblu.json

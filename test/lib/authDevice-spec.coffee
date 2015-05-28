@@ -43,8 +43,8 @@ describe 'authDevice', ->
       it 'should call the callback with no device', ->
         expect(@device).not.to.exist
 
-      it 'should call the callback with no error', ->
-        expect(@error).not.to.exist
+      it 'should call the callback with an error', ->
+        expect(@error).to.exist
 
   describe 'when the device in the database has tokens', ->
     beforeEach ->
@@ -69,5 +69,5 @@ describe 'authDevice', ->
       it 'should call the callback with no device', ->
         expect(@device).not.to.exist
 
-      it 'should call the callback with no error', ->
-        expect(@error).not.to.exist
+      it 'should call the callback with an error', ->
+        expect(@error).to.exist

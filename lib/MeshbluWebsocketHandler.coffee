@@ -2,6 +2,7 @@ _ = require 'lodash'
 config = require '../config'
 debug = require('debug')('meshblu:meshblu-websocket-handler')
 {EventEmitter} = require 'events'
+uuid = require 'node-uuid'
 
 class MeshbluWebsocketHandler extends EventEmitter
   constructor: (dependencies={})->
@@ -11,10 +12,12 @@ class MeshbluWebsocketHandler extends EventEmitter
     @securityImpl = dependencies.securityImpl ? require './getSecurityImpl'
     @getDevice = dependencies.getDevice ? require './getDevice'
     @getDevices = dependencies.getDevices ? require './getDevices'
+    @registerDevice = dependencies.registerDevice ? require './register'
     @sendMessage = dependencies.sendMessage
     @updateFromClient = dependencies.updateFromClient ? require './updateFromClient'
 
   initialize: (@socket, request) =>
+    @socket.id = uuid.v4()
     @headers = request?.headers
     @socket.on 'message', @onMessage
     @socket.on 'close', @onClose
@@ -26,6 +29,9 @@ class MeshbluWebsocketHandler extends EventEmitter
     @addListener 'message', @message
     @addListener 'device', @device
     @addListener 'devices', @devices
+    @addListener 'mydevices', @mydevices
+    @addListener 'whoami', @whoami
+    @addListener 'register', @register
     @socketIOClient = @SocketIOClient('ws://localhost:' + config.messageBus.port)
     @socketIOClient.on 'message', @onSocketMessage
 
@@ -84,6 +90,13 @@ class MeshbluWebsocketHandler extends EventEmitter
     @authDevice @uuid, @token, (error, device) =>
       return @sendError error.message, ['whoami', data] if error?
       @sendFrame 'whoami', device
+
+  register: (data) =>
+    console.log 'foo'
+    debug 'register', data
+    @registerDevice data, (error, device) =>
+      return @sendError error.message, ['register', data] if error?
+      @sendFrame 'register', device
 
   setOnlineStatus: (device, online) =>
     message =

@@ -15,6 +15,9 @@ describe 'MeshbluWebsocketHandler', ->
       @sut.addListener = sinon.spy()
       @sut.initialize @socket
 
+    it 'should assign a socket.id', ->
+      expect(@socket.id).to.exist
+
     it 'should register message event', ->
       expect(@socket.on).to.have.been.calledWith 'message'
 
@@ -35,6 +38,18 @@ describe 'MeshbluWebsocketHandler', ->
 
     it 'should listen for device', ->
       expect(@sut.addListener).to.have.been.calledWith 'device'
+
+    it 'should listen for devices', ->
+      expect(@sut.addListener).to.have.been.calledWith 'devices'
+
+    it 'should listen for mydevices', ->
+      expect(@sut.addListener).to.have.been.calledWith 'mydevices'
+
+    it 'should listen for register', ->
+      expect(@sut.addListener).to.have.been.calledWith 'register'
+
+    it 'should listen for whoami', ->
+      expect(@sut.addListener).to.have.been.calledWith 'whoami'
 
     it 'should create a SocketIO Client', ->
       expect(@SocketIOClient).to.have.been.calledWith 'ws://localhost:7777'
@@ -421,3 +436,26 @@ describe 'MeshbluWebsocketHandler', ->
 
       it 'should call devices', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'whoami', uuid: '5555'
+
+  describe 'register', ->
+    describe 'when register yields an error', ->
+      beforeEach ->
+        @registerDevice = sinon.stub().yields new Error
+        @sut = new MeshbluWebsocketHandler registerDevice: @registerDevice
+        @sut.sendError = sinon.spy()
+
+        @sut.register foo: 'bar'
+
+      it 'should call sendError', ->
+        expect(@sut.sendError).to.have.been.called
+
+    describe 'when successful', ->
+      beforeEach ->
+        @registerDevice = sinon.stub().yields null, uuid: '5555', color: 'green'
+        @sut = new MeshbluWebsocketHandler registerDevice: @registerDevice
+        @sut.sendFrame = sinon.spy()
+
+        @sut.register color: 'green'
+
+      it 'should call register', ->
+        expect(@sut.sendFrame).to.have.been.calledWith 'register', uuid: '5555', color: 'green'

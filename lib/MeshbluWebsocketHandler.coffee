@@ -13,28 +13,40 @@ class MeshbluWebsocketHandler extends EventEmitter
     @getDevice = dependencies.getDevice ? require './getDevice'
     @getDevices = dependencies.getDevices ? require './getDevices'
     @registerDevice = dependencies.registerDevice ? require './register'
+    @unregisterDevice = dependencies.unregisterDevice ? require './unregister'
     @sendMessage = dependencies.sendMessage
     @updateFromClient = dependencies.updateFromClient ? require './updateFromClient'
 
   initialize: (@socket, request) =>
     @socket.id = uuid.v4()
     @headers = request?.headers
-    @socket.on 'message', @onMessage
+
     @socket.on 'close', @onClose
-    @addListener 'status', @status
-    @addListener 'identity', @identity
-    @addListener 'update', @update
-    @addListener 'subscribe', @subscribe
-    @addListener 'unsubscribe', @unsubscribe
-    @addListener 'message', @message
-    @addListener 'device', @device
-    @addListener 'devices', @devices
-    @addListener 'mydevices', @mydevices
-    @addListener 'whoami', @whoami
-    @addListener 'register', @register
+    @socket.on 'message', @onMessage
+
+    @addListeners()
+
     @socketIOClient = @SocketIOClient('ws://localhost:' + config.messageBus.port)
     @socketIOClient.on 'message', @onSocketMessage
 
+  # event handlers
+  onClose: (event) =>
+    debug 'on.close'
+    @authDevice @uuid, @token, (error, device) =>
+      return if error?
+      @setOnlineStatus device, false
+      @socketIOClient.emit 'unsubscribe', @uuid
+      @socketIOClient.emit 'unsubscribe', "#{@uuid}_bc"
+      @socket = null
+      @socketIOClient = null
+
+  onMessage: (event) =>
+    debug 'onMessage', event.data
+    @parseFrame event.data, (error, type, data) =>
+      @sendError error.message, event.data if error?
+      @emit type, data
+
+  # message handlers
   device: (data) =>
     return @deviceWithToken data if data.token
 
@@ -53,13 +65,6 @@ class MeshbluWebsocketHandler extends EventEmitter
       @getDevices device, data, (error, foundDevices) =>
         return @sendError error.message, ['devices', data] if error?
         @sendFrame 'devices', foundDevices
-
-  deviceWithToken: (data) =>
-    @authDevice data.uuid, data.token, (error, authedDevice) =>
-      debug 'deviceWithToken', data
-      return @sendError error?.message, ['device', data] if error? || !authedDevice?
-      delete authedDevice.token
-      @sendFrame 'device', authedDevice
 
   identity: (data) =>
     data ?= {}
@@ -86,25 +91,11 @@ class MeshbluWebsocketHandler extends EventEmitter
         return @sendError error.message, ['mydevices', data] if error?
         @sendFrame 'mydevices', foundDevices
 
-  whoami: (data) =>
-    @authDevice @uuid, @token, (error, device) =>
-      return @sendError error.message, ['whoami', data] if error?
-      @sendFrame 'whoami', device
-
   register: (data) =>
-    console.log 'foo'
     debug 'register', data
     @registerDevice data, (error, device) =>
       return @sendError error.message, ['register', data] if error?
-      @sendFrame 'register', device
-
-  setOnlineStatus: (device, online) =>
-    message =
-      devices: '*',
-      topic: 'device-status',
-      payload:
-        online: online
-    @sendMessage device, message
+      @sendFrame 'registered', device
 
   status: =>
     @getSystemStatus (status) =>
@@ -125,41 +116,52 @@ class MeshbluWebsocketHandler extends EventEmitter
           if subscribedDevice.owner? && subscribedDevice.owner == device.uuid
             @socketIOClient.emit 'subscribe', subscribedDevice.uuid
 
-  subscribeWithToken: (data) =>
-    @authDevice data.uuid, data.token, (error, authedDevice) =>
-      debug 'subscribeWithToken', data
-      return @sendError error?.message, ['subscribe', data] if error? || !authedDevice?
-      @socketIOClient.emit 'subscribe', authedDevice.uuid
-
   unsubscribe: (data) =>
+    return @unregisterWithToken data if data.token
+
     @authDevice @uuid, @token, (error, device) =>
       return @sendError error.message, ['unsubscribe', data] if error?
       @socketIOClient.emit 'unsubscribe', "#{data.uuid}_bc"
       @socketIOClient.emit 'unsubscribe', data.uuid
 
+  unregister: (data) =>
+    @authDevice @uuid, @token, (error, device) =>
+      return @sendError error.message, ['unregister', data] if error?
+      @unregisterDevice device, data.uuid
+      @sendFrame 'unregistered', uuid: data.uuid
+
   update: (data) =>
     @authDevice @uuid, @token, (error, device) =>
       return @sendError error.message, ['update', data] if error?
       @updateFromClient device, data
+      @sendFrame 'updated', uuid: data.uuid
 
-  # event handlers
-  onClose: (event) =>
-    debug 'on.close'
+  whoami: (data) =>
     @authDevice @uuid, @token, (error, device) =>
-      return if error?
-      @setOnlineStatus device, false
-      @socketIOClient.emit 'unsubscribe', @uuid
-      @socketIOClient.emit 'unsubscribe', "#{@uuid}_bc"
-      @socket = null
-      @socketIOClient = null
-
-  onMessage: (event) =>
-    debug 'onMessage', event.data
-    @parseFrame event.data, (error, type, data) =>
-      @sendError error.message, event.data if error?
-      @emit type, data
+      return @sendError error.message, ['whoami', data] if error?
+      @sendFrame 'whoami', device
 
   # internal methods
+  addListeners: =>
+    @addListener 'device', @device
+    @addListener 'devices', @devices
+    @addListener 'identity', @identity
+    @addListener 'message', @message
+    @addListener 'mydevices', @mydevices
+    @addListener 'register', @register
+    @addListener 'status', @status
+    @addListener 'subscribe', @subscribe
+    @addListener 'update', @update
+    @addListener 'unsubscribe', @unsubscribe
+    @addListener 'whoami', @whoami
+
+  deviceWithToken: (data) =>
+    @authDevice data.uuid, data.token, (error, authedDevice) =>
+      debug 'deviceWithToken', data
+      return @sendError error?.message, ['device', data] if error? || !authedDevice?
+      delete authedDevice.token
+      @sendFrame 'device', authedDevice
+
   parseFrame: (frame, callback=->) =>
     try frame = JSON.parse frame
     debug 'parseFrame', frame
@@ -167,6 +169,14 @@ class MeshbluWebsocketHandler extends EventEmitter
       return callback null, frame...
 
     callback new Error 'invalid frame, must be in the form of [type, data]'
+
+  setOnlineStatus: (device, online) =>
+    message =
+      devices: '*',
+      topic: 'device-status',
+      payload:
+        online: online
+    @sendMessage device, message
 
   sendFrame: (type, data) =>
     frame = [type, data]
@@ -176,6 +186,19 @@ class MeshbluWebsocketHandler extends EventEmitter
   sendError: (message, frame) =>
     debug 'sendError', message
     @sendFrame 'error', message: message, frame: frame
+
+  subscribeWithToken: (data) =>
+    @authDevice data.uuid, data.token, (error, authedDevice) =>
+      debug 'subscribeWithToken', data
+      return @sendError error?.message, ['subscribe', data] if error? || !authedDevice?
+      @socketIOClient.emit 'subscribe', authedDevice.uuid
+
+  unregisterWithToken: (data) =>
+    @authDevice data.uuid, data.token, (error, authedDevice) =>
+      debug 'unregisterWithToken', data
+      return @sendError error?.message, ['unregister', data] if error? || !authedDevice?
+      @unregisterDevice authedDevice, data.uuid
+      @sendFrame 'unregistered', uuid: data.uuid
 
   #socketio event handlers
   onSocketMessage: (data) =>

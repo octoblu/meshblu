@@ -204,6 +204,9 @@ describe 'MeshbluWebsocketHandler', ->
       it 'should emit update', ->
         expect(@updateFromClient).to.have.been.calledWith {something: true}, uuid: '1345', online: true
 
+      it 'should send updated', ->
+        expect(@sut.sendFrame).to.have.been.calledWith 'updated', uuid: '1345'
+
   describe 'subscribe', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
@@ -420,9 +423,6 @@ describe 'MeshbluWebsocketHandler', ->
 
         @sut.whoami()
 
-      it 'should not call devices', ->
-        expect(@socketIOClient.emit).not.to.have.been.called
-
       it 'should call sendError', ->
         expect(@sut.sendError).to.have.been.called
 
@@ -458,4 +458,46 @@ describe 'MeshbluWebsocketHandler', ->
         @sut.register color: 'green'
 
       it 'should call register', ->
-        expect(@sut.sendFrame).to.have.been.calledWith 'register', uuid: '5555', color: 'green'
+        expect(@sut.sendFrame).to.have.been.calledWith 'registered', uuid: '5555', color: 'green'
+
+  describe 'unregister', ->
+    describe 'when authDevice yields an error', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields new Error
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut.sendError = sinon.spy()
+
+        @sut.unregister uuid: '1345', online: true
+
+      it 'should call sendError', ->
+        expect(@sut.sendError).to.have.been.called
+
+    describe 'when authDevice yields a device', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields null, something: true
+        @unregisterDevice = sinon.spy()
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, unregisterDevice: @unregisterDevice
+        @sut.sendFrame = sinon.spy()
+
+        @sut.unregister uuid: '1345'
+
+      it 'should emit unregister', ->
+        expect(@unregisterDevice).to.have.been.calledWith {something: true}, '1345'
+
+      it 'should send unregistered', ->
+        expect(@sut.sendFrame).to.have.been.calledWith 'unregistered', uuid: '1345'
+
+    describe 'when the uuid and token are given', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields null, something: true
+        @unregisterDevice = sinon.spy()
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, unregisterDevice: @unregisterDevice
+        @sut.sendFrame = sinon.spy()
+
+        @sut.unregister uuid: '5431', token: '5999'
+
+      it 'should unregister', ->
+        expect(@unregisterDevice).to.have.been.calledWith {something: true}, '5431'
+
+      it 'should send unregistered', ->
+        expect(@sut.sendFrame).to.have.been.calledWith 'unregistered', uuid: '5431'

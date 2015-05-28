@@ -23,8 +23,27 @@ class MeshbluWebsocketHandler extends EventEmitter
     @addListener 'subscribe', @subscribe
     @addListener 'unsubscribe', @unsubscribe
     @addListener 'message', @message
+    @addListener 'device', @device
     @socketIOClient = @SocketIOClient('ws://localhost:' + config.messageBus.port)
     @socketIOClient.on 'message', @onSocketMessage
+
+  device: (data) =>
+    return @deviceWithToken data if data.token
+
+    @authDevice @uuid, @token, (error, device) =>
+      debug 'device', data
+      return @sendError error.message, ['device', data] if error?
+      @getDevice data.uuid, (error, foundDevice) =>
+        return @sendError error.message, ['device', data] if error?
+        @securityImpl.canDiscover device, foundDevice, (error, permission) =>
+          @sendFrame 'device', foundDevice
+
+  deviceWithToken: (data) =>
+    @authDevice data.uuid, data.token, (error, authedDevice) =>
+      debug 'deviceWithToken', data
+      return @sendError error?.message, ['device', data] if error? || !authedDevice?
+      delete authedDevice.token
+      @sendFrame 'device', authedDevice
 
   identity: (data) =>
     data ?= {}
@@ -58,6 +77,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     return @subscribeWithToken data if data.token
 
     @authDevice @uuid, @token, (error, device) =>
+      debug 'subscribe', data
       return @sendError error.message, ['subscribe', data] if error?
       @getDevice data.uuid, (error, subscribedDevice) =>
         return @sendError error.message, ['subscribe', data] if error?
@@ -69,8 +89,9 @@ class MeshbluWebsocketHandler extends EventEmitter
             @socketIOClient.emit 'subscribe', subscribedDevice.uuid
 
   subscribeWithToken: (data) =>
-    authDevice data.uuid, data.token, (error, authedDevice) =>
-      return @sendError error.message, ['subscribe', data] if error? || !device?
+    @authDevice data.uuid, data.token, (error, authedDevice) =>
+      debug 'subscribeWithToken', data
+      return @sendError error.message, ['subscribe', data] if error? || !authedDevice?
       @socketIOClient.emit 'subscribe', authedDevice.uuid
 
   unsubscribe: (data) =>

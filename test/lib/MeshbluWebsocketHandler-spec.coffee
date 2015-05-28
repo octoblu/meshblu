@@ -33,6 +33,9 @@ describe 'MeshbluWebsocketHandler', ->
     it 'should listen for subscribe', ->
       expect(@sut.addListener).to.have.been.calledWith 'subscribe'
 
+    it 'should listen for device', ->
+      expect(@sut.addListener).to.have.been.calledWith 'device'
+
     it 'should create a SocketIO Client', ->
       expect(@SocketIOClient).to.have.been.calledWith 'ws://localhost:7777'
 
@@ -295,3 +298,43 @@ describe 'MeshbluWebsocketHandler', ->
 
       it 'should call message', ->
         expect(@sendMessage).to.have.been.calledWith {something: true}, uuid: '5431'
+
+  describe 'device', ->
+    describe 'when authDevice yields an error', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields new Error
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut.socketIOClient = @socketIOClient
+        @sut.sendError = sinon.spy()
+
+        @sut.device uuid: '1345', token: 'abcd'
+
+      it 'should not call device', ->
+        expect(@socketIOClient.emit).not.to.have.been.called
+
+      it 'should call sendError', ->
+        expect(@sut.sendError).to.have.been.called
+
+    describe 'when authDevice yields a device', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields null, something: true
+        @getDevice = sinon.stub().yields null, uuid: '5431', online: true
+        @securityImpl = canDiscover: sinon.stub().yields null, true
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, getDevice: @getDevice, securityImpl: @securityImpl
+        @sut.sendFrame = sinon.spy()
+
+        @sut.device uuid: '5431'
+
+      it 'should call device', ->
+        expect(@sut.sendFrame).to.have.been.calledWith 'device', uuid: '5431', online: true
+
+    describe 'when the uuid and token are given', ->
+      beforeEach ->
+        @authDevice = sinon.stub().yields null, uuid: '5431', online: true
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut.sendFrame = sinon.spy()
+
+        @sut.device uuid: '5431', token: '5999'
+
+      it 'should call device', ->
+        expect(@sut.sendFrame).to.have.been.calledWith 'device', uuid: '5431', online: true

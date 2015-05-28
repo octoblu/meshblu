@@ -16,6 +16,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     @unregisterDevice = dependencies.unregisterDevice ? require './unregister'
     @sendMessage = dependencies.sendMessage
     @updateFromClient = dependencies.updateFromClient ? require './updateFromClient'
+    @throttles = dependencies.throttles ? require './getThrottles'
 
   initialize: (@socket, request) =>
     @socket.id = uuid.v4()
@@ -43,8 +44,10 @@ class MeshbluWebsocketHandler extends EventEmitter
   onMessage: (event) =>
     debug 'onMessage', event.data
     @parseFrame event.data, (error, type, data) =>
-      @sendError error.message, event.data if error?
-      @emit type, data
+      return @sendError error.message, event.data if error?
+      @rateLimit @socket.id, type, (error) =>
+        return @sendError error.message, event.data, 429 if error?
+        @emit type, data
 
   # message handlers
   device: (data) =>
@@ -155,6 +158,15 @@ class MeshbluWebsocketHandler extends EventEmitter
     @addListener 'unsubscribe', @unsubscribe
     @addListener 'whoami', @whoami
 
+  rateLimit: (id, type, callback=->) =>
+    rateLimit = @throttles[type] ? @throttles.query
+    callback() unless rateLimit?
+    rateLimit id, (error, isLimited) =>
+      debug 'rateLimit', id, type, isLimited
+      return callback error if error?
+      return callback new Error('request exceeds rate limit') if isLimited
+      callback()
+
   deviceWithToken: (data) =>
     @authDevice data.uuid, data.token, (error, authedDevice) =>
       debug 'deviceWithToken', data
@@ -183,9 +195,9 @@ class MeshbluWebsocketHandler extends EventEmitter
     debug 'sendFrame', frame
     @socket.send JSON.stringify frame
 
-  sendError: (message, frame) =>
+  sendError: (message, frame, code) =>
     debug 'sendError', message
-    @sendFrame 'error', message: message, frame: frame
+    @sendFrame 'error', message: message, frame: frame, code: code
 
   subscribeWithToken: (data) =>
     @authDevice data.uuid, data.token, (error, authedDevice) =>

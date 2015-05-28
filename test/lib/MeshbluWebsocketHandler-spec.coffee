@@ -123,15 +123,30 @@ describe 'MeshbluWebsocketHandler', ->
       @sut.sendError 'bad error'
 
     it 'should create the message and call send', ->
-      expect(@sut.sendFrame).to.have.been.calledWith 'error', message: 'bad error', frame: undefined
+      expect(@sut.sendFrame).to.have.been.calledWith 'error', message: 'bad error', frame: undefined, code: undefined
 
   describe 'onMessage', ->
-    beforeEach (done) ->
-      @sut.addListener 'test', (@data) => done()
-      @sut.onMessage data: '["test",{"far":"near"}]'
+    describe 'when rateLimit exceeded', ->
+      beforeEach ->
+        @throttles = query: sinon.stub().yields new Error('rate limit exceeded')
+        @sut = new MeshbluWebsocketHandler throttles: @throttles
+        @sut.socket = id: '1555'
+        @sut.sendError = sinon.spy()
+        @sut.onMessage data: '["test",{"far":"near"}]'
 
-    it 'should emit test with object', ->
-      expect(@data).to.deep.equal far: 'near'
+      it 'should emit error', ->
+        expect(@sut.sendError).to.have.been.calledWith 'rate limit exceeded', '["test",{"far":"near"}]', 429
+
+    describe 'when rateLimit not exceeded', ->
+      beforeEach (done) ->
+        @throttles = query: sinon.stub().yields null, false
+        @sut = new MeshbluWebsocketHandler throttles: @throttles
+        @sut.socket = id: '1555'
+        @sut.addListener 'test', (@data) => done()
+        @sut.onMessage data: '["test",{"far":"near"}]'
+
+      it 'should emit test with object', ->
+        expect(@data).to.deep.equal far: 'near'
 
   describe 'identity', ->
     describe 'when authDevice yields an error', ->
@@ -501,3 +516,14 @@ describe 'MeshbluWebsocketHandler', ->
 
       it 'should send unregistered', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'unregistered', uuid: '5431'
+
+  describe 'rateLimit', ->
+    describe 'when limit function returns an error', ->
+      beforeEach ->
+        @throttles = query: sinon.stub().yields new Error
+        @sut = new MeshbluWebsocketHandler throttles: @throttles
+
+        @sut.rateLimit '1234', 'foo', (@error) =>
+
+      it 'should yield an error', ->
+        expect(@error).to.exist

@@ -159,9 +159,9 @@ class MeshbluWebsocketHandler extends EventEmitter
     @addListener 'whoami', @whoami
 
   rateLimit: (id, type, callback=->) =>
-    rateLimit = @throttles[type] ? @throttles.query
-    callback() unless rateLimit?
-    rateLimit id, (error, isLimited) =>
+    throttle = @throttles[type] ? @throttles.query
+    callback() unless throttle?
+    throttle.rateLimit id, (error, isLimited) =>
       debug 'rateLimit', id, type, isLimited
       return callback error if error?
       return callback new Error('request exceeds rate limit') if isLimited

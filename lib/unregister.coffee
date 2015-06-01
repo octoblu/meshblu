@@ -4,7 +4,7 @@ devices = require('./database').devices
 whoAmI = require('./whoAmI')
 securityImpl = require('./getSecurityImpl')
 
-module.exports = (fromDevice, unregisterUuid, unregisterToken, emitToClient, callback) ->
+module.exports = (fromDevice, unregisterUuid, unregisterToken, emitToClient, callback=->) ->
   if !fromDevice or !unregisterUuid
     return callback('invalid from or to device')
 

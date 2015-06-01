@@ -127,6 +127,7 @@ class MeshbluWebsocketHandler extends EventEmitter
       @socketIOClient.emit 'unsubscribe', data.uuid
 
   unregister: (data) =>
+    debug 'unregister', data
     return @unregisterWithToken data if data.token
 
     @authDevice @uuid, @token, (error, device) =>
@@ -157,6 +158,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     @addListener 'subscribe', @subscribe
     @addListener 'update', @update
     @addListener 'unsubscribe', @unsubscribe
+    @addListener 'unregister', @unregister
     @addListener 'whoami', @whoami
 
   rateLimit: (id, type, callback=->) =>
@@ -210,8 +212,8 @@ class MeshbluWebsocketHandler extends EventEmitter
       @socketIOClient.emit 'subscribe', authedDevice.uuid
 
   unregisterWithToken: (data) =>
+    debug 'unregisterWithToken', data
     @authDevice data.uuid, data.token, (error, authedDevice) =>
-      debug 'unregisterWithToken', data
       return @sendError error?.message, ['unregister', data] if error? || !authedDevice?
       @unregisterDevice authedDevice, data.uuid
       @sendFrame 'unregistered', uuid: data.uuid

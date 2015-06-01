@@ -65,7 +65,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     @authDevice @uuid, @token, (error, device) =>
       debug 'devices', data
       return @sendError error.message, ['devices', data] if error?
-      @getDevices device, data, (error, foundDevices) =>
+      @getDevices device, data, null, (error, foundDevices) =>
         return @sendError error.message, ['devices', data] if error?
         @sendFrame 'devices', foundDevices
 

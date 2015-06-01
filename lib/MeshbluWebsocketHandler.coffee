@@ -117,12 +117,14 @@ class MeshbluWebsocketHandler extends EventEmitter
 
           if subscribedDevice.owner? && subscribedDevice.owner == device.uuid
             @socketIOClient.emit 'subscribe', subscribedDevice.uuid
+            @socketIOClient.emit 'subscribe', "#{subscribedDevice.uuid}_sent"
 
   unsubscribe: (data) =>
     return @unsubscribeWithToken data if data.token
 
     @authDevice @uuid, @token, (error, device) =>
       return @sendError error.message, ['unsubscribe', data] if error?
+      @socketIOClient.emit 'unsubscribe', "#{data.uuid}_sent"
       @socketIOClient.emit 'unsubscribe', "#{data.uuid}_bc"
       @socketIOClient.emit 'unsubscribe', data.uuid
 

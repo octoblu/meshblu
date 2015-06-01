@@ -128,7 +128,7 @@ describe 'MeshbluWebsocketHandler', ->
   describe 'onMessage', ->
     describe 'when rateLimit exceeded', ->
       beforeEach ->
-        @throttles = query: sinon.stub().yields new Error('rate limit exceeded')
+        @throttles = query: rateLimit: sinon.stub().yields new Error('rate limit exceeded')
         @sut = new MeshbluWebsocketHandler throttles: @throttles
         @sut.socket = id: '1555'
         @sut.sendError = sinon.spy()
@@ -139,7 +139,7 @@ describe 'MeshbluWebsocketHandler', ->
 
     describe 'when rateLimit not exceeded', ->
       beforeEach (done) ->
-        @throttles = query: sinon.stub().yields null, false
+        @throttles = query: rateLimit: sinon.stub().yields null, false
         @sut = new MeshbluWebsocketHandler throttles: @throttles
         @sut.socket = id: '1555'
         @sut.addListener 'test', (@data) => done()
@@ -520,7 +520,7 @@ describe 'MeshbluWebsocketHandler', ->
   describe 'rateLimit', ->
     describe 'when limit function returns an error', ->
       beforeEach ->
-        @throttles = query: sinon.stub().yields new Error
+        @throttles = query: rateLimit: sinon.stub().yields new Error
         @sut = new MeshbluWebsocketHandler throttles: @throttles
 
         @sut.rateLimit '1234', 'foo', (@error) =>

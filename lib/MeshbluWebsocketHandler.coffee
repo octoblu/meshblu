@@ -65,8 +65,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     @authDevice @uuid, @token, (error, device) =>
       debug 'devices', data
       return @sendError error.message, ['devices', data] if error?
-      @getDevices device, data, null, (error, foundDevices) =>
-        return @sendError error.message, ['devices', data] if error?
+      @getDevices device, data, null, (foundDevices) =>
         @sendFrame 'devices', foundDevices
 
   identity: (data) =>
@@ -85,12 +84,12 @@ class MeshbluWebsocketHandler extends EventEmitter
       return @sendError error.message, ['message', data] if error?
       @sendMessage device, data
 
-  mydevices: (data) =>
+  mydevices: (data={}) =>
     @authDevice @uuid, @token, (error, device) =>
       debug 'mydevices', data
       return @sendError error.message, ['mydevices', data] if error?
       data.owner = device.uuid
-      @getDevices device, data, (error, foundDevices) =>
+      @getDevices device, data, null, (foundDevices) =>
         return @sendError error.message, ['mydevices', data] if error?
         @sendFrame 'mydevices', foundDevices
 
@@ -193,10 +192,13 @@ class MeshbluWebsocketHandler extends EventEmitter
   sendFrame: (type, data) =>
     frame = [type, data]
     debug 'sendFrame', frame
-    @socket.send JSON.stringify frame
+    @socket?.send JSON.stringify frame
 
   sendError: (message, frame, code) =>
-    debug 'sendError', message
+    try
+      throw new Error message
+    catch e
+      debug 'sendError', e.message, e.stack
     @sendFrame 'error', message: message, frame: frame, code: code
 
   subscribeWithToken: (data) =>

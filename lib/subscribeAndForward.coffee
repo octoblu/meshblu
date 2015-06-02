@@ -39,7 +39,7 @@ subscribeAndForward = (askingDevice, response, uuid, token, subscriptionTypes) -
     securityImpl.canReceive askingDevice, subscribedDevice, (error, permission) ->
       if error
         return response.status(401).send(error: 'unauthorized')
-      if !permission
+      if !permission && subscribedDevice.owner != askingDevice.uuid
         return response.status(401).send(error: 'unauthorized')
       newSubscriptionTypes.push 'broadcast'
       if subscribedDevice.owner and subscribedDevice.owner == askingDevice.uuid or subscribedDevice.uuid == askingDevice.uuid

@@ -10,8 +10,18 @@ module.exports = (fromDevice, data, callback=_.noop, dependencies={}) ->
 
   getDeviceWithToken data.uuid, (error, device) => # have to getDevice to verify the ip address
     return callback error if error?
-    data = _.defaults {ipAddress: device.ipAddress}, data
-    canConfigure fromDevice, data, (error, permission) =>
+    canConfigure fromDevice, device, (error, permission) =>
+      return callback error if error?
       return callback new Error('not authorized to claim this device') unless permission
-      updatedData = _.defaults {owner: fromDevice.uuid}, data, discoverWhitelist: [fromDevice.uuid]
-      updateDevice data.uuid, updatedData, callback
+
+      if !_.isArray device.discoverWhitelist
+        device.discoverWhitelist = []
+
+      if !_.isArray device.configureWhitelist
+        device.configureWhitelist = []
+
+      device.discoverWhitelist.push fromDevice.uuid
+      device.configureWhitelist.push fromDevice.uuid
+      device.owner = fromDevice.uuid
+
+      updateDevice data.uuid, device, callback

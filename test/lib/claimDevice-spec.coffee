@@ -31,15 +31,18 @@ describe 'claimDevice', ->
       @fromDevice = {uuid: '89e9cd5f-dfff-4771-b821-d35614b7a506'}
       @device     = {uuid: '07a4ed85-acc5-4495-b3d7-2d93439c04fa'}
 
-      @getDeviceWithToken.yields null, {ipAddress: '192.168.1.1'}
+      @getDeviceWithToken.yields null, {uuid: '07a4ed85-acc5-4495-b3d7-2d93439c04fa', ipAddress: '192.168.1.1'}
       @updateDevice.yields null, @device
       @sut @fromDevice, @device, done, @dependencies
 
     it 'should call updateDevice with that uuid and name', ->
-      expect(@updateDevice).to.have.been.calledWith @device.uuid, {
+      expect(@updateDevice).to.have.been.deep.calledWith @device.uuid, {
         owner: @fromDevice.uuid
         uuid: @device.uuid
         discoverWhitelist: [
+          @fromDevice.uuid
+        ]
+        configureWhitelist: [
           @fromDevice.uuid
         ]
         ipAddress: '192.168.1.1'
@@ -50,7 +53,7 @@ describe 'claimDevice', ->
       @fromDevice = {uuid: '89e9cd5f-dfff-4771-b821-d35614b7a506'}
       @device     = {uuid: '07a4ed85-acc5-4495-b3d7-2d93439c04fa', name: 'Cookie Crisp'}
 
-      @getDeviceWithToken.yields null, {ipAddress: '192.168.1.1'}
+      @getDeviceWithToken.yields null, {name: 'Cookie Crisp', uuid: '07a4ed85-acc5-4495-b3d7-2d93439c04fa', ipAddress: '192.168.1.1'}
       @updateDevice.yields null, @device
       @sut @fromDevice, @device, done, @dependencies
 
@@ -62,6 +65,9 @@ describe 'claimDevice', ->
         discoverWhitelist: [
           @fromDevice.uuid
         ]
+        configureWhitelist: [
+          @fromDevice.uuid
+        ]
         ipAddress: '192.168.1.1'
       }
 
@@ -70,7 +76,7 @@ describe 'claimDevice', ->
       @fromDevice = {uuid: 'e33c1844-6888-4698-852a-7be584327a1d'}
       @device     = {uuid: '9b97159e-63c2-4a71-9327-8fadad97f1e9', name: 'Fruit Loops', owner: 'wrong'}
 
-      @getDeviceWithToken.yields null, {ipAddress: '192.168.1.1'}
+      @getDeviceWithToken.yields null, {name: 'Fruit Loops', uuid: '9b97159e-63c2-4a71-9327-8fadad97f1e9', ipAddress: '192.168.1.1'}
       @updateDevice.yields null, @device
       @sut @fromDevice, @device, done, @dependencies
 
@@ -80,6 +86,9 @@ describe 'claimDevice', ->
         name: 'Fruit Loops'
         uuid: @device.uuid
         discoverWhitelist: [
+          @fromDevice.uuid
+        ]
+        configureWhitelist: [
           @fromDevice.uuid
         ]
         ipAddress: '192.168.1.1'
@@ -93,7 +102,7 @@ describe 'claimDevice', ->
       storeError = (@error) => done()
 
       @canConfigure.yields null, false
-      @getDeviceWithToken.yields null, {ipAddress: '192.168.1.1'}
+      @getDeviceWithToken.yields null, {uuid: '9b97159e-63c2-4a71-9327-8fadad97f1e9', name: 'Fruit Loops', ipAddress: '192.168.1.1'}
       @sut @fromDevice, @device, storeError, @dependencies
 
     it 'should call canConfigure with fromDevice, device with the ipAddress mixed in', ->

@@ -6,7 +6,6 @@ class MessageIOSocketHandler
     @socket.on 'unsubscribe', @onUnsubscribe
 
   onSubscribe: (data) =>
-    @socket.leave data
     @socket.join data
 
   onUnsubscribe: (data) =>

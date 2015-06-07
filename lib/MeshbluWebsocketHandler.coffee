@@ -30,6 +30,7 @@ class MeshbluWebsocketHandler extends EventEmitter
 
     @socketIOClient = @SocketIOClient('ws://localhost:' + config.messageBus.port)
     @socketIOClient.on 'message', @onSocketMessage
+    @socketIOClient.connect()
 
   # event handlers
   onClose: (event) =>
@@ -116,7 +117,7 @@ class MeshbluWebsocketHandler extends EventEmitter
         return @sendError error.message, ['subscribe', data] if error?
         @securityImpl.canReceive device, subscribedDevice, (error, permission) =>
           return @sendError error.message, ['subscribe', data] if error?
-          subscriptionTypes.push 'broadcast'
+          subscriptionTypes.push 'broadcast' if permission
 
           if subscribedDevice.owner? && subscribedDevice.owner == device.uuid
             subscriptionTypes.push 'received'

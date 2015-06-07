@@ -26,6 +26,7 @@ connectMessageIO = (response) ->
     debug 'onMessage', message
     readStream.push JSON.stringify(message) + '\n'
 
+  socketIOClient.connect()
   return socketIOClient
 
 subscribeAndForward = (askingDevice, response, uuid, token, subscriptionTypes) ->

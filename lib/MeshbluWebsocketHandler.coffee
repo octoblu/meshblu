@@ -3,12 +3,11 @@ config = require '../config'
 debug = require('debug')('meshblu:meshblu-websocket-handler')
 {EventEmitter} = require 'events'
 uuid = require 'node-uuid'
-subscribeToMessageIO = require './subscribeToMessageIO'
 
 class MeshbluWebsocketHandler extends EventEmitter
   constructor: (dependencies={})->
     @authDevice = dependencies.authDevice ? require './authDevice'
-    @SocketIOClient = dependencies.SocketIOClient ? require 'socket.io-client'
+    @MessageIOClient = dependencies.MessageIOClient ? require './messageIOClient'
     @getSystemStatus = dependencies.getSystemStatus ? require './getSystemStatus'
     @securityImpl = dependencies.securityImpl ? require './getSecurityImpl'
     @getDevice = dependencies.getDevice ? require './getDevice'
@@ -28,8 +27,11 @@ class MeshbluWebsocketHandler extends EventEmitter
 
     @addListeners()
 
-    @socketIOClient = @SocketIOClient('ws://localhost:' + config.messageBus.port)
-    @socketIOClient.on 'message', @onSocketMessage
+    @messageIOClient = new @MessageIOClient()
+    @messageIOClient.on 'message', @onSocketMessage
+    @messageIOClient.on 'config', @onSocketConfig
+    @messageIOClient.on 'data', @onSocketData
+    @messageIOClient.start()
 
   # event handlers
   onClose: (event) =>
@@ -37,10 +39,10 @@ class MeshbluWebsocketHandler extends EventEmitter
     @authDevice @uuid, @token, (error, device) =>
       return if error?
       @setOnlineStatus device, false
-      @socketIOClient.emit 'unsubscribe', @uuid
-      @socketIOClient.emit 'unsubscribe', "#{@uuid}_bc"
+      @messageIOClient.unsubscribe @uuid
+      @messageIOClient.unsubscribe "#{@uuid}_bc"
       @socket = null
-      @socketIOClient = null
+      @messageIOClient = null
 
   onMessage: (event) =>
     debug 'onMessage', event.data
@@ -76,8 +78,7 @@ class MeshbluWebsocketHandler extends EventEmitter
       return @sendFrame 'notReady', message: 'unauthorized', status: 401 if error?
       @sendFrame 'ready', uuid: @uuid, token: @token, status: 200
       @setOnlineStatus device, true
-      @socketIOClient.emit 'subscribe', @uuid
-      @socketIOClient.emit 'subscribe', "#{@uuid}_bc"
+      @messageIOClient.subscribe @uuid, ['received', 'broadcast']
 
   message: (data) =>
     @authDevice @uuid, @token, (error, device) =>
@@ -116,22 +117,22 @@ class MeshbluWebsocketHandler extends EventEmitter
         return @sendError error.message, ['subscribe', data] if error?
         @securityImpl.canReceive device, subscribedDevice, (error, permission) =>
           return @sendError error.message, ['subscribe', data] if error?
-          subscriptionTypes.push 'broadcast'
+          subscriptionTypes.push 'broadcast' if permission
 
           if subscribedDevice.owner? && subscribedDevice.owner == device.uuid
             subscriptionTypes.push 'received'
             subscriptionTypes.push 'sent'
 
-          subscribeToMessageIO @socketIOClient, subscribedDevice.uuid, data.types || subscriptionTypes
+          @messageIOClient.subscribe subscribedDevice.uuid, data.types || subscriptionTypes
 
   unsubscribe: (data) =>
     return @unsubscribeWithToken data if data.token
 
     @authDevice @uuid, @token, (error, device) =>
       return @sendError error.message, ['unsubscribe', data] if error?
-      @socketIOClient.emit 'unsubscribe', "#{data.uuid}_sent"
-      @socketIOClient.emit 'unsubscribe', "#{data.uuid}_bc"
-      @socketIOClient.emit 'unsubscribe', data.uuid
+      @messageIOClient.unsubscribe "#{data.uuid}_sent"
+      @messageIOClient.unsubscribe "#{data.uuid}_bc"
+      @messageIOClient.unsubscribe data.uuid
 
   unregister: (data) =>
     debug 'unregister', data
@@ -216,7 +217,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     @authDevice data.uuid, data.token, (error, authedDevice) =>
       debug 'subscribeWithToken', data
       return @sendError error?.message, ['subscribe', data] if error? || !authedDevice?
-      subscribeToMessageIO @socketIOClient, authDevice.uuid, data.types || ['broadcast', 'received', 'sent']
+      @messageIOClient.subscribe authDevice.uuid, data.types || ['broadcast', 'received', 'sent']
 
   unregisterWithToken: (data) =>
     debug 'unregisterWithToken', data
@@ -229,12 +230,18 @@ class MeshbluWebsocketHandler extends EventEmitter
     @authDevice data.uuid, data.token, (error, authedDevice) =>
       debug 'unsubscribeWithToken', data
       return @sendError error?.message, ['unsubscribe', data] if error? || !authedDevice?
-      @socketIOClient.emit 'unsubscribe', authedDevice.uuid
-      @socketIOClient.emit 'unsubscribe', "#{authedDevice.uuid}_bc"
-      @socketIOClient.emit 'unsubscribe', "#{authedDevice.uuid}_sent"
+      @messageIOClient.unsubscribe authedDevice.uuid
+      @messageIOClient.unsubscribe "#{authedDevice.uuid}_bc"
+      @messageIOClient.unsubscribe "#{authedDevice.uuid}_sent"
 
   #socketio event handlers
   onSocketMessage: (data) =>
     @sendFrame 'message', data
+
+  onSocketConfig: (data) =>
+    @sendFrame 'config', data
+
+  onSocketData: (data) =>
+    @sendFrame 'data', data
 
 module.exports = MeshbluWebsocketHandler

@@ -7,8 +7,8 @@ class MessageIOSocketHandler
     @socket.on 'subscribe', @onSubscribe
     @socket.on 'unsubscribe', @onUnsubscribe
 
-  onSubscribe: (data, id) =>
-    debug @socket.id, id, 'joining', data
+  onSubscribe: (data) =>
+    debug @socket.id, 'joining', data
     @socket.leave data
     @socket.join data
 

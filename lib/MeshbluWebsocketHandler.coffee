@@ -8,7 +8,7 @@ subscribeToMessageIO = require './subscribeToMessageIO'
 class MeshbluWebsocketHandler extends EventEmitter
   constructor: (dependencies={})->
     @authDevice = dependencies.authDevice ? require './authDevice'
-    @SocketIOClient = dependencies.SocketIOClient ? require 'socket.io-client'
+    @IOClient = dependencies.SocketIOClient ? require 'socket.io-client'
     @getSystemStatus = dependencies.getSystemStatus ? require './getSystemStatus'
     @securityImpl = dependencies.securityImpl ? require './getSecurityImpl'
     @getDevice = dependencies.getDevice ? require './getDevice'

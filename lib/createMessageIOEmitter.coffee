@@ -1,13 +1,16 @@
 config = require '../config'
 redis = require './redis'
-MeshbluIOEmitter = require './messageIOEmitter'
+MessageIOEmitter = require './messageIOEmitter'
+debug = require('debug')('meshblu:createMessageIOEmitter')
 
 module.exports = (io) =>
-  meshbluIOEmitter = new MeshbluIOEmitter
+  messageIOEmitter = new MessageIOEmitter
   if config.redis?.host
+    debug 'adding redis emitter'
     redisIoEmitter = require('socket.io-emitter')(redis.client)
-    meshbluIOEmitter.addEmitter redisIoEmitter
+    messageIOEmitter.addEmitter redisIoEmitter
   else
-    meshbluIOEmitter.addEmitter io
+    debug 'adding io emitter'
+    messageIOEmitter.addEmitter io
 
-  return meshbluIOEmitter.emit
+  return messageIOEmitter.emit

@@ -2,12 +2,14 @@ MeshbluWebsocketHandler = require '../../lib/MeshbluWebsocketHandler'
 
 describe 'MeshbluWebsocketHandler', ->
   beforeEach ->
-    @socketIOClient =
+    @messageIOClient =
       on: sinon.spy()
       emit: sinon.spy()
-      connect: sinon.spy()
-    @SocketIOClient = sinon.spy => @socketIOClient
-    @sut = new MeshbluWebsocketHandler SocketIOClient: @SocketIOClient
+      unsubscribe: sinon.spy()
+      start: sinon.spy()
+      subscribe: sinon.spy()
+    @MessageIOClient = sinon.spy => @messageIOClient
+    @sut = new MeshbluWebsocketHandler MessageIOClient: @MessageIOClient
     @socket = sinon.spy => @socket
 
   describe 'initialize', ->
@@ -20,7 +22,7 @@ describe 'MeshbluWebsocketHandler', ->
       expect(@socket.id).to.exist
 
     it 'should call connect', ->
-      expect(@socketIOClient.connect).to.have.been.called
+      expect(@messageIOClient.start).to.have.been.called
 
     it 'should register message event', ->
       expect(@socket.on).to.have.been.calledWith 'message'
@@ -55,8 +57,8 @@ describe 'MeshbluWebsocketHandler', ->
     it 'should listen for whoami', ->
       expect(@sut.addListener).to.have.been.calledWith 'whoami'
 
-    it 'should create a SocketIO Client', ->
-      expect(@SocketIOClient).to.have.been.calledWith 'ws://localhost:7777'
+    it 'should create a MessageIO Client', ->
+      expect(@MessageIOClient).to.have.been.calledWithNew
 
   describe 'sendFrame', ->
     describe 'sending a string', ->
@@ -156,7 +158,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient
         @sut.sendFrame = sinon.stub()
         @sut.setOnlineStatus = sinon.spy()
 
@@ -168,8 +170,8 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields a device', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, uuid: '1234'
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
-        @sut.socketIOClient = @socketIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient
+        @sut.messageIOClient = @messageIOClient
         @sut.sendFrame = sinon.stub()
         @sut.setOnlineStatus = sinon.spy()
 
@@ -178,11 +180,8 @@ describe 'MeshbluWebsocketHandler', ->
       it 'should emit ready', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'ready', uuid: '1234', token: 'abcd', status: 200
 
-      it 'should emit subscribe to my uuid', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', '1234'
-
-      it 'should emit subscribe to my uuid broadcast', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', '1234_bc'
+      it 'should emit subscribe to my uuid received and broadcast', ->
+        expect(@messageIOClient.subscribe).to.have.been.calledWith '1234', ['received', 'broadcast']
 
   describe 'status', ->
     beforeEach ->
@@ -230,13 +229,13 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient
         @sut.sendError = sinon.spy()
 
         @sut.subscribe uuid: '1345', token: 'abcd'
 
       it 'should not call subscribe', ->
-        expect(@socketIOClient.emit).not.to.have.been.called
+        expect(@messageIOClient.emit).not.to.have.been.called
 
       it 'should call sendError', ->
         expect(@sut.sendError).to.have.been.called
@@ -246,47 +245,44 @@ describe 'MeshbluWebsocketHandler', ->
         @authDevice = sinon.stub().yields null, something: true
         @getDevice = sinon.stub().yields null, uuid: '5431'
         @securityImpl = canReceive: sinon.stub().yields null, true
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient, securityImpl: @securityImpl, getDevice: @getDevice
-        @sut.socketIOClient = @socketIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, securityImpl: @securityImpl, getDevice: @getDevice
+        @sut.messageIOClient = @messageIOClient
         @sut.sendFrame = sinon.spy()
 
         @sut.subscribe uuid: '5431'
 
       it 'should call subscribe _bc', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', '5431_bc'
+        expect(@messageIOClient.subscribe).to.have.been.calledWith '5431', ["broadcast"]
 
       it 'should not call subscribe on uuid', ->
-        expect(@socketIOClient.emit).not.to.have.been.calledWith 'subscribe', '5431'
+        expect(@messageIOClient.subscribe).not.to.have.been.calledWith '5431', ["received"]
 
     describe 'when the device is owned by the owner', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, uuid: '1234'
         @getDevice = sinon.stub().yields null, uuid: '5431', owner: '1234'
         @securityImpl = canReceive: sinon.stub().yields null, true
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient, securityImpl: @securityImpl, getDevice: @getDevice
-        @sut.socketIOClient = @socketIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, securityImpl: @securityImpl, getDevice: @getDevice
+        @sut.messageIOClient = @messageIOClient
         @sut.sendFrame = sinon.spy()
 
         @sut.subscribe uuid: '5431'
 
       it 'should call subscribe _bc', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', '5431_bc'
-
-      it 'should call subscribe on uuid', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', '5431'
+        expect(@messageIOClient.subscribe).to.have.been.calledWith '5431', ["broadcast", "received", "sent"]
 
   describe 'unsubscribe', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
-        @sut.socketIOClient = @socketIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient
+        @sut.messageIOClient = @messageIOClient
         @sut.sendError = sinon.spy()
 
         @sut.unsubscribe uuid: '1345', token: 'abcd'
 
       it 'should not call unsubscribe', ->
-        expect(@socketIOClient.emit).not.to.have.been.called
+        expect(@messageIOClient.unsubscribe).not.to.have.been.called
 
       it 'should call sendError', ->
         expect(@sut.sendError).to.have.been.called
@@ -294,30 +290,30 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields a device', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, something: true
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
-        @sut.socketIOClient = @socketIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient
+        @sut.messageIOClient = @messageIOClient
         @sut.sendFrame = sinon.spy()
 
         @sut.unsubscribe uuid: '5431'
 
       it 'should call unsubscribe _bc', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', '5431_bc'
+        expect(@messageIOClient.unsubscribe).to.have.been.calledWith '5431_bc'
 
       it 'should call unsubscribe on uuid', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', '5431'
+        expect(@messageIOClient.unsubscribe).to.have.been.calledWith '5431'
 
   describe 'message', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient
-        @sut.socketIOClient = @socketIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient
+        @sut.messageIOClient = @messageIOClient
         @sut.sendError = sinon.spy()
 
         @sut.message uuid: '1345', token: 'abcd'
 
       it 'should not call message', ->
-        expect(@socketIOClient.emit).not.to.have.been.called
+        expect(@messageIOClient.emit).not.to.have.been.called
 
       it 'should call sendError', ->
         expect(@sut.sendError).to.have.been.called
@@ -326,8 +322,8 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, something: true
         @sendMessage = sinon.spy()
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, SocketIOClient: @SocketIOClient, sendMessage: @sendMessage
-        @sut.socketIOClient = @socketIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, sendMessage: @sendMessage
+        @sut.messageIOClient = @messageIOClient
         @sut.setOnlineStatus = sinon.spy()
         @sut.sendFrame = sinon.spy()
 
@@ -341,13 +337,13 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
         @sut = new MeshbluWebsocketHandler authDevice: @authDevice
-        @sut.socketIOClient = @socketIOClient
+        @sut.messageIOClient = @messageIOClient
         @sut.sendError = sinon.spy()
 
         @sut.device uuid: '1345', token: 'abcd'
 
       it 'should not call device', ->
-        expect(@socketIOClient.emit).not.to.have.been.called
+        expect(@messageIOClient.emit).not.to.have.been.called
 
       it 'should call sendError', ->
         expect(@sut.sendError).to.have.been.called
@@ -381,13 +377,13 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
         @sut = new MeshbluWebsocketHandler authDevice: @authDevice
-        @sut.socketIOClient = @socketIOClient
+        @sut.messageIOClient = @messageIOClient
         @sut.sendError = sinon.spy()
 
         @sut.devices uuid: '1345', token: 'abcd'
 
       it 'should not call devices', ->
-        expect(@socketIOClient.emit).not.to.have.been.called
+        expect(@messageIOClient.emit).not.to.have.been.called
 
       it 'should call sendError', ->
         expect(@sut.sendError).to.have.been.called
@@ -409,13 +405,13 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
         @sut = new MeshbluWebsocketHandler authDevice: @authDevice
-        @sut.socketIOClient = @socketIOClient
+        @sut.messageIOClient = @messageIOClient
         @sut.sendError = sinon.spy()
 
         @sut.mydevices color: 'green'
 
       it 'should not call devices', ->
-        expect(@socketIOClient.emit).not.to.have.been.called
+        expect(@messageIOClient.emit).not.to.have.been.called
 
       it 'should call sendError', ->
         expect(@sut.sendError).to.have.been.called
@@ -437,7 +433,7 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
         @sut = new MeshbluWebsocketHandler authDevice: @authDevice
-        @sut.socketIOClient = @socketIOClient
+        @sut.messageIOClient = @messageIOClient
         @sut.sendError = sinon.spy()
 
         @sut.whoami()

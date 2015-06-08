@@ -1,5 +1,5 @@
 config = require('./../config')
-socketEmitter = require('./createSocketEmitter')()
+messageIOEmitter = require('./createMessageIOEmitter')()
 devices = require('./database').devices
 whoAmI = require('./whoAmI')
 securityImpl = require('./getSecurityImpl')
@@ -21,7 +21,7 @@ module.exports = (fromDevice, unregisterUuid, unregisterToken, emitToClient, cal
       if emitToClient
         emitToClient 'unregistered', toDevice, toDevice
       else
-        socketEmitter toDevice.uuid, 'unregistered', toDevice
+        messageIOEmitter toDevice.uuid, 'unregistered', toDevice
 
       devices.remove { uuid: unregisterUuid }, (err, devicedata) ->
         if err or devicedata == 0

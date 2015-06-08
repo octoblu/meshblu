@@ -5,6 +5,7 @@ describe 'MeshbluWebsocketHandler', ->
     @socketIOClient =
       on: sinon.spy()
       emit: sinon.spy()
+      connect: sinon.spy()
     @SocketIOClient = sinon.spy => @socketIOClient
     @sut = new MeshbluWebsocketHandler SocketIOClient: @SocketIOClient
     @socket = sinon.spy => @socket
@@ -17,6 +18,9 @@ describe 'MeshbluWebsocketHandler', ->
 
     it 'should assign a socket.id', ->
       expect(@socket.id).to.exist
+
+    it 'should call connect', ->
+      expect(@socketIOClient.connect).to.have.been.called
 
     it 'should register message event', ->
       expect(@socket.on).to.have.been.calledWith 'message'

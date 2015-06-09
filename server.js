@@ -1,17 +1,6 @@
 'use strict';
 require('coffee-script/register');
 
-if (process.env.NODETIME_ACCOUNT_KEY) {
-  require('nodetime').profile({
-    accountKey: process.env.NODETIME_ACCOUNT_KEY,
-    appName: process.env.NODETIME_APP_NAME
-  });
-}
-
-if ((process.env.USE_NEWRELIC  || 'false').toLowerCase() === 'true') {
-  require('newrelic');
-}
-
 if ((process.env.USE_APP_DYNAMICS || 'false').toLowerCase() === 'true') {
   require('./lib/appdynamics');
 }

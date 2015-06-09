@@ -1,3 +1,4 @@
+_ = require 'lodash'
 debug = require('debug')('meshblu:MessageIOSocketHandler')
 
 class MessageIOSocketHandler
@@ -9,7 +10,7 @@ class MessageIOSocketHandler
 
   onSubscribe: (data) =>
     debug @socket.id, 'joining', data
-    @socket.leave data
+    return if _.contains @socket.rooms, data
     @socket.join data
 
   onUnsubscribe: (data) =>

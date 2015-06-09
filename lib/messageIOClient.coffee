@@ -39,7 +39,17 @@ class MessageIOClient extends EventEmitter
       debug 'subscribe', 'sent', "#{uuid}_send"
       @socketIOClient.emit 'subscribe', "#{uuid}_send"
 
-  unsubscribe: (uuid) =>
-    @socketIOClient.emit 'unsubscribe', uuid
+  unsubscribe: (uuid, subscriptionTypes) =>
+    if _.contains subscriptionTypes, 'received'
+      debug 'unsubscribe', 'received', uuid
+      @socketIOClient.emit 'unsubscribe', uuid
+
+    if _.contains subscriptionTypes, 'broadcast'
+      debug 'unsubscribe', 'broadcast', "#{uuid}_bc"
+      @socketIOClient.emit 'unsubscribe', "#{uuid}_bc"
+
+    if _.contains subscriptionTypes, 'sent'
+      debug 'unsubscribe', 'sent', "#{uuid}_send"
+      @socketIOClient.emit 'unsubscribe', "#{uuid}_send"
 
 module.exports = MessageIOClient

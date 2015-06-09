@@ -303,10 +303,10 @@ curl -X POST -d "name=arduino&token=123" "http://localhost:3000/devices" --heade
 
 PUT /devices/uuid
 
-Updates a device object. Token is required for security.
+Updates a device object.
 
 ```
-curl -X PUT -d "token=123&online=true" "http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26" --header "meshblu_auth_uuid: {my uuid}" --header "meshblu_auth_token: {my token}"
+curl -X PUT -d "online=true" "http://localhost:3000/devices/01404680-2539-11e3-b45a-d3519872df26" --header "meshblu_auth_uuid: {my uuid}" --header "meshblu_auth_token: {my token}"
 
 => {"uuid":"8220cff0-2939-11e3-88cd-0b8e5fdfd7d4","timestamp":1380481439002,"online":true}
 ```
@@ -331,7 +331,7 @@ curl -X GET http://meshblu.octoblu.com/localdevices --header "meshblu_auth_uuid:
 => {"devices":[{"autoRegister":true,"online":false,"timestamp":"2014-08-05T20:38:31.139Z","ipAddress":"184.98.43.115","protocol":"websocket","secure":false,"uuid":"76537331-1ce0-11e4-861d-89322229e557","channel":"main"},{"autoRegister":true,"online":true,"timestamp":"2014-08-05T16:50:52.492Z","ipAddress":"184.98.43.115","protocol":"websocket","secure":false,"uuid":"a92350c1-1cc0-11e4-861d-89322229e557","channel":"main"}]}
 ```
 
-GET /claimdevice/:uuid
+PUT /claimdevice/:uuid
 
 Adds the meshblu_auth_uuid as the owner of this device UUID allowing a user or device to claim ownership of another device.
 
@@ -343,7 +343,7 @@ curl -X PUT http://meshblu.octoblu.com/claimdevice/{:uuid} --header "meshblu_aut
 
 GET /mydevices
 
-Returns all information (including tokens) of all devices or nodes belonging to a user's UUID (identified as "owner")
+Returns all information (excluding tokens) of all devices or nodes belonging to a user's UUID (identified as "owner")
 
 ```
 curl -X GET "http://meshblu.octoblu.com/mydevices" --header "meshblu_auth_uuid: {my uuid}" --header "meshblu_auth_token: {my token}"

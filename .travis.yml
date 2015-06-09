@@ -62,28 +62,28 @@ env:
 after_success:
 - .kubernetes/travis_after_success
 deploy:
-- provider: s3
-  access_key_id: AKIAIT4X4NDGM2WVL6VA
-  secret_access_key: &70335699988320
-    secure: EbkGXcI612su+qYk4QENY5R3QN3Xv2lo2G4OGAQFWzE/1v98cjcG/YiRljBm+Uf03IjJuQh4ztLdbAspntBx/Pwyf4/7huvRX6xLsOW2n2FNPfFLrsd6NPoqsEBWxzaWveH4fYfwLUqg1yPIP3Uo6kdFfxuS7p1xI8Jy06ruao0=
-  local_dir: dpl_cd_upload
-  skip_cleanup: true
-  bucket: octoblu-deploy
-  on:
-    branch: master
-    condition: $USE_MONGO = true
-- provider: codedeploy
-  access_key_id: AKIAIT4X4NDGM2WVL6VA
-  secret_access_key: *70335699988320
-  bucket: octoblu-deploy
-  key: docker-builder/meshblu-$TRAVIS_COMMIT.zip
-  bundle_type: zip
-  region: us-west-2
-  application: docker-builder
-  deployment_group: meshblu
-  on:
-    branch: master
-    condition: $USE_MONGO = true
+# - provider: s3
+#   access_key_id: AKIAIT4X4NDGM2WVL6VA
+#   secret_access_key: &70335699988320
+#     secure: EbkGXcI612su+qYk4QENY5R3QN3Xv2lo2G4OGAQFWzE/1v98cjcG/YiRljBm+Uf03IjJuQh4ztLdbAspntBx/Pwyf4/7huvRX6xLsOW2n2FNPfFLrsd6NPoqsEBWxzaWveH4fYfwLUqg1yPIP3Uo6kdFfxuS7p1xI8Jy06ruao0=
+#   local_dir: dpl_cd_upload
+#   skip_cleanup: true
+#   bucket: octoblu-deploy
+#   on:
+#     branch: master
+#     condition: $USE_MONGO = true
+# - provider: codedeploy
+#   access_key_id: AKIAIT4X4NDGM2WVL6VA
+#   secret_access_key: *70335699988320
+#   bucket: octoblu-deploy
+#   key: docker-builder/meshblu-$TRAVIS_COMMIT.zip
+#   bundle_type: zip
+#   region: us-west-2
+#   application: docker-builder
+#   deployment_group: meshblu
+#   on:
+#     branch: master
+#     condition: $USE_MONGO = true
 - provider: opsworks
   access_key_id: AKIAIT4X4NDGM2WVL6VA
   secret_access_key:

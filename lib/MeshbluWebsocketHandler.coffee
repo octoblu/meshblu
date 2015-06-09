@@ -78,7 +78,7 @@ class MeshbluWebsocketHandler extends EventEmitter
       return @sendFrame 'notReady', message: 'unauthorized', status: 401 if error?
       @sendFrame 'ready', uuid: @uuid, token: @token, status: 200
       @setOnlineStatus device, true
-      @messageIOClient.subscribe @uuid, ['received', 'broadcast']
+      @messageIOClient.subscribe @uuid, ['received']
 
   message: (data) =>
     @authDevice @uuid, @token, (error, device) =>

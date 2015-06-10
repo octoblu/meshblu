@@ -1,7 +1,7 @@
 config = require '../config'
 
 config.rateLimits ?= {};
-windowRate = 60 * 1000
+windowRate = 1000
 
 tokenthrottle = require 'tokenthrottle'
 # if config.redis?.host

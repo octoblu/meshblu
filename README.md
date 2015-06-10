@@ -1,4 +1,4 @@
-# meshblu
+![meshblu](https://cdn.octoblu.com/assets/logos/meshblu/meshblu@2x.png)
 
 [![Build Status](https://travis-ci.org/octoblu/meshblu.svg?branch=master)](https://travis-ci.org/octoblu/meshblu)
 [![Code Climate](https://codeclimate.com/github/octoblu/meshblu/badges/gpa.svg)](https://codeclimate.com/github/octoblu/meshblu)
@@ -8,8 +8,6 @@
 OPEN HTTP, WebSocket, MQTT, & CoAP COMMUNICATIONS NETWORK & API FOR THE INTERNET OF THINGS (IoT)!
 
 Visit [developer.octoblu.com](http://developer.octoblu.com) for up-to-the-latest documentation and screencasts.
-
-======
 
 Introduction
 ------------

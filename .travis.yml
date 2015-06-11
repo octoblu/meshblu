@@ -16,7 +16,7 @@ env:
   - USE_MONGO=true
   - USE_MONGO=false
   global:
-  - AWS_ACCESS_KEY_ID=AKIAIT4X4NDGM2WVL6VA
+  - AWS_ACCESS_KEY_ID=AKIAJH2D5IPIRHYJT5IA
   - DOCKER_USERNAME=octoblu
   - DEPLOY_APPLICATION_NAME=meshblu
   - DEPLOY_REGION=us-west-2
@@ -59,59 +59,35 @@ env:
   - secure: B7B1+Msz6fZxWJ3cPsEg9JPvqksmdAs0jgctfs+SPCg102KhEPppPIFMU88OfYatiJZJ/wgK+ElO9H8FMZhe+aVA/aHvWQkIjI8rVmS72Zio0qEIIMlWdWQ1uECKYhpBwHNWnCBjQSse7sj/YPFFlnkpijrFXO2vhQxCsTNGwGQ=
   - secure: CgGwQU3frcUfL3XILqKH9rW1pGJA6gXmtnC0ezGRRjTkBzBWLgv/Eannr/eeBjcKbrdCrZEomLVGj7YTaaF9wCt6ofv7PQaoSwt7ceNxXMtYc0FNiKtBuaCWobvjZUJikQUe9imgt0bcTu6A089oVc7alnDUdou1kNsAbwnCobw=
   - secure: HEE0y7f6x0qGU2vC7XwZAALVFP4a46Wey+wWenNWLJQv+zOuJUClFpysmVxBQTiGp+jt43k/RUBve607ZSc004SlTpIkalbGEVh7VnX8V6Gpt5xIqXC66Td0Y5MsCaJ1Gwqa5X6/sqNWWx3mAzX5eYbLkSlfq6iwxjxYUgWlQyI=
+  - secure: ZZKdEw+Jkoa598tjColeqtmOSr9XgcpjMR47mFum5xp1Dt080/tAzdVITmtXOyHvUdOsS+4kDSYzZljXCvAiwAelxQYdXc/ohks9qYJB67BbaoOhEsrxRvAmkLi8dcZKfrVZlunazsbzWYd5AbDSa1RGXBzD+rNGnSUPBq6FS3g=
 after_success:
 - .kubernetes/travis_after_success
 deploy:
-# - provider: s3
-#   access_key_id: AKIAIT4X4NDGM2WVL6VA
-#   secret_access_key: &70335699988320
-#     secure: EbkGXcI612su+qYk4QENY5R3QN3Xv2lo2G4OGAQFWzE/1v98cjcG/YiRljBm+Uf03IjJuQh4ztLdbAspntBx/Pwyf4/7huvRX6xLsOW2n2FNPfFLrsd6NPoqsEBWxzaWveH4fYfwLUqg1yPIP3Uo6kdFfxuS7p1xI8Jy06ruao0=
-#   local_dir: dpl_cd_upload
-#   skip_cleanup: true
-#   bucket: octoblu-deploy
-#   on:
-#     branch: master
-#     condition: $USE_MONGO = true
-# - provider: codedeploy
-#   access_key_id: AKIAIT4X4NDGM2WVL6VA
-#   secret_access_key: *70335699988320
-#   bucket: octoblu-deploy
-#   key: docker-builder/meshblu-$TRAVIS_COMMIT.zip
-#   bundle_type: zip
-#   region: us-west-2
-#   application: docker-builder
-#   deployment_group: meshblu
-#   on:
-#     branch: master
-#     condition: $USE_MONGO = true
 - provider: opsworks
-  access_key_id: AKIAIT4X4NDGM2WVL6VA
-  secret_access_key:
-    secure: fqCKEwrQBo2P9G6CiQqU4dv/nwQ64FWv+TRblkvZxCsGe+VKoNYSz57B2AaX0mGvTyS7qt7GHOxcU4T64KYdXpRuYe/Z2yekp7K9mcgGCqYnprwUo7Xh67kstixjKxvs4QzYRWF0tJiaeoXgLoXxu0fO111iP8bCIQc5ThBSF+8=
+  access_key_id: AKIAJH2D5IPIRHYJT5IA
+  secret_access_key: &1
+    secure: "PWUGkix9QPeOVdeEKwXM1DioZsxOD7YXLjcMNm4yghyDwWtkPIn5b98Fay5A8CfiUjngjviUb63X2KhqYE/kglWETp7BsbSzOhgDqv8qbnsK4MVtzk30fphX+FcVo9RSd37G6S3cT58DnJ9CtK6Z+Hp/44U59w2AXdoRr3i8/Ys="
   app-id: e1883763-9db4-432f-900a-628dd84aceaa
   on:
     branch: master
     condition: $USE_MONGO = true
 - provider: opsworks
-  access_key_id: AKIAIT4X4NDGM2WVL6VA
-  secret_access_key:
-    secure: fqCKEwrQBo2P9G6CiQqU4dv/nwQ64FWv+TRblkvZxCsGe+VKoNYSz57B2AaX0mGvTyS7qt7GHOxcU4T64KYdXpRuYe/Z2yekp7K9mcgGCqYnprwUo7Xh67kstixjKxvs4QzYRWF0tJiaeoXgLoXxu0fO111iP8bCIQc5ThBSF+8=
+  access_key_id: AKIAJH2D5IPIRHYJT5IA
+  secret_access_key: *1
   app-id: 7b21bb86-93bb-4a2b-b482-7a8a3ab4a23b
   on:
     branch: master
     condition: $USE_MONGO = true
 - provider: opsworks
-  access_key_id: AKIAIT4X4NDGM2WVL6VA
-  secret_access_key:
-    secure: fqCKEwrQBo2P9G6CiQqU4dv/nwQ64FWv+TRblkvZxCsGe+VKoNYSz57B2AaX0mGvTyS7qt7GHOxcU4T64KYdXpRuYe/Z2yekp7K9mcgGCqYnprwUo7Xh67kstixjKxvs4QzYRWF0tJiaeoXgLoXxu0fO111iP8bCIQc5ThBSF+8=
+  access_key_id: AKIAJH2D5IPIRHYJT5IA
+  secret_access_key: *1
   app-id: 5fcc76e4-b0cc-41d3-b794-8a8b4ff0ed9e
   on:
     branch: staging
     condition: $USE_MONGO = true
 - provider: opsworks
-  access_key_id: AKIAIT4X4NDGM2WVL6VA
-  secret_access_key:
-    secure: fqCKEwrQBo2P9G6CiQqU4dv/nwQ64FWv+TRblkvZxCsGe+VKoNYSz57B2AaX0mGvTyS7qt7GHOxcU4T64KYdXpRuYe/Z2yekp7K9mcgGCqYnprwUo7Xh67kstixjKxvs4QzYRWF0tJiaeoXgLoXxu0fO111iP8bCIQc5ThBSF+8=
+  access_key_id: AKIAJH2D5IPIRHYJT5IA
+  secret_access_key: *1
   app-id: 3110aaa3-dd25-49d1-be43-6c0ac5c0a8ad
   on:
     branch: staging

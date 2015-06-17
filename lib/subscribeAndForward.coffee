@@ -7,31 +7,34 @@ MessageIOClient = require './messageIOClient'
 securityImpl = require './getSecurityImpl'
 debug = require('debug')('meshblu:subscribeAndForward')
 
-subscribeAndForwardWithToken = (response, uuid, token, subscriptionTypes) ->
+subscribeAndForwardWithToken = (response, uuid, token, subscriptionTypes, payloadOnly) ->
   authDevice uuid, token, (error, authedDevice) ->
-    messageIOClient = connectMessageIO(response)
+    messageIOClient = connectMessageIO(response, payloadOnly)
     messageIOClient.subscribe uuid, subscriptionTypes or [
       'received'
       'broadcast'
       'sent'
     ]
 
-connectMessageIO = (response) ->
+connectMessageIO = (response, payloadOnly=false) ->
   messageIOClient = new MessageIOClient()
   readStream = new Readable
   readStream._read = _.noop
   readStream.pipe response
   messageIOClient.on 'message', (message) ->
     debug 'onMessage', message
+    if payloadOnly
+      message = message?.payload
+
     readStream.push JSON.stringify(message) + '\n'
 
   messageIOClient.start()
   return messageIOClient
 
-subscribeAndForward = (askingDevice, response, uuid, token, subscriptionTypes) ->
+subscribeAndForward = (askingDevice, response, uuid, token, subscriptionTypes, payloadOnly) ->
   uuid = uuid or askingDevice.uuid
   if token
-    return subscribeAndForwardWithToken(response, uuid, token, subscriptionTypes)
+    return subscribeAndForwardWithToken(response, uuid, token, subscriptionTypes, payloadOnly)
   newSubscriptionTypes = []
   getDevice uuid, (error, subscribedDevice) ->
     if error
@@ -45,7 +48,7 @@ subscribeAndForward = (askingDevice, response, uuid, token, subscriptionTypes) -
       if subscribedDevice.owner and subscribedDevice.owner == askingDevice.uuid or subscribedDevice.uuid == askingDevice.uuid
         newSubscriptionTypes.push 'received'
         newSubscriptionTypes.push 'sent'
-      messageIOClient = connectMessageIO(response)
+      messageIOClient = connectMessageIO(response, payloadOnly)
       messageIOClient.subscribe uuid, subscriptionTypes or newSubscriptionTypes
 
 module.exports = subscribeAndForward

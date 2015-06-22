@@ -81,7 +81,7 @@ class Device
 
   update: (params, callback=->) =>
     @devices.update uuid: @uuid, params, (error) =>
-      return callback new Error(error) if error?
+      return callback @sanitizeError(error) if error?
       callback()
 
   addGeo: (callback=->) =>
@@ -111,5 +111,11 @@ class Device
         @attributes.onlineSince = new Date()
 
       callback()
+
+  sanitizeError: (error) =>
+    message = error
+    message = error.message if _.isError error
+
+    new Error message.replace("MongoError: ")
 
 module.exports = Device

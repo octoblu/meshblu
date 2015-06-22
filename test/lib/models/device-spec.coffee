@@ -389,7 +389,11 @@ describe 'Device', ->
 
         it 'should yield an error', ->
           expect(@error).to.be.an.instanceOf Error
-          expect(@error.message).to.deep.equal 'Unknown modifier $breed'
+
+          if process.env.USE_MONGO?.toLocaleLowerCase() == 'true'
+            expect(@error.message).to.deep.equal 'Unknown modifier: $breed'
+          else
+            expect(@error.message).to.deep.equal 'Unknown modifier $breed'
 
   describe '->validate', ->
     describe 'when created with a different uuid', ->

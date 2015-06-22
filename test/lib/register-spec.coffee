@@ -5,12 +5,12 @@ TestDatabase = require '../test-database'
 describe 'register', ->
   beforeEach (done) ->
     @sut = require '../../lib/register'
-    @updateDevice = sinon.stub()
+    @oldUpdateDevice = sinon.stub()
     TestDatabase.open (error, database) =>
       @database = database
       @devices  = @database.devices
 
-      @dependencies = {database: @database, updateDevice: @updateDevice}
+      @dependencies = {database: @database, oldUpdateDevice: @oldUpdateDevice}
       done error
 
   it 'should be a function', ->
@@ -19,7 +19,7 @@ describe 'register', ->
   describe 'when called with no params', ->
     beforeEach (done) ->
       @timestamp = moment().toISOString()
-      @updateDevice.yields null, timestamp: @timestamp
+      @oldUpdateDevice.yields null, timestamp: @timestamp
       storeDevice = (@error, @device) => done()
       @sut null, storeDevice, @dependencies
 
@@ -41,15 +41,15 @@ describe 'register', ->
     it 'should generate a new token', ->
       expect(@device.token).to.exist
 
-    it 'should call updateDevice', ->
-      expect(@updateDevice).to.have.been.called
+    it 'should call oldUpdateDevice', ->
+      expect(@oldUpdateDevice).to.have.been.called
 
     it 'should merge in the timestamp from update Device', ->
       expect(@device.timestamp).to.equal @timestamp
 
     describe 'when called again with no params', ->
       beforeEach (done) ->
-        @updateDevice.yields null, {}
+        @oldUpdateDevice.yields null, {}
         storeDevice = (error, @newerDevice) => done()
         @sut null, storeDevice, @dependencies
 
@@ -61,10 +61,10 @@ describe 'register', ->
 
   describe 'when called with a specific uuid', ->
     beforeEach (done) ->
-      @updateDevice.yields null, {}
+      @oldUpdateDevice.yields null, {}
       @dependencies.uuid =
         v4: sinon.stub().returns 'some-other-uuid'
-        
+
       @sut {uuid: 'some-uuid'}, done, @dependencies
 
     it 'should generate a new uuid for the device', (done) ->
@@ -74,12 +74,12 @@ describe 'register', ->
 
   describe 'when called with an owner id', ->
     beforeEach (done) ->
-      @updateDevice.yields null, {}
+      @oldUpdateDevice.yields null, {}
       @params = {uuid: 'some-uuid', token: 'token', owner: 'other-uuid'}
       @sut @params, done, @dependencies
 
     it 'should set the discoverWhitelist to the owners UUID',  ->
-      expect(@updateDevice).to.have.been.calledWith(
+      expect(@oldUpdateDevice).to.have.been.calledWith(
         sinon.match.any
         sinon.match
           token: 'token'
@@ -90,7 +90,7 @@ describe 'register', ->
 
   describe 'when called without an online', ->
     beforeEach (done) ->
-      @updateDevice.yields null, {}
+      @oldUpdateDevice.yields null, {}
       @sut {}, done, @dependencies
 
     it 'should create a device with an online of false', (done) ->
@@ -104,7 +104,7 @@ describe 'register', ->
 
     describe 'trying to create a new device with a different uuid', ->
       beforeEach (done) ->
-        @updateDevice.yields null, {}
+        @oldUpdateDevice.yields null, {}
         storeDevice = (@error, @device) => done()
         @sut {uuid: 'some-other-uuid'}, storeDevice, @dependencies
 
@@ -116,7 +116,7 @@ describe 'register', ->
 
   describe 'when called with just a name', ->
     beforeEach (done) ->
-      @updateDevice.yields null, {}
+      @oldUpdateDevice.yields null, {}
       storeDevice = (error, @device) => done()
       @params = {name: 'bobby'}
       @originalParams = _.cloneDeep @params

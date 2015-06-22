@@ -45,6 +45,14 @@ class Device
 
       @save callback
 
+  sanitize: (params) =>
+    return params unless _.isObject(params) || _.isArray(params)
+
+    return _.map params, @sanitize if _.isArray params
+
+    params = _.omit params, (value, key) -> key[0] == '$'
+    return _.mapValues params, @sanitize
+
   save: (callback=->) =>
     return callback @error unless @validate()
     async.series [
@@ -58,14 +66,6 @@ class Device
         @clearCache @uuid
         callback error
 
-  sanitize: (params) =>
-    return params unless _.isObject(params) || _.isArray(params)
-
-    return _.map params, @sanitize if _.isArray params
-
-    params = _.omit params, (value, key) -> key[0] == '$'
-    return _.mapValues params, @sanitize
-
   set: (attributes)=>
     @attributes ?= {}
     @attributes = _.extend {}, @attributes, @sanitize(attributes)
@@ -78,6 +78,11 @@ class Device
       return false
 
     return true
+
+  update: (params, callback=->) =>
+    @devices.update uuid: @uuid, params, (error) =>
+      return callback new Error(error) if error?
+      callback()
 
   addGeo: (callback=->) =>
     return _.defer callback unless @attributes.ipAddress?

@@ -4,12 +4,12 @@ describe 'resetToken', ->
   beforeEach ->
     @securityImpl = {}
     @getDevice = sinon.stub()
-    @updateDevice = sinon.stub()
+    @oldUpdateDevice = sinon.stub()
     @emitToClient = sinon.stub()
 
     #currying, yo
     @sut = (fromDevice, uuid, callback) =>
-      resetToken fromDevice, uuid, @emitToClient, callback, @securityImpl, @getDevice, @updateDevice
+      resetToken fromDevice, uuid, @emitToClient, callback, @securityImpl, @getDevice, @oldUpdateDevice
 
   it 'should exist', ->
     expect(@sut).to.exist
@@ -71,47 +71,47 @@ describe 'resetToken', ->
           @sut @fromDevice, 3, callback
           expect(callback).to.not.have.been.calledWith 'unauthorized'
 
-        it 'should call updateDevice', ->
+        it 'should call oldUpdateDevice', ->
           @sut @fromDevice, 3
-          expect(@updateDevice).to.have.been.called
+          expect(@oldUpdateDevice).to.have.been.called
 
-        it 'should call updateDevice with the toDevice uuid and parameters containing a token', ->
+        it 'should call oldUpdateDevice with the toDevice uuid and parameters containing a token', ->
           @sut @fromDevice, 3
-          args = @updateDevice.args[0]
+          args = @oldUpdateDevice.args[0]
           expect(args[0]).to.equal @device.uuid
           expect(args[1].token).to.exist
 
         it 'should update the device with a token greater than 20 characters long', ->
           @sut @fromDevice, 3
-          args = @updateDevice.args[0]
+          args = @oldUpdateDevice.args[0]
           expect(args[1].token.length).to.be.greaterThan 20
           expect(args[1].token).to.be.a 'string'
 
         it 'should update the device with a different token each time it is called', ->
           @sut @fromDevice, 3
-          args = @updateDevice.args[0]
+          args = @oldUpdateDevice.args[0]
           token = args[1].token
           @sut @fromDevice, 3
-          args = @updateDevice.args[1]
+          args = @oldUpdateDevice.args[1]
           expect(token).to.not.deep.equal(args[1].token)
 
-        describe 'when updateDevice returns with an error', ->
+        describe 'when oldUpdateDevice returns with an error', ->
           beforeEach ->
-            @updateDevice.yields true
+            @oldUpdateDevice.yields true
 
           it 'should call the callback with an error', ->
             callback = sinon.spy()
             @sut @fromDevice, 3, callback
             expect(callback).to.be.calledWith 'error updating device'
 
-        describe 'when updateDevice returns without an error', ->
+        describe 'when oldUpdateDevice returns without an error', ->
           beforeEach ->
-            @updateDevice.yields undefined, @fromDevice
+            @oldUpdateDevice.yields undefined, @fromDevice
 
           it 'should return a token', ->
             callback = sinon.spy()
             @sut @fromDevice, 3, callback
-            expect(callback).to.be.calledWith null, @updateDevice.args[0][1].token
+            expect(callback).to.be.calledWith null, @oldUpdateDevice.args[0][1].token
 
           it 'should call emitToClient', ->
             @sut @fromDevice, 3

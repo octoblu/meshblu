@@ -1,10 +1,10 @@
 describe 'claimDevice', ->
   beforeEach ->
-    @updateDevice = sinon.stub()
+    @oldUpdateDevice = sinon.stub()
     @canConfigure = sinon.stub()
     @getDeviceWithToken    = sinon.stub()
     @canConfigure.yields null, true
-    @dependencies = {updateDevice: @updateDevice, canConfigure: @canConfigure, getDeviceWithToken: @getDeviceWithToken}
+    @dependencies = {oldUpdateDevice: @oldUpdateDevice, canConfigure: @canConfigure, getDeviceWithToken: @getDeviceWithToken}
     @sut = require '../../lib/claimDevice'
 
   it 'should be a function', ->
@@ -32,11 +32,11 @@ describe 'claimDevice', ->
       @device     = {uuid: '07a4ed85-acc5-4495-b3d7-2d93439c04fa'}
 
       @getDeviceWithToken.yields null, {uuid: '07a4ed85-acc5-4495-b3d7-2d93439c04fa', ipAddress: '192.168.1.1'}
-      @updateDevice.yields null, @device
+      @oldUpdateDevice.yields null, @device
       @sut @fromDevice, @device, done, @dependencies
 
-    it 'should call updateDevice with that uuid and name', ->
-      expect(@updateDevice).to.have.been.deep.calledWith @device.uuid, {
+    it 'should call oldUpdateDevice with that uuid and name', ->
+      expect(@oldUpdateDevice).to.have.been.deep.calledWith @device.uuid, {
         owner: @fromDevice.uuid
         uuid: @device.uuid
         discoverWhitelist: [
@@ -54,11 +54,11 @@ describe 'claimDevice', ->
       @device     = {uuid: '07a4ed85-acc5-4495-b3d7-2d93439c04fa', name: 'Cookie Crisp'}
 
       @getDeviceWithToken.yields null, {name: 'Cookie Crisp', uuid: '07a4ed85-acc5-4495-b3d7-2d93439c04fa', ipAddress: '192.168.1.1'}
-      @updateDevice.yields null, @device
+      @oldUpdateDevice.yields null, @device
       @sut @fromDevice, @device, done, @dependencies
 
-    it 'should call updateDevice with that uuid and name', ->
-      expect(@updateDevice).to.have.been.calledWith @device.uuid, {
+    it 'should call oldUpdateDevice with that uuid and name', ->
+      expect(@oldUpdateDevice).to.have.been.calledWith @device.uuid, {
         owner: @fromDevice.uuid
         name: 'Cookie Crisp'
         uuid: @device.uuid
@@ -77,11 +77,11 @@ describe 'claimDevice', ->
       @device     = {uuid: '9b97159e-63c2-4a71-9327-8fadad97f1e9', name: 'Fruit Loops', owner: 'wrong'}
 
       @getDeviceWithToken.yields null, {name: 'Fruit Loops', uuid: '9b97159e-63c2-4a71-9327-8fadad97f1e9', ipAddress: '192.168.1.1'}
-      @updateDevice.yields null, @device
+      @oldUpdateDevice.yields null, @device
       @sut @fromDevice, @device, done, @dependencies
 
-    it 'should call updateDevice with that uuid and name', ->
-      expect(@updateDevice).to.have.been.calledWith @device.uuid, {
+    it 'should call oldUpdateDevice with that uuid and name', ->
+      expect(@oldUpdateDevice).to.have.been.calledWith @device.uuid, {
         owner: @fromDevice.uuid
         name: 'Fruit Loops'
         uuid: @device.uuid
@@ -112,8 +112,8 @@ describe 'claimDevice', ->
         name: 'Fruit Loops'
       }
 
-    it 'should not call updateDevice with that uuid and name', ->
-      expect(@updateDevice).not.to.have.been.called
+    it 'should not call oldUpdateDevice with that uuid and name', ->
+      expect(@oldUpdateDevice).not.to.have.been.called
 
     it 'should call the callback with an error', ->
       expect(@error).to.exist

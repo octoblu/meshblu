@@ -5,7 +5,7 @@ module.exports = (fromDevice, data, callback=_.noop, dependencies={}) ->
   return _.defer callback, new Error('invalid device') unless data?
 
   getDeviceWithToken    = dependencies.getDeviceWithToken ? require './getDeviceWithToken'
-  updateDevice = dependencies.updateDevice ? require './updateDevice'
+  oldUpdateDevice = dependencies.oldUpdateDevice ? require './oldUpdateDevice'
   canConfigure = dependencies.canConfigure ? require('./getSecurityImpl').canConfigure
 
   getDeviceWithToken data.uuid, (error, device) => # have to getDevice to verify the ip address
@@ -24,4 +24,4 @@ module.exports = (fromDevice, data, callback=_.noop, dependencies={}) ->
       device.configureWhitelist.push fromDevice.uuid
       device.owner = fromDevice.uuid
 
-      updateDevice data.uuid, device, callback
+      oldUpdateDevice data.uuid, device, callback

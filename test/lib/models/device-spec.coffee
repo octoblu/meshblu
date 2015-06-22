@@ -14,6 +14,75 @@ describe 'Device', ->
       @dependencies = {database: @database, getGeo: @getGeo, clearCache: @clearCache}
       done error
 
+  describe '->addGeo', ->
+    describe 'when a device has an ipAddress', ->
+      beforeEach (done) ->
+        @dependencies.getGeo = sinon.stub().yields null, {city: 'smallville'}
+        @sut = new Device ipAddress: '127.0.0.1', @dependencies
+        @sut.addGeo done
+
+      it 'should call getGeo with the ipAddress', ->
+        expect(@dependencies.getGeo).to.have.been.calledWith '127.0.0.1'
+
+      it 'should set the getGeo response on attributes', ->
+        expect(@sut.attributes.geo).to.deep.equal {city: 'smallville'}
+
+    describe 'when a device has no ipAddress', ->
+      beforeEach (done) ->
+        @dependencies.getGeo = sinon.spy()
+        @sut = new Device {}, @dependencies
+        @sut.addGeo done
+
+      it 'should not call getGeo', ->
+        expect(@dependencies.getGeo).not.to.have.been.called
+
+  describe '->addHashedToken', ->
+    describe 'when a device exists', ->
+      beforeEach (done) ->
+        @uuid = 'd17f2411-6465-4a02-b658-6b5c992fb7b2'
+        @attributes = {uuid: @uuid, name: 'Cherokee', token : bcrypt.hashSync('cool-token', 8)}
+        @devices.insert @attributes, done
+
+      describe 'when the device has an unhashed token', ->
+        beforeEach (done) ->
+          @sut = new Device uuid: @uuid, token: 'new-token', @dependencies
+          @sut.addHashedToken(done)
+
+        it 'should hash the token', ->
+          expect(bcrypt.compareSync('new-token', @sut.attributes.token)).to.be.true
+
+      describe 'when the device has no token', ->
+        beforeEach (done) ->
+          @sut = new Device uuid: @uuid, @dependencies
+          @sut.addHashedToken(done)
+
+        it 'should not modify the token', ->
+          expect(@sut.token).not.to.exist
+
+      describe 'when instantiated with the hashed token', ->
+        beforeEach (done) ->
+          @sut = new Device @attributes, @dependencies
+          @sut.addHashedToken done
+
+        it 'should not rehash the token', ->
+          expect(@sut.attributes.token).to.equal @attributes.token
+
+  describe '->addOnlineSince', ->
+    describe 'when a device exists with online', ->
+      beforeEach (done) ->
+        @uuid = 'dab71557-c8a4-45d9-95ae-8dfd963a2661'
+        @onlineSince = new Date(1422484953078)
+        @attributes = {uuid: @uuid, online: true, onlineSince: @onlineSince}
+        @devices.insert @attributes, done
+
+      describe 'when set online true', ->
+        beforeEach (done) ->
+          @sut = new Device uuid: @uuid, online: true, @dependencies
+          @sut.addOnlineSince done
+
+        it 'should not update onlineSince', ->
+          expect(@sut.attributes.onlineSince).not.to.exist
+
   describe '->fetch', ->
     describe "when a device doesn't exist", ->
       beforeEach (done) ->
@@ -282,6 +351,45 @@ describe 'Device', ->
             expect(match).to.be.true
             done()
 
+  describe '->update', ->
+    describe 'when a device is saved', ->
+      beforeEach (done) ->
+        @devices.insert {uuid: 'my-device'}, done
+
+      beforeEach (done) ->
+        @getGeo = sinon.stub().yields null, {city: 'phoenix'}
+        @dependencies.getGeo = @getGeo
+        @sut = new Device(uuid: 'my-device', @dependencies)
+        @sut.set name: 'VW bug', online: true, ipAddress: '192.168.1.1', pigeonCount: 3
+        @sut.save done
+
+      describe 'when called a normal update query', ->
+        beforeEach (done) ->
+          @sut.update uuid: 'my-device', name: 'Jetta', done
+
+        it 'should update the record', (done) ->
+          @devices.findOne uuid: 'my-device', (error, device) =>
+            return done error if error?
+            expect(device.name).to.equal 'Jetta'
+            done()
+
+      describe 'when called with an increment operator', ->
+        beforeEach ->
+          @sut.update $inc: {pigeonCount: 1}
+
+        it 'should increment the pigeon count', (done) ->
+          @devices.findOne uuid: 'my-device', (error, device) =>
+            return done error if error?
+            expect(device.pigeonCount).to.equal 4
+            done()
+
+      describe 'when called with an invalid operator', ->
+        beforeEach (done) ->
+          @sut.update $breed: 'pigeons', (@error) => done()
+
+        it 'should yield an error', ->
+          expect(@error).to.be.an.instanceOf Error
+          expect(@error.message).to.deep.equal 'Unknown modifier $breed'
 
   describe '->validate', ->
     describe 'when created with a different uuid', ->
@@ -309,72 +417,3 @@ describe 'Device', ->
 
       it 'should not set an error on the device', ->
         expect(@sut.error).to.not.exist
-
-  describe '->addGeo', ->
-    describe 'when a device has an ipAddress', ->
-      beforeEach (done) ->
-        @dependencies.getGeo = sinon.stub().yields null, {city: 'smallville'}
-        @sut = new Device ipAddress: '127.0.0.1', @dependencies
-        @sut.addGeo done
-
-      it 'should call getGeo with the ipAddress', ->
-        expect(@dependencies.getGeo).to.have.been.calledWith '127.0.0.1'
-
-      it 'should set the getGeo response on attributes', ->
-        expect(@sut.attributes.geo).to.deep.equal {city: 'smallville'}
-
-    describe 'when a device has no ipAddress', ->
-      beforeEach (done) ->
-        @dependencies.getGeo = sinon.spy()
-        @sut = new Device {}, @dependencies
-        @sut.addGeo done
-
-      it 'should not call getGeo', ->
-        expect(@dependencies.getGeo).not.to.have.been.called
-
-  describe '->addHashedToken', ->
-    describe 'when a device exists', ->
-      beforeEach (done) ->
-        @uuid = 'd17f2411-6465-4a02-b658-6b5c992fb7b2'
-        @attributes = {uuid: @uuid, name: 'Cherokee', token : bcrypt.hashSync('cool-token', 8)}
-        @devices.insert @attributes, done
-
-      describe 'when the device has an unhashed token', ->
-        beforeEach (done) ->
-          @sut = new Device uuid: @uuid, token: 'new-token', @dependencies
-          @sut.addHashedToken(done)
-
-        it 'should hash the token', ->
-          expect(bcrypt.compareSync('new-token', @sut.attributes.token)).to.be.true
-
-      describe 'when the device has no token', ->
-        beforeEach (done) ->
-          @sut = new Device uuid: @uuid, @dependencies
-          @sut.addHashedToken(done)
-
-        it 'should not modify the token', ->
-          expect(@sut.token).not.to.exist
-
-      describe 'when instantiated with the hashed token', ->
-        beforeEach (done) ->
-          @sut = new Device @attributes, @dependencies
-          @sut.addHashedToken done
-
-        it 'should not rehash the token', ->
-          expect(@sut.attributes.token).to.equal @attributes.token
-
-  describe '->addOnlineSince', ->
-    describe 'when a device exists with online', ->
-      beforeEach (done) ->
-        @uuid = 'dab71557-c8a4-45d9-95ae-8dfd963a2661'
-        @onlineSince = new Date(1422484953078)
-        @attributes = {uuid: @uuid, online: true, onlineSince: @onlineSince}
-        @devices.insert @attributes, done
-
-      describe 'when set online true', ->
-        beforeEach (done) ->
-          @sut = new Device uuid: @uuid, online: true, @dependencies
-          @sut.addOnlineSince done
-
-        it 'should not update onlineSince', ->
-          expect(@sut.attributes.onlineSince).not.to.exist

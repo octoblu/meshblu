@@ -3,9 +3,9 @@ uuid         = require 'node-uuid'
 bcrypt       = require 'bcrypt'
 TestDatabase = require '../test-database'
 
-describe 'Update Device', ->
+describe 'Old Update Device', ->
   beforeEach (done) ->
-    @sut = require '../../lib/updateDevice'
+    @sut = require '../../lib/oldUpdateDevice'
     @getDevice = sinon.stub()
     @clearCache = sinon.stub()
     @getGeo = sinon.stub()
@@ -48,7 +48,7 @@ describe 'Update Device', ->
       @originalDevice = {uuid: @uuid, name: 'hadoken', token : @token, online :true}
       @devices.insert _.clone(@originalDevice), done
 
-    describe 'when updateDevice is called', ->
+    describe 'when  is called', ->
       beforeEach (done) ->
         @getDevice.yields null
         @sut @uuid, {name: 'shakunetsu'}, done, @dependencies

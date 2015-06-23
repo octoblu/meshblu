@@ -3,7 +3,7 @@ _ = require 'lodash'
 module.exports = (fromDevice, query, params, callback=_.noop, dependencies={}) ->
   securityImpl = dependencies.securityImpl ? require('./getSecurityImpl')
   getDevice = dependencies.getDevice ? require('./getDevice')
-  Device = dependencies.Device ? require('./models/Device')
+  Device = dependencies.Device ? require('./models/device')
 
   getDevice query.uuid, (error, toDevice) =>
     securityImpl.canConfigure fromDevice, toDevice, query, (error, permission) =>

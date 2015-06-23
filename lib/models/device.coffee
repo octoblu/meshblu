@@ -80,6 +80,16 @@ class Device
     return true
 
   update: (params, callback=->) =>
+    params = _.cloneDeep params
+
+    keys = _.keys(params)
+
+    if _.all(keys, (key) -> _.startsWith key, '$')
+      params['$set'] ?= {}
+      params['$set'].uuid = @uuid
+    else
+      params.uuid = @uuid
+
     @devices.update uuid: @uuid, params, (error) =>
       return callback @sanitizeError(error) if error?
       callback()

@@ -9,14 +9,16 @@ describe 'updateIfAuthorized', ->
       @toDevice     = {uuid: 'to-device', configureWhitelist: ['from-device']}
       @getDevice    = sinon.stub().yields null, @toDevice
       @canConfigure = sinon.stub()
+      @clearCache = sinon.stub()
 
       @device = update: sinon.spy()
       @Device = sinon.spy => @device
 
-      @dependencies = getDevice: @getDevice, securityImpl: {canConfigure: @canConfigure}, Device: @Device
+      @dependencies = getDevice: @getDevice, securityImpl: {canConfigure: @canConfigure}, Device: @Device, clearCache: @clearCache
 
       @callback = sinon.spy()
       @sut {uuid: 'from-device'}, {uuid: 'to-device', token: 'token'}, {$inc: {magic: 1}}, @callback, @dependencies
+
 
     it 'should call canConfigure with the fromDevice, the toDevice and the query', ->
       expect(@canConfigure).to.have.been.calledWith {uuid: 'from-device'}, @toDevice, {uuid: 'to-device', token: 'token'}
@@ -49,6 +51,9 @@ describe 'updateIfAuthorized', ->
 
       it 'should not have called the callback yet', ->
         expect(@callback).to.have.not.been.called #yet
+
+      it 'should call clearCache with the uuid', ->
+        expect(@clearCache).to.have.been.calledWith 'to-device'
 
       it 'should instantiate a Device', ->
         expect(@Device).to.have.been.calledWithNew

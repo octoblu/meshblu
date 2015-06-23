@@ -11,11 +11,12 @@ class MeshbluWebsocketHandler extends EventEmitter
     @getSystemStatus = dependencies.getSystemStatus ? require './getSystemStatus'
     @securityImpl = dependencies.securityImpl ? require './getSecurityImpl'
     @getDevice = dependencies.getDevice ? require './getDevice'
+    @getDeviceIfAuthorized = dependencies.getDeviceIfAuthorized ? require './getDeviceIfAuthorized'
     @getDevices = dependencies.getDevices ? require './getDevices'
     @registerDevice = dependencies.registerDevice ? require './register'
     @unregisterDevice = dependencies.unregisterDevice ? require './unregister'
     @sendMessage = dependencies.sendMessage
-    @updateFromClient = dependencies.updateFromClient ? require './updateFromClient'
+    @updateIfAuthorized = dependencies.updateIfAuthorized ? require './updateIfAuthorized'
     @throttles = dependencies.throttles ? require './getThrottles'
 
   initialize: (@socket, request) =>
@@ -48,28 +49,28 @@ class MeshbluWebsocketHandler extends EventEmitter
     debug 'onMessage', event.data
     @parseFrame event.data, (error, type, data) =>
       return @sendError error.message, event.data if error?
+
       @rateLimit @socket.id, type, (error) =>
         return @sendError error.message, event.data, 429 if error?
-        @emit type, data
+        return @emit type, data if type == 'identity'
+
+        @authDevice @uuid, @token, (error, authedDevice)=>
+          return @sendError 'unauthorized', [type, data], 401 if error?
+          @authedDevice = authedDevice
+
+          @emit type, data
 
   # message handlers
   device: (data) =>
-    return @deviceWithToken data if data.token
-
-    @authDevice @uuid, @token, (error, device) =>
-      debug 'device', data
+    debug 'device', data
+    @getDeviceIfAuthorized @authedDevice, data, (error, foundDevice) =>
       return @sendError error.message, ['device', data] if error?
-      @getDevice data.uuid, (error, foundDevice) =>
-        return @sendError error.message, ['device', data] if error?
-        @securityImpl.canDiscover device, foundDevice, (error, permission) =>
-          @sendFrame 'device', foundDevice
+      @sendFrame 'device', foundDevice
 
   devices: (data) =>
-    @authDevice @uuid, @token, (error, device) =>
-      debug 'devices', data
-      return @sendError error.message, ['devices', data] if error?
-      @getDevices device, data, null, (foundDevices) =>
-        @sendFrame 'devices', foundDevices
+    debug 'devices', data
+    @getDevices @authedDevice, data, null, (foundDevices) =>
+      @sendFrame 'devices', foundDevices
 
   identity: (data) =>
     data ?= {}
@@ -144,10 +145,10 @@ class MeshbluWebsocketHandler extends EventEmitter
       @sendFrame 'unregistered', uuid: data.uuid
 
   update: (data) =>
-    @authDevice @uuid, @token, (error, device) =>
+    [query,params] = data
+    @updateIfAuthorized @authedDevice, query, params, (error) =>
       return @sendError error.message, ['update', data] if error?
-      @updateFromClient device, data
-      @sendFrame 'updated', uuid: data.uuid
+      @sendFrame 'updated', uuid: query.uuid
 
   whoami: (data) =>
     @authDevice @uuid, @token, (error, device) =>
@@ -177,13 +178,6 @@ class MeshbluWebsocketHandler extends EventEmitter
       return callback error if error?
       return callback new Error('request exceeds rate limit') if isLimited
       callback()
-
-  deviceWithToken: (data) =>
-    @authDevice data.uuid, data.token, (error, authedDevice) =>
-      debug 'deviceWithToken', data
-      return @sendError error?.message, ['device', data] if error? || !authedDevice?
-      delete authedDevice.token
-      @sendFrame 'device', authedDevice
 
   parseFrame: (frame, callback=->) =>
     try frame = JSON.parse frame

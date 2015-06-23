@@ -143,16 +143,57 @@ describe 'MeshbluWebsocketHandler', ->
       it 'should emit error', ->
         expect(@sut.sendError).to.have.been.calledWith 'rate limit exceeded', '["test",{"far":"near"}]', 429
 
-    describe 'when rateLimit not exceeded', ->
-      beforeEach (done) ->
+    describe 'when calling "identity"', ->
+      beforeEach ->
         @throttles = query: rateLimit: sinon.stub().yields null, false
-        @sut = new MeshbluWebsocketHandler throttles: @throttles
+        @authDevice = sinon.spy()
+        @sut = new MeshbluWebsocketHandler throttles: @throttles, authDevice: @authDevice
         @sut.socket = id: '1555'
-        @sut.addListener 'test', (@data) => done()
-        @sut.onMessage data: '["test",{"far":"near"}]'
+        sinon.spy @sut, 'emit'
+        @sut.onMessage data: '["identity",{"uuid":"something", "token": "dah token"}]'
 
-      it 'should emit test with object', ->
-        expect(@data).to.deep.equal far: 'near'
+      it 'should not call authDevice', ->
+        expect(@authDevice).to.have.not.been.called
+
+      it 'should emit identity', ->
+        expect(@sut.emit).to.have.been.calledWith 'identity', {uuid: 'something', token: 'dah token'}
+
+    describe 'when calling "test" and rateLimit not exceeded', ->
+      describe 'when authDevice yields an error', ->
+        beforeEach (done) ->
+          @throttles = query: rateLimit: sinon.stub().yields null, false
+          @authDevice = sinon.stub().yields new Error
+          @sut = new MeshbluWebsocketHandler throttles: @throttles, authDevice: @authDevice
+          @sut.socket = id: '1555'
+          @sut.sendError = sinon.spy => done()
+          sinon.spy @sut, 'emit'
+          @sut.onMessage data: '["test",{"far":"near"}]'
+
+        it 'should emit an error', ->
+          expect(@sut.sendError).to.have.been.calledWith 'unauthorized', ["test",{"far":"near"}], 401
+
+        it 'should not emit test', ->
+          expect(@sut.emit).not.to.have.been.called
+
+      describe 'when authDevice does not yields an error', ->
+        beforeEach (done) ->
+          @throttles = query: rateLimit: sinon.stub().yields null, false
+          @authDevice = sinon.stub().yields null, {uuid: 'some-uuid', token: 'some-token'}
+          @sut = new MeshbluWebsocketHandler throttles: @throttles, authDevice: @authDevice
+          @sut.uuid = 'some-uuid'
+          @sut.token = 'some-token'
+          @sut.socket = id: '1555'
+          @sut.addListener 'test', (@data) => done()
+          @sut.onMessage data: '["test",{"far":"near"}]'
+
+        it 'should call authDevice', ->
+          expect(@authDevice).to.have.been.calledWith 'some-uuid', 'some-token'
+
+        it 'should emit test with object', ->
+          expect(@data).to.deep.equal far: 'near'
+
+        it 'should set @authedDevice', ->
+          expect(@sut.authedDevice).to.deep.equal uuid: 'some-uuid', token: 'some-token'
 
   describe 'identity', ->
     describe 'when authDevice yields an error', ->
@@ -195,34 +236,31 @@ describe 'MeshbluWebsocketHandler', ->
       expect(@sut.sendFrame).to.have.been.calledWith 'status', something: true
 
   describe 'update', ->
-    describe 'when authDevice yields an error', ->
+    describe 'when updateIfAuthorized yields an error', ->
       beforeEach ->
-        @authDevice = sinon.stub().yields new Error
-        @updateFromDevice = sinon.spy()
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, updateFromDevice: @updateFromDevice
+        @updateIfAuthorized = sinon.stub().yields new Error
+        @sut = new MeshbluWebsocketHandler updateIfAuthorized: @updateIfAuthorized
+        @sut.authedDevice = {something: true}
         @sut.sendError = sinon.spy()
 
-        @sut.update uuid: '1345', online: true
-
-      it 'should not call updateFromDevice', ->
-        expect(@updateFromDevice).not.to.have.been.called
+        @sut.update [{uuid: '1345'}, {$set: {online: true}}]
 
       it 'should call sendError', ->
         expect(@sut.sendError).to.have.been.called
 
-    describe 'when authDevice yields a device', ->
+    describe 'when updateIfAuthorized does not yield an error', ->
       beforeEach ->
-        @authDevice = sinon.stub().yields null, something: true
-        @updateFromClient = sinon.spy()
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, updateFromClient: @updateFromClient
+        @updateIfAuthorized = sinon.stub().yields null
+        @sut = new MeshbluWebsocketHandler updateIfAuthorized: @updateIfAuthorized
+        @sut.authedDevice = {something: true}
         @sut.sendFrame = sinon.spy()
 
-        @sut.update uuid: '1345', online: true
+        @sut.update [{uuid: '1345'}, {$set: {online: true}}]
 
-      it 'should emit update', ->
-        expect(@updateFromClient).to.have.been.calledWith {something: true}, uuid: '1345', online: true
+      it 'should call updateIfAuthorized', ->
+        expect(@updateIfAuthorized).to.have.been.calledWith {something: true}, {uuid: '1345'}, {$set: {online: true}}
 
-      it 'should send updated', ->
+      it 'should sendFrame with updated', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'updated', uuid: '1345'
 
   describe 'subscribe', ->
@@ -333,71 +371,37 @@ describe 'MeshbluWebsocketHandler', ->
         expect(@sendMessage).to.have.been.calledWith {something: true}, uuid: '5431'
 
   describe 'device', ->
-    describe 'when authDevice yields an error', ->
+    describe 'when getDeviceIfAuthorized yields an error', ->
       beforeEach ->
-        @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
-        @sut.messageIOClient = @messageIOClient
+        @getDeviceIfAuthorized = sinon.stub().yields new Error('unauthorized')
+        @sut = new MeshbluWebsocketHandler getDeviceIfAuthorized: @getDeviceIfAuthorized
         @sut.sendError = sinon.spy()
-
-        @sut.device uuid: '1345', token: 'abcd'
-
-      it 'should not call device', ->
-        expect(@messageIOClient.emit).not.to.have.been.called
-
-      it 'should call sendError', ->
-        expect(@sut.sendError).to.have.been.called
-
-    describe 'when authDevice yields a device', ->
-      beforeEach ->
-        @authDevice = sinon.stub().yields null, something: true
-        @getDevice = sinon.stub().yields null, uuid: '5431', online: true
-        @securityImpl = canDiscover: sinon.stub().yields null, true
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, getDevice: @getDevice, securityImpl: @securityImpl
-        @sut.sendFrame = sinon.spy()
 
         @sut.device uuid: '5431'
 
-      it 'should call device', ->
-        expect(@sut.sendFrame).to.have.been.calledWith 'device', uuid: '5431', online: true
+      it 'should sendError with the error', ->
+        expect(@sut.sendError).to.have.been.calledWith 'unauthorized', ["device", {"uuid": "5431"}]
 
     describe 'when the uuid and token are given', ->
       beforeEach ->
-        @authDevice = sinon.stub().yields null, uuid: '5431', online: true
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @getDeviceIfAuthorized = sinon.stub().yields null, uuid: '5431', online: true
+        @sut = new MeshbluWebsocketHandler getDeviceIfAuthorized: @getDeviceIfAuthorized
         @sut.sendFrame = sinon.spy()
 
         @sut.device uuid: '5431', token: '5999'
 
-      it 'should call device', ->
+      it 'should call sendFrame', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'device', uuid: '5431', online: true
 
   describe 'devices', ->
-    describe 'when authDevice yields an error', ->
+    describe 'when getDevices yields devices', ->
       beforeEach ->
-        @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
-        @sut.messageIOClient = @messageIOClient
-        @sut.sendError = sinon.spy()
-
-        @sut.devices uuid: '1345', token: 'abcd'
-
-      it 'should not call devices', ->
-        expect(@messageIOClient.emit).not.to.have.been.called
-
-      it 'should call sendError', ->
-        expect(@sut.sendError).to.have.been.called
-
-    describe 'when authDevice yields a devices', ->
-      beforeEach ->
-        @authDevice = sinon.stub().yields null, something: true
         @getDevices = sinon.stub().yields [{uuid: '5431', color: 'green'}, {uuid: '1234', color: 'green'}]
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, getDevices: @getDevices
+        @sut = new MeshbluWebsocketHandler getDevices: @getDevices
         @sut.sendFrame = sinon.spy()
-
         @sut.devices color: 'green'
 
-      it 'should call devices', ->
+      it 'should call sendFrame with the devices', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'devices', [{uuid: '5431', color: 'green'}, {uuid: '1234', color: 'green'}]
 
   describe 'mydevices', ->

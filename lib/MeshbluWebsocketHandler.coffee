@@ -51,7 +51,7 @@ class MeshbluWebsocketHandler extends EventEmitter
       return @sendError error.message, event.data if error?
 
       @rateLimit @socket.id, type, (error) =>
-        return @sendError error.message, event.data, 429 if error?
+        return @closeWithError error, [type,data], 429 if error?
         return @emit type, data if type == 'identity'
 
         @authDevice @uuid, @token, (error, authedDevice)=>
@@ -59,6 +59,10 @@ class MeshbluWebsocketHandler extends EventEmitter
           @authedDevice = authedDevice
 
           @emit type, data
+
+  closeWithError: (error, frame, code) =>
+    @sendError error.message, frame, 429
+    @socket.close 429, error.message
 
   # message handlers
   device: (data) =>
@@ -172,9 +176,11 @@ class MeshbluWebsocketHandler extends EventEmitter
 
   rateLimit: (id, type, callback=->) =>
     throttle = @throttles[type] ? @throttles.query
+
     callback() unless throttle?
     throttle.rateLimit id, (error, isLimited) =>
       debug 'rateLimit', id, type, isLimited
+
       return callback error if error?
       return callback new Error('request exceeds rate limit') if isLimited
       callback()
@@ -237,5 +243,7 @@ class MeshbluWebsocketHandler extends EventEmitter
 
   onSocketData: (data) =>
     @sendFrame 'data', data
+
+
 
 module.exports = MeshbluWebsocketHandler

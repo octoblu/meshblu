@@ -13,8 +13,9 @@ describe 'updateIfAuthorized', ->
 
       @device = update: sinon.spy()
       @Device = sinon.spy => @device
+      @sendConfigActivity = sinon.spy()
 
-      @dependencies = getDevice: @getDevice, securityImpl: {canConfigure: @canConfigure}, Device: @Device, clearCache: @clearCache
+      @dependencies = getDevice: @getDevice, securityImpl: {canConfigure: @canConfigure}, Device: @Device, clearCache: @clearCache, sendConfigActivity: @sendConfigActivity
 
       @callback = sinon.spy()
       @sut {uuid: 'from-device'}, {uuid: 'to-device', token: 'token'}, {$inc: {magic: 1}}, @callback, @dependencies
@@ -61,6 +62,9 @@ describe 'updateIfAuthorized', ->
 
       it 'should call update on the device', ->
         expect(@device.update).to.have.been.calledWith {$inc: {magic: 1}}
+
+      it 'should call sendConfigActivity', ->
+        expect(@sendConfigActivity).to.have.been.calledWith 'to-device'
 
       describe 'when update yields an error', ->
         beforeEach ->

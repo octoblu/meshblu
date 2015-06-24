@@ -136,12 +136,15 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @throttles = query: rateLimit: sinon.stub().yields new Error('rate limit exceeded')
         @sut = new MeshbluWebsocketHandler throttles: @throttles
-        @sut.socket = id: '1555'
+        @sut.socket = id: '1555', close: sinon.spy()
         @sut.sendError = sinon.spy()
         @sut.onMessage data: '["test",{"far":"near"}]'
 
       it 'should emit error', ->
-        expect(@sut.sendError).to.have.been.calledWith 'rate limit exceeded', '["test",{"far":"near"}]', 429
+        expect(@sut.sendError).to.have.been.calledWith 'rate limit exceeded', ["test",{"far":"near"}], 429
+
+      it 'should close the socket', ->
+        expect(@sut.socket.close).to.have.been.called
 
     describe 'when calling "identity"', ->
       beforeEach ->

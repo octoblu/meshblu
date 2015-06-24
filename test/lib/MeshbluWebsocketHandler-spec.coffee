@@ -129,7 +129,7 @@ describe 'MeshbluWebsocketHandler', ->
       @sut.sendError 'bad error'
 
     it 'should create the message and call send', ->
-      expect(@sut.sendFrame).to.have.been.calledWith 'error', message: 'bad error', frame: undefined, code: undefined
+      expect(@sut.sendFrame).to.have.been.calledWith 'error', message: 'bad error', frame: undefined, status: undefined
 
   describe 'onMessage', ->
     describe 'when rateLimit exceeded', ->

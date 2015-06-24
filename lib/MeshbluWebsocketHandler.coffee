@@ -205,7 +205,7 @@ class MeshbluWebsocketHandler extends EventEmitter
       throw new Error message
     catch e
       debug 'sendError', e.message, e.stack
-    @sendFrame 'error', message: message, frame: frame, code: code
+    @sendFrame 'error', message: message, frame: frame, status: code
 
   subscribeWithToken: (data) =>
     @authDevice data.uuid, data.token, (error, authedDevice) =>

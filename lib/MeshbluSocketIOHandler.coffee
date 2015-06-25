@@ -1,4 +1,5 @@
 debug = require('debug')('meshblu:meshblu-socket.io-handler')
+SocketIOThrottler = require './SocketIOThrottler'
 
 class MeshbluSocketIOHandler
   constructor: (dependencies={}) ->
@@ -6,13 +7,15 @@ class MeshbluSocketIOHandler
     @updateIfAuthorized = dependencies.updateIfAuthorized ? require './updateIfAuthorized'
 
   initialize: (@socket) =>
+    @throttler = new SocketIOThrottler @socket
+
     @socket.on 'identity', (data, callback=->) =>
       @authDevice data.uuid, data.token, (error, device) =>
         return callback [{message: error.message, status: 401}] if error?
         @authedDevice = data
         callback [null, {uuid: device.uuid}]
 
-    @socket.on 'update', @onUpdate
+    @socket.on 'update', @throttler.throttle @onUpdate
 
   onUpdate: (data, callback=->) =>
     [query, params] = data

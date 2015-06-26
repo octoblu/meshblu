@@ -23,7 +23,7 @@ module.exports = (device={}, callback=_.noop, dependencies={}) ->
 
     device.token ?= generateToken()
     device.discoverWhitelist ?= [device.owner] if device.owner
-	device.configureWhitelist ?= [device.owner] if device.owner
+    device.configureWhitelist ?= [device.owner] if device.owner
 
     debug 'about to update device', device
     oldUpdateDevice newDevice.uuid, device, (error, savedDevice) =>

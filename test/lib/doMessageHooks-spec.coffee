@@ -1,5 +1,6 @@
 describe 'doMessageHooks', ->
   beforeEach ->
+    @device = {}
     @messageWebhook = send: sinon.stub()
     @MessageWebhook = sinon.spy => @messageWebhook
 
@@ -9,7 +10,7 @@ describe 'doMessageHooks', ->
   describe 'when called with null hook', ->
     beforeEach (done) ->
       ignoreErrors = => done()
-      @sut(null, payload: 'You got old', ignoreErrors, @dependencies)
+      @sut(@device, null, payload: 'You got old', ignoreErrors, @dependencies)
 
     it 'should not instantiate a MessageWebhook', ->
       expect(@MessageWebhook).not.to.have.been.called
@@ -18,10 +19,10 @@ describe 'doMessageHooks', ->
     beforeEach (done) ->
       @messageWebhook.send.yields null
       ignoreErrors = => done()
-      @sut([name: 'Rufio'], payload: 'You got old', ignoreErrors, @dependencies)
+      @sut(@device, [name: 'Rufio'], payload: 'You got old', ignoreErrors, @dependencies)
 
     it 'should instantiate a MessageWebhook', ->
-      expect(@MessageWebhook).to.have.been.calledWith name: 'Rufio'
+      expect(@MessageWebhook).to.have.been.calledWith @device, name: 'Rufio'
       expect(@MessageWebhook).to.have.been.alwaysCalledWithNew
 
     it 'should call send on the messageWebhook', ->
@@ -32,12 +33,12 @@ describe 'doMessageHooks', ->
     beforeEach (done) ->
       @messageWebhook.send.yields null
       ignoreErrors = => done()
-      @sut([{uuid: 'hook', fromUuid: 'smee'}, {uuid: 'toodles', fromUuid: 'smee'}], {payload: "I've just had an apostrophe"}, ignoreErrors, @dependencies)
+      @sut(@device, [{uuid: 'hook', fromUuid: 'smee'}, {uuid: 'toodles', fromUuid: 'smee'}], {payload: "I've just had an apostrophe"}, ignoreErrors, @dependencies)
 
     it 'should instantiate a MessageWebhook(s)', ->
       expect(@MessageWebhook).to.have.been.alwaysCalledWithNew
-      expect(@MessageWebhook.firstCall.args).to.deep.equal [{uuid: 'hook', fromUuid: 'smee'}]
-      expect(@MessageWebhook.secondCall.args).to.deep.equal [{uuid: 'toodles', fromUuid: 'smee'}]
+      expect(@MessageWebhook.firstCall.args[1]).to.deep.equal {uuid: 'hook', fromUuid: 'smee'}
+      expect(@MessageWebhook.secondCall.args[1]).to.deep.equal {uuid: 'toodles', fromUuid: 'smee'}
 
     it 'should call send on the messageWebhook', ->
       expect(@messageWebhook.send).to.have.been.calledTwice
@@ -47,7 +48,7 @@ describe 'doMessageHooks', ->
     beforeEach (done) ->
       @messageWebhook.send.yields new Error("I've lost my marbles.")
       storeError = (@errors) => done()
-      @sut [{}], {}, storeError, @dependencies
+      @sut @device, [{}], {}, storeError, @dependencies
 
     it 'should yield an error', ->
       error = @errors[0]
@@ -57,7 +58,7 @@ describe 'doMessageHooks', ->
   describe 'when none of the sends yield', ->
     beforeEach ->
       @callback = sinon.spy()
-      @sut [{}, {}], {}, @callback, @dependencies
+      @sut @device, [{}, {}], {}, @callback, @dependencies
 
     it 'should not call its callback', ->
       expect(@callback).to.not.have.been.called

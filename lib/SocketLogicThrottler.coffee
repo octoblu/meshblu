@@ -1,3 +1,4 @@
+_ = require 'lodash'
 debug = require('debug')('meshblu:SocketLogicThrottler')
 QueryThrottle = require './QueryThrottle'
 
@@ -5,7 +6,7 @@ class SocketLogicThrottler
   constructor: (@socket) ->
 
   onThrottle: =>
-    debug 'onThrottle'
+    debug 'onThrottle', 'notReady'
     @socket.emit 'notReady',{error: {message: 'Rate Limit Exceeded', code: 429}}
     @socket.disconnect(true)
 

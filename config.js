@@ -68,11 +68,11 @@ module.exports = {
     index: process.env.SPLUNK_INDEX || "meshblu"	//The Splunk index to send the data to. OCT-TA-meshblu uses "meshblu"
   },
   rateLimits: {
-    message: parseInt(process.env.RATE_LIMITS_MESSAGE || 10),
-    data: parseInt(process.env.RATE_LIMITS_DATA || 10),
-    connection: parseInt(process.env.RATE_LIMITS_CONNECTION || 2),
-    query: parseInt(process.env.RATE_LIMITS_QUERY || 2),
-    whoami: parseInt(process.env.RATE_LIMITS_WHOAMI || 10),
+    message: parseInt(process.env.RATE_LIMITS_MESSAGE || 20),
+    data: parseInt(process.env.RATE_LIMITS_DATA || 20),
+    connection: parseInt(process.env.RATE_LIMITS_CONNECTION || 1000),
+    query: parseInt(process.env.RATE_LIMITS_QUERY || 20),
+    whoami: parseInt(process.env.RATE_LIMITS_WHOAMI || 20),
     unthrottledIps: (process.env.RATE_LIMITS_UNTHROTTLED_IPS || '').split(',')
   },
   urbanAirship: {

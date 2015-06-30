@@ -57,7 +57,7 @@ describe 'MessageIOClient', ->
         @sut.subscribe 'goeo', ['sent']
 
       it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', 'goeo_send'
+        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', 'goeo_sent'
 
     describe 'broadcast only', ->
       beforeEach ->
@@ -76,7 +76,7 @@ describe 'MessageIOClient', ->
         expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', 'pear'
 
       it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', 'pear_send'
+        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', 'pear_sent'
 
       it 'should call emit on socketIOClient', ->
         expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', 'pear_bc'
@@ -96,7 +96,7 @@ describe 'MessageIOClient', ->
         @sut.unsubscribe 'watermelon', ['sent']
 
       it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', 'watermelon_send'
+        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', 'watermelon_sent'
 
     describe 'broadcast only', ->
       beforeEach ->
@@ -115,7 +115,7 @@ describe 'MessageIOClient', ->
         expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', 'apple'
 
       it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', 'apple_send'
+        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', 'apple_sent'
 
       it 'should call emit on socketIOClient', ->
         expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', 'apple_bc'

@@ -36,8 +36,8 @@ class MessageIOClient extends EventEmitter
       @socketIOClient.emit 'subscribe', "#{uuid}_bc"
 
     if _.contains subscriptionTypes, 'sent'
-      debug 'subscribe', 'sent', "#{uuid}_send"
-      @socketIOClient.emit 'subscribe', "#{uuid}_send"
+      debug 'subscribe', 'sent', "#{uuid}_sent"
+      @socketIOClient.emit 'subscribe', "#{uuid}_sent"
 
   unsubscribe: (uuid, subscriptionTypes) =>
     if _.contains subscriptionTypes, 'received'
@@ -49,7 +49,7 @@ class MessageIOClient extends EventEmitter
       @socketIOClient.emit 'unsubscribe', "#{uuid}_bc"
 
     if _.contains subscriptionTypes, 'sent'
-      debug 'unsubscribe', 'sent', "#{uuid}_send"
-      @socketIOClient.emit 'unsubscribe', "#{uuid}_send"
+      debug 'unsubscribe', 'sent', "#{uuid}_sent"
+      @socketIOClient.emit 'unsubscribe', "#{uuid}_sent"
 
 module.exports = MessageIOClient

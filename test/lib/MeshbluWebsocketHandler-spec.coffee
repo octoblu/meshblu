@@ -337,11 +337,8 @@ describe 'MeshbluWebsocketHandler', ->
 
         @sut.unsubscribe uuid: '5431'
 
-      it 'should call unsubscribe _bc', ->
-        expect(@messageIOClient.unsubscribe).to.have.been.calledWith '5431_bc'
-
-      it 'should call unsubscribe on uuid', ->
-        expect(@messageIOClient.unsubscribe).to.have.been.calledWith '5431'
+      it 'should call unsubscribe with uuid', ->
+        expect(@messageIOClient.unsubscribe).to.have.been.calledWith '5431', ['sent', 'received', 'broadcast']
 
   describe 'message', ->
     describe 'when authDevice yields an error', ->

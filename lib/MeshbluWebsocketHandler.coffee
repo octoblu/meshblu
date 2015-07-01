@@ -135,9 +135,8 @@ class MeshbluWebsocketHandler extends EventEmitter
 
     @authDevice @uuid, @token, (error, device) =>
       return @sendError error.message, ['unsubscribe', data] if error?
-      @messageIOClient.unsubscribe "#{data.uuid}_sent"
-      @messageIOClient.unsubscribe "#{data.uuid}_bc"
-      @messageIOClient.unsubscribe data.uuid
+      subscriptionTypes = data.types ? ['sent', 'received', 'broadcast']
+      @messageIOClient.unsubscribe data.uuid, subscriptionTypes
 
   unregister: (data) =>
     debug 'unregister', data
@@ -217,7 +216,8 @@ class MeshbluWebsocketHandler extends EventEmitter
     @authDevice data.uuid, data.token, (error, authedDevice) =>
       debug 'subscribeWithToken', data
       return @sendError error?.message, ['subscribe', data] if error? || !authedDevice?
-      @messageIOClient.subscribe authDevice.uuid, data.types || ['broadcast', 'received', 'sent']
+      subscriptionTypes = data.types ? ['sent', 'received', 'broadcast']
+      @messageIOClient.subscribe authDevice.uuid, subscriptionTypes
 
   unregisterWithToken: (data) =>
     debug 'unregisterWithToken', data
@@ -230,9 +230,8 @@ class MeshbluWebsocketHandler extends EventEmitter
     @authDevice data.uuid, data.token, (error, authedDevice) =>
       debug 'unsubscribeWithToken', data
       return @sendError error?.message, ['unsubscribe', data] if error? || !authedDevice?
-      @messageIOClient.unsubscribe authedDevice.uuid
-      @messageIOClient.unsubscribe "#{authedDevice.uuid}_bc"
-      @messageIOClient.unsubscribe "#{authedDevice.uuid}_sent"
+      subscriptionTypes = data.types ? ['sent', 'received', 'broadcast']
+      @messageIOClient.unsubscribe data.uuid, subscriptionTypes
 
   #socketio event handlers
   onSocketMessage: (data) =>
@@ -243,7 +242,5 @@ class MeshbluWebsocketHandler extends EventEmitter
 
   onSocketData: (data) =>
     @sendFrame 'data', data
-
-
 
 module.exports = MeshbluWebsocketHandler

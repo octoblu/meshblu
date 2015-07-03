@@ -27,8 +27,9 @@ class SimpleAuth
     if _.isFunction message
       callback = message
       message = null
-      
+
     return @asyncCallback(null, true, callback) if @checkLists fromDevice, toDevice, toDevice?.discoverWhitelist, toDevice?.discoverBlacklist, true
+
     if message?.token
       return @authDevice(
         toDevice.uuid
@@ -41,11 +42,37 @@ class SimpleAuth
     return @asyncCallback(null, false, callback)
 
 
-  canReceive: (fromDevice, toDevice, callback) =>
+  canReceive: (fromDevice, toDevice, message, callback) =>
+    if _.isFunction message
+      callback = message
+      message = null
+
+    if message?.token
+      return @authDevice(
+        toDevice.uuid
+        message.token
+        (error, result) =>
+          return @asyncCallback(error, false, callback) if error?
+          return @asyncCallback(null, result?, callback)
+       )
+
     result = @checkLists fromDevice, toDevice, toDevice?.receiveWhitelist, toDevice?.receiveBlacklist, true
     @asyncCallback(null, result, callback)
 
-  canSend: (fromDevice, toDevice, callback) =>
+  canSend: (fromDevice, toDevice, message, callback) =>
+    if _.isFunction message
+      callback = message
+      message = null
+
+    if message?.token
+      return @authDevice(
+        toDevice.uuid
+        message.token
+        (error, result) =>
+          return @asyncCallback(error, false, callback) if error?
+          return @asyncCallback(null, result?, callback)
+       )
+
     result = @checkLists fromDevice, toDevice, toDevice?.sendWhitelist, toDevice?.sendBlacklist, true
     @asyncCallback(null, result, callback)
 

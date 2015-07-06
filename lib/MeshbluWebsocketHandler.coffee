@@ -3,6 +3,7 @@ config = require '../config'
 debug = require('debug')('meshblu:meshblu-websocket-handler')
 {EventEmitter} = require 'events'
 uuid = require 'node-uuid'
+toobusy = require 'toobusy'
 
 class MeshbluWebsocketHandler extends EventEmitter
   constructor: (dependencies={})->

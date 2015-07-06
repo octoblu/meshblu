@@ -40,6 +40,7 @@
     "splunk-sdk": "^1.7.1",
     "tokenthrottle": "~1.1.0",
     "tokenthrottle-redis": "^1.1.0",
+    "toobusy": "^0.2.4",
     "when": "~3.4.4",
     "winston": "^0.8.3",
     "winston-elasticsearch": "^0.1.1",

@@ -5,7 +5,7 @@ windowRate = 1000
 
 tokenthrottle = require 'tokenthrottle'
 
-require('toobusy').maxLag 40
+require('toobusy')
 # if config.redis?.host
 #   redis = require './redis'
 #   tokenthrottle = require 'tokenthrottle-redis'

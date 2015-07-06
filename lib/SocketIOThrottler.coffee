@@ -8,13 +8,13 @@ class SocketIOThrottler
   throttle: (fn=->) => =>
     originalArguments = arguments
 
-    onThrottle = (error) =>
+    onThrottle = =>
       debug 'onThrottle'
       callback = _.last originalArguments
 
-      callback [{message: error.message, status: error.status}] if _.isFunction callback
+      callback [{message: 'Rate Limit Exceeded', status: 429}] if _.isFunction callback
 
-      @socket.emit 'notReady',{error: {message: error.message, status: error.status}}
+      @socket.emit 'notReady',{error: {message: 'Rate Limit Exceeded', status: 429}}
       @socket.disconnect(true)
 
     new QueryThrottle().throttle @socket.id, onThrottle, =>

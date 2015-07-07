@@ -1,25 +1,23 @@
+debug = require('debug')('meshblu:getThrottles')
+Limitus = require 'limitus'
+limiter = new Limitus()
+
 config = require '../config'
 
 config.rateLimits ?= {};
 windowRate = 1000
 
-tokenthrottle = require 'tokenthrottle'
-# if config.redis?.host
-#   redis = require './redis'
-#   tokenthrottle = require 'tokenthrottle-redis'
-#   redisClient = redis.client
-
-createThrottle = (rate) ->
-  throttleConfig =
-    window: windowRate
-    rate: rate
-    burst: rate * 2
-  tokenthrottle throttleConfig #, redisClient
+createThrottle = (name, rate) ->
+  debug 'createThrottle', name, rate
+  limiter.rule name, max: rate, interval: windowRate
+  rateLimit: (id, callback=->) =>
+    debug 'rateLimit', name, id
+    limiter.drop(name, id, callback)
 
 module.exports =
-  connection : createThrottle config.rateLimits.connection
-  message : createThrottle config.rateLimits.message
-  data : createThrottle config.rateLimits.data
-  query : createThrottle config.rateLimits.query
-  whoami : createThrottle config.rateLimits.whoami
+  connection: createThrottle 'connection', config.rateLimits.connection
+  query:      createThrottle 'query', config.rateLimits.query
+  message:    createThrottle 'message', config.rateLimits.message
+  data:       createThrottle 'data', config.rateLimits.data
+  whoami:     createThrottle 'whoami', config.rateLimits.whoami
   unthrottledIps : config.rateLimits.unthrottledIps

@@ -10,7 +10,7 @@ windowRate = 1000
 createThrottle = (name, rate) ->
   debug 'createThrottle', name, rate
   limiter.rule name, max: rate, interval: windowRate
-  rateLimit: (id, callback=->) =>
+  rateLimit: (id="", callback=->) =>
     debug 'rateLimit', name, id
     limiter.drop(name, id, callback)
 

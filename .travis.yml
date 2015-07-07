@@ -81,6 +81,13 @@ deploy:
 - provider: opsworks
   access_key_id: AKIAJH2D5IPIRHYJT5IA
   secret_access_key: *1
+  app-id: c9b4255f-bc9e-4368-a998-a26ea9ac4f7f
+  on:
+    branch: master
+    condition: $USE_MONGO = true
+- provider: opsworks
+  access_key_id: AKIAJH2D5IPIRHYJT5IA
+  secret_access_key: *1
   app-id: 5fcc76e4-b0cc-41d3-b794-8a8b4ff0ed9e
   on:
     branch: staging

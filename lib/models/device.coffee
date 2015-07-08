@@ -41,6 +41,7 @@ class Device
       return callback error if error?
 
       compareToken = (hashedToken, callback=->) =>
+        return callback true unless hashedToken?.hash?
         debug 'compareToken', token, hashedToken.hash
         bcrypt.compare token, hashedToken.hash, (error, result) =>
           debug 'result', error, result

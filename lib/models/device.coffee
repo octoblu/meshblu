@@ -40,10 +40,18 @@ class Device
     @fetch (error, attributes) =>
       return callback error if error?
 
-      @attributes.tokens = _.reject attributes.tokens, (data) =>
-        bcrypt.compareSync token, data.hash
+      compareToken = (hashedToken, callback=->) =>
+        debug 'compareToken', token, hashedToken.hash
+        bcrypt.compare token, hashedToken.hash, (error, result) =>
+          debug 'result', error, result
+          callback(result)
 
-      @save callback
+
+      tokens = attributes.tokens ? []
+
+      async.rejectSeries tokens.reverse(), compareToken, (remainingTokens) =>
+        @attributes.tokens = remainingTokens
+        @save callback
 
   sanitize: (params) =>
     return params unless _.isObject(params) || _.isArray(params)

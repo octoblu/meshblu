@@ -5,6 +5,8 @@ createSubscriptionIfAuthorized = (authedDevice, params, callback=_.noop, depende
   database = dependencies.database ? require './database'
   getDevice = dependencies.getDevice ? require './getDevice'
 
+  return callback new Error('Type must be one of ["event"]') unless _.contains ['event'], params.type
+
   getDevice params.uuid, (error, toDevice) =>
     return callback error if error?
 

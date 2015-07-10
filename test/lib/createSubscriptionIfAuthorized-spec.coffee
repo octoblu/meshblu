@@ -11,6 +11,15 @@ describe 'createSubscriptionIfAuthorized', ->
       @dependencies = database: @database
       done error
 
+  describe 'when called with an invalid type', ->
+    beforeEach (done) ->
+      storeError = (@error) => done()
+      @sut {}, {type: 'invalid'}, storeError
+
+    it 'should yield an error', ->
+      expect(@error).to.be.an.instanceOf Error
+      expect(@error.message).to.deep.equal 'Type must be one of ["event"]'
+
   describe 'when we have one open device and one closed device', ->
     beforeEach (done) ->
       @open_device = uuid: 'uuid1', configureWhitelist: ['*']

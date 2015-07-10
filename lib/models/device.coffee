@@ -47,7 +47,6 @@ class Device
           debug 'result', error, result
           callback(result)
 
-
       tokens = attributes.tokens ? []
 
       async.rejectSeries tokens.reverse(), compareToken, (remainingTokens) =>

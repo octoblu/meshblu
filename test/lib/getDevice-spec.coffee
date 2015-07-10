@@ -8,9 +8,6 @@ describe 'getDevice', ->
       @database = database
       done error
 
-  afterEach ->
-    @database.close?()
-
   describe 'when a device does not exist', ->
     beforeEach (done) ->
       storeDevice = (@error, @device) => done()
@@ -40,4 +37,3 @@ describe 'getDevice', ->
 
       it 'should not have a token', ->
         expect(@device.token).to.not.exist
-

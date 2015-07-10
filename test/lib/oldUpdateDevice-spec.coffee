@@ -16,9 +16,6 @@ describe 'Old Update Device', ->
       @dependencies = {database: @database, getDevice: @getDevice, clearCache: @clearCache, getGeo: @getGeo}
       done error
 
-  afterEach ->
-    @database.close?()
-
   it 'should be a function', ->
     expect(@sut).to.be.a 'function'
 

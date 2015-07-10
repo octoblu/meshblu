@@ -45,6 +45,24 @@ describe 'createSubscriptionIfAuthorized', ->
           expect(subscription).to.deep.equal subscriberUuid: @open_device.uuid, emitterUuid: @closed_device.uuid, type: 'event'
           done()
 
+      describe 'if we call it again', ->
+        beforeEach (done) ->
+          params = {
+            uuid: @open_device.uuid
+            targetUuid: @closed_device.uuid
+            type: 'event'
+          }
+
+          @dependencies.getDevice = sinon.stub().yields null, @open_device
+
+          @sut @open_device, params, done, @dependencies
+
+        it 'should not create a new subscription in the database', ->
+          @database.subscriptions.count {}, (error, subscriptionCount) =>
+            return done error if error?
+            expect(subscriptionCount).to.equal 1
+            done()
+
     describe 'when someone else creates a subscription from the closed device to the open device', ->
       beforeEach (done) ->
         @other_device = {uuid: 'uuid3'}

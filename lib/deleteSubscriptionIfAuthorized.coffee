@@ -1,7 +1,7 @@
 _ = require 'lodash'
 SimpleAuth = require './simpleAuth'
 
-createSubscriptionIfAuthorized = (authedDevice, params, callback=_.noop, dependencies={}) ->
+deleteSubscriptionIfAuthorized = (authedDevice, params, callback=_.noop, dependencies={}) ->
   database = dependencies.database ? require './database'
   getDevice = dependencies.getDevice ? require './getDevice'
 
@@ -11,9 +11,9 @@ createSubscriptionIfAuthorized = (authedDevice, params, callback=_.noop, depende
     simpleAuth = new SimpleAuth()
     simpleAuth.canConfigure authedDevice, toDevice, (error, canConfigure) =>
       return callback error if error?
-      return callback new Error('Insufficient permissions to subscribe on behalf of that device') unless canConfigure
+      return callback new Error('Insufficient permissions to remove subscription on behalf of that device') unless canConfigure
 
       subscription = {subscriberUuid: params.uuid, emitterUuid: params.targetUuid, type: params.type}
-      database.subscriptions.update subscription, subscription, upsert: true, callback
+      database.subscriptions.remove subscription, multi: true, callback
 
-module.exports = createSubscriptionIfAuthorized
+module.exports = deleteSubscriptionIfAuthorized

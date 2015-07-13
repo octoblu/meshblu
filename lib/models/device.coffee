@@ -1,14 +1,16 @@
+_      = require 'lodash'
 async  = require 'async'
 bcrypt = require 'bcrypt'
-_      = require 'lodash'
+crypto = require 'crypto'
 debug  = require('debug')('meshblu:model:device')
 
 class Device
   constructor: (attributes={}, dependencies={}) ->
     @devices = dependencies.database?.devices ? require('../database').devices
-    @getGeo = dependencies.getGeo ? require('../getGeo')
-    @generateToken = dependencies.generateToken ? require('../generateToken')
+    @getGeo = dependencies.getGeo ? require '../getGeo'
+    @generateToken = dependencies.generateToken ? require '../generateToken'
     @clearCache = dependencies.clearCache ? require '../clearCache'
+    @config = dependencies.config ? require '../../config'
     @set attributes
     {@uuid} = attributes
 
@@ -26,17 +28,54 @@ class Device
     @fetch (error, attributes) =>
       return callback error if error?
 
-      bcrypt.hash token, 8, (error, hashedToken) =>
-        return callback error if error?
-
-        @attributes.tokens = attributes.tokens ? []
-
-        unless _.any(@attributes.tokens, hash: hashedToken)
-          @attributes.tokens.push hash: hashedToken, createdAt: new Date()
-
-        @save callback
+      hashedToken = @_hashToken token
+      debug 'storeToken', token, hashedToken
+      tokenData = createdAt: new Date()
+      @update $set: {"meshblu.tokens.#{hashedToken}" : tokenData}, callback
 
   revokeToken: (token, callback=_.noop)=>
+    @fetch (error, attributes) =>
+      return callback error if error?
+
+      hashedToken = @_hashToken token
+      @update $unset : {"meshblu.tokens.#{hashedToken}"}, callback
+
+  verifyToken: (token, callback=_.noop) =>
+    @verifyNewToken token, (error, verified) =>
+      return callback error if error?
+      return callback null, true if verified
+
+      @verifyDeprecatedToken token, (error, verified) =>
+        return callback error if error?
+        return callback null, false unless verified
+        @storeToken token, (error) =>
+          return callback error if error?
+          @revokeDeprecatedToken token, (error) =>
+            return callback error if error?
+            callback null, true
+
+  verifyNewToken: (token, callback=_.noop) =>
+    hashedToken = @_hashToken token
+    @devices.findOne uuid: @uuid, "meshblu.tokens.#{hashedToken}": {$exists: true}, (error, device) =>
+      return callback error if error?
+      callback null, !!device
+
+  verifyDeprecatedToken: (token, callback=_.noop) =>
+    @fetch (error, attributes) =>
+      hashedTokens = _.pluck(attributes.tokens, 'hash') ? []
+      hashedTokens.push attributes.token if attributes.token?
+
+      compareToken = (hashedToken, callback=->) =>
+        debug token, hashedToken
+        bcrypt.compare token, hashedToken, (error, result) =>
+          callback(result)
+
+      # this is faster than async.detect, srsly, trust me.
+      async.detectSeries hashedTokens.reverse(), compareToken, (goodToken) =>
+        debug 'token matched?', goodToken?
+        callback null, goodToken?
+
+  revokeDeprecatedToken: (token, callback=_.noop)=>
     @fetch (error, attributes) =>
       return callback error if error?
 
@@ -72,6 +111,7 @@ class Device
       debug 'save', @attributes
       @devices.update {uuid: @uuid}, {$set: @attributes}, (error, data) =>
         @clearCache @uuid
+        @fetch?.cache = null
         callback error
 
   set: (attributes)=>
@@ -98,7 +138,11 @@ class Device
     else
       params.uuid = @uuid
 
+    debug 'update', @uuid, params
+
     @devices.update uuid: @uuid, params, (error) =>
+      @clearCache @uuid
+      @fetch?.cache = null
       return callback @sanitizeError(error) if error?
       callback()
 
@@ -135,5 +179,12 @@ class Device
     message = error.message if _.isError error
 
     new Error message.replace("MongoError: ")
+
+  _hashToken: (token) =>
+    hasher = crypto.createHash 'sha256'
+    hasher.update token
+    hasher.update @uuid
+    hasher.update @config.token
+    hasher.digest 'base64'
 
 module.exports = Device

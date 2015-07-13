@@ -11,7 +11,9 @@ describe 'Device', ->
       @devices  = @database.devices
       @getGeo = sinon.stub().yields null, {}
       @clearCache = sinon.spy()
-      @dependencies = {database: @database, getGeo: @getGeo, clearCache: @clearCache}
+      @config = token: 'totally-secret-yo'
+      @dependencies = {database: @database, getGeo: @getGeo, clearCache: @clearCache, config: @config}
+      @hashedToken = 'qe4NSaR3wrM6c2Q6uE6diz23ZXHyXUE2u/zJ9rvGE5A='
       done error
 
   describe '->addGeo', ->
@@ -279,77 +281,118 @@ describe 'Device', ->
 
       describe 'when called with token mystery-token', ->
         beforeEach (done) ->
-          @sut.storeToken 'mystery-token', done
+          @sut.storeToken 'mystery-token', (error) =>
+            return done error if error
+            @sut.fetch (error, attributes) =>
+              @updatedDevice = attributes
+              @token = @updatedDevice.meshblu?.tokens?[@hashedToken]
+              done(error)
+
 
         it 'should hash the token and add it to the attributes', ->
-          token = _.first @sut.attributes.tokens
-          expect(bcrypt.compareSync 'mystery-token', token.hash).to.be.true
+          expect(@updatedDevice.meshblu?.tokens).to.include.keys @hashedToken
 
         it 'should add a timestamp to the token', ->
-          token = _.first @sut.attributes.tokens
-          expect(token.createdAt.getTime()).to.be.closeTo Date.now(), 1000
+          expect(@token.createdAt?.getTime()).to.be.closeTo Date.now(), 1000
 
         it 'should store the token in the database', (done) ->
           @devices.findOne uuid: @uuid, (error, device) =>
             return done error if error?
-            token = _.first @sut.attributes.tokens
-            expect(bcrypt.compareSync 'mystery-token', token.hash).to.be.true
+            token = @updatedDevice.meshblu?.tokens?[@hashedToken]
+            expect(token).to.exist
             done()
 
-      describe 'when called with token smart-token', ->
-        beforeEach (done) ->
-          @sut.storeToken 'smart-token', done
+  describe '->revokeToken', ->
+    beforeEach (done) ->
+      @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
+      @devices.insert
+        uuid: @uuid,
+        meshblu:
+          tokens:
+            'qe4NSaR3wrM6c2Q6uE6diz23ZXHyXUE2u/zJ9rvGE5A=': {}
+      , done
 
-        it 'should store the token', ->
-          token = _.first @sut.attributes.tokens
-          expect(bcrypt.compareSync 'smart-token', token.hash).to.be.true
-
-        describe 'when called with a different token', ->
-          beforeEach (done) ->
-            @sut = new Device uuid: @uuid, @dependencies
-            @sut.storeToken 'smart-token-number-two', done
-
-          it 'should contain smart-token-number-two', ->
-            match = _.any @sut.attributes.tokens, (token) => bcrypt.compareSync 'smart-token-number-two', token.hash
-            expect(match).to.be.true
-
-          it 'should contain smart-token', ->
-            match = _.any @sut.attributes.tokens, (token) => bcrypt.compareSync 'smart-token', token.hash
-            expect(match).to.be.true
-
-        describe 'when called with the same token', ->
-          beforeEach (done) ->
-            @sut.storeToken 'smart-token', done
-
-          it 'should not add anything', ->
-            expect(@sut.attributes.tokens).to.have.a.lengthOf 1
-
-
-    describe 'when a device already has a session token', ->
+    describe 'when a token already exists', ->
       beforeEach (done) ->
-        @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
-        @devices.insert uuid: @uuid, tokens: [{hash: bcrypt.hashSync('foo', 8)}], done
-
-      beforeEach ->
         @sut = new Device uuid: @uuid, @dependencies
+        @sut.revokeToken 'mystery-token', done
 
-      describe 'when called with token mystery-token', ->
-        beforeEach (done) ->
-          @sut.storeToken 'mystery-tolkein', done
+      it 'should remove the token from the device', (done) ->
+        @devices.findOne uuid: @uuid, (error, device) =>
+          return done error if error?
+          expect(device.meshblu?.tokens).not.to.include.keys @hashedToken
+          done()
 
-        it 'should have foo in the database', (done) ->
-          @devices.findOne uuid: @uuid, (error, device) =>
-            return done error if error?
-            match = _.any device.tokens, (token) => bcrypt.compareSync 'foo', token.hash
-            expect(match).to.be.true
-            done()
+  describe '->verifyToken', ->
+    beforeEach ->
+      @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
 
-        it 'should have mystery-tolkein in the database', (done) ->
-          @devices.findOne uuid: @uuid, (error, device) =>
-            return done error if error?
-            match = _.any device.tokens, (token) => bcrypt.compareSync 'mystery-tolkein', token.hash
-            expect(match).to.be.true
-            done()
+    describe 'when using a new token', ->
+      beforeEach (done) ->
+        @devices.insert
+          uuid: @uuid,
+          meshblu:
+            tokens:
+              'qe4NSaR3wrM6c2Q6uE6diz23ZXHyXUE2u/zJ9rvGE5A=': {}
+        , done
+
+      beforeEach (done) ->
+        @sut = new Device uuid: @uuid, @dependencies
+        @sut.verifyToken 'mystery-token', (error, @verified) => done()
+
+      it 'should be verified', ->
+        expect(@verified).to.be.true
+
+    describe 'when using an old token', ->
+      beforeEach (done) ->
+        @devices.insert
+          uuid: @uuid,
+          tokens: [{hash: bcrypt.hashSync('mystery-token', 8)}]
+        , done
+
+      beforeEach (done) ->
+        @sut = new Device uuid: @uuid, @dependencies
+        @sut.verifyToken 'mystery-token', (error, @verified) => done()
+
+      it 'should be verified', ->
+        expect(@verified).to.be.true
+
+      it 'should store the token in the database', (done) ->
+        @devices.findOne uuid: @uuid, (error, device) =>
+          return done error if error?
+          expect(device.meshblu?.tokens).to.include.keys @hashedToken
+          done()
+
+      it 'should remove the deprecated token in the database', (done) ->
+        @sut.verifyDeprecatedToken 'mystery-token', (error, verified) =>
+          expect(verified).to.be.false
+          done()
+
+  describe '->verifyNewToken', ->
+    beforeEach (done) ->
+      @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
+      @devices.insert
+        uuid: @uuid,
+        meshblu:
+          tokens:
+            'qe4NSaR3wrM6c2Q6uE6diz23ZXHyXUE2u/zJ9rvGE5A=': {}
+      , done
+
+    describe 'when a token is valid', ->
+      beforeEach (done) ->
+        @sut = new Device uuid: @uuid, @dependencies
+        @sut.verifyNewToken 'mystery-token', (error, @verified) => done()
+
+      it 'should be verified', ->
+        expect(@verified).to.be.true
+
+    describe 'when a token is invalid', ->
+      beforeEach (done) ->
+        @sut = new Device uuid: @uuid, @dependencies
+        @sut.verifyNewToken 'mystery-tolkein', (error, @verified) => done()
+
+      it 'should not be verified', ->
+        expect(@verified).to.be.false
 
   describe '->update', ->
     describe 'when a device is saved', ->

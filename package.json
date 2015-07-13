@@ -1,11 +1,8 @@
 {
   "name": "meshblu-server",
   "description": "communications platform and api for iot",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "author": "Octoblu, Inc.",
-  "engines": {
-    "node": ">=0.6"
-  },
   "dependencies": {
     "JSONStream": "~0.9.0",
     "async": "^0.9.0",
@@ -40,8 +37,6 @@
     "socket.io-emitter": "^0.2.0",
     "socket.io-redis": "^0.1.4",
     "splunk-sdk": "^1.7.1",
-    "tokenthrottle": "~1.1.0",
-    "tokenthrottle-redis": "^1.1.0",
     "when": "~3.4.4",
     "winston": "^0.8.3",
     "winston-elasticsearch": "^0.1.1",

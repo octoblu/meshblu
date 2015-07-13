@@ -62,6 +62,8 @@ class Device
 
   verifyDeprecatedToken: (token, callback=_.noop) =>
     @fetch (error, attributes) =>
+      return callback error if error?
+      
       hashedTokens = _.pluck(attributes.tokens, 'hash') ? []
       hashedTokens.push attributes.token if attributes.token?
 

@@ -1,5 +1,5 @@
 _ = require 'lodash'
-debug = require('debug')('meshblu:MessageIOSocketHandler')
+debug = require('debug')('meshblu:message-io-socket-handler')
 
 class MessageIOSocketHandler
   initialize: (@socket) =>

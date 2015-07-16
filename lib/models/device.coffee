@@ -63,7 +63,7 @@ class Device
   verifyDeprecatedToken: (token, callback=_.noop) =>
     @fetch (error, attributes) =>
       return callback error if error?
-      
+
       hashedTokens = _.pluck(attributes.tokens, 'hash') ? []
       hashedTokens.push attributes.token if attributes.token?
 
@@ -111,10 +111,7 @@ class Device
     ], (error) =>
       return callback error if error?
       debug 'save', @attributes
-      @devices.update {uuid: @uuid}, {$set: @attributes}, (error, data) =>
-        @clearCache @uuid
-        @fetch?.cache = null
-        callback error
+      @update $set: @attributes, callback
 
   set: (attributes)=>
     @attributes ?= {}
@@ -131,8 +128,7 @@ class Device
 
   update: (params, callback=->) =>
     params = _.cloneDeep params
-
-    keys = _.keys(params)
+    keys   = _.keys(params)
 
     if _.all(keys, (key) -> _.startsWith key, '$')
       params['$set'] ?= {}
@@ -146,7 +142,19 @@ class Device
       @clearCache @uuid
       @fetch?.cache = null
       return callback @sanitizeError(error) if error?
-      callback()
+      @_hashDevice (error) =>
+        return callback @sanitizeError(error) if error?
+        callback()
+
+  _hashDevice: (callback=->) =>
+    debug '_hashDevice', @uuid
+    @devices.findOne uuid: @uuid, (error, data) =>
+      return callback error if error?
+      delete data.meshblu.hash if data?.meshblu?.hash
+      params = $set :
+        'meshblu.hash': @_hashToken JSON.stringify(data)
+      debug 'updating hash', @uuid, params
+      @devices.update uuid: @uuid, params, callback
 
   addGeo: (callback=->) =>
     return _.defer callback unless @attributes.ipAddress?

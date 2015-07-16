@@ -15,6 +15,7 @@
     "cors": "^2.7.1",
     "debug": "^2.1.1",
     "elasticsearch": "~4.0.2",
+    "eventemitter2": "^0.4.14",
     "express": "^4.12.4",
     "express-meshblu-healthcheck": "^1.0.1",
     "faye-websocket": "^0.9.4",

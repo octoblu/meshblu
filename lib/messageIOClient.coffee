@@ -1,9 +1,10 @@
 _ = require 'lodash'
 config = require '../config'
 debug = require('debug')('meshblu:message-io-client')
-{EventEmitter} = require 'events'
+{EventEmitter2} = require 'eventemitter2'
+# {EventEmitter} = require 'events'
 
-class MessageIOClient extends EventEmitter
+class MessageIOClient extends EventEmitter2
   constructor: (dependencies={}) ->
     @SocketIOClient = dependencies.SocketIOClient ? require 'socket.io-client'
 

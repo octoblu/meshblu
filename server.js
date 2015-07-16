@@ -55,6 +55,7 @@ if (process.env.AIRBRAKE_KEY) {
 } else {
   process.on("uncaughtException", function(error) {
     console.error(error.message, error.stack);
+    process.exit(1);
   });
 }
 

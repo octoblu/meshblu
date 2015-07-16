@@ -1,7 +1,7 @@
 config = require '../config'
 redis = require './redis'
 MessageIOEmitter = require './messageIOEmitter'
-debug = require('debug')('meshblu:createMessageIOEmitter')
+debug = require('debug')('meshblu:create-message-io-emitter')
 
 module.exports = (io) =>
   messageIOEmitter = new MessageIOEmitter

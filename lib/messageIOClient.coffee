@@ -1,6 +1,6 @@
 _ = require 'lodash'
 config = require '../config'
-debug = require('debug')('meshblu:MessageIOClient')
+debug = require('debug')('meshblu:message-io-client')
 {EventEmitter} = require 'events'
 
 class MessageIOClient extends EventEmitter

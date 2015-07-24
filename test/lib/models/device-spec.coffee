@@ -335,8 +335,7 @@ describe 'Device', ->
           @device.save done
 
       beforeEach (done) ->
-        @devices.findOne uuid: @uuid, (error, attributes) =>
-          @sut = new Device attributes, @dependencies
+          @sut = new Device uuid: @uuid, @dependencies
           @sut.verifyToken 'mushrooms', (error, @verified) => done()
 
       it 'should be verified', ->

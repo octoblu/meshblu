@@ -7,7 +7,7 @@ describe 'Old Update Device', ->
   beforeEach (done) ->
     @sut = require '../../lib/oldUpdateDevice'
     @getDevice = sinon.stub()
-    @clearCache = sinon.stub()
+    @clearCache = sinon.stub().yields null
     @getGeo = sinon.stub()
     @getGeo.yields null, null
     TestDatabase.open (error, database) =>
@@ -45,7 +45,7 @@ describe 'Old Update Device', ->
       @originalDevice = {uuid: @uuid, name: 'hadoken', token : @token, online :true}
       @devices.insert _.clone(@originalDevice), done
 
-    describe 'when  is called', ->
+    describe 'when oldUpdateDevice is called', ->
       beforeEach (done) ->
         @getDevice.yields null
         @sut @uuid, {name: 'shakunetsu'}, done, @dependencies

@@ -73,8 +73,7 @@ class Device
           callback(result)
 
       # this is faster than async.detect, srsly, trust me.
-      async.detectSeries hashedTokens.reverse(), compareToken, (goodToken) =>
-        debug 'token matched?', goodToken?
+      async.detectSeries hashedTokens.reverse(), compareToken, (goodToken) =>        
         callback null, goodToken?
 
   revokeDeprecatedToken: (token, callback=_.noop)=>
@@ -139,12 +138,12 @@ class Device
     debug 'update', @uuid, params
 
     @devices.update uuid: @uuid, params, (error) =>
-      @clearCache @uuid
-      @fetch?.cache = null
-      return callback @sanitizeError(error) if error?
-      @_hashDevice (error) =>
+      @clearCache @uuid, =>
+        @fetch?.cache = null
         return callback @sanitizeError(error) if error?
-        callback()
+        @_hashDevice (error) =>
+          return callback @sanitizeError(error) if error?
+          callback()
 
   _hashDevice: (callback=->) =>
     debug '_hashDevice', @uuid

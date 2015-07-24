@@ -8,7 +8,7 @@ module.exports = (uuid, token, callback=(->), dependencies={}) ->
   device = new @Device uuid: uuid
   device.verifyToken token, (error, verified) =>
     return callback error if error?
-    return callback new Error('Unable to find valid device') unless verified?
+    return callback new Error('Unable to find valid device') unless verified
     device.fetch (error, attributes) =>
       return callback error if error?
       callback null, attributes

@@ -10,7 +10,7 @@ describe 'Device', ->
       @database = database
       @devices  = @database.devices
       @getGeo = sinon.stub().yields null, {}
-      @clearCache = sinon.spy()
+      @clearCache = sinon.stub().yields null
       @config = token: 'totally-secret-yo'
       @dependencies = {database: @database, getGeo: @getGeo, clearCache: @clearCache, config: @config}
       @hashedToken = 'qe4NSaR3wrM6c2Q6uE6diz23ZXHyXUE2u/zJ9rvGE5A='

@@ -26,6 +26,22 @@ describe 'authDevice', ->
 
   describe 'when passed a valid token and uuid', ->
     beforeEach (done) ->
+      @device.verifyToken.yields null, false
+      @device.fetch.yields null, {}
+      storeResults = (@error, @returnDevice) => done()
+      @sut 'valid-uuid', 'invalid-token', storeResults, @dependencies
+
+    it 'should call the callback with a device', ->
+      expect(@returnDevice).to.not.exist
+
+    it 'should call fetch', ->
+      expect(@device.fetch).to.not.have.been.called
+
+    it 'should call the callback without an error', ->
+      expect(@error).to.exist
+
+  describe 'when passed a valid token and uuid', ->
+    beforeEach (done) ->
       @device.verifyToken.yields null, true
       @device.fetch.yields null, {}
       storeResults = (@error, @returnDevice) => done()

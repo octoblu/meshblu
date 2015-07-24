@@ -12,8 +12,7 @@ module.exports = (fromDevice, query, params, callback=_.noop, dependencies={}) -
       return callback error if error?
       return callback new Error('Device does not have sufficient permissions for update') unless permission
 
-      clearCache toDevice.uuid
-
-      newDevice = new Device(uuid: toDevice.uuid)
-      newDevice.update params, callback
-      sendConfigActivity query.uuid
+      clearCache toDevice.uuid, =>
+        newDevice = new Device(uuid: toDevice.uuid)
+        newDevice.update params, callback
+        sendConfigActivity query.uuid

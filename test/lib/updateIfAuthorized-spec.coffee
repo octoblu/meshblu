@@ -9,7 +9,7 @@ describe 'updateIfAuthorized', ->
       @toDevice     = {uuid: 'to-device', configureWhitelist: ['from-device']}
       @getDevice    = sinon.stub().yields null, @toDevice
       @canConfigure = sinon.stub()
-      @clearCache = sinon.stub()
+      @clearCache = sinon.stub().yields null
 
       @device = update: sinon.spy()
       @Device = sinon.spy => @device

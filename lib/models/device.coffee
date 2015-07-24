@@ -65,13 +65,13 @@ class Device
       callback null, !!device
 
   verifyOGToken: (ogToken, callback=->) =>
-    debug "verifyOGToken: ", ogToken, @attributes.token
+    debug "verifyOGToken: ", ogToken
 
-    return callback null, false unless @attributes.token?
-
-    bcrypt.compare ogToken, @attributes.token, (error, result) =>
-      debug "verifyOGToken: bcrypt.compare results: #{error}, #{result}"
-      callback null, result
+    @fetch (error, attributes={}) =>
+      return callback null, false unless attributes.token?
+      bcrypt.compare ogToken, attributes.token, (error, result) =>
+        debug "verifyOGToken: bcrypt.compare results: #{error}, #{result}"
+        callback null, result
 
   verifyDeprecatedToken: (token, callback=->) =>
     @fetch (error, attributes={}) =>

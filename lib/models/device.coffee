@@ -40,40 +40,54 @@ class Device
       hashedToken = @_hashToken token
       @update $unset : {"meshblu.tokens.#{hashedToken}"}, callback
 
-  verifyToken: (token, callback=_.noop) =>
-    @verifyNewToken token, (error, verified) =>
+  verifyToken: (token, callback=->) =>
+    @verifyOGToken token, (error, verified) =>
       return callback error if error?
       return callback null, true if verified
 
-      @verifyDeprecatedToken token, (error, verified) =>
+      @verifyNewToken token, (error, verified) =>
         return callback error if error?
-        return callback null, false unless verified
-        @storeToken token, (error) =>
-          return callback error if error?
-          @revokeDeprecatedToken token, (error) =>
-            return callback error if error?
-            callback null, true
+        return callback null, true if verified
 
-  verifyNewToken: (token, callback=_.noop) =>
+        @verifyDeprecatedToken token, (error, verified) =>
+          return callback error if error?
+          return callback null, false unless verified
+          @storeToken token, (error) =>
+            return callback error if error?
+            @revokeDeprecatedToken token, (error) =>
+              return callback error if error?
+              callback null, true
+
+  verifyNewToken: (token, callback=->) =>
     hashedToken = @_hashToken token
     @devices.findOne uuid: @uuid, "meshblu.tokens.#{hashedToken}": {$exists: true}, (error, device) =>
       return callback error if error?
       callback null, !!device
 
-  verifyDeprecatedToken: (token, callback=_.noop) =>
-    @fetch (error, attributes) =>
-      return callback error if error?
+  verifyOGToken: (ogToken, callback=->) =>
+    debug "verifyOGToken: ", ogToken, @attributes.token
 
-      hashedTokens = _.pluck(attributes.tokens, 'hash') ? []
-      hashedTokens.push attributes.token if attributes.token?
+    return callback null, false unless @attributes.token?
+
+    bcrypt.compare ogToken, @attributes.token, (error, result) =>
+      debug "verifyOGToken: bcrypt.compare results: #{error}, #{result}"
+      callback null, result
+
+  verifyDeprecatedToken: (token, callback=->) =>
+    @fetch (error, attributes={}) =>
+      return callback error if error?
+      return callback null, false unless attributes.tokens?
+
+      hashedTokens = _.pluck attributes.tokens, 'hash'
 
       compareToken = (hashedToken, callback=->) =>
-        debug token, hashedToken
+        debug "compareToken: ", token, hashedToken
         bcrypt.compare token, hashedToken, (error, result) =>
+          debug "bcrypt.compare results: #{error}, #{result}"
           callback(result)
 
       # this is faster than async.detect, srsly, trust me.
-      async.detectSeries hashedTokens.reverse(), compareToken, (goodToken) =>        
+      async.detectSeries hashedTokens.reverse(), compareToken, (goodToken) =>
         callback null, goodToken?
 
   revokeDeprecatedToken: (token, callback=_.noop)=>

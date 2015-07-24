@@ -327,6 +327,21 @@ describe 'Device', ->
     beforeEach ->
       @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
 
+    describe 'when using the og token', ->
+      beforeEach (done) ->
+        @token = 'mushrooms'
+        @devices.insert uuid: @uuid, =>
+          @device = new Device {uuid: @uuid, token: @token}, @dependencies
+          @device.save done
+
+      beforeEach (done) ->
+        @devices.findOne uuid: @uuid, (error, attributes) =>
+          @sut = new Device attributes, @dependencies
+          @sut.verifyToken 'mushrooms', (error, @verified) => done()
+
+      it 'should be verified', ->
+        expect(@verified).to.be.true
+
     describe 'when using a new token', ->
       beforeEach (done) ->
         @devices.insert

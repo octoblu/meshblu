@@ -59,6 +59,7 @@ module.exports = {
   logToRedis: (process.env.USE_REDIS_LOG || "false").toLowerCase() == "true",
   logEvents: (process.env.LOG_EVENTS || "true").toLowerCase() == "true",
   eventLoggers: setupEventLoggers(),
+  forwardEventUuids: (process.env.FORWARD_EVENT_DEVICES || '').split(','),
   splunk: {
     protocol: process.env.SPLUNK_PROTOCOL || "http", 	//This should be "http" OR "https"
     host: process.env.SPLUNK_HOST, 			//The Host to connect to

@@ -15,8 +15,8 @@ describe 'MeshbluEventEmitter', ->
           @sut.emit 'update', {'$set': {foo: 'bar'}}
 
         it 'should call sendMessage with a message', ->
-          expect(@sendMessage).to.have.been.calledWith('meshblu-uuid', {
+          expect(@sendMessage).to.have.been.calledWith(uuid: 'meshblu-uuid', {
             devices: ['some-uuid','some-other-uuid']
             topic: 'update'
             payload: {'$set': {foo: 'bar'}}
-          }, 'event')
+          })

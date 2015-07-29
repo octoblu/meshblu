@@ -68,6 +68,7 @@ class Device
     debug "verifyOGToken: ", ogToken
 
     @fetch (error, attributes={}) =>
+      return callback error if error?
       return callback null, false unless attributes.token?
       bcrypt.compare ogToken, attributes.token, (error, result) =>
         debug "verifyOGToken: bcrypt.compare results: #{error}, #{result}"

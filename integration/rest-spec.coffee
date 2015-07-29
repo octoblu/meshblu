@@ -1,7 +1,10 @@
+_ = require 'lodash'
 path = require 'path'
+url = require 'url'
 MeshbluHTTP = require 'meshblu-http'
 MeshbluConfig = require 'meshblu-config'
 meshblu = require 'meshblu'
+request = require 'request'
 
 describe 'REST', ->
   before (done) ->
@@ -48,3 +51,16 @@ describe 'REST', ->
           request:
             uuid: 'invalid-uuid'
         }
+
+  describe '/device/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/devices/#{@config.uuid}"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        request.get uri, (error) =>
+          return done error if error?
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "device" message', ->
+        expect(@message.topic).to.deep.equal 'device'

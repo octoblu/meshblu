@@ -6,7 +6,7 @@ generateAndStoreToken = (ownerDevice, targetUuid, callback=_.noop, dependencies=
   securityImpl = dependencies.securityImpl ? require('./getSecurityImpl')
 
   getDevice targetUuid, (error, targetDevice) =>
-    return callback error if error?
+    return callback new Error(error.error.message) if error?
 
     securityImpl.canConfigure ownerDevice, targetDevice, (error, permission) =>
       return callback new Error('unauthorized') unless permission

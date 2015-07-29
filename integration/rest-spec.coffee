@@ -354,3 +354,111 @@ describe 'REST', ->
           request:
             uuid: 'invalid-uuid'
         }
+
+  describe 'POST /devices/:uuid/token', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.register configWhitelist: ['*'], (error, device) =>
+          return done error if error?
+
+          @device = device
+          @meshblu.resetToken @device.uuid, (error) =>
+            return done error if error?
+            @conx.once 'message', (@message) =>
+              done()
+
+      it 'should send a "resettoken" message', ->
+        expect(@message.topic).to.deep.equal 'resettoken'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          request:
+            uuid: @device.uuid
+        }
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.resetToken 'invalid-uuid', (error) =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send an "resettoken-error" message', ->
+        expect(@message.topic).to.deep.equal 'resettoken-error'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: '66b2928b-a317-4bc3-893e-245946e9672a'
+          error:    'invalid device'
+          request:
+            uuid: 'invalid-uuid'
+        }
+
+  describe 'POST /devices/:uuid/tokens', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.register configWhitelist: ['*'], (error, device) =>
+          return done error if error?
+
+          @device = device
+          @meshblu.generateAndStoreToken @device.uuid, (error) =>
+            return done error if error?
+            @conx.once 'message', (@message) =>
+              done()
+
+      it 'should send a "generatetoken" message', ->
+        expect(@message.topic).to.deep.equal 'generatetoken'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          request:
+            uuid: @device.uuid
+        }
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.generateAndStoreToken 'invalid-uuid', (error) =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send an "generatetoken-error" message', ->
+        expect(@message.topic).to.deep.equal 'generatetoken-error'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: '66b2928b-a317-4bc3-893e-245946e9672a'
+          error:    'Device not found'
+          request:
+            uuid: 'invalid-uuid'
+        }
+
+  describe 'DELETE /devices/:uuid/tokens/:token', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.register configWhitelist: ['*'], (error, device) =>
+          return done error if error?
+
+          @meshblu.generateAndStoreToken device.uuid, (error, device) =>
+            return done error if error?
+
+            @device = device
+            @meshblu.revokeToken @device.uuid, @device.token, (error) =>
+              return callback done error if error?
+              @conx.once 'message', (@message) =>
+                done()
+
+      it 'should send a "revoketoken" message', ->
+        expect(@message.topic).to.deep.equal 'revoketoken'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          request:
+            uuid: @device.uuid
+        }
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.revokeToken 'invalid-uuid', 'invalid-token', (error) =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send an "revoketoken-error" message', ->
+        expect(@message.topic).to.deep.equal 'revoketoken-error'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: '66b2928b-a317-4bc3-893e-245946e9672a'
+          error:    'Device not found'
+          request:
+            uuid: 'invalid-uuid'
+        }

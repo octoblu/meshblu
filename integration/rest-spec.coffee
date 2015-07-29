@@ -488,8 +488,48 @@ describe 'REST', ->
       it 'should send an "register-error" message', ->
         expect(@message.topic).to.deep.equal 'register-error'
         expect(@message.payload).to.deep.equal {
-          error:    'Device not updated'
+          error:  'Device not updated'
           request:
             uuid: 'not-allowed'
             ipAddress: '127.0.0.1'
+        }
+
+  describe 'PUT /devices/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/devices/#{@config.uuid}"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.put uri, auth: auth, json: {foo: 'bar'},  (error) =>
+          return done error if error?
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "update" message', ->
+        expect(@message.topic).to.deep.equal 'update'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          request:
+            query: {uuid: @config.uuid}
+            params: {foo: 'bar'}
+        }
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        pathname = "/devices/invalid-uuid"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.put uri, auth: auth, json: {foo: 'bar'},  (error) =>
+          return done error if error?
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "update-error" message', ->
+        expect(@message.topic).to.deep.equal 'update-error'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          error: "Device not found"
+          request:
+            query: {uuid: 'invalid-uuid'}
+            params: {foo: 'bar'}
         }

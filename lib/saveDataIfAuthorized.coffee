@@ -9,7 +9,7 @@ module.exports = (sendMessage, fromDevice, toDeviceUuid, params, callback=_.noop
   sendConfigActivity = dependencies.sendConfigActivity ? require './sendConfigActivity'
 
   getDevice toDeviceUuid, (error, toDevice) =>
-    return callback error if error?
+    return callback new Error(error.error.message) if error?
     securityImpl.canSend fromDevice, toDevice, params, (error, permission) =>
       return callback error if error?
       return callback new Error('Device does not have sufficient permissions to save data') unless permission

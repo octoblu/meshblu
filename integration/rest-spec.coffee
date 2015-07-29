@@ -763,3 +763,43 @@ describe 'REST', ->
           error: "Invalid Message Format"
           request: {}
         }
+
+  describe 'POST /data/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/data/#{@config.uuid}"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+
+        request.post uri, auth: auth, json: {value: 1}, (error) =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "data" message', ->
+        expect(@message.topic).to.deep.equal 'data'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: @config.uuid
+          request:
+            ipAddress: '127.0.0.1'
+            value: 1
+        }
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        pathname = "/data/invalid-uuid"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+
+        request.post uri, auth: auth, json: {value: 1}, (error) =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "data-error" message', ->
+        expect(@message.topic).to.deep.equal 'data-error'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: @config.uuid
+          error: "Device not found"
+          request:
+            ipAddress: '127.0.0.1'
+            value: 1
+        }

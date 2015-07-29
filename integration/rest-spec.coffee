@@ -680,3 +680,21 @@ describe 'REST', ->
             type: 'sent'
             uuid: @config.uuid
         }
+
+  describe 'GET /subscribe', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/subscribe"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+
+        request.get uri, auth: auth, timeout: 10, =>
+        @conx.once 'message', (@message) =>
+          done()
+
+      it 'should send a "subscribe" message', ->
+        expect(@message.topic).to.deep.equal 'subscribe'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          request: {}
+        }

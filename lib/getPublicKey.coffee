@@ -6,5 +6,7 @@ module.exports = (uuid, callback=_.noop, dependencies={}) ->
   getDevice = dependencies.getDevice ? require './getDevice'
 
   getDevice uuid, (error, device) =>
+    return callback new Error(error.error.message) if error?
+
     publicKey = device?.publicKey
-    callback error, (publicKey ? null)
+    callback null, (publicKey ? null)

@@ -48,7 +48,7 @@ describe 'getPublicKey', ->
 
   describe 'when fetching the device errors', ->
     beforeEach (done) ->
-      @getDevice = sinon.stub().yields new Error("I can't let you do that")
+      @getDevice = sinon.stub().yields error: {message: "I can't let you do that"}
       storeResult = (@error, @publicKey) => done()
       @sut 'db34cd53-c1ab-4da6-919f-9c7359142905', storeResult, getDevice: @getDevice
 

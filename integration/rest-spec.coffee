@@ -337,23 +337,20 @@ describe 'REST', ->
       it 'should send a "publickey" message', ->
         expect(@message.topic).to.deep.equal 'publickey'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
           request:
             uuid: @config.uuid
         }
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        @meshblu.update @config.uuid, {$foo: 'bar'}, (error) =>
+        @meshblu.publicKey 'invalid-uuid', (error) =>
           @conx.once 'message', (@message) =>
             done()
 
-      it 'should send an "update-error" message', ->
-        expect(@message.topic).to.deep.equal 'update-error'
+      it 'should send an "publickey-error" message', ->
+        expect(@message.topic).to.deep.equal 'publickey-error'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
-          error: "The dollar ($) prefixed field '$foo' in '$foo' is not valid for storage."
+          error: 'Device not found'
           request:
-            query: {uuid: @config.uuid}
-            params: {$set: {"$foo": 'bar'}}
+            uuid: 'invalid-uuid'
         }

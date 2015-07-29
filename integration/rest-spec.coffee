@@ -803,3 +803,23 @@ describe 'REST', ->
             ipAddress: '127.0.0.1'
             value: 1
         }
+
+  describe 'GET /data/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/data/#{@config.uuid}"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+
+        request.get uri, auth: auth, (error) =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "subscribe" message', ->
+        expect(@message.topic).to.deep.equal 'subscribe'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: @config.uuid
+          request:
+            type: 'data'
+            uuid: @config.uuid
+        }

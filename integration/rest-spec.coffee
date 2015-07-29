@@ -241,3 +241,43 @@ describe 'REST', ->
           request:
             uuid: 'invalid-uuid'
         }
+
+  describe 'GET /unclaimeddevices', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/unclaimeddevices"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.get uri, auth: auth,  (error) =>
+          return done error if error?
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "localdevices" message', ->
+        expect(@message.topic).to.deep.equal 'localdevices'
+        expect(@message.payload).to.deep.equal {
+          fromIp: '127.0.0.1'
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          request: {}
+        }
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        pathname = "/unclaimeddevices"
+        query = uuid: 'invalid-uuid'
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.get uri, auth: auth, qs: query,  (error) =>
+          return done error if error?
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "localdevices-error" message', ->
+        expect(@message.topic).to.deep.equal 'localdevices-error'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromIp: "127.0.0.1"
+          error: "Devices not found"
+          request:
+            uuid: 'invalid-uuid'
+        }

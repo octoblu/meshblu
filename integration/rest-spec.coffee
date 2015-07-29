@@ -570,3 +570,34 @@ describe 'REST', ->
             query: {uuid: 'invalid-uuid'}
             params: {}
         }
+
+  describe 'GET /mydevices', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.mydevices {}, =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "devices" message', ->
+        expect(@message.topic).to.deep.equal 'devices'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          request:
+            owner: @config.uuid
+        }
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.mydevices {uuid: 'invalid-uuid'}, =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "devices-error" message', ->
+        expect(@message.topic).to.deep.equal 'devices-error'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          error: "Devices not found"
+          request:
+            owner: @config.uuid
+            uuid: 'invalid-uuid'
+        }

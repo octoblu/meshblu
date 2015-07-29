@@ -163,7 +163,40 @@ describe 'REST', ->
           expect(@message.topic).to.deep.equal 'update-error'
           expect(@message.payload).to.deep.equal {
             fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
-            error: "The dollar ($) prefixed field '$foo' in '$foo' is not valid for storage."  
+            error: "The dollar ($) prefixed field '$foo' in '$foo' is not valid for storage."
+            request:
+              query: {uuid: @config.uuid}
+              params: {$set: {"$foo": 'bar'}}
+          }
+
+    describe 'PUT /v2/devices/:uuid', ->
+      describe 'when called with a valid request', ->
+        beforeEach (done) ->
+          @meshblu.updateDangerously @config.uuid, {$unset: {foo: 1}}, (error) =>
+            return done error if error?
+            @conx.once 'message', (@message) =>
+              done()
+
+        it 'should send a "update" message', ->
+          expect(@message.topic).to.deep.equal 'update'
+          expect(@message.payload).to.deep.equal {
+            fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+            request:
+              query: {uuid: @config.uuid}
+              params: {$unset: {foo: 1}}
+          }
+
+      describe 'when called with an invalid request', ->
+        beforeEach (done) ->
+          @meshblu.update @config.uuid, {$foo: 'bar'}, (error) =>
+            @conx.once 'message', (@message) =>
+              done()
+
+        it 'should send an "update-error" message', ->
+          expect(@message.topic).to.deep.equal 'update-error'
+          expect(@message.payload).to.deep.equal {
+            fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+            error: "The dollar ($) prefixed field '$foo' in '$foo' is not valid for storage."
             request:
               query: {uuid: @config.uuid}
               params: {$set: {"$foo": 'bar'}}

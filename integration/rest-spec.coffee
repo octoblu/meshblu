@@ -698,3 +698,39 @@ describe 'REST', ->
           fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
           request: {}
         }
+
+  describe 'GET /authenticate/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/authenticate/#{@config.uuid}"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+
+        request.get uri, json: {token: @config.token}, (error) =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "identity" message', ->
+        expect(@message.topic).to.deep.equal 'identity'
+        expect(@message.payload).to.deep.equal {
+          request:
+            uuid: @config.uuid
+        }
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        pathname = "/authenticate/#{@config.uuid}"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+
+        request.get uri, (error) =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "identity-error" message', ->
+        expect(@message.topic).to.deep.equal 'identity-error'
+        expect(@message.payload).to.deep.equal {
+          error: "Device not found or token not valid"
+          request:
+            uuid: @config.uuid
+        }

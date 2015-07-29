@@ -71,6 +71,7 @@ class Device
       return callback error, false if error?
       return callback null, false unless attributes.token?
       bcrypt.compare ogToken, attributes.token, (error, result) =>
+        return callback error if error?
         debug "verifyOGToken: bcrypt.compare results: #{error}, #{result}"
         callback null, result
 

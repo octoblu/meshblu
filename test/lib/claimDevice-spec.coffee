@@ -125,9 +125,9 @@ describe 'claimDevice', ->
 
       storeError = (@error) => done()
 
-      @notFoundError = new Error 'Device not found'
+      @notFoundError = {error: {message: 'Device not found'}}
       @getDeviceWithToken.yields @notFoundError, null
       @sut fromDevice, device, storeError, @dependencies
 
-    it 'should call yield the device not found error', ->
-      expect(@error).to.equal @notFoundError
+    it 'should yield a device not found error', ->
+      expect(@error).to.deep.equal new Error('Device not found')

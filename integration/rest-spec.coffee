@@ -462,3 +462,34 @@ describe 'REST', ->
           request:
             uuid: 'invalid-uuid'
         }
+
+  describe 'POST /devices', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.register {}, (error, device) =>
+          return done error if error?
+
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "register" message', ->
+        expect(@message.topic).to.deep.equal 'register'
+        expect(@message.payload).to.deep.equal {
+          request:
+            ipAddress: '127.0.0.1'
+        }
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.register uuid: 'not-allowed', (error) =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send an "register-error" message', ->
+        expect(@message.topic).to.deep.equal 'register-error'
+        expect(@message.payload).to.deep.equal {
+          error:    'Device not updated'
+          request:
+            uuid: 'not-allowed'
+            ipAddress: '127.0.0.1'
+        }

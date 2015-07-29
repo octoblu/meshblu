@@ -734,3 +734,32 @@ describe 'REST', ->
           request:
             uuid: @config.uuid
         }
+
+  describe 'POST /messages', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.message {devices: ['some-uuid']}, =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "message" message', ->
+        expect(@message.topic).to.deep.equal 'message'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          request:
+            devices: ['some-uuid']
+        }
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.message {}, =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "message-error" message', ->
+        expect(@message.topic).to.deep.equal 'message-error'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          error: "Invalid Message Format"
+          request: {}
+        }

@@ -533,3 +533,40 @@ describe 'REST', ->
             query: {uuid: 'invalid-uuid'}
             params: {foo: 'bar'}
         }
+
+  describe 'DELETE /devices/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.register {}, (error, device) =>
+          return done error if error?
+
+          @device = device
+          @meshblu.unregister uuid: @device.uuid, (error) =>
+            return done error if error?
+            @conx.once 'message', (@message) =>
+              done()
+
+      it 'should send a "unregister" message', ->
+        expect(@message.topic).to.deep.equal 'unregister'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: @config.uuid
+          request:
+            query: {uuid: @device.uuid}
+            params: {}
+        }
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.unregister uuid: 'invalid-uuid', (error) =>
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send an "unregister-error" message', ->
+        expect(@message.topic).to.deep.equal 'unregister-error'
+        expect(@message.payload).to.deep.equal {
+          error:  'invalid device to unregister'
+          fromUuid: @config.uuid
+          request:
+            query: {uuid: 'invalid-uuid'}
+            params: {}
+        }

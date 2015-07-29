@@ -281,3 +281,47 @@ describe 'REST', ->
           request:
             uuid: 'invalid-uuid'
         }
+
+  describe 'PUT /claimdevice/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.register configWhitelist: ['*'], (error, device) =>
+          return done error if error?
+
+          @device = device
+          pathname = "/claimdevice/#{@device.uuid}"
+          uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+          auth = user: @config.uuid, pass: @config.token
+          request.put uri, auth: auth,  (error) =>
+            return done error if error?
+            @conx.once 'message', (@message) =>
+              done()
+
+      it 'should send a "claimdevice" message', ->
+        expect(@message.topic).to.deep.equal 'claimdevice'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromIp:   "127.0.0.1"
+          request:
+            uuid: @device.uuid
+        }
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        pathname = "/claimdevice/invalid-uuid"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.put uri, auth: auth,  (error) =>
+          return done error if error?
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send an "claimdevice-error" message', ->
+        expect(@message.topic).to.deep.equal 'claimdevice-error'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: '66b2928b-a317-4bc3-893e-245946e9672a'
+          fromIp:   '127.0.0.1'
+          error:    'Device not found'
+          request:
+            uuid: 'invalid-uuid'
+        }

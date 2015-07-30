@@ -27,10 +27,8 @@ describe 'SocketLogic Events', ->
   describe.only 'EVENT devices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-
         @meshblu.devices {}, (data) =>
           return done new Error(data.error) if data.error?
-
           @eventForwarder.once 'message', (@message) =>
             done()
 
@@ -56,39 +54,33 @@ describe 'SocketLogic Events', ->
             uuid: 'invalid-uuid'
         }
 
-  xdescribe 'GET /devices/:uuid', ->
+  describe 'EVENT devices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        pathname = "/devices/#{@config.uuid}"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        request.get uri, auth: auth,  (error) =>
-          return done error if error?
+        @meshblu.device {uuid: @device.uuid}, (data) =>
+          return done new Error(data.error) if data.error?
           @eventForwarder.once 'message', (@message) =>
             done()
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request:
-            uuid: @config.uuid
+            uuid: @device.uuid
         }
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        pathname = "/devices/invalid-uuid"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        request.get uri, auth: auth,  (error) =>
-          return done error if error?
+        @meshblu.device {uuid: 'invalid-uuid'}, (data) =>
+          return done new Error(data.error) if data.error?
           @eventForwarder.once 'message', (@message) =>
             done()
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           error: "Devices not found"
           request:
             uuid: 'invalid-uuid'

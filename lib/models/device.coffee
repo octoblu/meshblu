@@ -41,6 +41,8 @@ class Device
       @update $unset : {"meshblu.tokens.#{hashedToken}"}, callback
 
   verifyToken: (token, callback=->) =>
+    return callback new Error('No token provided') unless token?
+
     @verifyOGToken token, (error, verified) =>
       return callback error if error?
       return callback null, true if verified

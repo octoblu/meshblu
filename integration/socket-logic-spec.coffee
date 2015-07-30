@@ -3,7 +3,7 @@ path = require 'path'
 meshblu = require 'meshblu'
 MeshbluConfig = require 'meshblu-config'
 
-describe 'SocketLogic Events', ->
+describe.only 'SocketLogic Events', ->
   before (done) ->
     filename = path.join __dirname, 'meshblu.json'
     @config = new MeshbluConfig(filename: filename).toJSON()
@@ -24,7 +24,7 @@ describe 'SocketLogic Events', ->
   it 'should get here', ->
     expect(true).to.be.true
 
-  describe.only 'EVENT devices', ->
+  describe 'EVENT devices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
         @meshblu.devices {}, (data) =>
@@ -86,72 +86,41 @@ describe 'SocketLogic Events', ->
             uuid: 'invalid-uuid'
         }
 
-  xdescribe 'GET /v2/whoami', ->
+  describe 'EVENT whoami', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.whoami (error) =>
-          return done error if error?
+        @meshblu.whoami {}, (data) =>
+          return done new Error(data.error) if data.error?
           @eventForwarder.once 'message', (@message) =>
             done()
 
       it 'should send a "whoami" message', ->
         expect(@message.topic).to.deep.equal 'whoami'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request: {}
         }
 
-  xdescribe 'GET /v2/devices/:uuid', ->
+  describe 'EVENT update', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.device @config.uuid, (error) =>
-          return done error if error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
-      it 'should send a "devices" message', ->
-        expect(@message.topic).to.deep.equal 'devices'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
-          request:
-            uuid: @config.uuid
-        }
-
-    describe 'when called with an invalid request', ->
-      beforeEach (done) ->
-        @meshblu.device 'invalid-uuid', (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
-      it 'should send a "devices-error" message', ->
-        expect(@message.topic).to.deep.equal 'devices-error'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
-          error: 'Devices not found'
-          request:
-            uuid: 'invalid-uuid'
-        }
-
-  xdescribe 'PATCH /v2/devices/:uuid', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        @meshblu.update @config.uuid, foo: 'bar', (error) =>
-          return done error if error?
+        @meshblu.update uuid: @device.uuid, foo: 'bar', (data) =>
+          return done new Error(data.error) if data.error?
           @eventForwarder.once 'message', (@message) =>
             done()
 
       it 'should send a "update" message', ->
         expect(@message.topic).to.deep.equal 'update'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request:
-            query: {uuid: @config.uuid}
-            params: {$set: {foo: 'bar'}}
+            query: {uuid: @device.uuid}
+            params: {$set: {foo: 'bar', uuid: @device.uuid}}
         }
 
-    describe 'when called with an invalid request', ->
+    xdescribe 'when called with an invalid request', ->
       beforeEach (done) ->
-        @meshblu.update @config.uuid, {$foo: 'bar'}, (error) =>
+        @meshblu.update uuid: @device.uuid, $foo: 'bar', (error) =>
           @eventForwarder.once 'message', (@message) =>
             done()
 

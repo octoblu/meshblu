@@ -105,6 +105,27 @@ describe 'REST', ->
           request: {}
         }
 
+  describe 'GET /v2/devices', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/v2/devices"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        query = {foo: 'bar'}
+        request.get uri, auth: auth, qs: query, (error, response, body) =>
+          return done error if error?
+          return done body unless response.statusCode == 200
+          @conx.once 'message', (@message) =>
+            done()
+
+      it 'should send a "devices" message', ->
+        expect(@message.topic).to.deep.equal 'devices'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          request:
+            foo: 'bar'
+        }
+
   describe 'GET /v2/devices/:uuid', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->

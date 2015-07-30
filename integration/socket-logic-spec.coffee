@@ -118,20 +118,20 @@ describe.only 'SocketLogic Events', ->
             params: {$set: {foo: 'bar', uuid: @device.uuid}}
         }
 
-    xdescribe 'when called with an invalid request', ->
+    describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        @meshblu.update uuid: @device.uuid, $foo: 'bar', (error) =>
+        @meshblu.update uuid: 'invalid-uuid', foo: 'bar', (error) =>
           @eventForwarder.once 'message', (@message) =>
             done()
 
       it 'should send an "update-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
-          error: "The dollar ($) prefixed field '$foo' in '$foo' is not valid for storage."
+          fromUuid: @device.uuid
+          error: "Device not found"
           request:
-            query: {uuid: @config.uuid}
-            params: {$set: {"$foo": 'bar'}}
+            query: {uuid: 'invalid-uuid'}
+            params: {$set: {foo: 'bar', uuid: 'invalid-uuid'}}
         }
 
   xdescribe 'PUT /v2/devices/:uuid', ->

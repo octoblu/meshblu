@@ -134,47 +134,10 @@ describe.only 'SocketLogic Events', ->
             params: {$set: {foo: 'bar', uuid: 'invalid-uuid'}}
         }
 
-  xdescribe 'PUT /v2/devices/:uuid', ->
+  describe 'EVENT localdevices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.updateDangerously @config.uuid, {$unset: {foo: 1}}, (error) =>
-          return done error if error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
-      it 'should send a "update" message', ->
-        expect(@message.topic).to.deep.equal 'update'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
-          request:
-            query: {uuid: @config.uuid}
-            params: {$unset: {foo: 1}}
-        }
-
-    describe 'when called with an invalid request', ->
-      beforeEach (done) ->
-        @meshblu.update @config.uuid, {$foo: 'bar'}, (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
-      it 'should send an "update-error" message', ->
-        expect(@message.topic).to.deep.equal 'update-error'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
-          error: "The dollar ($) prefixed field '$foo' in '$foo' is not valid for storage."
-          request:
-            query: {uuid: @config.uuid}
-            params: {$set: {"$foo": 'bar'}}
-        }
-
-  xdescribe 'GET /localdevices', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        pathname = "/localdevices"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        request.get uri, auth: auth,  (error) =>
-          return done error if error?
+        @meshblu.localdevices (error) =>
           @eventForwarder.once 'message', (@message) =>
             done()
 
@@ -182,65 +145,35 @@ describe.only 'SocketLogic Events', ->
         expect(@message.topic).to.deep.equal 'localdevices'
         expect(@message.payload).to.deep.equal {
           fromIp: '127.0.0.1'
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request: {}
         }
 
-    describe 'when called with an invalid request', ->
-      beforeEach (done) ->
-        pathname = "localdevices"
-        query = uuid: 'invalid-uuid'
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        request.get uri, auth: auth, qs: query,  (error) =>
-          return done error if error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
-      it 'should send a "localdevices-error" message', ->
-        expect(@message.topic).to.deep.equal 'localdevices-error'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
-          fromIp: "127.0.0.1"
-          error: "Devices not found"
-          request:
-            uuid: 'invalid-uuid'
-        }
-
-  xdescribe 'GET /unclaimeddevices', ->
+  describe 'EVENT unclaimeddevices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        pathname = "/unclaimeddevices"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        request.get uri, auth: auth,  (error) =>
-          return done error if error?
+        @meshblu.unclaimeddevices {}, (error) =>
           @eventForwarder.once 'message', (@message) =>
             done()
 
-      it 'should send a "localdevices" message', ->
-        expect(@message.topic).to.deep.equal 'localdevices'
+      it 'should send a "unclaimeddevices" message', ->
+        expect(@message.topic).to.deep.equal 'unclaimeddevices'
         expect(@message.payload).to.deep.equal {
           fromIp: '127.0.0.1'
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request: {}
         }
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        pathname = "/unclaimeddevices"
-        query = uuid: 'invalid-uuid'
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        request.get uri, auth: auth, qs: query,  (error) =>
-          return done error if error?
+        @meshblu.unclaimeddevices {uuid: 'invalid-uuid'}, (error) =>
           @eventForwarder.once 'message', (@message) =>
             done()
 
-      it 'should send a "localdevices-error" message', ->
-        expect(@message.topic).to.deep.equal 'localdevices-error'
+      it 'should send an "unclaimeddevices-error" message', ->
+        expect(@message.topic).to.deep.equal 'unclaimeddevices-error'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           fromIp: "127.0.0.1"
           error: "Devices not found"
           request:

@@ -315,39 +315,36 @@ describe.only 'SocketLogic Events', ->
             uuid: 'invalid-uuid'
         }
 
-  xdescribe 'DELETE /devices/:uuid/tokens/:token', ->
+  describe 'EVENT revokeToken', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.register configWhitelist: ['*'], (error, device) =>
-          return done error if error?
+        @meshblu.register configWhitelist: ['*'], (data) =>
+          return done new Error data.error if data.error?
 
-          @meshblu.generateAndStoreToken device.uuid, (error, device) =>
-            return done error if error?
-
-            @device = device
-            @meshblu.revokeToken @device.uuid, @device.token, (error) =>
-              return callback done error if error?
+          @meshblu.generateAndStoreToken uuid: data.uuid, (device) =>
+            @newDevice = device
+            @meshblu.revokeToken @newDevice, =>
               @eventForwarder.once 'message', (@message) =>
                 done()
 
       it 'should send a "revoketoken" message', ->
         expect(@message.topic).to.deep.equal 'revoketoken'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request:
-            uuid: @device.uuid
+            uuid: @newDevice.uuid
         }
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        @meshblu.revokeToken 'invalid-uuid', 'invalid-token', (error) =>
+        @meshblu.revokeToken uuid: 'invalid-uuid', token: 'invalid-token', (error) =>
           @eventForwarder.once 'message', (@message) =>
             done()
 
       it 'should send an "revoketoken-error" message', ->
         expect(@message.topic).to.deep.equal 'revoketoken-error'
         expect(@message.payload).to.deep.equal {
-          fromUuid: '66b2928b-a317-4bc3-893e-245946e9672a'
+          fromUuid: @device.uuid
           error:    'Device not found'
           request:
             uuid: 'invalid-uuid'

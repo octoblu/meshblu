@@ -280,36 +280,36 @@ describe.only 'SocketLogic Events', ->
             uuid: 'invalid-uuid'
         }
 
-  xdescribe 'POST /devices/:uuid/tokens', ->
+  describe 'EVENT generateAndStoreToken', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.register configWhitelist: ['*'], (error, device) =>
-          return done error if error?
+        @meshblu.register configWhitelist: ['*'], (data) =>
+          return done new Error data.error if data.error?
 
-          @device = device
-          @meshblu.generateAndStoreToken @device.uuid, (error) =>
-            return done error if error?
+          @newDevice = data
+          @meshblu.generateAndStoreToken uuid: @newDevice.uuid, (data) =>
+            return done new Error data.error if data.error?
             @eventForwarder.once 'message', (@message) =>
               done()
 
       it 'should send a "generatetoken" message', ->
         expect(@message.topic).to.deep.equal 'generatetoken'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request:
-            uuid: @device.uuid
+            uuid: @newDevice.uuid
         }
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        @meshblu.generateAndStoreToken 'invalid-uuid', (error) =>
+        @meshblu.generateAndStoreToken uuid: 'invalid-uuid', (data) =>
           @eventForwarder.once 'message', (@message) =>
             done()
 
       it 'should send an "generatetoken-error" message', ->
         expect(@message.topic).to.deep.equal 'generatetoken-error'
         expect(@message.payload).to.deep.equal {
-          fromUuid: '66b2928b-a317-4bc3-893e-245946e9672a'
+          fromUuid: @device.uuid
           error:    'Device not found'
           request:
             uuid: 'invalid-uuid'

@@ -245,24 +245,24 @@ describe.only 'SocketLogic Events', ->
             uuid: 'invalid-uuid'
         }
 
-  xdescribe 'POST /devices/:uuid/token', ->
+  describe 'EVENT resetToken', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.register configWhitelist: ['*'], (error, device) =>
-          return done error if error?
+        @meshblu.register configWhitelist: ['*'], (data) =>
+          return done new Error data.error if data.error?
 
-          @device = device
-          @meshblu.resetToken @device.uuid, (error) =>
-            return done error if error?
+          @newDevice = data
+          @meshblu.resetToken @newDevice.uuid, (data) =>
+            return done new Error data.error if data.error?
             @eventForwarder.once 'message', (@message) =>
               done()
 
       it 'should send a "resettoken" message', ->
         expect(@message.topic).to.deep.equal 'resettoken'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request:
-            uuid: @device.uuid
+            uuid: @newDevice.uuid
         }
 
     describe 'when called with an invalid request', ->
@@ -274,7 +274,7 @@ describe.only 'SocketLogic Events', ->
       it 'should send an "resettoken-error" message', ->
         expect(@message.topic).to.deep.equal 'resettoken-error'
         expect(@message.payload).to.deep.equal {
-          fromUuid: '66b2928b-a317-4bc3-893e-245946e9672a'
+          fromUuid: @device.uuid
           error:    'invalid device'
           request:
             uuid: 'invalid-uuid'

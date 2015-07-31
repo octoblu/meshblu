@@ -217,16 +217,15 @@ describe.only 'SocketLogic Events', ->
             uuid: 'invalid-uuid'
         }
 
-  xdescribe 'GET /devices/:uuid/publickey', ->
+  describe 'EVENT getPublicKey', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.publicKey @config.uuid, (error) =>
-          return done error if error?
+        @meshblu.getPublicKey @config.uuid, (error) =>
           @eventForwarder.once 'message', (@message) =>
             done()
 
-      it 'should send a "publickey" message', ->
-        expect(@message.topic).to.deep.equal 'publickey'
+      it 'should send a "getpublickey" message', ->
+        expect(@message.topic).to.deep.equal 'getpublickey'
         expect(@message.payload).to.deep.equal {
           request:
             uuid: @config.uuid
@@ -234,12 +233,12 @@ describe.only 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        @meshblu.publicKey 'invalid-uuid', (error) =>
+        @meshblu.getPublicKey 'invalid-uuid', (error) =>
           @eventForwarder.once 'message', (@message) =>
             done()
 
-      it 'should send an "publickey-error" message', ->
-        expect(@message.topic).to.deep.equal 'publickey-error'
+      it 'should send an "getpublickey-error" message', ->
+        expect(@message.topic).to.deep.equal 'getpublickey-error'
         expect(@message.payload).to.deep.equal {
           error: 'Device not found'
           request:

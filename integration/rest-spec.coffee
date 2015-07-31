@@ -355,8 +355,8 @@ describe 'REST', ->
           @conx.once 'message', (@message) =>
             done()
 
-      it 'should send a "publickey" message', ->
-        expect(@message.topic).to.deep.equal 'publickey'
+      it 'should send a "getpublickey" message', ->
+        expect(@message.topic).to.deep.equal 'getpublickey'
         expect(@message.payload).to.deep.equal {
           request:
             uuid: @config.uuid
@@ -368,8 +368,8 @@ describe 'REST', ->
           @conx.once 'message', (@message) =>
             done()
 
-      it 'should send an "publickey-error" message', ->
-        expect(@message.topic).to.deep.equal 'publickey-error'
+      it 'should send an "getpublickey-error" message', ->
+        expect(@message.topic).to.deep.equal 'getpublickey-error'
         expect(@message.payload).to.deep.equal {
           error: 'Device not found'
           request:

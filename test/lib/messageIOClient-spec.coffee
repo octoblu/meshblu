@@ -42,6 +42,112 @@ describe 'MessageIOClient', ->
     it 'should map config', ->
       expect(@socketIOClient.on).to.have.been.calledWith 'config'
 
+  describe 'topicMatch', ->
+    describe 'by default', ->
+      beforeEach ->
+        @sut.start()
+        @sut.subscribe 'apple', ['received']
+
+      it 'should return true', ->
+        expect(@sut.topicMatch('apple', 'pears')).to.be.true
+
+      it 'should return true', ->
+        expect(@sut.topicMatch('apple')).to.be.true
+
+    describe 'when the topic is a string', ->
+      beforeEach ->
+        @sut.start()
+        @sut.subscribe 'apple', ['received'], ['pears']
+
+      describe 'when given the same string', ->
+        it 'should return true', ->
+          expect(@sut.topicMatch('apple', 'pears')).to.be.true
+
+      describe 'when given a different string', ->
+        it 'should return false', ->
+          expect(@sut.topicMatch('apple', 'steak')).to.be.false
+
+    describe 'when the topic ends in a wildcard', ->
+      beforeEach ->
+        @sut.start()
+        @sut.subscribe 'apple', ['received'], ['pear*']
+
+      describe 'when given the same string', ->
+        it 'should return true', ->
+          expect(@sut.topicMatch('apple', 'pear')).to.be.true
+
+      describe 'when given one more character', ->
+        it 'should return true', ->
+          expect(@sut.topicMatch('apple', 'pears')).to.be.true
+
+      describe 'when given a longer string', ->
+        it 'should return true', ->
+          expect(@sut.topicMatch('apple', 'pearson')).to.be.true
+
+      describe 'when given a different string', ->
+        it 'should return false', ->
+          expect(@sut.topicMatch('apple', 'paer')).to.be.false
+
+    describe 'when the topic starts and ends in a wildcard', ->
+      beforeEach ->
+        @sut.start()
+        @sut.subscribe 'apple', ['received'], ['*ear*']
+
+      describe 'when given the same string', ->
+        it 'should return true', ->
+          expect(@sut.topicMatch('apple', 'pear')).to.be.true
+
+      describe 'when given one more character', ->
+        it 'should return true', ->
+          expect(@sut.topicMatch('apple', 'pears')).to.be.true
+
+      describe 'when given a longer string', ->
+        it 'should return true', ->
+          expect(@sut.topicMatch('apple', 'pearson')).to.be.true
+
+      describe 'when given a different string', ->
+        it 'should return false', ->
+          expect(@sut.topicMatch('apple', 'paer')).to.be.false
+
+    describe 'when the topic contains a wildcard', ->
+      beforeEach ->
+        @sut.start()
+        @sut.subscribe 'apple', ['received'], ['p*r']
+
+      it 'should return true', ->
+        expect(@sut.topicMatch('apple', 'pear')).to.be.true
+
+      it 'should return true', ->
+        expect(@sut.topicMatch('apple', 'paer')).to.be.true
+
+      it 'should return false', ->
+        expect(@sut.topicMatch('apple', 'raer')).to.be.false
+
+    describe 'when the topic contains a minus', ->
+      beforeEach ->
+        @sut.start()
+        @sut.subscribe 'apple', ['received'], ['-pears']
+
+      it 'should return false', ->
+        expect(@sut.topicMatch('apple', 'pears')).to.be.false
+
+      it 'should return true', ->
+        expect(@sut.topicMatch('apple', 'paer')).to.be.true
+
+    describe 'when the topic contains a minus and a wildcard', ->
+      beforeEach ->
+        @sut.start()
+        @sut.subscribe 'apple', ['received'], ['-p*r*']
+
+      it 'should return false', ->
+        expect(@sut.topicMatch('apple', 'pears')).to.be.false
+
+      it 'should return false', ->
+        expect(@sut.topicMatch('apple', 'paer')).to.be.false
+
+      it 'should return true', ->
+        expect(@sut.topicMatch('apple', 'dear')).to.be.true
+
   describe 'subscribe', ->
     describe 'received only', ->
       beforeEach ->

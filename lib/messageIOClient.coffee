@@ -2,11 +2,26 @@ _ = require 'lodash'
 config = require '../config'
 debug = require('debug')('meshblu:message-io-client')
 {EventEmitter2} = require 'eventemitter2'
-# {EventEmitter} = require 'events'
 
 class MessageIOClient extends EventEmitter2
   constructor: (dependencies={}) ->
     @SocketIOClient = dependencies.SocketIOClient ? require 'socket.io-client'
+    @topicMap = {}
+
+  addTopics: (uuid, topics=['*']) =>
+    [skips, names] = _.partition topics, (topic) => _.startsWith topic, '-'
+    names = ['*'] if _.isEmpty names
+    map = {}
+
+    map.names = _.map names, (topic) =>
+      topic = topic.replace(/\*/g, '.*?')
+      new RegExp "^#{topic}$"
+
+    map.skips = _.map skips, (topic) =>
+      topic = topic.replace(/\*/g, '.*?').replace(/^-/, '')
+      new RegExp "^#{topic}$"
+
+    @topicMap[uuid] = map
 
   close: =>
     @socketIOClient.close()
@@ -15,7 +30,8 @@ class MessageIOClient extends EventEmitter2
     @socketIOClient = @SocketIOClient "ws://localhost:#{config.messageBus.port}", 'force new connection': true
     @socketIOClient.on 'message', (message) =>
       debug 'relay message', message
-      @emit 'message', message
+      if @topicMatch message?.toUuid, message?.topic
+        @emit 'message', message
 
     @socketIOClient.on 'data', (message) =>
       debug 'relay message', message
@@ -27,7 +43,9 @@ class MessageIOClient extends EventEmitter2
 
     @socketIOClient.connect()
 
-  subscribe: (uuid, subscriptionTypes) =>
+  subscribe: (uuid, subscriptionTypes, topics) =>
+    @addTopics uuid, topics
+
     if _.contains subscriptionTypes, 'received'
       debug 'subscribe', 'received', uuid
       @socketIOClient.emit 'subscribe', uuid
@@ -41,6 +59,8 @@ class MessageIOClient extends EventEmitter2
       @socketIOClient.emit 'subscribe', "#{uuid}_sent"
 
   unsubscribe: (uuid, subscriptionTypes) =>
+    delete @topicMap[uuid]
+
     if _.contains subscriptionTypes, 'received'
       debug 'unsubscribe', 'received', uuid
       @socketIOClient.emit 'unsubscribe', uuid
@@ -52,5 +72,9 @@ class MessageIOClient extends EventEmitter2
     if _.contains subscriptionTypes, 'sent'
       debug 'unsubscribe', 'sent', "#{uuid}_sent"
       @socketIOClient.emit 'unsubscribe', "#{uuid}_sent"
+
+  topicMatch: (uuid, topic) =>
+    return false if _.any @topicMap[uuid].skips, (re) => re.test topic
+    _.any @topicMap[uuid].names, (re) => re.test topic
 
 module.exports = MessageIOClient

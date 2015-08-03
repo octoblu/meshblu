@@ -6,7 +6,7 @@ console.log "  using #{if USE_MONGO then 'mongo' else 'nedb'}"
 console.log "================================================"
 
 if USE_MONGO
-  mongojs = require 'mongojs'
+  mongojs = require '@octoblu/mongojs'
   MONGO_DATABASE = mongojs 'meshblu-test', ['devices', 'subscriptions']
 
 class TestDatabase

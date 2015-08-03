@@ -42,6 +42,113 @@ describe 'MessageIOClient', ->
     it 'should map config', ->
       expect(@socketIOClient.on).to.have.been.calledWith 'config'
 
+  describe '.onMessage', ->
+    beforeEach ->
+      @sut.topicMatchUuids = sinon.stub()
+      @sut.emit = sinon.spy()
+
+    describe 'when devices is a uuid', ->
+      beforeEach ->
+        @uuid = 'someone'
+
+      describe 'when the topic matches', ->
+        beforeEach ->
+          @sut.topicMatchUuids.returns true
+          @sut.onMessage devices: @uuid
+
+        it 'should call @emit with the message', ->
+          expect(@sut.emit).to.have.been.called
+
+        it 'should call topicMatchUuids', ->
+          expect(@sut.topicMatchUuids).to.have.been.calledWith [@uuid]
+
+    describe 'when devices is an array of uuids', ->
+      beforeEach ->
+        @uuids = ['something', 'that isn\'t star']
+
+      describe 'when the topic matches', ->
+        beforeEach ->
+          @sut.topicMatchUuids.returns true
+          @sut.onMessage devices: @uuids
+
+        it 'should call @emit with the message', ->
+          expect(@sut.emit).to.have.been.called
+
+        it 'should call topicMatchUuids', ->
+          expect(@sut.topicMatchUuids).to.have.been.calledWith @uuids
+
+      describe 'when the topic does not match', ->
+        beforeEach ->
+          @sut.topicMatchUuids.returns false
+          @sut.onMessage devices: @uuids
+
+        it 'should not call @emit with the message', ->
+          expect(@sut.emit).not.to.have.been.called
+
+        it 'should call topicMatchUuids', ->
+          expect(@sut.topicMatchUuids).to.have.been.calledWith @uuids
+
+    describe 'when devices is null', ->
+      beforeEach ->
+        @uuids = null
+
+      describe 'when the topic matches', ->
+        beforeEach ->
+          @sut.topicMatchUuids.returns true
+          @sut.onMessage devices: @uuids
+
+        it 'should call @emit with the message', ->
+          expect(@sut.emit).to.have.been.called
+
+        it 'should call topicMatchUuids', ->
+          expect(@sut.topicMatchUuids).to.have.been.calledWith [null]
+
+    describe 'when devices contains *', ->
+      beforeEach ->
+        @uuids = ['*']
+
+      describe 'when the topic matches', ->
+        beforeEach ->
+          @sut.topicMatchUuids.returns true
+          @sut.onMessage devices: @uuids, fromUuid: 'blah'
+
+        it 'should call @emit with the message', ->
+          expect(@sut.emit).to.have.been.called
+
+        it 'should call topicMatchUuids', ->
+          expect(@sut.topicMatchUuids).to.have.been.calledWith ['blah']
+
+      describe 'when the topic does not match', ->
+        beforeEach ->
+          @sut.topicMatchUuids.returns false
+          @sut.onMessage devices: @uuids, fromUuid: 'blah'
+
+        it 'should not call @emit with the message', ->
+          expect(@sut.emit).not.to.have.been.called
+
+        it 'should call topicMatchUuids', ->
+          expect(@sut.topicMatchUuids).to.have.been.calledWith ['blah']
+
+  describe '.topicMatchUuids', ->
+    describe 'by default', ->
+      beforeEach ->
+        @sut.start()
+        @sut.subscribe 'apple', ['received']
+
+      it 'should return true', ->
+        expect(@sut.topicMatchUuids(['apple'], 'pears')).to.be.true
+
+      it 'should return true', ->
+        expect(@sut.topicMatchUuids(['apple'])).to.be.true
+
+      describe 'when devices is null', ->
+        it 'should return false', ->
+          expect(@sut.topicMatchUuids(null, 'pears')).to.be.false
+
+      describe 'when devices does not contain my device', ->
+        it 'should return false', ->
+          expect(@sut.topicMatchUuids(['grapes'], 'pears')).to.be.false
+
   describe 'topicMatch', ->
     describe 'by default', ->
       beforeEach ->

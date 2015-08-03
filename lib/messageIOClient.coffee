@@ -26,12 +26,18 @@ class MessageIOClient extends EventEmitter2
   close: =>
     @socketIOClient.close()
 
+  onMessage: (message) =>
+    uuids = message?.devices
+    uuids = [uuids] unless _.isArray uuids
+    uuids = [message.fromUuid] if _.contains uuids, '*'
+
+    debug 'relay message', message
+    if @topicMatchUuids uuids, message?.topic
+      @emit 'message', message
+
   start: =>
     @socketIOClient = @SocketIOClient "ws://localhost:#{config.messageBus.port}", 'force new connection': true
-    @socketIOClient.on 'message', (message) =>
-      debug 'relay message', message
-      if @topicMatch message?.toUuid, message?.topic
-        @emit 'message', message
+    @socketIOClient.on 'message', @onMessage
 
     @socketIOClient.on 'data', (message) =>
       debug 'relay message', message
@@ -73,7 +79,13 @@ class MessageIOClient extends EventEmitter2
       debug 'unsubscribe', 'sent', "#{uuid}_sent"
       @socketIOClient.emit 'unsubscribe', "#{uuid}_sent"
 
+  topicMatchUuids: (uuids, topic) =>
+    _.any uuids, (uuid) =>
+      @topicMatch uuid, topic
+
   topicMatch: (uuid, topic) =>
+    @topicMap[uuid] ?= {}
+    debug @topicMap[uuid], topic
     return false if _.any @topicMap[uuid].skips, (re) => re.test topic
     _.any @topicMap[uuid].names, (re) => re.test topic
 

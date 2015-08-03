@@ -350,11 +350,11 @@ describe.only 'SocketLogic Events', ->
             uuid: 'invalid-uuid'
         }
 
-  xdescribe 'POST /devices', ->
+  describe 'EVENT register', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.register {}, (error, device) =>
-          return done error if error?
+        @meshblu.register {}, (data) =>
+          return done new Error data.error if data.error?
 
           @eventForwarder.once 'message', (@message) =>
             done()
@@ -366,7 +366,7 @@ describe.only 'SocketLogic Events', ->
             ipAddress: '127.0.0.1'
         }
 
-    describe 'when called with an invalid request', ->
+    xdescribe 'when called with an invalid request', ->
       beforeEach (done) ->
         @meshblu.register uuid: 'not-allowed', (error) =>
           @eventForwarder.once 'message', (@message) =>

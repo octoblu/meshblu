@@ -4,7 +4,7 @@ messageIOEmitter = require('./createMessageIOEmitter')()
 debug = require('debug')('meshblu:doMessageForward')
 
 module.exports = (forwarders=[], message, fromUuid, callback=_.noop, dependencies={}) ->
-  debug 'forward to', forwarders
+  debug 'doMessageForward', forwarders, message
   async.map forwarders, (forwarder, cb=->) =>
     message.meshblu ?= {}
     message.meshblu.forwardedFor ?= []

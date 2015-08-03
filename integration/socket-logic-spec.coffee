@@ -3,7 +3,7 @@ path = require 'path'
 meshblu = require 'meshblu'
 MeshbluConfig = require 'meshblu-config'
 
-describe.only 'SocketLogic Events', ->
+describe 'SocketLogic Events', ->
   before (done) ->
     filename = path.join __dirname, 'meshblu.json'
     @config = new MeshbluConfig(filename: filename).toJSON()
@@ -366,7 +366,7 @@ describe.only 'SocketLogic Events', ->
             ipAddress: '127.0.0.1'
         }
 
-    xdescribe 'when called with an invalid request', ->
+    describe 'when called with an invalid request', ->
       beforeEach (done) ->
         @meshblu.register uuid: 'not-allowed', (error) =>
           @eventForwarder.once 'message', (@message) =>
@@ -381,65 +381,23 @@ describe.only 'SocketLogic Events', ->
             ipAddress: '127.0.0.1'
         }
 
-  xdescribe 'PUT /devices/:uuid', ->
+  describe 'EVENT unregister', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        pathname = "/devices/#{@config.uuid}"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        request.put uri, auth: auth, json: {foo: 'bar'},  (error) =>
-          return done error if error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
+        @meshblu.register {}, (data) =>
+          return done new Error data.error if data.error?
 
-      it 'should send a "update" message', ->
-        expect(@message.topic).to.deep.equal 'update'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
-          request:
-            query: {uuid: @config.uuid}
-            params: {foo: 'bar'}
-        }
-
-    describe 'when called with an invalid request', ->
-      beforeEach (done) ->
-        pathname = "/devices/invalid-uuid"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        request.put uri, auth: auth, json: {foo: 'bar'},  (error) =>
-          return done error if error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
-      it 'should send a "update-error" message', ->
-        expect(@message.topic).to.deep.equal 'update-error'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
-          error: "Device not found"
-          request:
-            query: {uuid: 'invalid-uuid'}
-            params: {foo: 'bar'}
-        }
-
-  xdescribe 'DELETE /devices/:uuid', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        @meshblu.register {}, (error, device) =>
-          return done error if error?
-
-          @device = device
-          @meshblu.unregister uuid: @device.uuid, (error) =>
-            return done error if error?
+          @newDevice = data
+          @meshblu.unregister uuid: @newDevice.uuid, (data) =>
+            return done new Error data.error if data.error?
             @eventForwarder.once 'message', (@message) =>
               done()
 
       it 'should send a "unregister" message', ->
         expect(@message.topic).to.deep.equal 'unregister'
         expect(@message.payload).to.deep.equal {
-          fromUuid: @config.uuid
-          request:
-            query: {uuid: @device.uuid}
-            params: {}
+          fromUuid: @device.uuid
+          request: {uuid: @newDevice.uuid}
         }
 
     describe 'when called with an invalid request', ->
@@ -452,10 +410,8 @@ describe.only 'SocketLogic Events', ->
         expect(@message.topic).to.deep.equal 'unregister-error'
         expect(@message.payload).to.deep.equal {
           error:  'invalid device to unregister'
-          fromUuid: @config.uuid
-          request:
-            query: {uuid: 'invalid-uuid'}
-            params: {}
+          fromUuid: @device.uuid
+          request: {uuid: 'invalid-uuid'}
         }
 
   xdescribe 'GET /mydevices', ->

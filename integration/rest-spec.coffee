@@ -799,7 +799,6 @@ describe 'REST', ->
         expect(@message.payload).to.deep.equal {
           fromUuid: @config.uuid
           request:
-            ipAddress: '127.0.0.1'
             value: 1
         }
 
@@ -819,7 +818,6 @@ describe 'REST', ->
           fromUuid: @config.uuid
           error: "Device not found"
           request:
-            ipAddress: '127.0.0.1'
             value: 1
         }
 

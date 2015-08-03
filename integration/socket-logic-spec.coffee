@@ -516,11 +516,14 @@ describe 'SocketLogic Events', ->
             uuid: 'invalid-uuid'
         }
 
-  xdescribe 'POST /messages', ->
+  describe 'EVENT message', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.message {devices: ['some-uuid']}, =>
-          @eventForwarder.once 'message', (@message) =>
+        @meshblu.message {devices: ['some-uuid']}
+        @eventForwarder.on 'message', (message) =>
+          if message.topic == 'message'
+            @message = message
+            @eventForwarder.removeAllListeners 'message'
             done()
 
       it 'should send a "message" message', ->
@@ -531,76 +534,53 @@ describe 'SocketLogic Events', ->
             devices: ['some-uuid']
         }
 
-    describe 'when called with an invalid request', ->
-      beforeEach (done) ->
-        @meshblu.message {}, =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
-      it 'should send a "message-error" message', ->
-        expect(@message.topic).to.deep.equal 'message-error'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: @device.uuid
-          error: "Invalid Message Format"
-          request: {}
-        }
-
-  xdescribe 'POST /data/:uuid', ->
+  describe 'EVENT data', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        pathname = "/data/#{@config.uuid}"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-
-        request.post uri, auth: auth, json: {value: 1}, (error) =>
+        @meshblu.data uuid: @device.uuid, value: 1, =>
           @eventForwarder.once 'message', (@message) =>
             done()
 
       it 'should send a "data" message', ->
         expect(@message.topic).to.deep.equal 'data'
         expect(@message.payload).to.deep.equal {
-          fromUuid: @config.uuid
+          fromUuid: @device.uuid
           request:
-            ipAddress: '127.0.0.1'
+            uuid: @device.uuid
             value: 1
         }
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        pathname = "/data/invalid-uuid"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-
-        request.post uri, auth: auth, json: {value: 1}, (error) =>
+        @meshblu.data uuid: 'invalid-uuid', value: 1, =>
           @eventForwarder.once 'message', (@message) =>
             done()
 
       it 'should send a "data-error" message', ->
         expect(@message.topic).to.deep.equal 'data-error'
         expect(@message.payload).to.deep.equal {
-          fromUuid: @config.uuid
+          fromUuid: @device.uuid
           error: "Device not found"
           request:
-            ipAddress: '127.0.0.1'
+            uuid: 'invalid-uuid'
             value: 1
         }
 
-  xdescribe 'GET /data/:uuid', ->
+  describe 'EVENT getdata', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        pathname = "/data/#{@config.uuid}"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-
-        request.get uri, auth: auth, (error) =>
-          @eventForwarder.once 'message', (@message) =>
+        @meshblu.getdata uuid: @device.uuid, token: @device.token, =>
+        @eventForwarder.on 'message', (message) =>
+          if message.topic == 'subscribe'
+            @message = message
+            @eventForwarder.removeAllListeners 'message'
             done()
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
         expect(@message.payload).to.deep.equal {
-          fromUuid: @config.uuid
+          fromUuid: @device.uuid
           request:
             type: 'data'
-            uuid: @config.uuid
+            uuid: @device.uuid
         }

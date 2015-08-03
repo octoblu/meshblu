@@ -18,7 +18,7 @@ describe 'SocketLogic Events', ->
 
   before (done) ->
     @meshblu = meshblu.createConnection _.pick(@config, 'server', 'port')
-    @meshblu.on 'ready', (@device) => done()
+    @meshblu.once 'ready', (@device) => done()
     @meshblu.on 'notReady', done
 
   it 'should get here', ->
@@ -446,129 +446,66 @@ describe 'SocketLogic Events', ->
             uuid: 'invalid-uuid'
         }
 
-  xdescribe 'GET /subscribe/:uuid', ->
+  describe 'EVENT subscribe', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        pathname = "/subscribe/#{@config.uuid}"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
+        @meshblu.subscribe {uuid: @device.uuid}, (data) =>
+          return done new Error data.error if data.error?
 
-        request.get uri, auth: auth, timeout: 10, =>
-        @eventForwarder.once 'message', (@message) =>
-          done()
-
-      it 'should send a "subscribe" message', ->
-        expect(@message.topic).to.deep.equal 'subscribe'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: @device.uuid
-          request:
-            uuid: @config.uuid
-        }
-
-  xdescribe 'GET /subscribe/:uuid/broadcast', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        pathname = "/subscribe/#{@config.uuid}/broadcast"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-
-        request.get uri, auth: auth, timeout: 10, =>
-        @eventForwarder.once 'message', (@message) =>
-          done()
-
-      it 'should send a "subscribe" message', ->
-        expect(@message.topic).to.deep.equal 'subscribe'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: @device.uuid
-          request:
-            type: 'broadcast'
-            uuid: @config.uuid
-        }
-
-  xdescribe 'GET /subscribe/:uuid/received', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        pathname = "/subscribe/#{@config.uuid}/received"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-
-        request.get uri, auth: auth, timeout: 10, =>
-        @eventForwarder.once 'message', (@message) =>
-          done()
-
-      it 'should send a "subscribe" message', ->
-        expect(@message.topic).to.deep.equal 'subscribe'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: @device.uuid
-          request:
-            type: 'received'
-            uuid: @config.uuid
-        }
-
-  xdescribe 'GET /subscribe/:uuid/sent', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        pathname = "/subscribe/#{@config.uuid}/sent"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-
-        request.get uri, auth: auth, timeout: 10, =>
-        @eventForwarder.once 'message', (@message) =>
-          done()
-
-      it 'should send a "subscribe" message', ->
-        expect(@message.topic).to.deep.equal 'subscribe'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: @device.uuid
-          request:
-            type: 'sent'
-            uuid: @config.uuid
-        }
-
-  xdescribe 'GET /subscribe', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        pathname = "/subscribe"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-
-        request.get uri, auth: auth, timeout: 10, =>
-        @eventForwarder.once 'message', (@message) =>
-          done()
-
-      it 'should send a "subscribe" message', ->
-        expect(@message.topic).to.deep.equal 'subscribe'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: @device.uuid
-          request: {}
-        }
-
-  xdescribe 'GET /authenticate/:uuid', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        pathname = "/authenticate/#{@config.uuid}"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-
-        request.get uri, json: {token: @config.token}, (error) =>
           @eventForwarder.once 'message', (@message) =>
             done()
+
+      it 'should send a "subscribe" message', ->
+        expect(@message.topic).to.deep.equal 'subscribe'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: @device.uuid
+          request:
+            uuid: @device.uuid
+        }
+
+    describe 'when called with a valid request with token', ->
+      beforeEach (done) ->
+        @meshblu.subscribe {uuid: @device.uuid, token: @device.token}, (data) =>
+          return done new Error data.error if data.error?
+
+          @eventForwarder.once 'message', (@message) =>
+            done()
+
+      it 'should send a "subscribe" message', ->
+        expect(@message.topic).to.deep.equal 'subscribe'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: @device.uuid
+          request:
+            uuid: @device.uuid
+        }
+
+  describe 'EVENT identity', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.identify()
+        @eventForwarder.once 'message', (@message) =>
+          done()
 
       it 'should send a "identity" message', ->
         expect(@message.topic).to.deep.equal 'identity'
         expect(@message.payload).to.deep.equal {
           request:
-            uuid: @config.uuid
+            uuid: @device.uuid
         }
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        pathname = "/authenticate/#{@config.uuid}"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-
-        request.get uri, (error) =>
+        @tempMeshblu = meshblu.createConnection _.pick(@config, 'server', 'port')
+        @tempMeshblu.once 'ready', (@newDevice) =>
           @eventForwarder.once 'message', (@message) =>
+            done() # To ignore the first 'identity' message
+
+      beforeEach (done) ->
+        @tempMeshblu.bufferedSocketEmit 'identity', uuid: 'invalid-uuid', debug: true
+        @eventForwarder.on 'message', (message) =>
+          if message.topic == 'identity-error'
+            @message = message
+            @eventForwarder.removeAllListeners 'message'
             done()
 
       it 'should send a "identity-error" message', ->
@@ -576,7 +513,7 @@ describe 'SocketLogic Events', ->
         expect(@message.payload).to.deep.equal {
           error: "Device not found or token not valid"
           request:
-            uuid: @config.uuid
+            uuid: 'invalid-uuid'
         }
 
   xdescribe 'POST /messages', ->

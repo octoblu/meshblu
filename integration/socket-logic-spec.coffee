@@ -414,19 +414,20 @@ describe 'SocketLogic Events', ->
           request: {uuid: 'invalid-uuid'}
         }
 
-  xdescribe 'GET /mydevices', ->
+  describe 'EVENT mydevices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.mydevices {}, =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
+        @meshblu.register owner: @device.uuid, =>
+          @meshblu.mydevices {}, =>
+            @eventForwarder.once 'message', (@message) =>
+              done()
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request:
-            owner: @config.uuid
+            owner: @device.uuid
         }
 
     describe 'when called with an invalid request', ->
@@ -438,10 +439,10 @@ describe 'SocketLogic Events', ->
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           error: "Devices not found"
           request:
-            owner: @config.uuid
+            owner: @device.uuid
             uuid: 'invalid-uuid'
         }
 
@@ -459,7 +460,7 @@ describe 'SocketLogic Events', ->
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request:
             uuid: @config.uuid
         }
@@ -478,7 +479,7 @@ describe 'SocketLogic Events', ->
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request:
             type: 'broadcast'
             uuid: @config.uuid
@@ -498,7 +499,7 @@ describe 'SocketLogic Events', ->
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request:
             type: 'received'
             uuid: @config.uuid
@@ -518,7 +519,7 @@ describe 'SocketLogic Events', ->
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request:
             type: 'sent'
             uuid: @config.uuid
@@ -538,7 +539,7 @@ describe 'SocketLogic Events', ->
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request: {}
         }
 
@@ -588,7 +589,7 @@ describe 'SocketLogic Events', ->
       it 'should send a "message" message', ->
         expect(@message.topic).to.deep.equal 'message'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           request:
             devices: ['some-uuid']
         }
@@ -602,7 +603,7 @@ describe 'SocketLogic Events', ->
       it 'should send a "message-error" message', ->
         expect(@message.topic).to.deep.equal 'message-error'
         expect(@message.payload).to.deep.equal {
-          fromUuid: "66b2928b-a317-4bc3-893e-245946e9672a"
+          fromUuid: @device.uuid
           error: "Invalid Message Format"
           request: {}
         }

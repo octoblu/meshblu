@@ -7,14 +7,14 @@ MessageIOClient = require './messageIOClient'
 securityImpl = require './getSecurityImpl'
 debug = require('debug')('meshblu:subscribeAndForward')
 
-subscribeAndForwardWithToken = (response, uuid, token, subscriptionTypes, payloadOnly) ->
+subscribeAndForwardWithToken = (response, uuid, token, subscriptionTypes, payloadOnly, topics) ->
   authDevice uuid, token, (error, authedDevice) ->
     messageIOClient = connectMessageIO(response, payloadOnly)
-    messageIOClient.subscribe uuid, subscriptionTypes or [
+    messageIOClient.subscribe uuid, subscriptionTypes || [
       'received'
       'broadcast'
       'sent'
-    ]
+    ], topics
 
 connectMessageIO = (response, payloadOnly=false) ->
   messageIOClient = new MessageIOClient()
@@ -31,10 +31,10 @@ connectMessageIO = (response, payloadOnly=false) ->
   messageIOClient.start()
   return messageIOClient
 
-subscribeAndForward = (askingDevice, response, uuid, token, subscriptionTypes, payloadOnly) ->
-  uuid = uuid or askingDevice.uuid
+subscribeAndForward = (askingDevice, response, uuid, token, subscriptionTypes, payloadOnly, topics) ->
+  uuid = uuid || askingDevice.uuid
   if token
-    return subscribeAndForwardWithToken(response, uuid, token, subscriptionTypes, payloadOnly)
+    return subscribeAndForwardWithToken(response, uuid, token, subscriptionTypes, payloadOnly, topics)
   newSubscriptionTypes = []
   getDevice uuid, (error, subscribedDevice) ->
     if error
@@ -45,10 +45,10 @@ subscribeAndForward = (askingDevice, response, uuid, token, subscriptionTypes, p
       if !permission && subscribedDevice.owner != askingDevice.uuid
         return response.status(401).send(error: 'unauthorized')
       newSubscriptionTypes.push 'broadcast'
-      if subscribedDevice.owner and subscribedDevice.owner == askingDevice.uuid or subscribedDevice.uuid == askingDevice.uuid
+      if subscribedDevice.owner and subscribedDevice.owner == askingDevice.uuid || subscribedDevice.uuid == askingDevice.uuid
         newSubscriptionTypes.push 'received'
         newSubscriptionTypes.push 'sent'
       messageIOClient = connectMessageIO(response, payloadOnly)
-      messageIOClient.subscribe uuid, subscriptionTypes or newSubscriptionTypes
+      messageIOClient.subscribe uuid, subscriptionTypes || newSubscriptionTypes, topics
 
 module.exports = subscribeAndForward

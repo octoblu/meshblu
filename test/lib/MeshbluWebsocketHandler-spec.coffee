@@ -137,7 +137,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when rateLimit exceeded', ->
       beforeEach ->
         @throttles = query: rateLimit: sinon.stub().yields new Error('rate limit exceeded')
-        @sut = new MeshbluWebsocketHandler throttles: @throttles
+        @sut = new MeshbluWebsocketHandler throttles: @throttles, meshbluEventEmitter: @meshbluEventEmitter
         @sut.socket = id: '1555', close: sinon.spy()
         @sut.sendError = sinon.spy()
         @sut.onMessage data: '["test",{"far":"near"}]'
@@ -152,7 +152,7 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @throttles = query: rateLimit: sinon.stub().yields null, false
         @authDevice = sinon.spy()
-        @sut = new MeshbluWebsocketHandler throttles: @throttles, authDevice: @authDevice
+        @sut = new MeshbluWebsocketHandler throttles: @throttles, authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.socket = id: '1555'
         sinon.spy @sut, 'emit'
         @sut.onMessage data: '["identity",{"uuid":"something", "token": "dah token"}]'
@@ -168,7 +168,7 @@ describe 'MeshbluWebsocketHandler', ->
         beforeEach (done) ->
           @throttles = query: rateLimit: sinon.stub().yields null, false
           @authDevice = sinon.stub().yields new Error
-          @sut = new MeshbluWebsocketHandler throttles: @throttles, authDevice: @authDevice
+          @sut = new MeshbluWebsocketHandler throttles: @throttles, authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
           @sut.socket = id: '1555'
           @sut.sendError = sinon.spy => done()
           sinon.spy @sut, 'emit'
@@ -184,7 +184,7 @@ describe 'MeshbluWebsocketHandler', ->
         beforeEach (done) ->
           @throttles = query: rateLimit: sinon.stub().yields null, false
           @authDevice = sinon.stub().yields null, {uuid: 'some-uuid', token: 'some-token'}
-          @sut = new MeshbluWebsocketHandler throttles: @throttles, authDevice: @authDevice
+          @sut = new MeshbluWebsocketHandler throttles: @throttles, authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
           @sut.uuid = 'some-uuid'
           @sut.token = 'some-token'
           @sut.socket = id: '1555'
@@ -204,7 +204,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, meshbluEventEmitter: @meshbluEventEmitter
         @sut.sendFrame = sinon.stub()
         @sut.setOnlineStatus = sinon.spy()
 
@@ -216,7 +216,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields a device', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, uuid: '1234'
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, meshbluEventEmitter: @meshbluEventEmitter
         @sut.messageIOClient = @messageIOClient
         @sut.sendFrame = sinon.stub()
         @sut.setOnlineStatus = sinon.spy()
@@ -232,7 +232,7 @@ describe 'MeshbluWebsocketHandler', ->
   describe 'status', ->
     beforeEach ->
       @getSystemStatus = sinon.stub().yields something: true
-      @sut = new MeshbluWebsocketHandler getSystemStatus: @getSystemStatus
+      @sut = new MeshbluWebsocketHandler getSystemStatus: @getSystemStatus, meshbluEventEmitter: @meshbluEventEmitter
       @sut.sendFrame = sinon.stub()
 
       @sut.status()
@@ -244,7 +244,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when updateIfAuthorized yields an error', ->
       beforeEach ->
         @updateIfAuthorized = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler updateIfAuthorized: @updateIfAuthorized
+        @sut = new MeshbluWebsocketHandler updateIfAuthorized: @updateIfAuthorized, meshbluEventEmitter: @meshbluEventEmitter
         @sut.authedDevice = {something: true}
         @sut.sendError = sinon.spy()
 
@@ -256,7 +256,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when updateIfAuthorized does not yield an error', ->
       beforeEach ->
         @updateIfAuthorized = sinon.stub().yields null
-        @sut = new MeshbluWebsocketHandler updateIfAuthorized: @updateIfAuthorized
+        @sut = new MeshbluWebsocketHandler updateIfAuthorized: @updateIfAuthorized, meshbluEventEmitter: @meshbluEventEmitter
         @sut.authedDevice = {something: true}
         @sut.sendFrame = sinon.spy()
 
@@ -272,7 +272,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, meshbluEventEmitter: @meshbluEventEmitter
         @sut.sendError = sinon.spy()
 
         @sut.subscribe uuid: '1345', token: 'abcd'
@@ -288,7 +288,7 @@ describe 'MeshbluWebsocketHandler', ->
         @authDevice = sinon.stub().yields null, something: true
         @getDevice = sinon.stub().yields null, uuid: '5431'
         @securityImpl = canReceive: sinon.stub().yields null, true
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, securityImpl: @securityImpl, getDevice: @getDevice
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, securityImpl: @securityImpl, getDevice: @getDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.messageIOClient = @messageIOClient
         @sut.sendFrame = sinon.spy()
 
@@ -305,7 +305,7 @@ describe 'MeshbluWebsocketHandler', ->
         @authDevice = sinon.stub().yields null, uuid: '1234'
         @getDevice = sinon.stub().yields null, uuid: '5431', owner: '1234'
         @securityImpl = canReceive: sinon.stub().yields null, true
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, securityImpl: @securityImpl, getDevice: @getDevice
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, securityImpl: @securityImpl, getDevice: @getDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.messageIOClient = @messageIOClient
         @sut.sendFrame = sinon.spy()
 
@@ -318,7 +318,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, meshbluEventEmitter: @meshbluEventEmitter
         @sut.messageIOClient = @messageIOClient
         @sut.sendError = sinon.spy()
 
@@ -333,7 +333,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields a device', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, something: true
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, meshbluEventEmitter: @meshbluEventEmitter
         @sut.messageIOClient = @messageIOClient
         @sut.sendFrame = sinon.spy()
 
@@ -346,7 +346,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, meshbluEventEmitter: @meshbluEventEmitter
         @sut.messageIOClient = @messageIOClient
         @sut.sendError = sinon.spy()
 
@@ -362,7 +362,7 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, something: true
         @sendMessage = sinon.spy()
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, sendMessage: @sendMessage
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, sendMessage: @sendMessage, meshbluEventEmitter: @meshbluEventEmitter
         @sut.messageIOClient = @messageIOClient
         @sut.setOnlineStatus = sinon.spy()
         @sut.sendFrame = sinon.spy()
@@ -376,7 +376,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when getDeviceIfAuthorized yields an error', ->
       beforeEach ->
         @getDeviceIfAuthorized = sinon.stub().yields new Error('unauthorized')
-        @sut = new MeshbluWebsocketHandler getDeviceIfAuthorized: @getDeviceIfAuthorized
+        @sut = new MeshbluWebsocketHandler getDeviceIfAuthorized: @getDeviceIfAuthorized, meshbluEventEmitter: @meshbluEventEmitter
         @sut.sendError = sinon.spy()
 
         @sut.device uuid: '5431'
@@ -387,7 +387,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when the uuid and token are given', ->
       beforeEach ->
         @getDeviceIfAuthorized = sinon.stub().yields null, uuid: '5431', online: true
-        @sut = new MeshbluWebsocketHandler getDeviceIfAuthorized: @getDeviceIfAuthorized
+        @sut = new MeshbluWebsocketHandler getDeviceIfAuthorized: @getDeviceIfAuthorized, meshbluEventEmitter: @meshbluEventEmitter
         @sut.sendFrame = sinon.spy()
 
         @sut.device uuid: '5431', token: '5999'
@@ -399,7 +399,8 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when getDevices yields devices', ->
       beforeEach ->
         @getDevices = sinon.stub().yields [{uuid: '5431', color: 'green'}, {uuid: '1234', color: 'green'}]
-        @sut = new MeshbluWebsocketHandler getDevices: @getDevices
+        @sut = new MeshbluWebsocketHandler getDevices: @getDevices, meshbluEventEmitter: @meshbluEventEmitter
+        @sut.authedDevice = {}
         @sut.sendFrame = sinon.spy()
         @sut.devices color: 'green'
 
@@ -410,7 +411,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.messageIOClient = @messageIOClient
         @sut.sendError = sinon.spy()
 
@@ -426,7 +427,7 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, uuid: '5555'
         @getDevices = sinon.stub().yields [{uuid: '5431', color: 'green', owner: '5555'}, {uuid: '1234', color: 'green', owner: '5555'}]
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, getDevices: @getDevices
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, getDevices: @getDevices, meshbluEventEmitter: @meshbluEventEmitter
         @sut.sendFrame = sinon.spy()
 
         @sut.mydevices color: 'green'
@@ -438,7 +439,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.messageIOClient = @messageIOClient
         @sut.sendError = sinon.spy()
 
@@ -450,7 +451,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields a devices', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, uuid: '5555'
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.sendFrame = sinon.spy()
 
         @sut.whoami()
@@ -462,7 +463,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when register yields an error', ->
       beforeEach ->
         @registerDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler registerDevice: @registerDevice
+        @sut = new MeshbluWebsocketHandler registerDevice: @registerDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.sendError = sinon.spy()
 
         @sut.register foo: 'bar'
@@ -473,7 +474,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when successful', ->
       beforeEach ->
         @registerDevice = sinon.stub().yields null, uuid: '5555', color: 'green'
-        @sut = new MeshbluWebsocketHandler registerDevice: @registerDevice
+        @sut = new MeshbluWebsocketHandler registerDevice: @registerDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.sendFrame = sinon.spy()
 
         @sut.register color: 'green'
@@ -485,7 +486,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields an error', ->
       beforeEach ->
         @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.sendError = sinon.spy()
 
         @sut.unregister uuid: '1345', online: true
@@ -497,7 +498,7 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, something: true
         @unregisterDevice = sinon.spy()
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, unregisterDevice: @unregisterDevice
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, unregisterDevice: @unregisterDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.sendFrame = sinon.spy()
 
         @sut.unregister uuid: '1345'
@@ -512,7 +513,7 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @authDevice = sinon.stub().yields null, something: true
         @unregisterDevice = sinon.spy()
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, unregisterDevice: @unregisterDevice
+        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, unregisterDevice: @unregisterDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.sendFrame = sinon.spy()
 
         @sut.unregister uuid: '5431', token: '5999'
@@ -527,7 +528,7 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when limit function returns an error', ->
       beforeEach ->
         @throttles = query: rateLimit: sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler throttles: @throttles
+        @sut = new MeshbluWebsocketHandler throttles: @throttles, meshbluEventEmitter: @meshbluEventEmitter
 
         @sut.rateLimit '1234', 'foo', (@error) =>
 

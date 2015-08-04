@@ -41,6 +41,27 @@ class SimpleAuth
 
     return @asyncCallback(null, false, callback)
 
+  canListen: (fromDevice, toDevice, message, callback) =>
+    if _.isFunction message
+      callback = message
+      message = null
+
+    if message?.token
+      return @authDevice(
+        toDevice.uuid
+        message.token
+        (error, result) =>
+          return @asyncCallback(error, false, callback) if error?
+          return @asyncCallback(null, result?, callback)
+       )
+
+    listenWhitelist = _.cloneDeep toDevice?.listenWhitelist
+    unless listenWhitelist
+      listenWhitelist = []
+      listenWhitelist.push toDevice.owner if toDevice?.owner
+
+    result = @checkLists fromDevice, toDevice, listenWhitelist, toDevice?.listenBlacklist, true
+    @asyncCallback(null, result, callback)
 
   canReceive: (fromDevice, toDevice, message, callback) =>
     if _.isFunction message

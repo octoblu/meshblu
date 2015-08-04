@@ -3,6 +3,7 @@ path = require 'path'
 MeshbluConfig = require 'meshblu-config'
 MeshbluHTTP = require 'meshblu-http'
 MeshbluWebsocket = require 'meshblu-websocket'
+MeshbluSocketLogic = require 'meshblu'
 
 describe 'SocketLogic Events', ->
   before (done) ->
@@ -19,23 +20,20 @@ describe 'SocketLogic Events', ->
     meshbluHTTP.register {}, (error, device) =>
       return done error if error?
 
-      @meshblu = new MeshbluWebsocket uuid: device.uuid, token: device.token, host: @config.host, protocol: @config.protocol
+      @device = device
+      @meshblu = new MeshbluWebsocket uuid: @device.uuid, token: @device.token, host: @config.host, protocol: @config.protocol
       @meshblu.connect (error) =>
         done error
 
-  it 'should get here', (done) ->
-    setTimeout =>
-      expect(true).to.be.true
-      done()
-    , 1000
+  it 'should get here', ->
+    expect(true).to.be.true
 
-  xdescribe 'EVENT devices', ->
+  describe 'EVENT devices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.devices {}, (data) =>
-          return done new Error(data.error) if data.error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
+        @meshblu.devices {}
+        @eventForwarder.once 'message', (@message) =>
+          done()
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
@@ -46,9 +44,9 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        @meshblu.devices {uuid: 'invalid-uuid'}, =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
+        @meshblu.devices {uuid: 'invalid-uuid'}
+        @eventForwarder.once 'message', (@message) =>
+          done()
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'

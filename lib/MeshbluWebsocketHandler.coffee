@@ -16,6 +16,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     @registerDevice = dependencies.registerDevice ? require './register'
     @unregisterDevice = dependencies.unregisterDevice ? require './unregister'
     @sendMessage = dependencies.sendMessage
+    @meshbluEventEmitter = dependencies.meshbluEventEmitter
     @updateIfAuthorized = dependencies.updateIfAuthorized ? require './updateIfAuthorized'
     @throttles = dependencies.throttles ? require './getThrottles'
 
@@ -74,6 +75,7 @@ class MeshbluWebsocketHandler extends EventEmitter
   devices: (data) =>
     debug 'devices', data
     @getDevices @authedDevice, data, null, (foundDevices) =>
+      @_log 'devices', foundDevices.error?, request: data, error: foundDevices.error?.message, fromUuid: @authedDevice.uuid
       @sendFrame 'devices', foundDevices
 
   identity: (data) =>
@@ -232,6 +234,10 @@ class MeshbluWebsocketHandler extends EventEmitter
       return @sendError error?.message, ['unsubscribe', data] if error? || !authedDevice?
       subscriptionTypes = data.types ? ['sent', 'received', 'broadcast']
       @messageIOClient.unsubscribe data.uuid, subscriptionTypes
+
+  _log: (event, didError, data) =>
+    event = "#{event}-error" if didError
+    @meshbluEventEmitter.emit event, data
 
   #socketio event handlers
   onSocketMessage: (data) =>

@@ -1,3 +1,4 @@
+{EventEmitter} = require 'events'
 MeshbluWebsocketHandler = require '../../lib/MeshbluWebsocketHandler'
 
 describe 'MeshbluWebsocketHandler', ->
@@ -9,7 +10,8 @@ describe 'MeshbluWebsocketHandler', ->
       start: sinon.spy()
       subscribe: sinon.spy()
     @MessageIOClient = sinon.spy => @messageIOClient
-    @sut = new MeshbluWebsocketHandler MessageIOClient: @MessageIOClient
+    @meshbluEventEmitter = new EventEmitter
+    @sut = new MeshbluWebsocketHandler MessageIOClient: @MessageIOClient, meshbluEventEmitter: @meshbluEventEmitter
     @socket = sinon.spy => @socket
 
   describe 'initialize', ->

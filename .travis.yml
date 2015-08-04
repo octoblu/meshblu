@@ -102,5 +102,7 @@ deploy:
 addons:
   code_climate:
     repo_token: 8e3f39fe338fe8465f0400555fcbf8a2a3293f9c586b64588e8ce198e64bda58
+before_install:
+  - npm install -g npm
 after_script:
 - cat coverage/lcov.info | codeclimate

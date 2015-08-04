@@ -440,6 +440,14 @@ describe 'Device', ->
             expect(device.pigeonCount).to.equal 4
             done()
 
+      describe 'when called with an invalid operator', ->
+        beforeEach (done) ->
+          @sut.update $breed: 'pigeons', (@error) => done()
+
+        it 'should yield an error', ->
+          expect(@error).to.be.an.instanceOf Error
+
+
   describe '->validate', ->
     describe 'when created with a different uuid', ->
       beforeEach ->

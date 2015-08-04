@@ -155,10 +155,11 @@ class Device
 
     debug 'update', @uuid, params
 
-    @devices.update uuid: @uuid, params, (error) =>
+    @devices.update uuid: @uuid, params, (error, result) =>
+      return callback @sanitizeError(error) if error?
+
       @clearCache @uuid, =>
-        @fetch?.cache = null
-        return callback @sanitizeError(error) if error?
+        @fetch.cache = null
         @_hashDevice (error) =>
           return callback @sanitizeError(error) if error?
           callback()

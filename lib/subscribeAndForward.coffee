@@ -7,14 +7,10 @@ MessageIOClient = require './messageIOClient'
 securityImpl = require './getSecurityImpl'
 debug = require('debug')('meshblu:subscribeAndForward')
 
-subscribeAndForwardWithToken = (response, uuid, token, subscriptionTypes, payloadOnly, topics) ->
+subscribeAndForwardWithToken = (response, uuid, token, requestedSubscriptionTypes, payloadOnly, topics) ->
   authDevice uuid, token, (error, authedDevice) ->
     messageIOClient = connectMessageIO(response, payloadOnly)
-    messageIOClient.subscribe uuid, subscriptionTypes || [
-      'received'
-      'broadcast'
-      'sent'
-    ], topics
+    messageIOClient.subscribe uuid, requestedSubscriptionTypes, topics
 
 connectMessageIO = (response, payloadOnly=false) ->
   messageIOClient = new MessageIOClient()
@@ -31,10 +27,10 @@ connectMessageIO = (response, payloadOnly=false) ->
   messageIOClient.start()
   return messageIOClient
 
-subscribeAndForward = (askingDevice, response, uuid, token, subscriptionTypes, payloadOnly, topics) ->
+subscribeAndForward = (askingDevice, response, uuid, token, requestedSubscriptionTypes, payloadOnly, topics) ->
   uuid = uuid || askingDevice.uuid
   if token
-    return subscribeAndForwardWithToken(response, uuid, token, subscriptionTypes, payloadOnly, topics)
+    return subscribeAndForwardWithToken(response, uuid, token, requestedSubscriptionTypes, payloadOnly, topics)
   newSubscriptionTypes = []
   getDevice uuid, (error, subscribedDevice) ->
     if error
@@ -44,11 +40,23 @@ subscribeAndForward = (askingDevice, response, uuid, token, subscriptionTypes, p
         return response.status(401).send(error: 'unauthorized')
       if !permission && subscribedDevice.owner != askingDevice.uuid
         return response.status(401).send(error: 'unauthorized')
-      newSubscriptionTypes.push 'broadcast'
-      if subscribedDevice.owner and subscribedDevice.owner == askingDevice.uuid || subscribedDevice.uuid == askingDevice.uuid
-        newSubscriptionTypes.push 'received'
-        newSubscriptionTypes.push 'sent'
-      messageIOClient = connectMessageIO(response, payloadOnly)
-      messageIOClient.subscribe uuid, subscriptionTypes || newSubscriptionTypes, topics
+
+      authorizedSubscriptionTypes = []
+      authorizedSubscriptionTypes.push 'broadcast'
+
+      securityImpl.canReceiveAs askingDevice, subscribedDevice, (error, permission) ->
+        if error
+          return response.status(401).send(error: 'unauthorized')
+
+        if permission
+          authorizedSubscriptionTypes.push 'broadcast'
+          authorizedSubscriptionTypes.push 'received'
+          authorizedSubscriptionTypes.push 'sent'
+
+        requestedSubscriptionTypes ?= authorizedSubscriptionTypes
+        subscriptionTypes = _.intersection requestedSubscriptionTypes, authorizedSubscriptionTypes
+
+        messageIOClient = connectMessageIO(response, payloadOnly)
+        messageIOClient.subscribe uuid, subscriptionTypes, topics
 
 module.exports = subscribeAndForward

@@ -37,6 +37,24 @@ describe 'REST', ->
           request: {}
         }
 
+    describe 'when called with a valid uuid and token', ->
+      beforeEach (done) ->
+        @meshblu.register discoverWhitelist: [], (error, @newDevice) =>
+          @meshblu.devices uuid: @newDevice.uuid, token: @newDevice.token, (error, @response)=>
+            done()
+
+      it 'should receive a device array', ->
+        expect(@response.devices).to.exist
+
+    describe 'when called with a valid uuid and invalid token', ->
+      beforeEach (done) ->
+        @meshblu.register discoverWhitelist: [], (error, @newDevice) =>
+          @meshblu.devices uuid: @newDevice.uuid, token: 'bad-token', (error, @response)=>
+            done()
+
+      it 'should not receive a device array', ->
+        expect(@response.devices).to.not.exist
+
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
         @meshblu.devices {uuid: 'invalid-uuid'}, =>

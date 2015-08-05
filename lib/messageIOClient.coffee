@@ -9,6 +9,7 @@ class MessageIOClient extends EventEmitter2
     @topicMap = {}
 
   addTopics: (uuid, topics=['*']) =>
+    topics = [topics] unless _.isArray topics
     [skips, names] = _.partition topics, (topic) => _.startsWith topic, '-'
     names = ['*'] if _.isEmpty names
     map = {}
@@ -52,6 +53,8 @@ class MessageIOClient extends EventEmitter2
   subscribe: (uuid, subscriptionTypes, topics) =>
     @addTopics uuid, topics
 
+    subscriptionTypes ?= ['received', 'broadcast', 'sent']
+
     if _.contains subscriptionTypes, 'received'
       debug 'subscribe', 'received', uuid
       @socketIOClient.emit 'subscribe', uuid
@@ -66,6 +69,8 @@ class MessageIOClient extends EventEmitter2
 
   unsubscribe: (uuid, subscriptionTypes) =>
     delete @topicMap[uuid]
+
+    subscriptionTypes ?= ['received', 'broadcast', 'sent']
 
     if _.contains subscriptionTypes, 'received'
       debug 'unsubscribe', 'received', uuid

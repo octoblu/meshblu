@@ -269,27 +269,13 @@ describe 'MeshbluWebsocketHandler', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'updated', uuid: '1345'
 
   describe 'subscribe', ->
-    describe 'when authDevice yields an error', ->
-      beforeEach ->
-        @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, meshbluEventEmitter: @meshbluEventEmitter
-        @sut.sendError = sinon.spy()
-
-        @sut.subscribe uuid: '1345', token: 'abcd'
-
-      it 'should not call subscribe', ->
-        expect(@messageIOClient.emit).not.to.have.been.called
-
-      it 'should call sendError', ->
-        expect(@sut.sendError).to.have.been.called
-
     describe 'when authDevice yields a device', ->
       beforeEach ->
-        @authDevice = sinon.stub().yields null, something: true
         @getDevice = sinon.stub().yields null, uuid: '5431'
         @securityImpl = canReceive: sinon.stub().yields null, true
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, securityImpl: @securityImpl, getDevice: @getDevice, meshbluEventEmitter: @meshbluEventEmitter
+        @sut = new MeshbluWebsocketHandler MessageIOClient: @MessageIOClient, securityImpl: @securityImpl, getDevice: @getDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.messageIOClient = @messageIOClient
+        @sut.authedDevice = something: true
         @sut.sendFrame = sinon.spy()
 
         @sut.subscribe uuid: '5431'
@@ -302,10 +288,10 @@ describe 'MeshbluWebsocketHandler', ->
 
     describe 'when the device is owned by the owner', ->
       beforeEach ->
-        @authDevice = sinon.stub().yields null, uuid: '1234'
         @getDevice = sinon.stub().yields null, uuid: '5431', owner: '1234'
         @securityImpl = canReceive: sinon.stub().yields null, true
         @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, securityImpl: @securityImpl, getDevice: @getDevice, meshbluEventEmitter: @meshbluEventEmitter
+        @sut.authedDevice = uuid: '1234'
         @sut.messageIOClient = @messageIOClient
         @sut.sendFrame = sinon.spy()
 
@@ -377,6 +363,7 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @getDeviceIfAuthorized = sinon.stub().yields new Error('unauthorized')
         @sut = new MeshbluWebsocketHandler getDeviceIfAuthorized: @getDeviceIfAuthorized, meshbluEventEmitter: @meshbluEventEmitter
+        @sut.authedDevice = {}
         @sut.sendError = sinon.spy()
 
         @sut.device uuid: '5431'
@@ -388,6 +375,7 @@ describe 'MeshbluWebsocketHandler', ->
       beforeEach ->
         @getDeviceIfAuthorized = sinon.stub().yields null, uuid: '5431', online: true
         @sut = new MeshbluWebsocketHandler getDeviceIfAuthorized: @getDeviceIfAuthorized, meshbluEventEmitter: @meshbluEventEmitter
+        @sut.authedDevice = {}
         @sut.sendFrame = sinon.spy()
 
         @sut.device uuid: '5431', token: '5999'
@@ -408,50 +396,22 @@ describe 'MeshbluWebsocketHandler', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'devices', [{uuid: '5431', color: 'green'}, {uuid: '1234', color: 'green'}]
 
   describe 'mydevices', ->
-    describe 'when authDevice yields an error', ->
+    describe 'when called with a query', ->
       beforeEach ->
-        @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
-        @sut.messageIOClient = @messageIOClient
-        @sut.sendError = sinon.spy()
-
-        @sut.mydevices color: 'green'
-
-      it 'should not call devices', ->
-        expect(@messageIOClient.emit).not.to.have.been.called
-
-      it 'should call sendError', ->
-        expect(@sut.sendError).to.have.been.called
-
-    describe 'when authDevice yields a devices', ->
-      beforeEach ->
-        @authDevice = sinon.stub().yields null, uuid: '5555'
-        @getDevices = sinon.stub().yields [{uuid: '5431', color: 'green', owner: '5555'}, {uuid: '1234', color: 'green', owner: '5555'}]
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, getDevices: @getDevices, meshbluEventEmitter: @meshbluEventEmitter
+        @getDevices = sinon.stub().yields devices: [{uuid: '5431', color: 'green', owner: '5555'}, {uuid: '1234', color: 'green', owner: '5555'}]
+        @sut = new MeshbluWebsocketHandler getDevices: @getDevices, meshbluEventEmitter: @meshbluEventEmitter
         @sut.sendFrame = sinon.spy()
-
+        @sut.authedDevice = {}
         @sut.mydevices color: 'green'
 
       it 'should call devices', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'mydevices', [{uuid: '5431', color: 'green', owner: '5555'}, {uuid: '1234', color: 'green', owner: '5555'}]
 
   describe 'whoami', ->
-    describe 'when authDevice yields an error', ->
-      beforeEach ->
-        @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
-        @sut.messageIOClient = @messageIOClient
-        @sut.sendError = sinon.spy()
-
-        @sut.whoami()
-
-      it 'should call sendError', ->
-        expect(@sut.sendError).to.have.been.called
-
     describe 'when authDevice yields a devices', ->
       beforeEach ->
-        @authDevice = sinon.stub().yields null, uuid: '5555'
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
+        @sut = new MeshbluWebsocketHandler meshbluEventEmitter: @meshbluEventEmitter
+        @sut.authedDevice = uuid: '5555'
         @sut.sendFrame = sinon.spy()
 
         @sut.whoami()
@@ -483,22 +443,11 @@ describe 'MeshbluWebsocketHandler', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'registered', uuid: '5555', color: 'green'
 
   describe 'unregister', ->
-    describe 'when authDevice yields an error', ->
+    describe 'when unregisterDevice yields nothing', ->
       beforeEach ->
-        @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
-        @sut.sendError = sinon.spy()
-
-        @sut.unregister uuid: '1345', online: true
-
-      it 'should call sendError', ->
-        expect(@sut.sendError).to.have.been.called
-
-    describe 'when authDevice yields a device', ->
-      beforeEach ->
-        @authDevice = sinon.stub().yields null, something: true
-        @unregisterDevice = sinon.spy()
+        @unregisterDevice = sinon.stub().yields null
         @sut = new MeshbluWebsocketHandler authDevice: @authDevice, unregisterDevice: @unregisterDevice, meshbluEventEmitter: @meshbluEventEmitter
+        @sut.authedDevice = something: true
         @sut.sendFrame = sinon.spy()
 
         @sut.unregister uuid: '1345'
@@ -509,20 +458,20 @@ describe 'MeshbluWebsocketHandler', ->
       it 'should send unregistered', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'unregistered', uuid: '1345'
 
-    describe 'when the uuid and token are given', ->
+    describe 'when unregisterDevice yields an error', ->
       beforeEach ->
-        @authDevice = sinon.stub().yields null, something: true
-        @unregisterDevice = sinon.spy()
+        @unregisterDevice = sinon.stub().yields 'this is not really an error object, but oh well'
         @sut = new MeshbluWebsocketHandler authDevice: @authDevice, unregisterDevice: @unregisterDevice, meshbluEventEmitter: @meshbluEventEmitter
-        @sut.sendFrame = sinon.spy()
+        @sut.authedDevice = something: true
+        @sut.sendError = sinon.spy()
 
-        @sut.unregister uuid: '5431', token: '5999'
+        @sut.unregister uuid: '5431'
 
       it 'should unregister', ->
         expect(@unregisterDevice).to.have.been.calledWith {something: true}, '5431'
 
-      it 'should send unregistered', ->
-        expect(@sut.sendFrame).to.have.been.calledWith 'unregistered', uuid: '5431'
+      it 'should send an error', ->
+        expect(@sut.sendError).to.have.been.calledWith 'this is not really an error object, but oh well', ['unregister', uuid: '5431']
 
   describe 'rateLimit', ->
     describe 'when limit function returns an error', ->

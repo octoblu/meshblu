@@ -83,6 +83,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     data ?= {}
     {@uuid, @token} = data
     @authDevice @uuid, @token, (error, device) =>
+      @log 'identity', error?, request: {uuid: @uuid}, error: error?.message, fromUuid: @uuid
       return @sendFrame 'notReady', message: 'unauthorized', status: 401 if error?
       @sendFrame 'ready', uuid: @uuid, token: @token, status: 200
       @setOnlineStatus device, true
@@ -95,17 +96,22 @@ class MeshbluWebsocketHandler extends EventEmitter
       @sendMessage device, data
 
   mydevices: (data={}) =>
-    @authDevice @uuid, @token, (error, device) =>
-      debug 'mydevices', data
+    data.owner = @uuid
+    @getDevices @authedDevice, data, null, (result) =>
+      {error,devices} = result
+
+      error = null if error?.message == "Devices not found"
+      devices ?= data.devices
+
+      @log 'devices', error?, request: data , fromUuid: @uuid, error: error?.message
+
       return @sendError error.message, ['mydevices', data] if error?
-      data.owner = device.uuid
-      @getDevices device, data, null, (foundDevices) =>
-        return @sendError error.message, ['mydevices', data] if error?
-        @sendFrame 'mydevices', foundDevices
+      @sendFrame 'mydevices', devices
 
   register: (data) =>
     debug 'register', data
     @registerDevice data, (error, device) =>
+      @log 'register', error?, request: data, fromUuid: @uuid, error: error?.message
       return @sendError error.message, ['register', data] if error?
       @sendFrame 'registered', device
 
@@ -114,24 +120,9 @@ class MeshbluWebsocketHandler extends EventEmitter
       @sendFrame 'status', status
 
   subscribe: (data) =>
-    return @subscribeWithToken data if data.token
-
-    subscriptionTypes = []
-
-    @authDevice @uuid, @token, (error, device) =>
-      debug 'subscribe', data
-      return @sendError error.message, ['subscribe', data] if error?
-      @getDevice data.uuid, (error, subscribedDevice) =>
-        return @sendError error.message, ['subscribe', data] if error?
-        @securityImpl.canReceive device, subscribedDevice, (error, permission) =>
-          return @sendError error.message, ['subscribe', data] if error?
-          subscriptionTypes.push 'broadcast' if permission
-
-          if subscribedDevice.owner? && subscribedDevice.owner == device.uuid
-            subscriptionTypes.push 'received'
-            subscriptionTypes.push 'sent'
-
-          @messageIOClient.subscribe subscribedDevice.uuid, data.types || subscriptionTypes
+    @subscribeIfAuthorized data, (error) =>
+      @log 'subscribe', error?, request: data, fromUuid: @authedDevice.uuid, error: error?.message
+      return @sendError (error.message ? error), ['subscribe', data] if error?
 
   unsubscribe: (data) =>
     return @unsubscribeWithToken data if data.token
@@ -143,24 +134,22 @@ class MeshbluWebsocketHandler extends EventEmitter
 
   unregister: (data) =>
     debug 'unregister', data
-    return @unregisterWithToken data if data.token
 
-    @authDevice @uuid, @token, (error, device) =>
-      return @sendError error.message, ['unregister', data] if error?
-      @unregisterDevice device, data.uuid
+    @unregisterDevice @authedDevice, data.uuid, null, null, (error) =>
+      @log 'unregister', error?, request: data, fromUuid: @uuid, error: (error?.message ? error ? undefined)
+      return @sendError (error.message ? error), ['unregister', data] if error?
       @sendFrame 'unregistered', uuid: data.uuid
 
   update: (data) =>
     [query,params] = data
     @updateIfAuthorized @authedDevice, query, params, (error) =>
+      @log 'update', error?, request: {query: query, params: params}, fromUuid: @uuid, error: error?.message
       return @sendError error.message, ['update', data] if error?
       @sendFrame 'updated', uuid: query.uuid
 
-  whoami: (data) =>
-    @authDevice @uuid, @token, (error, device) =>
-      @log 'devices', false
-      return @sendError error.message, ['whoami', data] if error?
-      @sendFrame 'whoami', device
+  whoami: =>
+    @log 'devices', null, request: {uuid: @uuid}, fromUuid: @uuid
+    @sendFrame 'whoami', @authedDevice
 
   # internal methods
   addListeners: =>
@@ -220,19 +209,26 @@ class MeshbluWebsocketHandler extends EventEmitter
       debug 'sendError', e.message, e.stack
     @sendFrame 'error', message: message, frame: frame, status: code
 
-  subscribeWithToken: (data) =>
-    @authDevice data.uuid, data.token, (error, authedDevice) =>
-      debug 'subscribeWithToken', data
-      return @sendError error?.message, ['subscribe', data] if error? || !authedDevice?
-      subscriptionTypes = data.types ? ['sent', 'received', 'broadcast']
-      @messageIOClient.subscribe authDevice.uuid, subscriptionTypes
+  subscribeIfAuthorized: (data, callback=->) =>
+    @getDevice data.uuid, (error, subscribedDevice) =>
+      return callback error if error?
+      @securityImpl.canReceive @authedDevice, subscribedDevice, (error, permission) =>
+        return callback error if error?
 
-  unregisterWithToken: (data) =>
-    debug 'unregisterWithToken', data
-    @authDevice data.uuid, data.token, (error, authedDevice) =>
-      return @sendError error?.message, ['unregister', data] if error? || !authedDevice?
-      @unregisterDevice authedDevice, data.uuid
-      @sendFrame 'unregistered', uuid: data.uuid
+        requestedSubscriptionTypes = data.types
+        authorizedSubscriptionTypes = []
+        authorizedSubscriptionTypes.push 'broadcast' if permission
+
+        if subscribedDevice.owner? && subscribedDevice.owner == @authedDevice.uuid
+          authorizedSubscriptionTypes.push 'received'
+          authorizedSubscriptionTypes.push 'sent'
+
+        requestedSubscriptionTypes = requestedSubscriptionTypes ? authorizedSubscriptionTypes
+        subscriptionTypes = _.intersection(requestedSubscriptionTypes, authorizedSubscriptionTypes)
+
+        @messageIOClient.subscribe subscribedDevice.uuid, subscriptionTypes
+        callback()
+
 
   unsubscribeWithToken: (data) =>
     @authDevice data.uuid, data.token, (error, authedDevice) =>

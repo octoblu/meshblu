@@ -301,25 +301,10 @@ describe 'MeshbluWebsocketHandler', ->
         expect(@messageIOClient.subscribe).to.have.been.calledWith '5431', ["broadcast", "received", "sent"]
 
   describe 'unsubscribe', ->
-    describe 'when authDevice yields an error', ->
+    describe 'when called', ->
       beforeEach ->
-        @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, meshbluEventEmitter: @meshbluEventEmitter
-        @sut.messageIOClient = @messageIOClient
-        @sut.sendError = sinon.spy()
-
-        @sut.unsubscribe uuid: '1345', token: 'abcd'
-
-      it 'should not call unsubscribe', ->
-        expect(@messageIOClient.unsubscribe).not.to.have.been.called
-
-      it 'should call sendError', ->
-        expect(@sut.sendError).to.have.been.called
-
-    describe 'when authDevice yields a device', ->
-      beforeEach ->
-        @authDevice = sinon.stub().yields null, something: true
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, meshbluEventEmitter: @meshbluEventEmitter
+        @sut = new MeshbluWebsocketHandler MessageIOClient: @MessageIOClient, meshbluEventEmitter: @meshbluEventEmitter
+        @sut.authedDevice = something: true
         @sut.messageIOClient = @messageIOClient
         @sut.sendFrame = sinon.spy()
 
@@ -329,26 +314,11 @@ describe 'MeshbluWebsocketHandler', ->
         expect(@messageIOClient.unsubscribe).to.have.been.calledWith '5431', ['sent', 'received', 'broadcast']
 
   describe 'message', ->
-    describe 'when authDevice yields an error', ->
-      beforeEach ->
-        @authDevice = sinon.stub().yields new Error
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, meshbluEventEmitter: @meshbluEventEmitter
-        @sut.messageIOClient = @messageIOClient
-        @sut.sendError = sinon.spy()
-
-        @sut.message uuid: '1345', token: 'abcd'
-
-      it 'should not call message', ->
-        expect(@messageIOClient.emit).not.to.have.been.called
-
-      it 'should call sendError', ->
-        expect(@sut.sendError).to.have.been.called
-
     describe 'when authDevice yields a device', ->
       beforeEach ->
-        @authDevice = sinon.stub().yields null, something: true
         @sendMessage = sinon.spy()
-        @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, sendMessage: @sendMessage, meshbluEventEmitter: @meshbluEventEmitter
+        @sut = new MeshbluWebsocketHandler MessageIOClient: @MessageIOClient, sendMessage: @sendMessage, meshbluEventEmitter: @meshbluEventEmitter
+        @sut.authedDevice = something: true
         @sut.messageIOClient = @messageIOClient
         @sut.setOnlineStatus = sinon.spy()
         @sut.sendFrame = sinon.spy()

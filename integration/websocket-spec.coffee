@@ -244,6 +244,21 @@ describe 'SocketLogic Events', ->
             uuid: @device.uuid
         }
 
+  describe 'EVENT unsubscribe', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.unsubscribe @device.uuid
+        @eventForwarder.once 'message', (@message) =>
+          done()
+
+      it 'should send a "unsubscribe" message', ->
+        expect(@message.topic).to.deep.equal 'unsubscribe'
+        expect(@message.payload).to.deep.equal {
+          fromUuid: @device.uuid
+          request:
+            uuid: @device.uuid
+        }
+
   describe 'EVENT identity', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
@@ -290,7 +305,7 @@ describe 'SocketLogic Events', ->
             uuid: 'invalid-uuid'
         }
 
-  xdescribe 'EVENT message', ->
+  describe 'EVENT message', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
         @meshblu.message {devices: ['some-uuid']}
@@ -306,55 +321,4 @@ describe 'SocketLogic Events', ->
           fromUuid: @device.uuid
           request:
             devices: ['some-uuid']
-        }
-
-  xdescribe 'EVENT data', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        @meshblu.data uuid: @device.uuid, value: 1, =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
-      it 'should send a "data" message', ->
-        expect(@message.topic).to.deep.equal 'data'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: @device.uuid
-          request:
-            uuid: @device.uuid
-            value: 1
-        }
-
-    describe 'when called with an invalid request', ->
-      beforeEach (done) ->
-        @meshblu.data uuid: 'invalid-uuid', value: 1, =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
-      it 'should send a "data-error" message', ->
-        expect(@message.topic).to.deep.equal 'data-error'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: @device.uuid
-          error: "Device not found"
-          request:
-            uuid: 'invalid-uuid'
-            value: 1
-        }
-
-  xdescribe 'EVENT getdata', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        @meshblu.getdata uuid: @device.uuid, token: @device.token, =>
-        @eventForwarder.on 'message', (message) =>
-          if message.topic == 'subscribe'
-            @message = message
-            @eventForwarder.removeAllListeners 'message'
-            done()
-
-      it 'should send a "subscribe" message', ->
-        expect(@message.topic).to.deep.equal 'subscribe'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: @device.uuid
-          request:
-            type: 'data'
-            uuid: @device.uuid
         }

@@ -69,13 +69,14 @@ class MeshbluWebsocketHandler extends EventEmitter
   device: (data) =>
     debug 'device', data
     @getDeviceIfAuthorized @authedDevice, data, (error, foundDevice) =>
+      @log 'devices', error?, request: data, error: error?.message, fromUuid: @authedDevice.uuid
       return @sendError error.message, ['device', data] if error?
       @sendFrame 'device', foundDevice
 
   devices: (data) =>
     debug 'devices', data
     @getDevices @authedDevice, data, null, (foundDevices) =>
-      @_log 'devices', foundDevices.error?, request: data, error: foundDevices.error?.message, fromUuid: @authedDevice.uuid
+      @log 'devices', foundDevices.error?, request: data, error: foundDevices.error?.message, fromUuid: @authedDevice.uuid
       @sendFrame 'devices', foundDevices
 
   identity: (data) =>
@@ -157,6 +158,7 @@ class MeshbluWebsocketHandler extends EventEmitter
 
   whoami: (data) =>
     @authDevice @uuid, @token, (error, device) =>
+      @log 'devices', false
       return @sendError error.message, ['whoami', data] if error?
       @sendFrame 'whoami', device
 
@@ -175,6 +177,18 @@ class MeshbluWebsocketHandler extends EventEmitter
     @addListener 'unregister', @unregister
     @addListener 'whoami', @whoami
 
+  log: (event, didError, data) =>
+    event = "#{event}-error" if didError
+    @meshbluEventEmitter.emit event, data
+
+  parseFrame: (frame, callback=->) =>
+    try frame = JSON.parse frame
+    debug 'parseFrame', frame
+    if _.isArray(frame) && frame.length
+      return callback null, frame...
+
+    callback new Error 'invalid frame, must be in the form of [type, data]'
+
   rateLimit: (id, type, callback=->) =>
     throttle = @throttles[type] ? @throttles.query
 
@@ -185,14 +199,6 @@ class MeshbluWebsocketHandler extends EventEmitter
       return callback error if error?
       return callback new Error('request exceeds rate limit') if isLimited
       callback()
-
-  parseFrame: (frame, callback=->) =>
-    try frame = JSON.parse frame
-    debug 'parseFrame', frame
-    if _.isArray(frame) && frame.length
-      return callback null, frame...
-
-    callback new Error 'invalid frame, must be in the form of [type, data]'
 
   setOnlineStatus: (device, online) =>
     message =
@@ -234,10 +240,6 @@ class MeshbluWebsocketHandler extends EventEmitter
       return @sendError error?.message, ['unsubscribe', data] if error? || !authedDevice?
       subscriptionTypes = data.types ? ['sent', 'received', 'broadcast']
       @messageIOClient.unsubscribe data.uuid, subscriptionTypes
-
-  _log: (event, didError, data) =>
-    event = "#{event}-error" if didError
-    @meshbluEventEmitter.emit event, data
 
   #socketio event handlers
   onSocketMessage: (data) =>

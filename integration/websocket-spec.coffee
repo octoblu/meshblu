@@ -1,5 +1,6 @@
 _ = require 'lodash'
 path = require 'path'
+debug = require('debug')('meshblu:integration:websocket')
 MeshbluConfig = require 'meshblu-config'
 MeshbluHTTP = require 'meshblu-http'
 MeshbluWebsocket = require 'meshblu-websocket'
@@ -24,6 +25,8 @@ describe 'SocketLogic Events', ->
       @meshblu = new MeshbluWebsocket uuid: @device.uuid, token: @device.token, host: @config.host, protocol: @config.protocol
       @meshblu.connect (error) =>
         done error
+      @meshblu.on 'error', (error) =>
+        debug '@meshblu error', error
 
   it 'should get here', ->
     expect(true).to.be.true
@@ -57,13 +60,12 @@ describe 'SocketLogic Events', ->
             uuid: 'invalid-uuid'
         }
 
-  xdescribe 'EVENT devices', ->
+  describe 'EVENT device', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.device {uuid: @device.uuid}, (data) =>
-          return done new Error(data.error) if data.error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
+        @meshblu.device @device.uuid
+        @eventForwarder.once 'message', (@message) =>
+          done()
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
@@ -75,33 +77,31 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        @meshblu.device {uuid: 'invalid-uuid'}, (data) =>
-          return done new Error(data.error) if data.error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
+        @meshblu.device 'invalid-uuid'
+        @eventForwarder.once 'message', (@message) =>
+          done()
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
         expect(@message.payload).to.deep.equal {
           fromUuid: @device.uuid
-          error: "Devices not found"
+          error: 'unauthorized'
           request:
             uuid: 'invalid-uuid'
         }
 
-  xdescribe 'EVENT whoami', ->
+  describe 'EVENT whoami', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.whoami {}, (data) =>
-          return done new Error(data.error) if data.error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
+        @meshblu.whoami()
+        @eventForwarder.once 'message', (@message) =>
+          done()
 
       it 'should send a "whoami" message', ->
-        expect(@message.topic).to.deep.equal 'whoami'
+        expect(@message.topic).to.deep.equal 'devices'
         expect(@message.payload).to.deep.equal {
           fromUuid: @device.uuid
-          request: {}
+          request: {uuid: @device.uuid}
         }
 
   xdescribe 'EVENT update', ->

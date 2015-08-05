@@ -54,7 +54,7 @@ describe 'SocketLogic Events', ->
             uuid: 'invalid-uuid'
         }
 
-  describe 'EVENT devices', ->
+  describe 'EVENT device', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
         @meshblu.device {uuid: @device.uuid}, (data) =>

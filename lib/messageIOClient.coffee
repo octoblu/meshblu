@@ -9,6 +9,7 @@ class MessageIOClient extends EventEmitter2
     @topicMap = {}
 
   addTopics: (uuid, topics=['*']) =>
+    topics = [topics] unless _.isArray topics
     [skips, names] = _.partition topics, (topic) => _.startsWith topic, '-'
     names = ['*'] if _.isEmpty names
     map = {}

@@ -6,7 +6,7 @@ MeshbluHTTP = require 'meshblu-http'
 MeshbluWebsocket = require 'meshblu-websocket'
 MeshbluSocketLogic = require 'meshblu'
 
-describe 'SocketLogic Events', ->
+describe 'WebSocket Events', ->
   before (done) ->
     filename = path.join __dirname, 'meshblu.json'
     @config = new MeshbluConfig(filename: filename).toJSON()
@@ -14,6 +14,7 @@ describe 'SocketLogic Events', ->
     @eventForwarder = new MeshbluWebsocket @config
     @eventForwarder.connect =>
       @eventForwarder.subscribe @config.uuid
+      console.log 'calling done...'
       done()
 
   before (done) ->
@@ -28,9 +29,6 @@ describe 'SocketLogic Events', ->
       @meshblu.on 'error', (error) =>
         debug '@meshblu error', error
 
-  before (done) ->
-    @eventForwarder.once 'message', => done()
-
   it 'should get here', ->
     expect(true).to.be.true
 
@@ -38,8 +36,11 @@ describe 'SocketLogic Events', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
         @meshblu.devices {}
-        @eventForwarder.once 'message', (@message) =>
-          done()
+        @eventForwarder.on 'message', (message) =>
+          if message.topic == 'devices'
+            @message = message
+            @eventForwarder.removeAllListeners 'message'
+            done()
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'

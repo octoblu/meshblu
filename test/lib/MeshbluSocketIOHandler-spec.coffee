@@ -2,9 +2,12 @@
 MeshbluSocketIOHandler = require '../../lib/MeshbluSocketIOHandler'
 
 describe 'MeshbluSocketIOHandler', ->
+  beforeEach ->
+    @meshbluEventEmitter = new EventEmitter
+
   describe 'initialize', ->
     beforeEach ->
-      @sut = new MeshbluSocketIOHandler
+      @sut = new MeshbluSocketIOHandler meshbluEventEmitter: @meshbluEventEmitter
       @socket = new EventEmitter
       @sut.initialize @socket
 
@@ -17,7 +20,7 @@ describe 'MeshbluSocketIOHandler', ->
         @socket = new EventEmitter
 
         @authDevice = sinon.stub().yields new Error 'not authorized'
-        @sut = new MeshbluSocketIOHandler authDevice: @authDevice
+        @sut = new MeshbluSocketIOHandler authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.initialize @socket
         @socket.emit 'identity', {uuid: 'something', token: 'something-else'}, (@result) =>
 
@@ -31,7 +34,7 @@ describe 'MeshbluSocketIOHandler', ->
         @socket = new EventEmitter
 
         @authDevice = sinon.stub().yields null, {uuid: 'device'}
-        @sut = new MeshbluSocketIOHandler authDevice: @authDevice
+        @sut = new MeshbluSocketIOHandler authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.initialize @socket
         @callback = sinon.spy()
         @socket.emit 'identity', uuid: 'device', token: 'wrong', @callback
@@ -48,7 +51,7 @@ describe 'MeshbluSocketIOHandler', ->
 
         @device = {some: 'device', uuid: '23955'}
         @authDevice = sinon.stub().yields null, @device
-        @sut = new MeshbluSocketIOHandler authDevice: @authDevice
+        @sut = new MeshbluSocketIOHandler authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.initialize @socket
         @callback = sinon.spy()
         @socket.emit 'identity', uuid: '23955', token: '$###', @callback
@@ -67,7 +70,7 @@ describe 'MeshbluSocketIOHandler', ->
 
         @authDevice = sinon.stub().yields new Error
 
-        @sut = new MeshbluSocketIOHandler authDevice: @authDevice
+        @sut = new MeshbluSocketIOHandler authDevice: @authDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.initialize @socket
         @sut = sinon.spy()
 
@@ -87,7 +90,7 @@ describe 'MeshbluSocketIOHandler', ->
         @authDevice = sinon.stub().yields null, @device
         @updateIfAuthorized = sinon.stub()
 
-        @sut = new MeshbluSocketIOHandler authDevice: @authDevice, updateIfAuthorized: @updateIfAuthorized
+        @sut = new MeshbluSocketIOHandler authDevice: @authDevice, updateIfAuthorized: @updateIfAuthorized, meshbluEventEmitter: @meshbluEventEmitter
         @sut.initialize @socket
         @sut.authedDevice = uuid: '1345', token: 'toooooken'
         @sut = sinon.spy()

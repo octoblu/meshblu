@@ -6,7 +6,7 @@ class MeshbluEventEmitter
     @Date = dependencies.Date ? Date
 
   emit: (eventType, data={}) =>
-    data = _.extend _timestamp: @Date.now(), data
+    data = _.extend _timestamp: (new @Date).toJSON(), data
 
     message =
       devices: @uuids

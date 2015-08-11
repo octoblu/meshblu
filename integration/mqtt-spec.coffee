@@ -69,11 +69,11 @@ describe 'SocketLogic Events', ->
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
         @meshblu.update uuid: 'invalid-uuid', foo: 'bar', (error) =>
-          return done new Error('expected an error') unless error?
+          return done new Error('Expected an error') unless error?
           @eventForwarder.once 'message', (@message) =>
             done()
 
-      it.only 'should send an "update-error" message', ->
+      it 'should send an "update-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
         expect(@message.payload).to.deep.equal {
           fromUuid: @device.uuid
@@ -83,95 +83,16 @@ describe 'SocketLogic Events', ->
             params: {$set: {foo: 'bar', uuid: 'invalid-uuid'}}
         }
 
-  xdescribe 'EVENT localdevices', ->
+  describe 'EVENT getPublicKey', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.localdevices (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
-      it 'should send a "localdevices" message', ->
-        expect(@message.topic).to.deep.equal 'localdevices'
-        expect(@message.payload).to.deep.equal {
-          fromIp: '127.0.0.1'
-          fromUuid: @device.uuid
-          request: {}
-        }
-
-  xdescribe 'EVENT unclaimeddevices', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        @meshblu.unclaimeddevices {}, (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
-      it 'should send a "unclaimeddevices" message', ->
-        expect(@message.topic).to.deep.equal 'unclaimeddevices'
-        expect(@message.payload).to.deep.equal {
-          fromIp: '127.0.0.1'
-          fromUuid: @device.uuid
-          request: {}
-        }
-
-    describe 'when called with an invalid request', ->
-      beforeEach (done) ->
-        @meshblu.unclaimeddevices {uuid: 'invalid-uuid'}, (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
-      it 'should send an "unclaimeddevices-error" message', ->
-        expect(@message.topic).to.deep.equal 'unclaimeddevices-error'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: @device.uuid
-          fromIp: "127.0.0.1"
-          error: "Devices not found"
-          request:
-            uuid: 'invalid-uuid'
-        }
-
-  xdescribe 'EVENT claimdevice', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        @meshblu.register configWhitelist: ['*'], (data) =>
-          return done new Error data.error if data.error?
-
-          @newDevice = data
-          @meshblu.claimdevice uuid: @newDevice.uuid, (data) =>
-            return done new Error data.error if data.error?
-            @eventForwarder.once 'message', (@message) =>
+        @meshblu.getPublicKey uuid: @config.uuid, (error) =>
+          return done error if error
+          @eventForwarder.on 'message', (message) =>
+            if message.topic == 'getpublickey'
+              @message = message
+              @eventForwarder.removeAllListeners 'message'
               done()
-
-      it 'should send a "claimdevice" message', ->
-        expect(@message.topic).to.deep.equal 'claimdevice'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: @device.uuid
-          fromIp:   "127.0.0.1"
-          request:
-            uuid: @newDevice.uuid
-        }
-
-    describe 'when called with an invalid request', ->
-      beforeEach (done) ->
-        @meshblu.claimdevice uuid: 'invalid-uuid', (data) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
-      it 'should send an "claimdevice-error" message', ->
-        expect(@message.topic).to.deep.equal 'claimdevice-error'
-        expect(@message.payload).to.deep.equal {
-          fromUuid: @device.uuid
-          fromIp:   '127.0.0.1'
-          error:    'Device not found'
-          request:
-            uuid: 'invalid-uuid'
-        }
-
-  xdescribe 'EVENT getPublicKey', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        @meshblu.getPublicKey @config.uuid, (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send a "getpublickey" message', ->
         expect(@message.topic).to.deep.equal 'getpublickey'
@@ -182,7 +103,8 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        @meshblu.getPublicKey 'invalid-uuid', (error) =>
+        @meshblu.getPublicKey uuid: 'invalid-uuid', (error) =>
+          return done new Error('Expected an error') unless error?
           @eventForwarder.once 'message', (@message) =>
             done()
 

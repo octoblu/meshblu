@@ -163,8 +163,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     @addListener 'whoami', @whoami
 
   log: (event, didError, data) =>
-    event = "#{event}-error" if didError
-    @meshbluEventEmitter.emit event, data
+    @meshbluEventEmitter.log event, didError, data
 
   parseFrame: (frame, callback=->) =>
     try frame = JSON.parse frame

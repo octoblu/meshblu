@@ -32,7 +32,6 @@ class MeshbluSocketIOHandler
         return callback [null]
 
   log: (event, didError, data) =>
-    event = "#{event}-error" if didError
-    @meshbluEventEmitter.emit event, data
+    @meshbluEventEmitter.log event, didError, data
 
 module.exports = MeshbluSocketIOHandler

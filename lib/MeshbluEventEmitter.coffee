@@ -10,4 +10,8 @@ class MeshbluEventEmitter
       payload: data
     @sendMessage uuid: @meshbluUuid, message
 
+  log: (event, didError, data) =>
+    event = "#{event}-error" if didError
+    @emit event, data
+
 module.exports = MeshbluEventEmitter

@@ -116,17 +116,21 @@ describe 'SocketLogic Events', ->
             uuid: 'invalid-uuid'
         }
 
-  xdescribe 'EVENT resetToken', ->
+  describe 'EVENT resetToken', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.register configWhitelist: ['*'], (data) =>
-          return done new Error data.error if data.error?
+        meshbluHTTP = new MeshbluHTTP _.pick @config, 'server', 'port'
+        meshbluHTTP.register configWhitelist: ['*'], (error, device) =>
+          return done error if error?
 
-          @newDevice = data
-          @meshblu.resetToken @newDevice.uuid, (data) =>
-            return done new Error data.error if data.error?
-            @eventForwarder.once 'message', (@message) =>
-              done()
+          @newDevice = device
+          @meshblu.resetToken uuid: @newDevice.uuid, (error, data) =>
+            return done new Error error.message if error?
+            @eventForwarder.once 'message', (message) =>
+              if message.topic == 'resettoken'
+                @message = message
+                @eventForwarder.removeAllListeners 'message'
+                done()
 
       it 'should send a "resettoken" message', ->
         expect(@message.topic).to.deep.equal 'resettoken'
@@ -138,7 +142,8 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        @meshblu.resetToken 'invalid-uuid', (error) =>
+        @meshblu.resetToken uuid: 'invalid-uuid', (error) =>
+          return done new Error('Expected an error') unless error?
           @eventForwarder.once 'message', (@message) =>
             done()
 

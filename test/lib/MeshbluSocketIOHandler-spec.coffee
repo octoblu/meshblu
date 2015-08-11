@@ -4,6 +4,7 @@ MeshbluSocketIOHandler = require '../../lib/MeshbluSocketIOHandler'
 describe 'MeshbluSocketIOHandler', ->
   beforeEach ->
     @meshbluEventEmitter = new EventEmitter
+    @meshbluEventEmitter.log = ->
 
   describe 'initialize', ->
     beforeEach ->

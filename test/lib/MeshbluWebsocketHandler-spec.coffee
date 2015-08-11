@@ -11,6 +11,7 @@ describe 'MeshbluWebsocketHandler', ->
       subscribe: sinon.spy()
     @MessageIOClient = sinon.spy => @messageIOClient
     @meshbluEventEmitter = new EventEmitter
+    @meshbluEventEmitter.log = ->
     @sut = new MeshbluWebsocketHandler MessageIOClient: @MessageIOClient, meshbluEventEmitter: @meshbluEventEmitter
     @socket = sinon.spy => @socket
 

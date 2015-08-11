@@ -1,9 +1,13 @@
+_ = require 'lodash'
 debug = require('debug')('meshblu:MeshbluEventEmitter')
 
 class MeshbluEventEmitter
-  constructor: (@meshbluUuid, @uuids, @sendMessage) ->
+  constructor: (@meshbluUuid, @uuids, @sendMessage, dependencies={}) ->
+    @Date = dependencies.Date ? Date
 
-  emit: (eventType, data) =>
+  emit: (eventType, data={}) =>
+    data = _.extend _timestamp: @Date.now(), data
+
     message =
       devices: @uuids
       topic: eventType

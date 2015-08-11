@@ -32,7 +32,7 @@ describe 'REST', ->
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request: {}
         }
@@ -63,7 +63,7 @@ describe 'REST', ->
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           error: "Devices not found"
           request:
@@ -83,7 +83,7 @@ describe 'REST', ->
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             uuid: @config.uuid
@@ -101,7 +101,7 @@ describe 'REST', ->
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           error: "Devices not found"
           request:
@@ -118,7 +118,7 @@ describe 'REST', ->
 
       it 'should send a "whoami" message', ->
         expect(@message.topic).to.deep.equal 'whoami'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request: {}
         }
@@ -138,7 +138,7 @@ describe 'REST', ->
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             foo: 'bar'
@@ -154,7 +154,7 @@ describe 'REST', ->
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             uuid: @config.uuid
@@ -168,7 +168,7 @@ describe 'REST', ->
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           error: 'Devices not found'
           request:
@@ -185,7 +185,7 @@ describe 'REST', ->
 
       it 'should send a "update" message', ->
         expect(@message.topic).to.deep.equal 'update'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             query: {uuid: @config.uuid}
@@ -200,7 +200,7 @@ describe 'REST', ->
 
       it 'should send an "update-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           error: "The dollar ($) prefixed field '$foo' in '$foo' is not valid for storage."
           request:
@@ -218,7 +218,7 @@ describe 'REST', ->
 
       it 'should send a "update" message', ->
         expect(@message.topic).to.deep.equal 'update'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             query: {uuid: @config.uuid}
@@ -233,7 +233,7 @@ describe 'REST', ->
 
       it 'should send an "update-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           error: "The dollar ($) prefixed field '$foo' in '$foo' is not valid for storage."
           request:
@@ -254,7 +254,7 @@ describe 'REST', ->
 
       it 'should send a "localdevices" message', ->
         expect(@message.topic).to.deep.equal 'localdevices'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromIp: '127.0.0.1'
           fromUuid: @config.uuid
           request: {}
@@ -273,7 +273,7 @@ describe 'REST', ->
 
       it 'should send a "localdevices-error" message', ->
         expect(@message.topic).to.deep.equal 'localdevices-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           fromIp: "127.0.0.1"
           error: "Devices not found"
@@ -294,7 +294,7 @@ describe 'REST', ->
 
       it 'should send a "localdevices" message', ->
         expect(@message.topic).to.deep.equal 'localdevices'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromIp: '127.0.0.1'
           fromUuid: @config.uuid
           request: {}
@@ -313,7 +313,7 @@ describe 'REST', ->
 
       it 'should send a "localdevices-error" message', ->
         expect(@message.topic).to.deep.equal 'localdevices-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           fromIp: "127.0.0.1"
           error: "Devices not found"
@@ -338,7 +338,7 @@ describe 'REST', ->
 
       it 'should send a "claimdevice" message', ->
         expect(@message.topic).to.deep.equal 'claimdevice'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           fromIp:   "127.0.0.1"
           request:
@@ -357,7 +357,7 @@ describe 'REST', ->
 
       it 'should send an "claimdevice-error" message', ->
         expect(@message.topic).to.deep.equal 'claimdevice-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           fromIp:   '127.0.0.1'
           error:    'Device not found'
@@ -375,7 +375,7 @@ describe 'REST', ->
 
       it 'should send a "getpublickey" message', ->
         expect(@message.topic).to.deep.equal 'getpublickey'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           request:
             uuid: @config.uuid
         }
@@ -388,7 +388,7 @@ describe 'REST', ->
 
       it 'should send an "getpublickey-error" message', ->
         expect(@message.topic).to.deep.equal 'getpublickey-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           error: 'Device not found'
           request:
             uuid: 'invalid-uuid'
@@ -408,7 +408,7 @@ describe 'REST', ->
 
       it 'should send a "resettoken" message', ->
         expect(@message.topic).to.deep.equal 'resettoken'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             uuid: @device.uuid
@@ -422,7 +422,7 @@ describe 'REST', ->
 
       it 'should send an "resettoken-error" message', ->
         expect(@message.topic).to.deep.equal 'resettoken-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           error:    'invalid device'
           request:
@@ -443,7 +443,7 @@ describe 'REST', ->
 
       it 'should send a "generatetoken" message', ->
         expect(@message.topic).to.deep.equal 'generatetoken'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             uuid: @device.uuid
@@ -457,7 +457,7 @@ describe 'REST', ->
 
       it 'should send an "generatetoken-error" message', ->
         expect(@message.topic).to.deep.equal 'generatetoken-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           error:    'Device not found'
           request:
@@ -481,7 +481,7 @@ describe 'REST', ->
 
       it 'should send a "revoketoken" message', ->
         expect(@message.topic).to.deep.equal 'revoketoken'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             uuid: @device.uuid
@@ -495,7 +495,7 @@ describe 'REST', ->
 
       it 'should send an "revoketoken-error" message', ->
         expect(@message.topic).to.deep.equal 'revoketoken-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           error:    'Device not found'
           request:
@@ -513,7 +513,7 @@ describe 'REST', ->
 
       it 'should send a "register" message', ->
         expect(@message.topic).to.deep.equal 'register'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           request:
             ipAddress: '127.0.0.1'
         }
@@ -526,7 +526,7 @@ describe 'REST', ->
 
       it 'should send an "register-error" message', ->
         expect(@message.topic).to.deep.equal 'register-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           error:  'Device not updated'
           request:
             uuid: 'not-allowed'
@@ -546,7 +546,7 @@ describe 'REST', ->
 
       it 'should send a "update" message', ->
         expect(@message.topic).to.deep.equal 'update'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             query: {uuid: @config.uuid}
@@ -565,7 +565,7 @@ describe 'REST', ->
 
       it 'should send a "update-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           error: "Device not found"
           request:
@@ -587,7 +587,7 @@ describe 'REST', ->
 
       it 'should send a "unregister" message', ->
         expect(@message.topic).to.deep.equal 'unregister'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             uuid: @device.uuid
@@ -601,7 +601,7 @@ describe 'REST', ->
 
       it 'should send an "unregister-error" message', ->
         expect(@message.topic).to.deep.equal 'unregister-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           error:  'invalid device to unregister'
           fromUuid: @config.uuid
           request:
@@ -617,7 +617,7 @@ describe 'REST', ->
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             owner: @config.uuid
@@ -631,7 +631,7 @@ describe 'REST', ->
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           error: "Devices not found"
           request:
@@ -652,7 +652,7 @@ describe 'REST', ->
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             uuid: @config.uuid
@@ -671,7 +671,7 @@ describe 'REST', ->
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             type: 'broadcast'
@@ -691,7 +691,7 @@ describe 'REST', ->
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             type: 'received'
@@ -711,7 +711,7 @@ describe 'REST', ->
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             type: 'sent'
@@ -731,7 +731,7 @@ describe 'REST', ->
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request: {}
         }
@@ -749,7 +749,7 @@ describe 'REST', ->
 
       it 'should send a "identity" message', ->
         expect(@message.topic).to.deep.equal 'identity'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           request:
             uuid: @config.uuid
         }
@@ -766,7 +766,7 @@ describe 'REST', ->
 
       it 'should send a "identity-error" message', ->
         expect(@message.topic).to.deep.equal 'identity-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           error: "Device not found or token not valid"
           request:
             uuid: @config.uuid
@@ -781,7 +781,7 @@ describe 'REST', ->
 
       it 'should send a "message" message', ->
         expect(@message.topic).to.deep.equal 'message'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             devices: ['some-uuid']
@@ -795,7 +795,7 @@ describe 'REST', ->
 
       it 'should send a "message-error" message', ->
         expect(@message.topic).to.deep.equal 'message-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           error: "Invalid Message Format"
           request: {}
@@ -814,7 +814,7 @@ describe 'REST', ->
 
       it 'should send a "data" message', ->
         expect(@message.topic).to.deep.equal 'data'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             value: 1
@@ -832,7 +832,7 @@ describe 'REST', ->
 
       it 'should send a "data-error" message', ->
         expect(@message.topic).to.deep.equal 'data-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           error: "Device not found"
           request:
@@ -852,7 +852,7 @@ describe 'REST', ->
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @config.uuid
           request:
             type: 'data'

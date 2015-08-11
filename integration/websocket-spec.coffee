@@ -44,7 +44,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request: {}
         }
@@ -57,7 +57,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           error: "Devices not found"
           request:
@@ -73,7 +73,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request:
             uuid: @device.uuid
@@ -87,7 +87,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           error: 'unauthorized'
           request:
@@ -103,7 +103,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "whoami" message', ->
         expect(@message.topic).to.deep.equal 'devices'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request: {uuid: @device.uuid}
         }
@@ -117,7 +117,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "update" message', ->
         expect(@message.topic).to.deep.equal 'update'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request:
             query: {uuid: @device.uuid}
@@ -132,7 +132,7 @@ describe 'WebSocket Events', ->
 
       it 'should send an "update-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           error: "Device does not have sufficient permissions for update"
           request:
@@ -149,7 +149,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "register" message', ->
         expect(@message.topic).to.deep.equal 'register'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request: {foo: 'bar'}
         }
@@ -162,7 +162,7 @@ describe 'WebSocket Events', ->
 
       it 'should send an "register-error" message', ->
         expect(@message.topic).to.deep.equal 'register-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           error:  'Device not updated'
           fromUuid: @device.uuid
           request:
@@ -187,7 +187,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "unregister" message', ->
         expect(@message.topic).to.deep.equal 'unregister'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request: {uuid: @newDevice.uuid}
         }
@@ -200,7 +200,7 @@ describe 'WebSocket Events', ->
 
       it 'should send an "unregister-error" message', ->
         expect(@message.topic).to.deep.equal 'unregister-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           error:  'invalid device to unregister'
           fromUuid: @device.uuid
           request: {uuid: 'invalid-uuid'}
@@ -224,7 +224,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request:
             owner: @device.uuid
@@ -239,7 +239,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request:
             uuid: @device.uuid
@@ -254,7 +254,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "unsubscribe" message', ->
         expect(@message.topic).to.deep.equal 'unsubscribe'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request:
             uuid: @device.uuid
@@ -269,7 +269,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "identity" message', ->
         expect(@message.topic).to.deep.equal 'identity'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request:
             uuid: @device.uuid
@@ -299,7 +299,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "identity-error" message', ->
         expect(@message.topic).to.deep.equal 'identity-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           error: "Device not found"
           fromUuid: 'invalid-uuid'
           request:
@@ -318,7 +318,7 @@ describe 'WebSocket Events', ->
 
       it 'should send a "message" message', ->
         expect(@message.topic).to.deep.equal 'message'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request:
             devices: ['some-uuid']

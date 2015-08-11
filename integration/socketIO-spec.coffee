@@ -41,7 +41,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send an "update" message', ->
         expect(@message.topic).to.deep.equal 'update'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request:
             query: {uuid: @device.uuid}
@@ -58,7 +58,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           error: "Device does not have sufficient permissions for update"
           request:
@@ -80,7 +80,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send a "identity" message', ->
         expect(@message.topic).to.deep.equal 'identity'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           request:
             uuid: @device.uuid
         }
@@ -95,7 +95,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send a "identity-error" message', ->
         expect(@message.topic).to.deep.equal 'identity-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           error: "Device not found"
           request:
             uuid: 'invalid-uuid'

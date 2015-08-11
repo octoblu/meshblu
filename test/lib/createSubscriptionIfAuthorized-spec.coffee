@@ -66,7 +66,7 @@ describe 'createSubscriptionIfAuthorized', ->
 
           @sut @open_device, params, done, @dependencies
 
-        it 'should not create a new subscription in the database', ->
+        it 'should not create a new subscription in the database', (done) ->
           @database.subscriptions.count {}, (error, subscriptionCount) =>
             return done error if error?
             expect(subscriptionCount).to.equal 1

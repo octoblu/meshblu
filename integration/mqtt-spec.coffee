@@ -44,7 +44,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send a "whoami" message', ->
         expect(@message.topic).to.deep.equal 'whoami'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request: {}
         }
@@ -59,7 +59,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send a "update" message', ->
         expect(@message.topic).to.deep.equal 'update'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request:
             query: {uuid: @device.uuid}
@@ -75,7 +75,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send an "update-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           error: "Device not found"
           request:
@@ -96,7 +96,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send a "getpublickey" message', ->
         expect(@message.topic).to.deep.equal 'getpublickey'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           request:
             uuid: @config.uuid
         }
@@ -110,7 +110,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send an "getpublickey-error" message', ->
         expect(@message.topic).to.deep.equal 'getpublickey-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           error: 'Device not found'
           request:
             uuid: 'invalid-uuid'
@@ -134,7 +134,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send a "resettoken" message', ->
         expect(@message.topic).to.deep.equal 'resettoken'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request:
             uuid: @newDevice.uuid
@@ -149,7 +149,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send an "resettoken-error" message', ->
         expect(@message.topic).to.deep.equal 'resettoken-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           error:    'invalid device'
           request:
@@ -171,7 +171,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send a "generatetoken" message', ->
         expect(@message.topic).to.deep.equal 'generatetoken'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request:
             uuid: @newDevice.uuid
@@ -185,7 +185,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send an "generatetoken-error" message', ->
         expect(@message.topic).to.deep.equal 'generatetoken-error'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           error:    'Device not found'
           request:
@@ -204,7 +204,7 @@ describe 'SocketLogic Events', ->
 
       it 'should send a "message" message', ->
         expect(@message.topic).to.deep.equal 'message'
-        expect(@message.payload).to.deep.equal {
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
           fromUuid: @device.uuid
           request:
             devices: ['some-uuid']

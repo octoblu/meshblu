@@ -203,8 +203,8 @@ class Device
       callback()
 
   sanitizeError: (error) =>
-    message = error
-    message = error.message if _.isError error
+    message = error?.message ? error
+    message = "Unknown error" unless _.isString message
 
     new Error message.replace("MongoError: ")
 

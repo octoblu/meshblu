@@ -134,7 +134,6 @@ class Device
     @attributes ?= {}
     @attributes = _.extend {}, @attributes, @sanitize(attributes)
     @attributes.online = !!@attributes.online if @attributes.online?
-    @attributes.timestamp = new Date()
 
   validate: =>
     if @attributes.uuid? && @uuid != @attributes.uuid

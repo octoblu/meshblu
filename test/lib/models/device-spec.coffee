@@ -173,10 +173,6 @@ describe 'Device', ->
       it 'should update the record in devices', ->
         expect(@device.name).to.equal 'VW bug'
 
-      it 'should set the timestamp', ->
-        time = @device.timestamp.getTime()
-        expect(time).to.be.closeTo Date.now(), 1000
-
       it 'should set geo', ->
         expect(@device.geo).to.exist
 

@@ -134,16 +134,6 @@ describe 'Old Update Device', ->
           expect(device.online).to.be.false
           done()
 
-    describe 'when updated without a timestamp', ->
-      beforeEach (done) ->
-        @getDevice.yields null
-        @sut @uuid, {}, done, @dependencies
-
-      it 'should create a timestamp', (done) ->
-        @devices.findOne {}, (error, device) =>
-          expect(device.timestamp).to.exist
-          done()
-
     describe 'when updated without geo', ->
       beforeEach (done) ->
         @getDevice.yields null

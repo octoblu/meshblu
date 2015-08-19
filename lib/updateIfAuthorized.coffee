@@ -14,5 +14,7 @@ module.exports = (fromDevice, query, params, callback=_.noop, dependencies={}) -
 
       clearCache toDevice.uuid, =>
         newDevice = new Device(uuid: toDevice.uuid)
-        newDevice.update params, callback
-        sendConfigActivity query.uuid
+        newDevice.update params, (error) =>
+          return callback error if error?
+          sendConfigActivity query.uuid
+          callback()

@@ -11,7 +11,7 @@ describe 'updateIfAuthorized', ->
       @canConfigure = sinon.stub()
       @clearCache = sinon.stub().yields null
 
-      @device = update: sinon.spy()
+      @device = update: sinon.stub()
       @Device = sinon.spy => @device
       @sendConfigActivity = sinon.spy()
 
@@ -63,8 +63,12 @@ describe 'updateIfAuthorized', ->
       it 'should call update on the device', ->
         expect(@device.update).to.have.been.calledWith {$inc: {magic: 1}}
 
-      it 'should call sendConfigActivity', ->
-        expect(@sendConfigActivity).to.have.been.calledWith 'to-device'
+      describe 'when update yields no error', ->
+        beforeEach ->
+          @device.update.yield null
+
+        it 'should call sendConfigActivity', ->
+          expect(@sendConfigActivity).to.have.been.calledWith 'to-device'
 
       describe 'when update yields an error', ->
         beforeEach ->

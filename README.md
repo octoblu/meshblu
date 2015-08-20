@@ -187,34 +187,31 @@ Use the button above to deploy to the [DigitalOcean](https://www.digitalocean.co
 Docker
 ------
 
-The default Dockerfile will run Meshblu, MongoDB and Redis in a single container to make quick experiments easier.
+The default Dockerfile will run Meshblu a container to make quick experiments easier. The easiest way to get started is to use our image from the docker registry:
 
-You'll need docker installed, then to build the Meshblu image:
-
-From the directory where the Dockerfile resides run.
-
-```
-$ docker build -t=skynet .
+```bash
+docker run -e TOKEN=something_secret octoblu/meshblu
 ```
 
-To run a fully self contained instance using the source bundled in the container.
+*A note about secrets: We require that whomever runs Meshblu to supply a text secret, in the form of the `TOKEN` environmnet variable, that we can use as a salt when hashing tokens. Not knowing this secret hinders a malicious user when creating a rainbow table to reverse the hashed tokens.*
+
+
+If you want to build your own image, then run the following from the Meshblu project root:
 
 ```
-$ docker run -i -t -p 3000 skynet
+docker build -t local/meshblu .
 ```
 
-This will run Meshblu (formerly skynet) and expose port 3000 from the container on a random host port that you can find by running docker ps.
-
-If you want to do development and run without rebuilding the image you can bind mount your source directory including node_modules onto the container. This example also binds a directory to hold the log of stdout & stderr from the Meshblu node process.
+Then run it like above, but with the local image:
 
 ```
-$ docker run -d -p 3000 --name=skynet_dev -v /path/to/your/skynet:/var/www -v /path/to/your/logs:/var/log/skynet skynet
+docker run -e TOKEN=something_secret local/meshblu
 ```
 
-If you change the code restarting the container is as easy as:
+This will run Meshblu (formerly skynet) and expose port 80 from the container and map it to your port 80. If you'd like to map it to a different port, use `-p`. For example, to map it to local port 3000:
 
-```
-$ docker restart skynet_dev
+```shell
+docker run -p 3000:80 -e TOKEN=something_secret local/meshblu
 ```
 
 Nodeblu Developer Toolkit

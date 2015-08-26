@@ -26,11 +26,10 @@ findDevice = (uuid, callback, database) ->
   database ?= require './database'
   devices = database.devices
 
-  devices.findOne {uuid: uuid}, (error, data) ->
+  devices.findOne {uuid: uuid}, {_id: false}, (error, data) ->
     debug 'devices.findOne', uuid, error, data
     return callback new Error ('database error while finding a device') if error?
     if data
-      delete data._id
       cacheDevice data
     callback null, data
 

@@ -18,7 +18,7 @@ class Device
     if @fetch.cache?
       return _.defer callback, null, @fetch.cache
 
-    @devices.findOne uuid: @uuid, (error, device) =>
+    @devices.findOne uuid: @uuid, {_id: false}, (error, device) =>
       @fetch.cache = device
       unless device?
         error = new Error('Device not found')

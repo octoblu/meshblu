@@ -24,9 +24,12 @@ class MeshbluWebsocketHandler extends EventEmitter
     @socket.id = uuid.v4()
     @headers = request?.headers
 
+    @socket.on 'open', @onOpen
     @socket.on 'close', @onClose
     @socket.on 'message', @onMessage
 
+  # event handlers
+  onOpen: (event) =>
     @addListeners()
 
     @messageIOClient = new @MessageIOClient()
@@ -35,7 +38,6 @@ class MeshbluWebsocketHandler extends EventEmitter
     @messageIOClient.on 'data', @onSocketData
     @messageIOClient.start()
 
-  # event handlers
   onClose: (event) =>
     debug 'on.close'
     @authDevice @uuid, @token, (error, device) =>
@@ -43,9 +45,7 @@ class MeshbluWebsocketHandler extends EventEmitter
       @setOnlineStatus device, false
       @messageIOClient.unsubscribe @uuid
       @messageIOClient.unsubscribe "#{@uuid}_bc"
-      # Dear future person, this code is breaking stuff and I hope this fix doesn't screw you over too.
-      # @socket = null
-      # @messageIOClient = null
+      @messageIOClient = null
 
   onMessage: (event) =>
     debug 'onMessage', event.data

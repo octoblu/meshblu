@@ -17,7 +17,8 @@ describe 'MeshbluWebsocketHandler', ->
 
   describe 'initialize', ->
     beforeEach ->
-      @socket.on = sinon.spy()
+      @socket.on = sinon.stub()
+      @socket.on.withArgs('open').yields null
       @sut.addListener = sinon.spy()
       @sut.initialize @socket
 

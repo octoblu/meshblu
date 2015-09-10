@@ -43,8 +43,9 @@ class MeshbluWebsocketHandler extends EventEmitter
       @setOnlineStatus device, false
       @messageIOClient.unsubscribe @uuid
       @messageIOClient.unsubscribe "#{@uuid}_bc"
-      @socket = null
-      @messageIOClient = null
+      # Dear future person, this code is breaking stuff and I hope this fix doesn't screw you over too.
+      # @socket = null
+      # @messageIOClient = null
 
   onMessage: (event) =>
     debug 'onMessage', event.data

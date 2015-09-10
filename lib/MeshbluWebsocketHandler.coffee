@@ -28,10 +28,10 @@ class MeshbluWebsocketHandler extends EventEmitter
     @socket.on 'close', @onClose
     @socket.on 'message', @onMessage
 
-  # event handlers
-  onOpen: (event) =>
     @addListeners()
 
+  # event handlers
+  onOpen: (event) =>
     @messageIOClient = new @MessageIOClient()
     @messageIOClient.on 'message', @onSocketMessage
     @messageIOClient.on 'config', @onSocketConfig

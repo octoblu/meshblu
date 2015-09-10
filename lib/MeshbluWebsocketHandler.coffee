@@ -32,6 +32,7 @@ class MeshbluWebsocketHandler extends EventEmitter
 
   # event handlers
   onOpen: (event) =>
+    debug 'on.open'
     @messageIOClient = new @MessageIOClient()
     @messageIOClient.on 'message', @onSocketMessage
     @messageIOClient.on 'config', @onSocketConfig
@@ -45,7 +46,7 @@ class MeshbluWebsocketHandler extends EventEmitter
       @setOnlineStatus device, false
       @messageIOClient.unsubscribe @uuid
       @messageIOClient.unsubscribe "#{@uuid}_bc"
-      @messageIOClient = null
+      # @messageIOClient = null
 
   onMessage: (event) =>
     debug 'onMessage', event.data

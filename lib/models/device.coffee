@@ -181,11 +181,11 @@ class Device
       return callback error if error?
       delete data.meshblu.hash if data?.meshblu?.hash
       try
-        token = @_hashToken JSON.stringify(data)
+        hashedToken = @_hashToken JSON.stringify(data)
       catch error
         return callback error
       params = $set :
-        'meshblu.hash': token
+        'meshblu.hash': hashedToken
       debug 'updating hash', @uuid, params
       @devices.update uuid: @uuid, params, callback
 

@@ -28,7 +28,11 @@ class Device
     @fetch (error, attributes) =>
       return callback error if error?
 
-      hashedToken = @_hashToken token
+      try
+        hashedToken = @_hashToken token
+      catch error
+        return callback error
+
       debug 'storeToken', token, hashedToken
       tokenData = createdAt: new Date()
       @update $set: {"meshblu.tokens.#{hashedToken}" : tokenData}, callback
@@ -37,7 +41,11 @@ class Device
     @fetch (error, attributes) =>
       return callback error if error?
 
-      hashedToken = @_hashToken token
+      try
+        hashedToken = @_hashToken token
+      catch error
+        return callback error
+
       @update $unset : {"meshblu.tokens.#{hashedToken}"}, callback
 
   verifyToken: (token, callback=->) =>
@@ -61,7 +69,11 @@ class Device
               callback null, true
 
   verifyNewToken: (token, callback=->) =>
-    hashedToken = @_hashToken token
+    try
+      hashedToken = @_hashToken token
+    catch error
+      return callback error
+
     @devices.findOne uuid: @uuid, "meshblu.tokens.#{hashedToken}": {$exists: true}, (error, device) =>
       return callback error if error?
       callback null, !!device
@@ -168,8 +180,12 @@ class Device
     @devices.findOne uuid: @uuid, (error, data) =>
       return callback error if error?
       delete data.meshblu.hash if data?.meshblu?.hash
+      try
+        token = @_hashToken JSON.stringify(data)
+      catch error
+        return callback error
       params = $set :
-        'meshblu.hash': @_hashToken JSON.stringify(data)
+        'meshblu.hash': token
       debug 'updating hash', @uuid, params
       @devices.update uuid: @uuid, params, callback
 
@@ -208,6 +224,8 @@ class Device
     new Error message.replace("MongoError: ")
 
   _hashToken: (token) =>
+    throw new Error 'Invalid Device UUID' unless @uuid?
+
     hasher = crypto.createHash 'sha256'
     hasher.update token
     hasher.update @uuid

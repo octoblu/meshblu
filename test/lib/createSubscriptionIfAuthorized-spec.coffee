@@ -18,7 +18,15 @@ describe 'createSubscriptionIfAuthorized', ->
 
     it 'should yield an error', ->
       expect(@error).to.be.an.instanceOf Error
-      expect(@error.message).to.deep.equal 'Type must be one of ["event"]'
+      expect(@error.message).to.deep.equal 'Type must be one of ["event", "broadcast"]'
+
+  describe 'when called with an valid type', ->
+    beforeEach (done) ->
+      storeError = (@error) => done()
+      @sut {}, {type: 'broadcast'}, storeError
+
+    it 'should yield not an error', ->
+      expect(@error).not.to.be.an.instanceOf Error
 
   describe 'when we have one open device and one closed device', ->
     beforeEach (done) ->

@@ -27,13 +27,15 @@ class MessageIOClient extends EventEmitter2
   close: =>
     @socketIOClient.close()
 
+  defaultTopics: =>
+
   onMessage: (message) =>
     uuids = message?.devices
     uuids = [uuids] unless _.isArray uuids
     uuids = [message.fromUuid] if _.contains uuids, '*'
 
-    debug 'relay message', message
     if @topicMatchUuids uuids, message?.topic
+      debug 'relay message', message
       @emit 'message', message
 
   start: =>
@@ -89,8 +91,9 @@ class MessageIOClient extends EventEmitter2
       @topicMatch uuid, topic
 
   topicMatch: (uuid, topic) =>
-    @topicMap[uuid] ?= {}
-    debug @topicMap[uuid], topic
+    @addTopics uuid unless @topicMap[uuid]?
+
+    debug 'topicMatch', @topicMap[uuid], topic
     return false if _.any @topicMap[uuid].skips, (re) => re.test topic
     _.any @topicMap[uuid].names, (re) => re.test topic
 

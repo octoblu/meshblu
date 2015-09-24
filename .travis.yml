@@ -8,9 +8,7 @@ node_js:
 - '0.10'
 services:
 - mongodb
-notifications:
-  slack:
-    secure: DYeEeHEW/ElN9XkUJzY0fyG+cuLKz7nuvRg5bK7QGoWs/8bcGxiIkPiJsSGQ0NZbN9jBGg8vfTUtKJJZjnYgH1C+pfFMU+QOmFTPYHa320vunoXXFCaRdRboZMfoCx6zF2fMG1dDHmsRHJy4NPb+mRrqCb1ED6lIToKiJybCzb4=
+- redis
 env:
   matrix:
   - USE_MONGO=true
@@ -103,6 +101,8 @@ addons:
   code_climate:
     repo_token: 8e3f39fe338fe8465f0400555fcbf8a2a3293f9c586b64588e8ce198e64bda58
 before_install:
-  - npm install -g npm
+- npm install -g npm
+before_script:
+- npm install -g codeclimate-test-reporter
 after_script:
-- cat coverage/lcov.info | codeclimate
+- codeclimate-test-reporter < coverage/lcov.info

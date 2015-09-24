@@ -40,8 +40,8 @@ describe 'createSubscriptionIfAuthorized', ->
     describe 'when the open device creates a subscription from itself to the closed device', ->
       beforeEach (done) ->
         params = {
-          uuid: @open_device.uuid
-          targetUuid: @closed_device.uuid
+          subscriberUuid: @open_device.uuid
+          emitterUuid: @closed_device.uuid
           type: 'event'
         }
 
@@ -65,8 +65,8 @@ describe 'createSubscriptionIfAuthorized', ->
       describe 'if we call it again', ->
         beforeEach (done) ->
           params = {
-            uuid: @open_device.uuid
-            targetUuid: @closed_device.uuid
+            subscriberUuid: @open_device.uuid
+            emitterUuid: @closed_device.uuid
             type: 'event'
           }
 
@@ -85,8 +85,8 @@ describe 'createSubscriptionIfAuthorized', ->
         @other_device = {uuid: 'uuid3'}
 
         params = {
-          uuid: @closed_device.uuid
-          targetUuid: @open_device.uuid
+          subscriberUuid: @closed_device.uuid
+          emitterUuid: @open_device.uuid
           type: 'event'
         }
 

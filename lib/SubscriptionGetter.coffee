@@ -15,20 +15,16 @@ class SubscriptionGetter
   get: (callback) =>
     query = emitterUuid: @emitterUuid, type: @type
     @getDevice @emitterUuid, (error, emitterDevice) =>
-      debug '@getDevice', error, emitterDevice.uuid
       return callback error if error?
 
       @subscriptions.find query, (error, subscriptions) =>
-        debug '@subscriptions.find', error, subscriptions
         return callback error if error?
         uuids = _.pluck subscriptions, 'subscriberUuid'
 
         @_getDevices uuids, (error, devices) =>
-          debug '@_getDevices', error, _.pluck(devices, 'uuid')
           return callback error if error?
 
           @_filterCanReceive emitterDevice, devices, (error, devices) =>
-            debug '@_filterCanReceive', error, _.pluck(devices, 'uuid')
             return callback error if error?
             callback null, _.pluck devices, 'uuid'
 

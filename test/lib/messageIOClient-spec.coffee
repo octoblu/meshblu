@@ -28,7 +28,10 @@ describe 'MessageIOClient', ->
       @sut.start()
 
     it 'should create a socketIOClient', ->
-      expect(@FakeSocketIOClient).to.have.been.calledWith "ws://localhost:#{config.messageBus.port}", "force new connection": true
+      expect(@FakeSocketIOClient).to.have.been.calledWith(
+        "ws://localhost:#{config.messageBus.port}",
+        "force new connection": true
+      )
 
     it 'should call connect', ->
       expect(@socketIOClient.connect).to.have.been.called
@@ -144,10 +147,6 @@ describe 'MessageIOClient', ->
       describe 'when devices is null', ->
         it 'should return false', ->
           expect(@sut.topicMatchUuids(null, 'pears')).to.be.false
-
-      describe 'when devices does not contain my device', ->
-        it 'should return false', ->
-          expect(@sut.topicMatchUuids(['grapes'], 'pears')).to.be.false
 
   describe 'topicMatch', ->
     describe 'by default', ->

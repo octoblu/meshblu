@@ -9,6 +9,11 @@ var program = require('commander');
 var pjson = require('./package.json');
 var config = require('./config');
 
+if (!config.token) {
+  console.error('config.token or environment variable TOKEN is required. Exiting.');
+  process.exit(1);
+}
+
 var parentConnection;
 
 program

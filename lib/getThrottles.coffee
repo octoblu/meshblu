@@ -1,23 +1,15 @@
 debug = require('debug')('meshblu:getThrottles')
-Limitus = require 'limitus'
-limiter = new Limitus()
 
 config = require '../config'
 
-config.rateLimits ?= {};
-windowRate = 1000
+Throttle = require './LimitusThrottle'
 
-createThrottle = (name, rate) ->
-  debug 'createThrottle', name, rate
-  limiter.rule name, max: rate, interval: windowRate, mode: 'interval'
-  rateLimit: (id="", callback=->) =>
-    debug 'rateLimit', name, id
-    limiter.drop(name, id, callback)
+config.rateLimits ?= {}
 
 module.exports =
-  connection: createThrottle 'connection', config.rateLimits.connection
-  query:      createThrottle 'query', config.rateLimits.query
-  message:    createThrottle 'message', config.rateLimits.message
-  data:       createThrottle 'data', config.rateLimits.data
-  whoami:     createThrottle 'whoami', config.rateLimits.whoami
+  connection: new Throttle 'connection', config.rateLimits.connection
+  query     : new Throttle 'query',      config.rateLimits.query
+  message   : new Throttle 'message',    config.rateLimits.message
+  data      : new Throttle 'data',       config.rateLimits.data
+  whoami:     new Throttle 'whoami',     config.rateLimits.whoami
   unthrottledIps : config.rateLimits.unthrottledIps

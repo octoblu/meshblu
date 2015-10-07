@@ -6,9 +6,10 @@ class LogError
       @airbrake = require('airbrake').createClient process.env.AIRBRAKE_KEY
 
   log: (error) =>
-    @airbrake?.notify error
     console.error.apply console, arguments
-    console.error error.stack if _.isError error
+    if _.isError error
+      @airbrake?.notify error
+      console.error error.stack
 
 logError = new LogError()
 module.exports = logError.log

@@ -9,7 +9,7 @@ describe 'logElasticSearch', ->
     describe 'when we pass in ElasticSearch', ->
       beforeEach ->
         @spy = sinon.stub()
-        @console = {} 
+        @console = {}
         @options = marty: 'mcfly'
         @sut = new LogElasticSearch @options, console: @console, ElasticSearch: @spy
 
@@ -19,16 +19,13 @@ describe 'logElasticSearch', ->
       it 'should assign the result to @elasticsearch', ->
         expect(@sut.elasticsearch).to.be.an.instanceOf @spy
 
-      it 'should assign console to @console', ->
-        expect(@sut.console).to.equal @console
-
   describe '->log', ->
     beforeEach ->
-      @console = error: sinon.spy()
-      @sut = new LogElasticSearch {}, console: @console, ElasticSearch: ->
+      @logError = sinon.spy()
+      @sut = new LogElasticSearch {}, logError: @logError, ElasticSearch: ->
       @elasticsearch = @sut.elasticsearch
       @elasticsearch.create = sinon.stub()
-      
+
     describe 'when called an eventcode of 201 and some data', ->
       beforeEach ->
         @sut.log 201, {hello: 'mcfly'}
@@ -49,13 +46,13 @@ describe 'logElasticSearch', ->
         @elasticsearch.create.yields @error
         @sut.log()
 
-      it 'should console.error the error', ->
-        expect(@console.error).to.have.been.calledWith @error
+      it 'should @logError the error', ->
+        expect(@logError).to.have.been.calledWith @error
 
     describe 'when elasticsearch.create yields no error', ->
       beforeEach ->
         @elasticsearch.create.yields null
         @sut.log()
 
-      it 'should not console.error anything', ->
-        expect(@console.error).not.to.have.been.called
+      it 'should not @logError anything', ->
+        expect(@logError).not.to.have.been.called

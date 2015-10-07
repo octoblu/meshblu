@@ -1,7 +1,8 @@
 class LogElasticSearch
   constructor: (options, dependencies={}) ->
     ElasticSearch = dependencies.ElasticSearch ? require('elasticsearch').Client
-    @console = dependencies.console ? console
+    {@logError} = dependencies
+    @logError ?= require './logError'
     @elasticsearch = new ElasticSearch options
 
   log: (eventCode, body) =>
@@ -12,6 +13,6 @@ class LogElasticSearch
         throw error
       catch error
         error.createParams = index: "meshblu_events_#{eventCode}", type: 'event', body: body
-        @console.error error
+        @logError error
 
 module.exports = LogElasticSearch

@@ -1,6 +1,7 @@
 debug = require('debug')('meshblu:RedisThrottle')
 moment = require 'moment'
 redis = require './redis'
+logError = require 'logError'
 
 ###
  THIS DOESN'T WORK YET!!
@@ -22,7 +23,7 @@ class RedisThrottle
         .incr(key, 1)
         .expire(key, 10)
         .exec (error) =>
-          return console.error error.stack if error?
+          return logError error if error?
           callback()
 
 module.exports = RedisThrottle

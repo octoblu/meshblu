@@ -44,45 +44,6 @@ describe 'logEvent', ->
       it 'should set eventCode to 0', =>
         expect(@fakeFileLogger.log).to.have.been.calledWith 'info', {timestamp: @fakeTimestamp, eventCode: 0}
 
-  describe 'when elasticSearch logging enabled', =>
-    beforeEach =>
-      @fakeElasticSearchLogger = log: sinon.stub()
-      @dependencies.config.eventLoggers = elasticSearch : @fakeElasticSearchLogger
-
-    describe 'when payload is not an object', =>
-      beforeEach =>
-        @data = something: 'here', uuid: 'd0269f1f-214f-4a2f-9e79-bc248f229ec1', payload: '1234'
-        @sut 333, @data, @dependencies
-
-      it 'should wrap payload', =>
-        dataWithAdditions = _.extend {}, @data, timestamp: @fakeTimestamp, payload: {message: '1234'}
-        expect(@fakeElasticSearchLogger.log).to.have.been.calledWith 333, dataWithAdditions
-
-    describe 'when eventCode is defined', =>
-      beforeEach =>
-        @data = something: 'here', uuid: 'd0269f1f-214f-4a2f-9e79-bc248f229ec1'
-        @sut 201, @data, @dependencies
-
-      it 'should log with the eventCode and the data with timestamp mixed in', =>
-        dataWithAdditions = _.extend {}, @data, timestamp: @fakeTimestamp
-        expect(@fakeElasticSearchLogger.log).to.have.been.calledWith 201, dataWithAdditions
-
-
-  describe 'when splunk logging enabled', =>
-    beforeEach =>
-      @fakeSplunkLogger = log: sinon.stub()
-      @dependencies.config.eventLoggers = splunk : @fakeSplunkLogger
-
-    describe 'when eventCode is defined', =>
-      beforeEach =>
-        @eventCode = 201
-        @data = something: 'here', uuid: 'd0269f1f-214f-4a2f-9e79-bc248f229ec1'
-        @sut @eventCode, @data, @dependencies
-
-      it 'should log with the uuid as the type, adding timestamp and eventCode', =>
-        dataWithAdditions = _.extend {}, @data, timestamp: @fakeTimestamp, eventCode: @eventCode
-        expect(@fakeSplunkLogger.log).to.have.been.calledWith 'info', dataWithAdditions
-
   describe 'when console logging enabled', =>
     beforeEach =>
       @fakeConsoleLogger = log: sinon.stub()

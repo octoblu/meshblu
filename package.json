@@ -1,7 +1,7 @@
 {
   "name": "meshblu-server",
   "description": "communications platform and api for iot",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "author": "Octoblu, Inc.",
   "dependencies": {
     "JSONStream": "~0.9.0",
@@ -17,6 +17,7 @@
     "elasticsearch": "~4.0.2",
     "eventemitter2": "^0.4.14",
     "express": "^4.12.4",
+    "express-json5": "^0.1.0",
     "express-meshblu-healthcheck": "^1.0.1",
     "faye-websocket": "^0.9.4",
     "hiredis": "^0.4.1",

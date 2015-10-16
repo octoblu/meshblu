@@ -51,24 +51,19 @@ class Device
   verifyToken: (token, callback=->) =>
     return callback new Error('No token provided') unless token?
 
-    @verifyOGToken token, (error, verified) =>
+    @verifySessionToken token, (error, verified) =>
       return callback error if error?
       return callback null, true if verified
 
-      @verifyNewToken token, (error, verified) =>
+      @verifyRootToken token, (error, verified) =>
         return callback error if error?
-        return callback null, true if verified
 
-        @verifyDeprecatedToken token, (error, verified) =>
+        return callback null, false unless verified
+        @storeToken token, (error) =>
           return callback error if error?
-          return callback null, false unless verified
-          @storeToken token, (error) =>
-            return callback error if error?
-            @revokeDeprecatedToken token, (error) =>
-              return callback error if error?
-              callback null, true
+          return callback null, true
 
-  verifyNewToken: (token, callback=->) =>
+  verifySessionToken: (token, callback=->) =>
     try
       hashedToken = @_hashToken token
     catch error
@@ -78,50 +73,16 @@ class Device
       return callback error if error?
       callback null, !!device
 
-  verifyOGToken: (ogToken, callback=->) =>
-    debug "verifyOGToken: ", ogToken
+  verifyRootToken: (ogToken, callback=->) =>
+    debug "verifyRootToken: ", ogToken
 
     @fetch (error, attributes={}) =>
       return callback error, false if error?
       return callback null, false unless attributes.token?
       bcrypt.compare ogToken, attributes.token, (error, result) =>
         return callback error if error?
-        debug "verifyOGToken: bcrypt.compare results: #{error}, #{result}"
+        debug "verifyRootToken: bcrypt.compare results: #{error}, #{result}"
         callback null, result
-
-  verifyDeprecatedToken: (token, callback=->) =>
-    @fetch (error, attributes={}) =>
-      return callback error if error?
-      return callback null, false unless attributes.tokens?
-
-      hashedTokens = _.pluck attributes.tokens, 'hash'
-
-      compareToken = (hashedToken, callback=->) =>
-        debug "compareToken: ", token, hashedToken
-        bcrypt.compare token, hashedToken, (error, result) =>
-          debug "bcrypt.compare results: #{error}, #{result}"
-          callback(result)
-
-      # this is faster than async.detect, srsly, trust me.
-      async.detectSeries hashedTokens.reverse(), compareToken, (goodToken) =>
-        callback null, goodToken?
-
-  revokeDeprecatedToken: (token, callback=_.noop)=>
-    @fetch (error, attributes) =>
-      return callback error if error?
-
-      compareToken = (hashedToken, callback=->) =>
-        return callback true unless hashedToken?.hash?
-        debug 'compareToken', token, hashedToken.hash
-        bcrypt.compare token, hashedToken.hash, (error, result) =>
-          debug 'result', error, result
-          callback(result)
-
-      tokens = attributes.tokens ? []
-
-      async.rejectSeries tokens.reverse(), compareToken, (remainingTokens) =>
-        @attributes.tokens = remainingTokens
-        @save callback
 
   sanitize: (params) =>
     return params unless _.isObject(params) || _.isArray(params)

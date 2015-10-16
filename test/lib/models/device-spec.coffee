@@ -157,7 +157,7 @@ describe 'Device', ->
   describe '->save', ->
     describe 'when a device is saved', ->
       beforeEach (done) ->
-        @uuid = '66e20044-7262-4c26-84f0-c2c00fa02465';
+        @uuid = '66e20044-7262-4c26-84f0-c2c00fa02465'
         @devices.insert {uuid: @uuid}, done
 
       beforeEach (done) ->
@@ -269,7 +269,7 @@ describe 'Device', ->
   describe '->storeToken', ->
     describe 'when a device exists', ->
       beforeEach (done) ->
-        @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
+        @uuid = '50805aa3-a88b-4a67-836b-4752e318c979'
         @devices.insert uuid: @uuid, done
 
       beforeEach ->
@@ -300,7 +300,7 @@ describe 'Device', ->
 
   describe '->revokeToken', ->
     beforeEach (done) ->
-      @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
+      @uuid = '50805aa3-a88b-4a67-836b-4752e318c979'
       @devices.insert
         uuid: @uuid,
         meshblu:
@@ -331,8 +331,8 @@ describe 'Device', ->
           @device.save done
 
       beforeEach (done) ->
-          @sut = new Device uuid: @uuid, @dependencies
-          @sut.verifyToken 'mushrooms', (error, @verified) => done()
+        @sut = new Device uuid: @uuid, @dependencies
+        @sut.verifyToken 'mushrooms', (error, @verified) => done()
 
       it 'should be verified', ->
         expect(@verified).to.be.true
@@ -353,34 +353,9 @@ describe 'Device', ->
       it 'should be verified', ->
         expect(@verified).to.be.true
 
-    describe 'when using an old token', ->
-      beforeEach (done) ->
-        @devices.insert
-          uuid: @uuid,
-          tokens: [{hash: bcrypt.hashSync('mystery-token', 8)}]
-        , done
-
-      beforeEach (done) ->
-        @sut = new Device uuid: @uuid, @dependencies
-        @sut.verifyToken 'mystery-token', (error, @verified) => done()
-
-      it 'should be verified', ->
-        expect(@verified).to.be.true
-
-      it 'should store the token in the database', (done) ->
-        @devices.findOne uuid: @uuid, (error, device) =>
-          return done error if error?
-          expect(device.meshblu?.tokens).to.include.keys @hashedToken
-          done()
-
-      it 'should remove the deprecated token in the database', (done) ->
-        @sut.verifyDeprecatedToken 'mystery-token', (error, verified) =>
-          expect(verified).to.be.false
-          done()
-
-  describe '->verifyNewToken', ->
+  describe '->verifySessionToken', ->
     beforeEach (done) ->
-      @uuid = '50805aa3-a88b-4a67-836b-4752e318c979';
+      @uuid = '50805aa3-a88b-4a67-836b-4752e318c979'
       @devices.insert
         uuid: @uuid,
         meshblu:
@@ -391,7 +366,7 @@ describe 'Device', ->
     describe 'when a token is valid', ->
       beforeEach (done) ->
         @sut = new Device uuid: @uuid, @dependencies
-        @sut.verifyNewToken 'mystery-token', (error, @verified) => done()
+        @sut.verifySessionToken 'mystery-token', (error, @verified) => done()
 
       it 'should be verified', ->
         expect(@verified).to.be.true
@@ -399,7 +374,7 @@ describe 'Device', ->
     describe 'when a token is invalid', ->
       beforeEach (done) ->
         @sut = new Device uuid: @uuid, @dependencies
-        @sut.verifyNewToken 'mystery-tolkein', (error, @verified) => done()
+        @sut.verifySessionToken 'mystery-tolkein', (error, @verified) => done()
 
       it 'should not be verified', ->
         expect(@verified).to.be.false

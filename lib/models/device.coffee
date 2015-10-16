@@ -69,9 +69,9 @@ class Device
     catch error
       return callback error
 
-    @devices.findOne uuid: @uuid, "meshblu.tokens.#{hashedToken}": {$exists: true}, (error, device) =>
+    @fetch (error, attributes) =>
       return callback error if error?
-      callback null, !!device
+      callback null, attributes?.meshblu?.tokens?[hashedToken]?
 
   verifyRootToken: (ogToken, callback=->) =>
     debug "verifyRootToken: ", ogToken

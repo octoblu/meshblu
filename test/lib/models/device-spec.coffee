@@ -411,6 +411,36 @@ describe 'Device', ->
             expect(device.pigeonCount).to.equal 4
             done()
 
+  describe '-> resetToken', ->
+    beforeEach ->
+      @sut = new Device uuid: 'a-uuid', @dependencies
+      sinon.stub(@sut, 'save')
+
+    describe 'when it works', ->
+      beforeEach ->
+        @sut.resetToken (@error, @token) =>
+        @sut.save.yield null
+
+      it 'should not have an error', ->
+        expect(@error).not.to.exist
+
+      it 'should have a token', ->
+        expect(@token).to.exist
+
+      it 'should call set the token attribute', ->
+        expect(@sut.attributes.token).to.exist
+
+    describe 'when it does not work', ->
+      beforeEach ->
+        @sut.resetToken (@error, @token) =>
+        @sut.save.yield new Error 'something wrong'
+
+      it 'should have an error', ->
+        expect(@error).to.exist
+
+      it 'should not have a token', ->
+        expect(@token).not.to.exist
+
   describe '->validate', ->
     describe 'when created with a different uuid', ->
       beforeEach ->

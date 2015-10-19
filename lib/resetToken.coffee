@@ -1,22 +1,18 @@
-crypto = require 'crypto'
-
-generateToken = ->
-  crypto.createHash('sha1').update((new Date()).valueOf().toString() + Math.random().toString()).digest('hex');
-
-resetToken  = (fromDevice, uuid, emitToClient, callback=(->), securityImpl, getDevice, oldUpdateDevice) ->
+resetToken  = (fromDevice, uuid, emitToClient, callback=(->), {securityImpl, getDevice, Device}={}) ->
   securityImpl ?= require './getSecurityImpl'
   getDevice ?= require './getDevice'
-  oldUpdateDevice ?= require './oldUpdateDevice'
-  getDevice uuid, (error, device)->
+  Device ?= require './models/device'
+
+  getDevice uuid, (error, gotDevice) ->
     return callback 'invalid device' if error?
 
-    securityImpl.canConfigure fromDevice, device, (error, permission) =>
+    securityImpl.canConfigure fromDevice, gotDevice, (error, permission) =>
       return callback "unauthorized" unless permission
-      token = generateToken()
 
-      oldUpdateDevice device.uuid, token: token, (error, device) ->
+      device = new Device uuid: uuid
+      device.resetToken (error, token) =>
         return callback "error updating device" if error?
-        emitToClient 'notReady', device, {}
+        emitToClient 'notReady', fromDevice, {}
         return callback null, token
 
 module.exports = resetToken

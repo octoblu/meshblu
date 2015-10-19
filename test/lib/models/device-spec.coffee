@@ -12,7 +12,11 @@ describe 'Device', ->
       @getGeo = sinon.stub().yields null, {}
       @clearCache = sinon.stub().yields null
       @config = token: 'totally-secret-yo'
-      @dependencies = {database: @database, getGeo: @getGeo, clearCache: @clearCache, config: @config}
+      @redis =
+        del: sinon.stub()
+        sadd: sinon.stub()
+        sismember: sinon.stub()
+      @dependencies = {database: @database, getGeo: @getGeo, clearCache: @clearCache, config: @config, redis: @redis}
       @hashedToken = 'qe4NSaR3wrM6c2Q6uE6diz23ZXHyXUE2u/zJ9rvGE5A='
       done error
 
@@ -332,6 +336,7 @@ describe 'Device', ->
 
       beforeEach (done) ->
         @sut = new Device uuid: @uuid, @dependencies
+        @sut._verifyTokenInCache = sinon.stub().yields null, false
         @sut.verifyToken 'mushrooms', (error, @verified) => done()
 
       it 'should be verified', ->
@@ -348,6 +353,7 @@ describe 'Device', ->
 
       beforeEach (done) ->
         @sut = new Device uuid: @uuid, @dependencies
+        @sut._verifyTokenInCache = sinon.stub().yields null, false
         @sut.verifyToken 'mystery-token', (error, @verified) => done()
 
       it 'should be verified', ->
@@ -410,6 +416,85 @@ describe 'Device', ->
             return done error if error?
             expect(device.pigeonCount).to.equal 4
             done()
+
+  describe '-> _clearTokenCache', ->
+    describe 'when redis client is not available', ->
+      beforeEach ->
+        @dependencies.redis = {}
+        @sut = new Device uuid: 'a-uuid', @dependencies
+        @sut._clearTokenCache (@error, @result) =>
+
+      it 'should return false', ->
+        expect(@result).to.be.false
+
+    describe 'when redis client is available', ->
+      beforeEach (done) ->
+        @sut = new Device uuid: 'a-uuid', @dependencies
+        @sut._clearTokenCache (@error, @result) => done()
+        @redis.del.yield null, 1
+
+      it 'should return the result of del', ->
+        expect(@result).to.equal 1
+
+      it 'should call redis.del', ->
+        expect(@redis.del).to.have.been.calledWith 'tokens:a-uuid'
+
+  describe '-> _storeTokenInCache', ->
+    describe 'when redis client is not available', ->
+      beforeEach ->
+        @dependencies.redis = {}
+        @sut = new Device uuid: 'a-uuid', @dependencies
+        @sut._storeTokenInCache 'foo', (@error, @result) =>
+
+      it 'should return false', ->
+        expect(@result).to.be.false
+
+    describe 'when redis client is available', ->
+      beforeEach (done) ->
+        @sut = new Device uuid: 'a-uuid', @dependencies
+        @sut._storeTokenInCache 'foo', (@error, @result) => done()
+        @redis.sadd.yield null, 1
+
+      it 'should return the result of sadd', ->
+        expect(@result).to.equal 1
+
+      it 'should call redis.sadd', ->
+        expect(@redis.sadd).to.have.been.calledWith 'tokens:a-uuid', 'foo'
+
+  describe '-> _verifyTokenInCache', ->
+    describe 'when redis client is not available', ->
+      beforeEach ->
+        @dependencies.redis = {}
+        @sut = new Device uuid: 'a-uuid', @dependencies
+        @sut._verifyTokenInCache 'foo', (@error, @result) =>
+
+      it 'should return false', ->
+        expect(@result).to.be.false
+
+    describe 'when redis client is available', ->
+      describe 'when the member is available in the set', ->
+        beforeEach (done) ->
+          @sut = new Device uuid: 'a-uuid', @dependencies
+          @sut._verifyTokenInCache 'foo', (@error, @result) => done()
+          @redis.sismember.yield null, 1
+
+        it 'should return the result of sismember', ->
+          expect(@result).to.equal 1
+
+        it 'should call redis.sismember', ->
+          expect(@redis.sismember).to.have.been.calledWith 'tokens:a-uuid', @sut._hashToken('foo')
+
+      describe 'when the member is not available in the set', ->
+        beforeEach (done) ->
+          @sut = new Device uuid: 'a-uuid', @dependencies
+          @sut._verifyTokenInCache 'foo', (@error, @result) => done()
+          @redis.sismember.yield null, 0
+
+        it 'should return the result of sismember', ->
+          expect(@result).to.equal 0
+
+        it 'should call redis.sismember', ->
+          expect(@redis.sismember).to.have.been.calledWith 'tokens:a-uuid', @sut._hashToken('foo')
 
   describe '-> resetToken', ->
     beforeEach ->

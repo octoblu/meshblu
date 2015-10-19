@@ -11,9 +11,9 @@ class Device
     @generateToken = dependencies.generateToken ? require '../generateToken'
     @clearCache = dependencies.clearCache ? require '../clearCache'
     @config = dependencies.config ? require '../../config'
+    @redis = dependencies.redis ? require '../redis'
     @set attributes
     {@uuid} = attributes
-
 
   addGeo: (callback=->) =>
     return _.defer callback unless @attributes.ipAddress?
@@ -58,6 +58,7 @@ class Device
     @set token: newToken
     @save (error) =>
       return callback error if error?
+      @_clearTokenCache()
       callback null, newToken
 
   revokeToken: (token, callback=_.noop)=>
@@ -69,6 +70,7 @@ class Device
       catch error
         return callback error
 
+      @_clearTokenCache()
       @update $unset : {"meshblu.tokens.#{hashedToken}"}, callback
 
   sanitize: (params) =>
@@ -127,10 +129,11 @@ class Device
     @fetch (error, attributes={}) =>
       return callback error, false if error?
       return callback null, false unless attributes.token?
-      bcrypt.compare ogToken, attributes.token, (error, result) =>
+      bcrypt.compare ogToken, attributes.token, (error, verified) =>
         return callback error if error?
-        debug "verifyRootToken: bcrypt.compare results: #{error}, #{result}"
-        callback null, result
+        debug "verifyRootToken: bcrypt.compare results: #{error}, #{verified}"
+        @_storeTokenInCache @_hashToken(ogToken) if verified
+        callback null, verified
 
   verifySessionToken: (token, callback=->) =>
     try
@@ -140,22 +143,25 @@ class Device
 
     @fetch (error, attributes) =>
       return callback error if error?
-      callback null, attributes?.meshblu?.tokens?[hashedToken]?
+
+      verified = attributes?.meshblu?.tokens?[hashedToken]?
+      @_storeTokenInCache hashedToken if verified
+      callback null, verified
 
   verifyToken: (token, callback=->) =>
     return callback new Error('No token provided') unless token?
 
-    @verifySessionToken token, (error, verified) =>
+    @_verifyTokenInCache token, (error, verified) =>
       return callback error if error?
       return callback null, true if verified
 
-      @verifyRootToken token, (error, verified) =>
+      @verifySessionToken token, (error, verified) =>
         return callback error if error?
+        return callback null, true if verified
 
-        return callback null, false unless verified
-        @storeToken token, (error) =>
+        @verifyRootToken token, (error, verified) =>
           return callback error if error?
-          return callback null, true
+          return callback null, verified
 
   update: (params, callback=->) =>
     params = _.cloneDeep params
@@ -177,6 +183,10 @@ class Device
         @_hashDevice (error) =>
           return callback @sanitizeError(error) if error?
           callback()
+
+  _clearTokenCache: (callback=->) =>
+    return callback null, false unless @redis?.del?
+    @redis.del "tokens:#{@uuid}", callback
 
   _hashDevice: (callback=->) =>
     debug '_hashDevice', @uuid
@@ -200,5 +210,15 @@ class Device
     hasher.update @uuid
     hasher.update @config.token
     hasher.digest 'base64'
+
+  _storeTokenInCache: (token, callback=->) =>
+    return callback null, false unless @redis?.sadd?
+    @redis.sadd "tokens:#{@uuid}", token, callback
+
+  _verifyTokenInCache: (token, callback=->) =>
+    return callback null, false unless @redis?.sismember?
+    hashedToken = @_hashToken token
+    @redis.sismember "tokens:#{@uuid}", hashedToken, callback
+
 
 module.exports = Device

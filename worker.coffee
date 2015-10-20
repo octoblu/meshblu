@@ -38,11 +38,12 @@ class Worker
     try
       callback null, JSON.parse jobStr
     catch error
-      callback error
+      console.error error.stack
+      callback()
 
   processJobStr: (jobStr, callback) =>
     @parseJob jobStr, (error, job) =>
-      return callback error if error?
+      return callback() if error?
 
       @processJob job, callback
 
@@ -51,7 +52,7 @@ class Worker
     {uuid,token} = auth
 
     authDevice uuid, token, (error, device) =>
-      return callback error if error?
+      return callback() if error?
 
       @sendMessage device, message, callback
 

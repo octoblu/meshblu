@@ -22,6 +22,7 @@ class Worker
   run: =>
     async.whilst @true, @popMessage, (error) =>
       console.error 'whilst error:', error.stack
+      process.exit 1
 
   true: => true
 

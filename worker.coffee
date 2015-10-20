@@ -2,6 +2,8 @@ _ = require 'lodash'
 process.env.MESSAGE_BUS_PORT = "" + _.random 10000, 50000
 
 async = require 'async'
+debug = require('debug')('meshblu:worker')
+Benchmark = require 'simple-benchmark'
 redis = require './lib/redis'
 authDevice = require './lib/authDevice'
 sendMessageCreator = require './lib/sendMessage'
@@ -30,33 +32,44 @@ class Worker
     @redis.brpop 'meshblu-messages', 60, (err, result) =>
       return callback err if err?
       return callback() unless result?
+      benchmark = new Benchmark label: 'message'
+      debug 'start', benchmark.toString()
 
       [queueName, jobStr] = result
-      @processJobStr jobStr, callback
+      @processJobStr jobStr, benchmark, callback
 
-  parseJob: (jobStr, callback) =>
+  processJobStr: (jobStr, benchmark, callback) =>
+    debug 'parseJobStr', benchmark.toString()
+    @parseJob jobStr, benchmark, (error, job) =>
+      return callback() if error?
+
+      @processJob job, benchmark, callback
+
+  parseJob: (jobStr, benchmark, callback) =>
+    debug 'parseJob', benchmark.toString()
     try
       callback null, JSON.parse jobStr
     catch error
       console.error error.stack
       callback()
 
-  processJobStr: (jobStr, callback) =>
-    @parseJob jobStr, (error, job) =>
-      return callback() if error?
-
-      @processJob job, callback
-
-  processJob: (job, callback) =>
+  processJob: (job, benchmark, callback) =>
+    debug 'processJob', benchmark.toString()
     {auth,message,http} = job
     {uuid,token} = auth
 
-    authDevice uuid, token, (error, device) =>
+    @authDevice uuid, token, benchmark, (error, device) =>
+      debug 'authedDevice', benchmark.toString()
       return callback() if error?
 
-      @sendMessage device, message, callback
+      @sendMessage device, message, benchmark, callback
 
-  sendMessage: (device, message, callback) =>
+  authDevice: (uuid, token, benchmark, callback) =>
+    debug 'authDevice', benchmark.toString()
+    authDevice uuid, token, callback
+
+  sendMessage: (device, message, benchmark, callback) =>
+    debug 'sendMessage', benchmark.toString()
     @_sendMessage device, message
     callback()
 

@@ -31,7 +31,7 @@ class Worker
       return callback() unless result?
 
       [queueName, jobStr] = result
-      @processJobStr jobStr, Date.now(), callback
+      @processJobStr jobStr, callback
 
   parseJob: (jobStr, callback) =>
     try
@@ -39,17 +39,15 @@ class Worker
     catch error
       callback error
 
-  processJobStr: (jobStr, time, callback) =>
+  processJobStr: (jobStr, callback) =>
     @parseJob jobStr, (error, job) =>
       return callback error if error?
 
-      @processJob job, time, callback
+      @processJob job, callback
 
-  processJob: (job, time, callback) =>
+  processJob: (job, callback) =>
     {auth,message,http} = job
     {uuid,token} = auth
-    message.payload.times.http = http
-    message.payload.times.worker = time
 
     authDevice uuid, token, (error, device) =>
       return callback error if error?

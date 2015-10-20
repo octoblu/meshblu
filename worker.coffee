@@ -1,12 +1,23 @@
+_ = require 'lodash'
+process.env.MESSAGE_BUS_PORT = "" + _.random 10000, 50000
+
 async = require 'async'
 redis = require './lib/redis'
 authDevice = require './lib/authDevice'
 sendMessageCreator = require './lib/sendMessage'
 createMessageIOEmitter = require './lib/createMessageIOEmitter'
+MessageIO = require './lib/MessageIO'
+
 
 class Worker
   constructor: ->
-    @_sendMessage = sendMessageCreator createMessageIOEmitter()
+    messageIO = new MessageIO()
+    messageIO.start()
+
+    redisStore = redis.createIoStore()
+    messageIO.setAdapter redisStore
+
+    @_sendMessage = sendMessageCreator createMessageIOEmitter messageIO.io
 
   run: =>
     async.whilst @true, @popMessage, (error) =>
@@ -15,7 +26,7 @@ class Worker
   true: => true
 
   popMessage: (callback) =>
-    redis.brpop 'meshblu-messages', 1, (err, result) =>
+    redis.client.brpop 'meshblu-messages', 1, (err, result) =>
       return callback err if err?
       return callback() unless result?
       [queueName, jobStr] = result
@@ -34,15 +45,16 @@ class Worker
       @processJob job, callback
 
   processJob: (job, callback) =>
-    {uuid,token,message} = job
+    {auth,message} = job
+    {uuid,token} = auth
 
     authDevice uuid, token, (error, device) =>
       return callback error if error?
 
-      @sendMessage device, message, message.topic, callback
+      @sendMessage device, message, callback
 
-  sendMessage: (device, message, topic, callback) =>
-    @_sendMessage device, message, topic
+  sendMessage: (device, message, callback) =>
+    @_sendMessage device, message
     callback()
 
 worker = new Worker()

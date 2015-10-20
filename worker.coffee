@@ -8,7 +8,6 @@ sendMessageCreator = require './lib/sendMessage'
 createMessageIOEmitter = require './lib/createMessageIOEmitter'
 MessageIO = require './lib/MessageIO'
 
-
 class Worker
   constructor: ->
     messageIO = new MessageIO()
@@ -18,6 +17,7 @@ class Worker
     messageIO.setAdapter redisStore
 
     @_sendMessage = sendMessageCreator createMessageIOEmitter messageIO.io
+    @redis = redis.createClient()
 
   run: =>
     async.whilst @true, @popMessage, (error) =>
@@ -26,11 +26,12 @@ class Worker
   true: => true
 
   popMessage: (callback) =>
-    redis.client.brpop 'meshblu-messages', 1, (err, result) =>
+    @redis.brpop 'meshblu-messages', 60, (err, result) =>
       return callback err if err?
       return callback() unless result?
+
       [queueName, jobStr] = result
-      @processJobStr jobStr, callback
+      @processJobStr jobStr, Date.now(), callback
 
   parseJob: (jobStr, callback) =>
     try
@@ -38,15 +39,17 @@ class Worker
     catch error
       callback error
 
-  processJobStr: (jobStr, callback) =>
+  processJobStr: (jobStr, time, callback) =>
     @parseJob jobStr, (error, job) =>
       return callback error if error?
 
-      @processJob job, callback
+      @processJob job, time, callback
 
-  processJob: (job, callback) =>
-    {auth,message} = job
+  processJob: (job, time, callback) =>
+    {auth,message,http} = job
     {uuid,token} = auth
+    message.payload.times.http = http
+    message.payload.times.worker = time
 
     authDevice uuid, token, (error, device) =>
       return callback error if error?

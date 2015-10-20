@@ -22,21 +22,21 @@ deploy:
     secure: "PWUGkix9QPeOVdeEKwXM1DioZsxOD7YXLjcMNm4yghyDwWtkPIn5b98Fay5A8CfiUjngjviUb63X2KhqYE/kglWETp7BsbSzOhgDqv8qbnsK4MVtzk30fphX+FcVo9RSd37G6S3cT58DnJ9CtK6Z+Hp/44U59w2AXdoRr3i8/Ys="
   app-id: e1883763-9db4-432f-900a-628dd84aceaa
   on:
-    branch: master
+    branch: production
     condition: $USE_MONGO = true
 - provider: opsworks
   access_key_id: AKIAJH2D5IPIRHYJT5IA
   secret_access_key: *1
   app-id: 7b21bb86-93bb-4a2b-b482-7a8a3ab4a23b
   on:
-    branch: master
+    branch: production
     condition: $USE_MONGO = true
 - provider: opsworks
   access_key_id: AKIAJH2D5IPIRHYJT5IA
   secret_access_key: *1
   app-id: c9b4255f-bc9e-4368-a998-a26ea9ac4f7f
   on:
-    branch: master
+    branch: production
     condition: $USE_MONGO = true
 - provider: opsworks
   access_key_id: AKIAJH2D5IPIRHYJT5IA

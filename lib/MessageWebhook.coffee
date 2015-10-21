@@ -9,8 +9,7 @@ class MessageWebhook
 
   generateAndForwardMeshbluCredentials: (callback=->) =>
     return callback() unless @options.generateAndForwardMeshbluCredentials
-    token = @device.generateToken()
-    @device.storeToken token, (error) =>
+    @device.generateAndStoreTokenInCache (error, token) =>
       return callback error if error?
       callback null, token
 
@@ -25,6 +24,6 @@ class MessageWebhook
         callback()
 
   removeToken: (token) =>
-    @device.revokeToken token, (error) =>
+    @device.removeTokenFromCache token, (error) =>
 
 module.exports = MessageWebhook

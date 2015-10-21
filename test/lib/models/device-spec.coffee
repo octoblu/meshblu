@@ -17,8 +17,9 @@ describe 'Device', ->
       @redis =
         del: sinon.stub()
         sadd: sinon.stub()
+        srem: sinon.stub()
         sismember: sinon.stub()
-        
+
       @dependencies =
         database: @database
         getGeo: @getGeo
@@ -313,6 +314,32 @@ describe 'Device', ->
             expect(token).to.exist
             done()
 
+  describe '->generateAndStoreTokenInCache', ->
+    describe 'when called and it yields a token', ->
+      beforeEach (done) ->
+        @sut = new Device uuid: @uuid, @dependencies
+        @sut.generateToken = sinon.stub().returns 'cheeseburger'
+        @sut._hashToken = sinon.stub().returns 'this-is-totally-a-secret'
+        @sut._storeTokenInCache = sinon.stub().yields null
+        @sut.generateAndStoreTokenInCache (@error, @token) => done()
+      it 'should call _storeTokenInCache', ->
+        expect(@sut._storeTokenInCache).to.have.been.calledWith 'this-is-totally-a-secret'
+      it 'should have a token', ->
+        expect(@token).to.deep.equal 'cheeseburger'
+
+    describe 'when called and it yields a different token', ->
+      beforeEach (done) ->
+        @sut = new Device uuid: @uuid, @dependencies
+        @sut.generateToken = sinon.stub().returns 'california burger'
+        @sut._hashToken = sinon.stub().returns 'this-is-totally-a-different-secret'
+        @sut._storeTokenInCache = sinon.stub().yields null
+        @sut.generateAndStoreTokenInCache (@error, @token) => done()
+
+      it 'should call _storeTokenInCache', ->
+        expect(@sut._storeTokenInCache).to.have.been.calledWith 'this-is-totally-a-different-secret'
+      it 'should have a token', ->
+        expect(@token).to.deep.equal 'california burger'
+
   describe '->revokeToken', ->
     beforeEach (done) ->
       @uuid = '50805aa3-a88b-4a67-836b-4752e318c979'
@@ -473,6 +500,29 @@ describe 'Device', ->
 
       it 'should call redis.sadd', ->
         expect(@redis.sadd).to.have.been.calledWith 'tokens:a-uuid', 'foo'
+
+  describe '-> removeTokenFromCache', ->
+    describe 'when redis client is not available', ->
+      beforeEach ->
+        @dependencies.redis = {}
+        @sut = new Device uuid: 'a-uuid', @dependencies
+        @sut.removeTokenFromCache 'foo', (@error, @result) =>
+
+      it 'should return false', ->
+        expect(@result).to.be.false
+
+    describe 'when redis client is available', ->
+      beforeEach (done) ->
+        @sut = new Device uuid: 'a-uuid', @dependencies
+        @sut._hashToken = sinon.stub().returns 'hashed-foo'
+        @sut.removeTokenFromCache 'foo', (@error, @result) => done()
+        @redis.srem.yield null, 1
+
+      it 'should return the result of srem', ->
+        expect(@result).to.equal 1
+
+      it 'should call redis.srem', ->
+        expect(@redis.srem).to.have.been.calledWith 'tokens:a-uuid', 'hashed-foo'
 
   describe '-> _storeInvalidTokenInBlacklist', ->
     describe 'when redis client is not available', ->

@@ -12,6 +12,8 @@ class Device
     @clearCache = dependencies.clearCache ? require '../clearCache'
     @config = dependencies.config ? require '../../config'
     @redis = dependencies.redis ? require '../redis'
+    @findCachedDevice = dependencies.findCachedDevice ? require '../findCachedDevice'
+    @cacheDevice = dependencies.cacheDevice ? require '../cacheDevice'
     @set attributes
     {@uuid} = attributes
 
@@ -48,11 +50,15 @@ class Device
     if @fetch.cache?
       return _.defer callback, null, @fetch.cache
 
-    @devices.findOne uuid: @uuid, {_id: false}, (error, device) =>
-      @fetch.cache = device
-      unless device?
-        error = new Error('Device not found')
-      callback error, @fetch.cache
+    @findCachedDevice @uuid, (error, device) =>
+      return callback error if error?
+      return callback null, device if device?
+
+      @devices.findOne uuid: @uuid, {_id: false}, (error, device) =>
+        @fetch.cache = device
+        return callback new Error('Device not found') unless device?
+        @cacheDevice device
+        callback null, @fetch.cache
 
   resetToken: (callback) =>
     newToken = @generateToken()

@@ -2,24 +2,8 @@ _ = require 'lodash'
 config = require './../config'
 redis = require './redis'
 cacheDevice = require './cacheDevice'
+findCachedDevice = require './findCachedDevice'
 debug = require('debug')('meshblu:getDeviceWithToken')
-
-findCachedDevice = (uuid, callback) ->
-  unless config.redis && config.redis.host
-    callback(null, null)
-    return
-
-  cachedKey = redis.CACHE_KEY + uuid
-
-  debug 'checking redis cache', cachedKey
-  redis.get cachedKey, (error, data) ->
-    debug 'cache results', error, data
-    if error
-      callback error
-      return
-
-    data = JSON.parse data if data
-    callback null, data
 
 findDevice = (uuid, callback, database) ->
   debug 'findDevice', uuid

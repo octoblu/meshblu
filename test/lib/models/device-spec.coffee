@@ -11,12 +11,23 @@ describe 'Device', ->
       @devices  = @database.devices
       @getGeo = sinon.stub().yields null, {}
       @clearCache = sinon.stub().yields null
+      @cacheDevice = sinon.stub()
+      @findCachedDevice = sinon.stub().yields null
       @config = token: 'totally-secret-yo'
       @redis =
         del: sinon.stub()
         sadd: sinon.stub()
         sismember: sinon.stub()
-      @dependencies = {database: @database, getGeo: @getGeo, clearCache: @clearCache, config: @config, redis: @redis}
+        
+      @dependencies =
+        database: @database
+        getGeo: @getGeo
+        clearCache: @clearCache
+        config: @config
+        redis: @redis
+        cacheDevice: @cacheDevice
+        findCachedDevice: @findCachedDevice
+
       @hashedToken = 'qe4NSaR3wrM6c2Q6uE6diz23ZXHyXUE2u/zJ9rvGE5A='
       done error
 

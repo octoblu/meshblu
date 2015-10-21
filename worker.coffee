@@ -70,7 +70,9 @@ class Worker
 
   sendMessage: (device, message, benchmark, callback) =>
     debug 'sendMessage', benchmark.toString()
-    @_sendMessage device, message, 'message', callback
+    @_sendMessage device, message, 'message', =>
+      debug 'sentMessage', benchmark.toString()
+      callback()
 
 worker = new Worker()
 worker.run()

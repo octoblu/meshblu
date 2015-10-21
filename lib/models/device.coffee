@@ -61,6 +61,18 @@ class Device
         @cacheDevice device
         callback null, @fetch.cache
 
+  generateAndStoreTokenInCache: (callback=->)=>
+    token = @generateToken()
+    hashedToken = @_hashToken token
+    @_storeTokenInCache hashedToken, (error) =>
+      return callback error if error?
+      callback null, token
+
+  removeTokenFromCache: (token, callback=->) =>
+    return callback null, false unless @redis?.srem?
+    hashedToken = @_hashToken token
+    @redis.srem "tokens:#{@uuid}", hashedToken, callback
+
   resetToken: (callback) =>
     newToken = @generateToken()
     @set token: newToken
@@ -78,7 +90,7 @@ class Device
       catch error
         return callback error
 
-      @_clearTokenCache()
+      @removeTokenFromCache token
       @update $unset : {"meshblu.tokens.#{hashedToken}"}, callback
 
   sanitize: (params) =>
@@ -227,13 +239,13 @@ class Device
     hasher.update @config.token
     hasher.digest 'base64'
 
-  _storeInvalidTokenInBlacklist: (token, callback=->) =>
-    return callback null, false unless @redis?.sadd?
-    @redis.sadd "tokens:blacklist:#{@uuid}", token, callback
-
   _storeTokenInCache: (token, callback=->) =>
     return callback null, false unless @redis?.sadd?
     @redis.sadd "tokens:#{@uuid}", token, callback
+
+  _storeInvalidTokenInBlacklist: (token, callback=->) =>
+    return callback null, false unless @redis?.sadd?
+    @redis.sadd "tokens:blacklist:#{@uuid}", token, callback
 
   _verifyTokenInCache: (token, callback=->) =>
     return callback null, false unless @redis?.sismember?

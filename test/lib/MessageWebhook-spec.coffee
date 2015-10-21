@@ -5,8 +5,8 @@ describe 'MessageWebhook', ->
     @deviceRecord = {}
     @device =
       generateToken: sinon.stub()
-      revokeToken: sinon.stub()
-      storeToken: sinon.stub()
+      removeTokenFromCache: sinon.stub()
+      generateAndStoreTokenInCache: sinon.stub()
     @request = sinon.stub()
     @generateAndStoreToken = sinon.stub()
     @revokeToken = sinon.stub()
@@ -119,8 +119,7 @@ describe 'MessageWebhook', ->
         @request.yields null, statusCode: 200, 'nothing wrong'
         @hook = url: 'http://facebook.com', generateAndForwardMeshbluCredentials: true
         @deviceRecord = uuid: 'test'
-        @device.generateToken.returns 'gobbledegook'
-        @device.storeToken.yields null
+        @device.generateAndStoreTokenInCache.yields null, 'gobbledegook'
         @sut = new MessageWebhook @deviceRecord.uuid, @hook, @dependencies
         @sut.generateAndForwardMeshbluCredentials (@error, @token) =>
 
@@ -142,5 +141,5 @@ describe 'MessageWebhook', ->
       it 'should get not error', ->
         expect(@error).not.to.exist
 
-      it 'should call revokeToken', ->
-        expect(@device.revokeToken).to.have.been.calledWith 'test'
+      it 'should call removeTokenFromCache', ->
+        expect(@device.removeTokenFromCache).to.have.been.calledWith 'test'

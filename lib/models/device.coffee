@@ -47,12 +47,13 @@ class Device
       callback()
 
   fetch: (callback=->) =>
-    if @fetch.cache?
-      return _.defer callback, null, @fetch.cache
+    return _.defer callback, null, @fetch.cache if @fetch.cache?
 
     @findCachedDevice @uuid, (error, device) =>
       return callback error if error?
-      return callback null, device if device?
+      if device?
+        @fetch.cache = device
+        return callback null, device
 
       @devices.findOne uuid: @uuid, {_id: false}, (error, device) =>
         @fetch.cache = device

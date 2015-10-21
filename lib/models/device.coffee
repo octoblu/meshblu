@@ -235,7 +235,6 @@ class Device
 
   _isTokenInBlacklist: (token, callback=->) =>
     return callback null, false unless @redis?.sismember?
-    hashedToken = @_hashToken token
-    @redis.sismember "tokens:blacklist:#{@uuid}", hashedToken, callback
+    @redis.sismember "tokens:blacklist:#{@uuid}", token, callback
 
 module.exports = Device

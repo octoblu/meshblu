@@ -541,7 +541,7 @@ describe 'Device', ->
           expect(@result).to.equal 1
 
         it 'should call redis.sismember', ->
-          expect(@redis.sismember).to.have.been.calledWith 'tokens:blacklist:a-uuid', @sut._hashToken('foo')
+          expect(@redis.sismember).to.have.been.calledWith 'tokens:blacklist:a-uuid', 'foo'
 
       describe 'when the member is not available in the set', ->
         beforeEach (done) ->
@@ -553,7 +553,7 @@ describe 'Device', ->
           expect(@result).to.equal 0
 
         it 'should call redis.sismember', ->
-          expect(@redis.sismember).to.have.been.calledWith 'tokens:blacklist:a-uuid', @sut._hashToken('foo')
+          expect(@redis.sismember).to.have.been.calledWith 'tokens:blacklist:a-uuid', 'foo'
 
   describe '-> resetToken', ->
     beforeEach ->

@@ -336,6 +336,7 @@ describe 'Device', ->
 
       beforeEach (done) ->
         @sut = new Device uuid: @uuid, @dependencies
+        @sut._isTokenInBlacklist = sinon.stub().yields null, false
         @sut._verifyTokenInCache = sinon.stub().yields null, false
         @sut.verifyToken 'mushrooms', (error, @verified) => done()
 
@@ -353,6 +354,7 @@ describe 'Device', ->
 
       beforeEach (done) ->
         @sut = new Device uuid: @uuid, @dependencies
+        @sut._isTokenInBlacklist = sinon.stub().yields null, false
         @sut._verifyTokenInCache = sinon.stub().yields null, false
         @sut.verifyToken 'mystery-token', (error, @verified) => done()
 
@@ -461,6 +463,28 @@ describe 'Device', ->
       it 'should call redis.sadd', ->
         expect(@redis.sadd).to.have.been.calledWith 'tokens:a-uuid', 'foo'
 
+  describe '-> _storeInvalidTokenInBlacklist', ->
+    describe 'when redis client is not available', ->
+      beforeEach ->
+        @dependencies.redis = {}
+        @sut = new Device uuid: 'a-uuid', @dependencies
+        @sut._storeInvalidTokenInBlacklist 'foo', (@error, @result) =>
+
+      it 'should return false', ->
+        expect(@result).to.be.false
+
+    describe 'when redis client is available', ->
+      beforeEach (done) ->
+        @sut = new Device uuid: 'a-uuid', @dependencies
+        @sut._storeInvalidTokenInBlacklist 'foo', (@error, @result) => done()
+        @redis.sadd.yield null, 1
+
+      it 'should return the result of sadd', ->
+        expect(@result).to.equal 1
+
+      it 'should call redis.sadd', ->
+        expect(@redis.sadd).to.have.been.calledWith 'tokens:blacklist:a-uuid', 'foo'
+
   describe '-> _verifyTokenInCache', ->
     describe 'when redis client is not available', ->
       beforeEach ->
@@ -495,6 +519,41 @@ describe 'Device', ->
 
         it 'should call redis.sismember', ->
           expect(@redis.sismember).to.have.been.calledWith 'tokens:a-uuid', @sut._hashToken('foo')
+
+  describe '-> _isTokenInBlacklist', ->
+    describe 'when redis client is not available', ->
+      beforeEach ->
+        @dependencies.redis = {}
+        @sut = new Device uuid: 'a-uuid', @dependencies
+        @sut._isTokenInBlacklist 'foo', (@error, @result) =>
+
+      it 'should return false', ->
+        expect(@result).to.be.false
+
+    describe 'when redis client is available', ->
+      describe 'when the member is available in the set', ->
+        beforeEach (done) ->
+          @sut = new Device uuid: 'a-uuid', @dependencies
+          @sut._isTokenInBlacklist 'foo', (@error, @result) => done()
+          @redis.sismember.yield null, 1
+
+        it 'should return the result of sismember', ->
+          expect(@result).to.equal 1
+
+        it 'should call redis.sismember', ->
+          expect(@redis.sismember).to.have.been.calledWith 'tokens:blacklist:a-uuid', @sut._hashToken('foo')
+
+      describe 'when the member is not available in the set', ->
+        beforeEach (done) ->
+          @sut = new Device uuid: 'a-uuid', @dependencies
+          @sut._isTokenInBlacklist 'foo', (@error, @result) => done()
+          @redis.sismember.yield null, 0
+
+        it 'should return the result of sismember', ->
+          expect(@result).to.equal 0
+
+        it 'should call redis.sismember', ->
+          expect(@redis.sismember).to.have.been.calledWith 'tokens:blacklist:a-uuid', @sut._hashToken('foo')
 
   describe '-> resetToken', ->
     beforeEach ->

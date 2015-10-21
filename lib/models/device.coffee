@@ -32,6 +32,7 @@ class Device
 
       bcrypt.hash token, 8, (error, hashedToken) =>
         @attributes.token = hashedToken if hashedToken?
+        @_storeTokenInCache hashedToken if hashedToken?
         callback error
 
   addOnlineSince: (callback=->) =>
@@ -152,17 +153,24 @@ class Device
   verifyToken: (token, callback=->) =>
     return callback new Error('No token provided') unless token?
 
-    @_verifyTokenInCache token, (error, verified) =>
+    @_isTokenInBlacklist token, (error, blacklisted) =>
       return callback error if error?
-      return callback null, true if verified
+      return callback null, false if blacklisted
 
-      @verifySessionToken token, (error, verified) =>
+      @_verifyTokenInCache token, (error, verified) =>
         return callback error if error?
         return callback null, true if verified
 
-        @verifyRootToken token, (error, verified) =>
+        @verifySessionToken token, (error, verified) =>
           return callback error if error?
-          return callback null, verified
+          return callback null, true if verified
+
+          @verifyRootToken token, (error, verified) =>
+            return callback error if error?
+            return callback null, true if verified
+
+            @_storeInvalidTokenInBlacklist token
+            return callback null, false
 
   update: (params, callback=->) =>
     params = _.cloneDeep params
@@ -212,6 +220,10 @@ class Device
     hasher.update @config.token
     hasher.digest 'base64'
 
+  _storeInvalidTokenInBlacklist: (token, callback=->) =>
+    return callback null, false unless @redis?.sadd?
+    @redis.sadd "tokens:blacklist:#{@uuid}", token, callback
+
   _storeTokenInCache: (token, callback=->) =>
     return callback null, false unless @redis?.sadd?
     @redis.sadd "tokens:#{@uuid}", token, callback
@@ -221,5 +233,9 @@ class Device
     hashedToken = @_hashToken token
     @redis.sismember "tokens:#{@uuid}", hashedToken, callback
 
+  _isTokenInBlacklist: (token, callback=->) =>
+    return callback null, false unless @redis?.sismember?
+    hashedToken = @_hashToken token
+    @redis.sismember "tokens:blacklist:#{@uuid}", hashedToken, callback
 
 module.exports = Device

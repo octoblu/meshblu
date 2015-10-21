@@ -114,6 +114,7 @@ class Device
 
       debug 'storeToken', token, hashedToken
       tokenData = createdAt: new Date()
+      @_storeTokenInCache hashedToken
       @update $set: {"meshblu.tokens.#{hashedToken}" : tokenData}, callback
 
   validate: =>

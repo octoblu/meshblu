@@ -2,18 +2,22 @@ MessageWebhook = require '../../lib/MessageWebhook'
 
 describe 'MessageWebhook', ->
   beforeEach ->
-    @device = {}
+    @deviceRecord = {}
+    @device =
+      generateToken: sinon.stub()
+      revokeToken: sinon.stub()
+      storeToken: sinon.stub()
     @request = sinon.stub()
     @generateAndStoreToken = sinon.stub()
     @revokeToken = sinon.stub()
-    @dependencies = request: @request, generateAndStoreToken: @generateAndStoreToken, revokeToken: @revokeToken
+    @dependencies = request: @request, generateAndStoreToken: @generateAndStoreToken, revokeToken: @revokeToken, device: @device
 
   describe '->send', ->
     describe 'when instantiated with a url', ->
       describe 'when request fails', ->
         beforeEach ->
           @request.yields new Error
-          @sut = new MessageWebhook @device, url: 'http://google.com', @dependencies
+          @sut = new MessageWebhook @deviceRecord.uuid, url: 'http://google.com', @dependencies
           @sut.send foo: 'bar', (@error) =>
 
         it 'should call request with whatever I want', ->
@@ -25,7 +29,7 @@ describe 'MessageWebhook', ->
       describe 'when request do not fails, but returns error that shouldnt happen', ->
         beforeEach ->
           @request.yields null, {statusCode: 103}, 'dont PUT that there'
-          @sut = new MessageWebhook @device, url: 'http://google.com', @dependencies
+          @sut = new MessageWebhook @deviceRecord.uuid, url: 'http://google.com', @dependencies
           @sut.send foo: 'bar', (@error) =>
 
         it 'should call request with whatever I want', ->
@@ -38,7 +42,7 @@ describe 'MessageWebhook', ->
       describe 'when request do fails and it mah fault', ->
         beforeEach ->
           @request.yields null, {statusCode: 429}, 'chillax broham'
-          @sut = new MessageWebhook @device, url: 'http://google.com', @dependencies
+          @sut = new MessageWebhook @deviceRecord.uuid, url: 'http://google.com', @dependencies
           @sut.send foo: 'bar', (@error) =>
 
         it 'should call request with whatever I want', ->
@@ -51,7 +55,7 @@ describe 'MessageWebhook', ->
       describe 'when request do fails and it yo fault', ->
         beforeEach ->
           @request.yields null, {statusCode: 506}, 'pay me mo moneys'
-          @sut = new MessageWebhook @device, url: 'http://google.com', @dependencies
+          @sut = new MessageWebhook @deviceRecord.uuid, url: 'http://google.com', @dependencies
           @sut.send foo: 'bar', (@error) =>
 
         it 'should call request with whatever I want', ->
@@ -65,7 +69,7 @@ describe 'MessageWebhook', ->
         beforeEach ->
           @request.yields null, statusCode: 200, 'nothing wrong'
           @hook = url: 'http://facebook.com'
-          @sut = new MessageWebhook @device, @hook, @dependencies
+          @sut = new MessageWebhook @deviceRecord.uuid, @hook, @dependencies
           @sut.send czar: 'foo', (@error) =>
 
         it 'should get not error', ->
@@ -81,8 +85,8 @@ describe 'MessageWebhook', ->
         beforeEach ->
           @request.yields null, statusCode: 200, 'nothing wrong'
           @hook = url: 'http://facebook.com', generateAndForwardMeshbluCredentials: true
-          @device = uuid: 'test'
-          @sut = new MessageWebhook @device, @hook, @dependencies
+          @deviceRecord = uuid: 'test'
+          @sut = new MessageWebhook @deviceRecord.uuid, @hook, @dependencies
           @sut.generateAndForwardMeshbluCredentials = sinon.stub().yields null, 'gobbledegook'
           @sut.send czar: 'foo', (@error) =>
 
@@ -96,7 +100,7 @@ describe 'MessageWebhook', ->
         beforeEach ->
           @request.yields null, statusCode: 200, 'nothing wrong'
           @hook = url: 'http://facebook.com', generateAndForwardMeshbluCredentials: true, auth: 'basic'
-          @sut = new MessageWebhook @device, @hook, @dependencies
+          @sut = new MessageWebhook @deviceRecord.uuid, @hook, @dependencies
           @sut.generateAndForwardMeshbluCredentials = sinon.stub().yields null
           @sut.send czar: 'foo', (@error) =>
 
@@ -114,9 +118,10 @@ describe 'MessageWebhook', ->
       beforeEach ->
         @request.yields null, statusCode: 200, 'nothing wrong'
         @hook = url: 'http://facebook.com', generateAndForwardMeshbluCredentials: true
-        @device = uuid: 'test'
-        @sut = new MessageWebhook @device, @hook, @dependencies
-        @generateAndStoreToken.yields null, token: 'gobbledegook'
+        @deviceRecord = uuid: 'test'
+        @device.generateToken.returns 'gobbledegook'
+        @device.storeToken.yields null
+        @sut = new MessageWebhook @deviceRecord.uuid, @hook, @dependencies
         @sut.generateAndForwardMeshbluCredentials (@error, @token) =>
 
       it 'should get not error', ->
@@ -129,8 +134,8 @@ describe 'MessageWebhook', ->
     describe 'when using a crazy scheme to get meshblu credentials forwarded', ->
       beforeEach ->
         @hook = url: 'http://facebook.com', generateAndForwardMeshbluCredentials: true
-        @device = uuid: 'test'
-        @sut = new MessageWebhook @device, @hook, @dependencies
+        @deviceRecord = uuid: 'test'
+        @sut = new MessageWebhook @deviceRecord.uuid, @hook, @dependencies
         @revokeToken.yields null
         @sut.removeToken 'test', (@error) =>
 
@@ -138,4 +143,4 @@ describe 'MessageWebhook', ->
         expect(@error).not.to.exist
 
       it 'should call revokeToken', ->
-        expect(@revokeToken).to.have.been.calledWith @device, @device.uuid, 'test'
+        expect(@device.revokeToken).to.have.been.calledWith 'test'

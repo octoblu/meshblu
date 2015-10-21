@@ -22,7 +22,7 @@ describe 'doMessageHooks', ->
       @sut(@device, [name: 'Rufio'], payload: 'You got old', ignoreErrors, @dependencies)
 
     it 'should instantiate a MessageWebhook', ->
-      expect(@MessageWebhook).to.have.been.calledWith @device, name: 'Rufio'
+      expect(@MessageWebhook).to.have.been.calledWith @device.uuid, name: 'Rufio'
       expect(@MessageWebhook).to.have.been.alwaysCalledWithNew
 
     it 'should call send on the messageWebhook', ->

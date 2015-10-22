@@ -10,6 +10,7 @@ services:
 - mongodb
 - redis
 env:
+  global:
   - REDIS_HOST=localhost
   - REDIS_PORT=6379
   matrix:

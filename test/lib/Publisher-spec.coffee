@@ -1,3 +1,4 @@
+async = require 'async'
 Publisher = require '../../lib/Publisher'
 {createClient} = require '../../lib/redis'
 
@@ -27,8 +28,10 @@ describe 'Publisher', ->
         @redis.subscribe 'testy:sent:yer-id', done
 
       beforeEach (done) ->
-        @redis.once 'message', (@channel, @message) =>
-        @sut.publish 'sent', 'yer-id', carnivorousPlant: 'Feed me, Seymour!', done
+        async.parallel [
+          (callback) => @redis.once 'message', (@channel, @message) => callback()
+          async.apply @sut.publish, 'sent', 'yer-id', carnivorousPlant: 'Feed me, Seymour!'
+        ], done
 
       it 'should publish into redis', ->
         expect(@message).to.exist

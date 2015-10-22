@@ -1,3 +1,4 @@
+async = require 'async'
 config = require '../../config'
 {createClient} = require '../../lib/redis'
 MessageIOClient = require '../../lib/messageIOClient'
@@ -18,16 +19,20 @@ describe 'MessageIOClient', ->
 
       describe 'when given the same string', ->
         beforeEach (done) ->
+          @sut.once 'message', => done()
           message = devices: ['apple'], topic: 'pears', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
 
         it 'emit the message', ->
           expect(@onMessage).to.have.been.calledWith devices: ['apple'], topic: 'pears', payload: 'hi'
 
       describe 'when given the wrong string', ->
-        beforeEach (done) ->
+        beforeEach ->
           message = devices: ['apple'], topic: 'bears', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
+
+        beforeEach (done) ->
+          setTimeout done, 100
 
         it 'should not emit the message', ->
           expect(@onMessage).not.to.have.been.called
@@ -38,32 +43,38 @@ describe 'MessageIOClient', ->
 
       describe 'when given the same string', ->
         beforeEach (done) ->
+          @sut.once 'message', => done()
           message = devices: ['apple'], topic: 'pear', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
 
         it 'should emit the message', ->
           expect(@onMessage).to.have.been.called
 
       describe 'when given one more character', ->
         beforeEach (done) ->
+          @sut.once 'message', => done()
           message = devices: ['apple'], topic: 'pears', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
 
         it 'should emit the message', ->
           expect(@onMessage).to.have.been.called
 
       describe 'when given a longer string', ->
         beforeEach (done) ->
+          @sut.once 'message', => done()
           message = devices: ['apple'], topic: 'pearson', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
 
         it 'should emit the message', ->
           expect(@onMessage).to.have.been.called
 
       describe 'when given a different string', ->
-        beforeEach (done) ->
+        beforeEach ->
           message = devices: ['apple'], topic: 'paer', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
+
+        beforeEach (done) ->
+          setTimeout done, 100
 
         it 'should not emit the message', ->
           expect(@onMessage).not.to.have.been.called
@@ -74,32 +85,38 @@ describe 'MessageIOClient', ->
 
       describe 'when given the same string', ->
         beforeEach (done) ->
+          @sut.once 'message', => done()
           message = devices: ['apple'], topic: 'pear', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
 
         it 'should emit the message', ->
           expect(@onMessage).to.have.been.called
 
       describe 'when given one more character', ->
         beforeEach (done) ->
+          @sut.once 'message', => done()
           message = devices: ['apple'], topic: 'pears', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
 
         it 'should emit the message', ->
           expect(@onMessage).to.have.been.called
 
       describe 'when given a longer string', ->
         beforeEach (done) ->
+          @sut.once 'message', => done()
           message = devices: ['apple'], topic: 'pearson', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
 
         it 'should emit the message', ->
           expect(@onMessage).to.have.been.called
 
       describe 'when given a different string', ->
-        beforeEach (done) ->
+        beforeEach ->
           message = devices: ['apple'], topic: 'paer', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
+
+        beforeEach (done) ->
+          setTimeout done, 100
 
         it 'should not emit the message', ->
           expect(@onMessage).not.to.have.been.called
@@ -110,24 +127,29 @@ describe 'MessageIOClient', ->
 
       describe 'when given a matching string', ->
         beforeEach (done) ->
+          @sut.once 'message', => done()
           message = devices: ['apple'], topic: 'pear', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
 
         it 'should emit the message', ->
           expect(@onMessage).to.have.been.called
 
       describe 'given another matching string', ->
         beforeEach (done) ->
+          @sut.once 'message', => done()
           message = devices: ['apple'], topic: 'paer', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
 
         it 'should emit the message', ->
           expect(@onMessage).to.have.been.called
 
       describe 'when given a non-matching string', ->
-        beforeEach (done) ->
+        beforeEach ->
           message = devices: ['apple'], topic: 'raer', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
+
+        beforeEach (done) ->
+          setTimeout done, 100
 
         it 'should not emit the message', ->
           expect(@onMessage).not.to.have.been.called
@@ -137,17 +159,21 @@ describe 'MessageIOClient', ->
         @sut.subscribe 'apple', ['received'], ['-pears'], done
 
       describe 'when given a matching string', ->
-        beforeEach (done) ->
+        beforeEach ->
           message = devices: ['apple'], topic: 'pears', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
+
+        beforeEach (done) ->
+          setTimeout done, 100
 
         it 'should not emit the message', ->
           expect(@onMessage).not.to.have.been.called
 
       describe 'when given a non-matching string', ->
         beforeEach (done) ->
+          @sut.once 'message', => done()
           message = devices: ['apple'], topic: 'paer', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
 
         it 'should emit the message', ->
           expect(@onMessage).to.have.been.called
@@ -157,25 +183,32 @@ describe 'MessageIOClient', ->
         @sut.subscribe 'apple', ['received'], ['-p*r*'], done
 
       describe 'when given a matching string', ->
-        beforeEach (done) ->
+        beforeEach ->
           message = devices: ['apple'], topic: 'pears', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
+
+        beforeEach (done) ->
+          setTimeout done, 100
 
         it 'should not emit the message', ->
           expect(@onMessage).not.to.have.been.called
 
       describe 'when given a non-matching string', ->
-        beforeEach (done) ->
+        beforeEach ->
           message = devices: ['apple'], topic: 'paer', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
+
+        beforeEach (done) ->
+          setTimeout done, 100
 
         it 'should not emit the message', ->
           expect(@onMessage).not.to.have.been.called
 
       describe 'when given a non-matching string', ->
         beforeEach (done) ->
+          @sut.once 'message', => done()
           message = devices: ['apple'], topic: 'dear', payload: 'hi'
-          @redis.publish 'test:received:apple', JSON.stringify(message), done
+          @redis.publish 'test:received:apple', JSON.stringify(message)
 
         it 'should emit the message', ->
           expect(@onMessage).to.have.been.called
@@ -183,88 +216,89 @@ describe 'MessageIOClient', ->
   describe 'subscribe', ->
     describe 'received only', ->
       beforeEach (done) ->
-        @sut.once 'message', (@message) =>
-        @sut.subscribe 'apple', ['received'], undefined, =>
-          @redis.publish 'test:received:apple', JSON.stringify(dehydration: 'WATER you DOING?'), =>
-            done()
+        @sut.subscribe 'apple', ['received'], undefined, done
+
+      beforeEach (done) ->
+        @sut.once 'message', (@message) => done()
+        @redis.publish 'test:received:apple', JSON.stringify(dehydration: 'WATER you DOING?')
 
       it 'should get a message', ->
         expect(@message).to.deep.equal dehydration: 'WATER you DOING?'
 
     describe 'sent only', ->
       beforeEach (done) ->
-        @sut.once 'message', (@message) =>
-        @sut.subscribe 'hubris', ['sent'], undefined, =>
-          @redis.publish 'test:sent:hubris', JSON.stringify(that: 'would never happen to me!'), =>
-            done()
+        @sut.subscribe 'hubris', ['sent'], undefined, done
+
+      beforeEach (done) ->
+        @sut.once 'message', (@message) => done()
+        @redis.publish 'test:sent:hubris', JSON.stringify(that: 'would never happen to me!')
 
       it 'should get a message', ->
         expect(@message).to.deep.equal that: 'would never happen to me!'
 
     describe 'broadcast only', ->
       beforeEach (done) ->
-        @sut.once 'message', (@message) =>
-        @sut.subscribe 'hubris', ['broadcast'], undefined, =>
-          @redis.publish 'test:broadcast:hubris', JSON.stringify(that: 'would never happen to me!'), =>
-            done()
+        @sut.subscribe 'hubris', ['broadcast'], undefined, done
+
+      beforeEach (done) ->
+        @sut.once 'message', (@message) => done()
+        @redis.publish 'test:broadcast:hubris', JSON.stringify(that: 'would never happen to me!')
 
       it 'should get a message', ->
         expect(@message).to.deep.equal that: 'would never happen to me!'
 
     describe 'all kinds', ->
       beforeEach (done) ->
-        @sut.once 'message', (@message) =>
         @sut.subscribe 'heart', ['broadcast', 'sent', 'received'], undefined, done
 
       describe 'receiving a broadcast message', ->
         beforeEach (done) ->
-          @redis.publish 'test:broadcast:heart', JSON.stringify(couldBe: 'The 80s band'), =>
-            done()
+          @sut.once 'message', (@message) => done()
+          @redis.publish 'test:broadcast:heart', JSON.stringify(couldBe: 'The 80s band')
 
         it 'should get a broadcast message', ->
           expect(@message).to.deep.equal couldBe: 'The 80s band'
 
       describe 'receiving a received message', ->
         beforeEach (done) ->
-          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
-            done()
+          @sut.once 'message', (@message) => done()
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?')
 
         it 'should get a received message', ->
           expect(@message).to.deep.equal couldBe: 'lovesick?'
 
       describe 'receiving a received message', ->
         beforeEach (done) ->
-          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
-            done()
+          @sut.once 'message', (@message) => done()
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?')
 
         it 'should get a received message', ->
           expect(@message).to.deep.equal couldBe: 'lovesick?'
 
     describe 'no kinds', ->
       beforeEach (done) ->
-        @sut.once 'message', (@message) =>
         @sut.subscribe 'heart', undefined, undefined, done
 
       describe 'receiving a broadcast message', ->
         beforeEach (done) ->
-          @redis.publish 'test:broadcast:heart', JSON.stringify(couldBe: 'The 80s band'), =>
-            done()
+          @sut.once 'message', (@message) => done()
+          @redis.publish 'test:broadcast:heart', JSON.stringify(couldBe: 'The 80s band')
 
         it 'should get a broadcast message', ->
           expect(@message).to.deep.equal couldBe: 'The 80s band'
 
       describe 'receiving a received message', ->
         beforeEach (done) ->
-          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
-            done()
+          @sut.once 'message', (@message) => done()
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?')
 
         it 'should get a received message', ->
           expect(@message).to.deep.equal couldBe: 'lovesick?'
 
       describe 'receiving a received message', ->
         beforeEach (done) ->
-          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
-            done()
+          @sut.once 'message', (@message) => done()
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?')
 
         it 'should get a received message', ->
           expect(@message).to.deep.equal couldBe: 'lovesick?'
@@ -276,8 +310,10 @@ describe 'MessageIOClient', ->
         @sut.once 'message', @onMessage
         @sut.subscribe 'apple', ['received'], undefined, =>
           @sut.unsubscribe 'apple', ['received'], =>
-            @redis.publish 'test:received:apple', JSON.stringify(dehydration: 'WATER you DOING?'), =>
-              done()
+            @redis.publish 'test:received:apple', JSON.stringify(dehydration: 'WATER you DOING?'), done
+
+      beforeEach (done) ->
+        setTimeout done, 100
 
       it 'should not get a message', ->
         expect(@onMessage).not.to.have.been.called
@@ -288,8 +324,7 @@ describe 'MessageIOClient', ->
         @sut.once 'message', @onMessage
         @sut.subscribe 'hubris', ['sent'], undefined, =>
           @sut.unsubscribe 'hubris', ['sent'], =>
-            @redis.publish 'test:sent:hubris', JSON.stringify(that: 'would never happen to me!'), =>
-              done()
+            @redis.publish 'test:sent:hubris', JSON.stringify(that: 'would never happen to me!'), done
 
       it 'should not get a message', ->
         expect(@onMessage).not.to.have.been.called
@@ -300,8 +335,10 @@ describe 'MessageIOClient', ->
         @sut.once 'message', @onMessage
         @sut.subscribe 'hubris', ['broadcast'], undefined, =>
           @sut.unsubscribe 'hubris', ['broadcast'], =>
-            @redis.publish 'test:broadcast:hubris', JSON.stringify(that: 'would never happen to me!'), =>
-              done()
+            @redis.publish 'test:broadcast:hubris', JSON.stringify(that: 'would never happen to me!'), done
+
+      beforeEach (done) ->
+        setTimeout done, 100
 
       it 'should not get a message', ->
         expect(@onMessage).not.to.have.been.called
@@ -315,24 +352,21 @@ describe 'MessageIOClient', ->
 
       describe 'receiving a broadcast message', ->
         beforeEach (done) ->
-          @redis.publish 'test:broadcast:heart', JSON.stringify(couldBe: 'The 80s band'), =>
-            done()
+          @redis.publish 'test:broadcast:heart', JSON.stringify(couldBe: 'The 80s band'), done
 
         it 'should not get any', ->
           expect(@onMessage).not.to.have.been.called
 
       describe 'receiving a received message', ->
         beforeEach (done) ->
-          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
-            done()
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), done
 
         it 'should not get any', ->
           expect(@onMessage).not.to.have.been.called
 
       describe 'receiving a received message', ->
         beforeEach (done) ->
-          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
-            done()
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), done
 
         it 'should not get any', ->
           expect(@onMessage).not.to.have.been.called
@@ -345,25 +379,31 @@ describe 'MessageIOClient', ->
           @sut.unsubscribe 'heart', undefined, done
 
       describe 'receiving a broadcast message', ->
+        beforeEach ->
+          @redis.publish 'test:broadcast:heart', JSON.stringify(couldBe: 'The 80s band')
+
         beforeEach (done) ->
-          @redis.publish 'test:broadcast:heart', JSON.stringify(couldBe: 'The 80s band'), =>
-            done()
+          setTimeout done, 100
 
         it 'should not get any', ->
           expect(@onMessage).not.to.have.been.called
 
       describe 'receiving a received message', ->
+        beforeEach ->
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?')
+
         beforeEach (done) ->
-          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
-            done()
+          setTimeout done, 100
 
         it 'should not get any', ->
           expect(@onMessage).not.to.have.been.called
 
       describe 'receiving a received message', ->
+        beforeEach ->
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?')
+
         beforeEach (done) ->
-          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
-            done()
+          setTimeout done, 100
 
         it 'should not get any', ->
           expect(@onMessage).not.to.have.been.called

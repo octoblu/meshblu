@@ -15,6 +15,9 @@ class MessageIOClient extends EventEmitter2
     @subscriber = new Subscriber namespace: namespace
     @subscriber.on 'message', @_onMessage
 
+  close: =>
+    @subscriber.close()
+
   subscribe: (uuid, subscriptionTypes, topics, callback) =>
     subscriptionTypes ?= MessageIOClient.DEFAULT_SUBSCRIPTION_TYPES
     @_addTopics uuid, topics
@@ -49,6 +52,14 @@ class MessageIOClient extends EventEmitter2
   _defaultTopics: =>
 
   _onMessage: (channel, message) =>
+    if _.contains channel, ':config:'
+      @emit 'config', message
+      return
+
+    if _.contains channel, ':data:'
+      @emit 'data', message
+      return
+
     uuids = message?.devices
     uuids = [uuids] unless _.isArray uuids
     uuids = [message.fromUuid] if _.contains uuids, '*'

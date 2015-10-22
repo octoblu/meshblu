@@ -7,6 +7,10 @@ describe 'Subscriber', ->
       @redis = createClient()
       @sut = new Subscriber namespace: 'test'
 
+    describe '->close', ->
+      it 'should be a function', ->
+        @sut.close()
+
     describe '->subscribe', ->
       describe 'when subscribing', ->
         beforeEach (done) ->

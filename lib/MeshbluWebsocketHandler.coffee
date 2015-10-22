@@ -43,9 +43,7 @@ class MeshbluWebsocketHandler extends EventEmitter
     @authDevice @uuid, @token, (error, device) =>
       return if error?
       @setOnlineStatus device, false
-      @messageIOClient.unsubscribe @uuid
-      @messageIOClient.unsubscribe "#{@uuid}_bc"
-      # @messageIOClient = null
+      @messageIOClient.close()
 
   onMessage: (event) =>
     debug 'onMessage', event.data
@@ -88,7 +86,7 @@ class MeshbluWebsocketHandler extends EventEmitter
       return @sendFrame 'notReady', message: 'unauthorized', status: 401 if error?
       @sendFrame 'ready', uuid: @uuid, token: @token, status: 200
       @setOnlineStatus device, true
-      @messageIOClient.subscribe @uuid, ['received']
+      @messageIOClient.subscribe @uuid, ['received', 'config', 'data']
 
   message: (data) =>
     debug 'message', data
@@ -212,14 +210,18 @@ class MeshbluWebsocketHandler extends EventEmitter
         return callback error if error?
 
         requestedSubscriptionTypes = data.types
+
         authorizedSubscriptionTypes = []
         authorizedSubscriptionTypes.push 'broadcast' if permission
 
         if subscribedDevice.owner? && subscribedDevice.owner == @authedDevice.uuid
           authorizedSubscriptionTypes.push 'received'
           authorizedSubscriptionTypes.push 'sent'
+          authorizedSubscriptionTypes.push 'config'
+          authorizedSubscriptionTypes.push 'data'
 
         requestedSubscriptionTypes = requestedSubscriptionTypes ? authorizedSubscriptionTypes
+        requestedSubscriptionTypes = _.union requestedSubscriptionTypes, ['config', 'data']
         subscriptionTypes = _.intersection(requestedSubscriptionTypes, authorizedSubscriptionTypes)
 
         @messageIOClient.subscribe subscribedDevice.uuid, subscriptionTypes

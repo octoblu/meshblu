@@ -1,12 +1,11 @@
 class Publisher
-  constructor: ({@uuid, @namespace}, {@client}={}) ->
+  constructor: ({@namespace}={}, {@client}={}) ->
+    @namespace ?= 'meshblu'
     {createClient} = require './redis'
     @client ?= createClient()
 
-  _channel: =>
-    "#{@namespace}:#{@uuid}"
-
-  publish: (message, callback) =>
-    @client.publish @_channel(), JSON.stringify(message), callback
+  publish: (type, uuid, message, callback) =>
+    channel = "#{@namespace}:#{type}:#{uuid}"
+    @client.publish channel, JSON.stringify(message), callback
 
 module.exports = Publisher

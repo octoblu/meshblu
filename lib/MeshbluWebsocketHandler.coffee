@@ -37,7 +37,6 @@ class MeshbluWebsocketHandler extends EventEmitter
     @messageIOClient.on 'message', @onSocketMessage
     @messageIOClient.on 'config', @onSocketConfig
     @messageIOClient.on 'data', @onSocketData
-    @messageIOClient.start()
 
   onClose: (event) =>
     debug 'on.close'

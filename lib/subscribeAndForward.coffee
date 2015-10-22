@@ -24,7 +24,6 @@ connectMessageIO = (response, payloadOnly=false) ->
 
     readStream.push JSON.stringify(message) + '\n'
 
-  messageIOClient.start()
   return messageIOClient
 
 subscribeAndForward = (askingDevice, response, uuid, token, requestedSubscriptionTypes, payloadOnly, topics) ->

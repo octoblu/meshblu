@@ -1,14 +1,36 @@
 _ = require 'lodash'
+async = require 'async'
 config = require '../config'
 debug = require('debug')('meshblu:message-io-client')
+{createClient} = require './redis'
 {EventEmitter2} = require 'eventemitter2'
+Subscriber = require './Subscriber'
 
 class MessageIOClient extends EventEmitter2
-  constructor: (dependencies={}) ->
-    @SocketIOClient = dependencies.SocketIOClient ? require 'socket.io-client'
-    @topicMap = {}
+  @DEFAULT_SUBSCRIPTION_TYPES: ['broadcast', 'sent', 'received']
 
-  addTopics: (uuid, topics=['*']) =>
+  constructor: ({namespace}={}, dependencies={}) ->
+    namespace ?= 'meshblu'
+    @topicMap = {}
+    @subscriber = new Subscriber namespace: namespace
+    @subscriber.on 'message', @_onMessage
+
+  subscribe: (uuid, subscriptionTypes, topics, callback) =>
+    subscriptionTypes ?= MessageIOClient.DEFAULT_SUBSCRIPTION_TYPES
+    @_addTopics uuid, topics
+    async.each subscriptionTypes, (type, done) =>
+      @subscriber.subscribe type, uuid, done
+    , callback
+
+  unsubscribe: (uuid, subscriptionTypes, callback) =>
+    subscriptionTypes ?= MessageIOClient.DEFAULT_SUBSCRIPTION_TYPES
+    delete @topicMap[uuid]
+
+    async.each subscriptionTypes, (type, done) =>
+      @subscriber.unsubscribe type, uuid, done
+    , callback
+
+  _addTopics: (uuid, topics=['*']) =>
     topics = [topics] unless _.isArray topics
     [skips, names] = _.partition topics, (topic) => _.startsWith topic, '-'
     names = ['*'] if _.isEmpty names
@@ -24,74 +46,23 @@ class MessageIOClient extends EventEmitter2
 
     @topicMap[uuid] = map
 
-  close: =>
-    @socketIOClient.close()
+  _defaultTopics: =>
 
-  defaultTopics: =>
-
-  onMessage: (message) =>
+  _onMessage: (channel, message) =>
     uuids = message?.devices
     uuids = [uuids] unless _.isArray uuids
     uuids = [message.fromUuid] if _.contains uuids, '*'
 
-    if @topicMatchUuids uuids, message?.topic
+    if @_topicMatchUuids uuids, message?.topic
       debug 'relay message', message
       @emit 'message', message
 
-  start: =>
-    @socketIOClient = @SocketIOClient "ws://localhost:#{config.messageBus.port}", 'force new connection': true
-    @socketIOClient.on 'message', @onMessage
-
-    @socketIOClient.on 'data', (message) =>
-      debug 'relay message', message
-      @emit 'data', message
-
-    @socketIOClient.on 'config', (message) =>
-      debug 'relay config', message
-      @emit 'config', message
-
-    @socketIOClient.connect()
-
-  subscribe: (uuid, subscriptionTypes, topics) =>
-    @addTopics uuid, topics
-
-    subscriptionTypes ?= ['received', 'broadcast', 'sent']
-
-    if _.contains subscriptionTypes, 'received'
-      debug 'subscribe', 'received', uuid
-      @socketIOClient.emit 'subscribe', uuid
-
-    if _.contains subscriptionTypes, 'broadcast'
-      debug 'subscribe', 'broadcast', "#{uuid}_bc"
-      @socketIOClient.emit 'subscribe', "#{uuid}_bc"
-
-    if _.contains subscriptionTypes, 'sent'
-      debug 'subscribe', 'sent', "#{uuid}_sent"
-      @socketIOClient.emit 'subscribe', "#{uuid}_sent"
-
-  unsubscribe: (uuid, subscriptionTypes) =>
-    delete @topicMap[uuid]
-
-    subscriptionTypes ?= ['received', 'broadcast', 'sent']
-
-    if _.contains subscriptionTypes, 'received'
-      debug 'unsubscribe', 'received', uuid
-      @socketIOClient.emit 'unsubscribe', uuid
-
-    if _.contains subscriptionTypes, 'broadcast'
-      debug 'unsubscribe', 'broadcast', "#{uuid}_bc"
-      @socketIOClient.emit 'unsubscribe', "#{uuid}_bc"
-
-    if _.contains subscriptionTypes, 'sent'
-      debug 'unsubscribe', 'sent', "#{uuid}_sent"
-      @socketIOClient.emit 'unsubscribe', "#{uuid}_sent"
-
-  topicMatchUuids: (uuids, topic) =>
+  _topicMatchUuids: (uuids, topic) =>
     _.any uuids, (uuid) =>
-      @topicMatch uuid, topic
+      @_topicMatch uuid, topic
 
-  topicMatch: (uuid, topic) =>
-    @addTopics uuid unless @topicMap[uuid]?
+  _topicMatch: (uuid, topic) =>
+    @_addTopics uuid unless @topicMap[uuid]?
 
     debug 'topicMatch', @topicMap[uuid], topic
     return false if _.any @topicMap[uuid].skips, (re) => re.test topic

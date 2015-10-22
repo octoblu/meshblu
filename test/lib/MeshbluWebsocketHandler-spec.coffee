@@ -25,9 +25,6 @@ describe 'MeshbluWebsocketHandler', ->
     it 'should assign a socket.id', ->
       expect(@socket.id).to.exist
 
-    it 'should call connect', ->
-      expect(@messageIOClient.start).to.have.been.called
-
     it 'should register message event', ->
       expect(@socket.on).to.have.been.calledWith 'message'
 

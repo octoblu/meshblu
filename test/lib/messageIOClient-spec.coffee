@@ -1,333 +1,369 @@
 config = require '../../config'
+{createClient} = require '../../lib/redis'
 MessageIOClient = require '../../lib/messageIOClient'
 
 describe 'MessageIOClient', ->
   beforeEach ->
-    @socketIOClient =
-      on: sinon.spy()
-      connect: sinon.spy()
-      close: sinon.spy()
-      emit: sinon.spy()
-    @FakeSocketIOClient = sinon.spy => @socketIOClient
-    @sut = new MessageIOClient SocketIOClient: @FakeSocketIOClient
+    @redis = createClient()
+    @sut = new MessageIOClient namespace: 'test'
 
-  describe 'extends EventEmitter', ->
-    it 'should have emit', ->
-      expect(@sut.emit).to.exist
-
-  describe '.close', ->
+  describe 'topic filtering onMessage', ->
     beforeEach ->
-      @sut.start()
-      @sut.close()
-
-    it 'should call close on socketIOClient', ->
-      expect(@socketIOClient.close).to.have.been.called
-
-  describe '.start', ->
-    beforeEach ->
-      @sut.start()
-
-    it 'should create a socketIOClient', ->
-      expect(@FakeSocketIOClient).to.have.been.calledWith(
-        "ws://localhost:#{config.messageBus.port}",
-        "force new connection": true
-      )
-
-    it 'should call connect', ->
-      expect(@socketIOClient.connect).to.have.been.called
-
-    it 'should map message', ->
-      expect(@socketIOClient.on).to.have.been.calledWith 'message'
-
-    it 'should map data', ->
-      expect(@socketIOClient.on).to.have.been.calledWith 'data'
-
-    it 'should map config', ->
-      expect(@socketIOClient.on).to.have.been.calledWith 'config'
-
-  describe '.onMessage', ->
-    beforeEach ->
-      @sut.topicMatchUuids = sinon.stub()
-      @sut.emit = sinon.spy()
-
-    describe 'when devices is a uuid', ->
-      beforeEach ->
-        @uuid = 'someone'
-
-      describe 'when the topic matches', ->
-        beforeEach ->
-          @sut.topicMatchUuids.returns true
-          @sut.onMessage devices: @uuid
-
-        it 'should call @emit with the message', ->
-          expect(@sut.emit).to.have.been.called
-
-        it 'should call topicMatchUuids', ->
-          expect(@sut.topicMatchUuids).to.have.been.calledWith [@uuid]
-
-    describe 'when devices is an array of uuids', ->
-      beforeEach ->
-        @uuids = ['something', 'that isn\'t star']
-
-      describe 'when the topic matches', ->
-        beforeEach ->
-          @sut.topicMatchUuids.returns true
-          @sut.onMessage devices: @uuids
-
-        it 'should call @emit with the message', ->
-          expect(@sut.emit).to.have.been.called
-
-        it 'should call topicMatchUuids', ->
-          expect(@sut.topicMatchUuids).to.have.been.calledWith @uuids
-
-      describe 'when the topic does not match', ->
-        beforeEach ->
-          @sut.topicMatchUuids.returns false
-          @sut.onMessage devices: @uuids
-
-        it 'should not call @emit with the message', ->
-          expect(@sut.emit).not.to.have.been.called
-
-        it 'should call topicMatchUuids', ->
-          expect(@sut.topicMatchUuids).to.have.been.calledWith @uuids
-
-    describe 'when devices is null', ->
-      beforeEach ->
-        @uuids = null
-
-      describe 'when the topic matches', ->
-        beforeEach ->
-          @sut.topicMatchUuids.returns true
-          @sut.onMessage devices: @uuids
-
-        it 'should call @emit with the message', ->
-          expect(@sut.emit).to.have.been.called
-
-        it 'should call topicMatchUuids', ->
-          expect(@sut.topicMatchUuids).to.have.been.calledWith [null]
-
-    describe 'when devices contains *', ->
-      beforeEach ->
-        @uuids = ['*']
-
-      describe 'when the topic matches', ->
-        beforeEach ->
-          @sut.topicMatchUuids.returns true
-          @sut.onMessage devices: @uuids, fromUuid: 'blah'
-
-        it 'should call @emit with the message', ->
-          expect(@sut.emit).to.have.been.called
-
-        it 'should call topicMatchUuids', ->
-          expect(@sut.topicMatchUuids).to.have.been.calledWith ['blah']
-
-      describe 'when the topic does not match', ->
-        beforeEach ->
-          @sut.topicMatchUuids.returns false
-          @sut.onMessage devices: @uuids, fromUuid: 'blah'
-
-        it 'should not call @emit with the message', ->
-          expect(@sut.emit).not.to.have.been.called
-
-        it 'should call topicMatchUuids', ->
-          expect(@sut.topicMatchUuids).to.have.been.calledWith ['blah']
-
-  describe '.topicMatchUuids', ->
-    describe 'by default', ->
-      beforeEach ->
-        @sut.start()
-        @sut.subscribe 'apple', ['received']
-
-      it 'should return true', ->
-        expect(@sut.topicMatchUuids(['apple'], 'pears')).to.be.true
-
-      it 'should return true', ->
-        expect(@sut.topicMatchUuids(['apple'])).to.be.true
-
-      describe 'when devices is null', ->
-        it 'should return false', ->
-          expect(@sut.topicMatchUuids(null, 'pears')).to.be.false
-
-  describe 'topicMatch', ->
-    describe 'by default', ->
-      beforeEach ->
-        @sut.start()
-        @sut.subscribe 'apple', ['received']
-
-      it 'should return true', ->
-        expect(@sut.topicMatch('apple', 'pears')).to.be.true
-
-      it 'should return true', ->
-        expect(@sut.topicMatch('apple')).to.be.true
+      @onMessage = sinon.spy()
+      @sut.once 'message', @onMessage
 
     describe 'when the topic is a string', ->
-      beforeEach ->
-        @sut.start()
-        @sut.subscribe 'apple', ['received'], ['pears']
+      beforeEach (done) ->
+        @sut.subscribe 'apple', ['received'], ['pears'], done
 
       describe 'when given the same string', ->
-        it 'should return true', ->
-          expect(@sut.topicMatch('apple', 'pears')).to.be.true
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'pears', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
 
-      describe 'when given a different string', ->
-        it 'should return false', ->
-          expect(@sut.topicMatch('apple', 'steak')).to.be.false
+        it 'emit the message', ->
+          expect(@onMessage).to.have.been.calledWith devices: ['apple'], topic: 'pears', payload: 'hi'
+
+      describe 'when given the wrong string', ->
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'bears', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should not emit the message', ->
+          expect(@onMessage).not.to.have.been.called
 
     describe 'when the topic ends in a wildcard', ->
-      beforeEach ->
-        @sut.start()
-        @sut.subscribe 'apple', ['received'], ['pear*']
+      beforeEach (done) ->
+        @sut.subscribe 'apple', ['received'], ['pear*'], done
 
       describe 'when given the same string', ->
-        it 'should return true', ->
-          expect(@sut.topicMatch('apple', 'pear')).to.be.true
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'pear', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should emit the message', ->
+          expect(@onMessage).to.have.been.called
 
       describe 'when given one more character', ->
-        it 'should return true', ->
-          expect(@sut.topicMatch('apple', 'pears')).to.be.true
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'pears', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should emit the message', ->
+          expect(@onMessage).to.have.been.called
 
       describe 'when given a longer string', ->
-        it 'should return true', ->
-          expect(@sut.topicMatch('apple', 'pearson')).to.be.true
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'pearson', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should emit the message', ->
+          expect(@onMessage).to.have.been.called
 
       describe 'when given a different string', ->
-        it 'should return false', ->
-          expect(@sut.topicMatch('apple', 'paer')).to.be.false
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'paer', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should not emit the message', ->
+          expect(@onMessage).not.to.have.been.called
 
     describe 'when the topic starts and ends in a wildcard', ->
-      beforeEach ->
-        @sut.start()
-        @sut.subscribe 'apple', ['received'], ['*ear*']
+      beforeEach (done) ->
+        @sut.subscribe 'apple', ['received'], ['*ear*'], done
 
       describe 'when given the same string', ->
-        it 'should return true', ->
-          expect(@sut.topicMatch('apple', 'pear')).to.be.true
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'pear', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should emit the message', ->
+          expect(@onMessage).to.have.been.called
 
       describe 'when given one more character', ->
-        it 'should return true', ->
-          expect(@sut.topicMatch('apple', 'pears')).to.be.true
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'pears', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should emit the message', ->
+          expect(@onMessage).to.have.been.called
 
       describe 'when given a longer string', ->
-        it 'should return true', ->
-          expect(@sut.topicMatch('apple', 'pearson')).to.be.true
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'pearson', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should emit the message', ->
+          expect(@onMessage).to.have.been.called
 
       describe 'when given a different string', ->
-        it 'should return false', ->
-          expect(@sut.topicMatch('apple', 'paer')).to.be.false
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'paer', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should not emit the message', ->
+          expect(@onMessage).not.to.have.been.called
 
     describe 'when the topic contains a wildcard', ->
-      beforeEach ->
-        @sut.start()
-        @sut.subscribe 'apple', ['received'], ['p*r']
+      beforeEach (done) ->
+        @sut.subscribe 'apple', ['received'], ['p*r'], done
 
-      it 'should return true', ->
-        expect(@sut.topicMatch('apple', 'pear')).to.be.true
+      describe 'when given a matching string', ->
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'pear', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
 
-      it 'should return true', ->
-        expect(@sut.topicMatch('apple', 'paer')).to.be.true
+        it 'should emit the message', ->
+          expect(@onMessage).to.have.been.called
 
-      it 'should return false', ->
-        expect(@sut.topicMatch('apple', 'raer')).to.be.false
+      describe 'given another matching string', ->
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'paer', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should emit the message', ->
+          expect(@onMessage).to.have.been.called
+
+      describe 'when given a non-matching string', ->
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'raer', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should not emit the message', ->
+          expect(@onMessage).not.to.have.been.called
 
     describe 'when the topic contains a minus', ->
-      beforeEach ->
-        @sut.start()
-        @sut.subscribe 'apple', ['received'], ['-pears']
+      beforeEach (done) ->
+        @sut.subscribe 'apple', ['received'], ['-pears'], done
 
-      it 'should return false', ->
-        expect(@sut.topicMatch('apple', 'pears')).to.be.false
+      describe 'when given a matching string', ->
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'pears', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
 
-      it 'should return true', ->
-        expect(@sut.topicMatch('apple', 'paer')).to.be.true
+        it 'should not emit the message', ->
+          expect(@onMessage).not.to.have.been.called
+
+      describe 'when given a non-matching string', ->
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'paer', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should emit the message', ->
+          expect(@onMessage).to.have.been.called
 
     describe 'when the topic contains a minus and a wildcard', ->
-      beforeEach ->
-        @sut.start()
-        @sut.subscribe 'apple', ['received'], ['-p*r*']
+      beforeEach (done) ->
+        @sut.subscribe 'apple', ['received'], ['-p*r*'], done
 
-      it 'should return false', ->
-        expect(@sut.topicMatch('apple', 'pears')).to.be.false
+      describe 'when given a matching string', ->
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'pears', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
 
-      it 'should return false', ->
-        expect(@sut.topicMatch('apple', 'paer')).to.be.false
+        it 'should not emit the message', ->
+          expect(@onMessage).not.to.have.been.called
 
-      it 'should return true', ->
-        expect(@sut.topicMatch('apple', 'dear')).to.be.true
+      describe 'when given a non-matching string', ->
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'paer', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should not emit the message', ->
+          expect(@onMessage).not.to.have.been.called
+
+      describe 'when given a non-matching string', ->
+        beforeEach (done) ->
+          message = devices: ['apple'], topic: 'dear', payload: 'hi'
+          @redis.publish 'test:received:apple', JSON.stringify(message), done
+
+        it 'should emit the message', ->
+          expect(@onMessage).to.have.been.called
 
   describe 'subscribe', ->
     describe 'received only', ->
-      beforeEach ->
-        @sut.start()
-        @sut.subscribe 'apple', ['received']
+      beforeEach (done) ->
+        @sut.once 'message', (@message) =>
+        @sut.subscribe 'apple', ['received'], undefined, =>
+          @redis.publish 'test:received:apple', JSON.stringify(dehydration: 'WATER you DOING?'), =>
+            done()
 
-      it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', 'apple'
+      it 'should get a message', ->
+        expect(@message).to.deep.equal dehydration: 'WATER you DOING?'
 
     describe 'sent only', ->
-      beforeEach ->
-        @sut.start()
-        @sut.subscribe 'goeo', ['sent']
+      beforeEach (done) ->
+        @sut.once 'message', (@message) =>
+        @sut.subscribe 'hubris', ['sent'], undefined, =>
+          @redis.publish 'test:sent:hubris', JSON.stringify(that: 'would never happen to me!'), =>
+            done()
 
-      it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', 'goeo_sent'
+      it 'should get a message', ->
+        expect(@message).to.deep.equal that: 'would never happen to me!'
 
     describe 'broadcast only', ->
-      beforeEach ->
-        @sut.start()
-        @sut.subscribe 'pear', ['broadcast']
+      beforeEach (done) ->
+        @sut.once 'message', (@message) =>
+        @sut.subscribe 'hubris', ['broadcast'], undefined, =>
+          @redis.publish 'test:broadcast:hubris', JSON.stringify(that: 'would never happen to me!'), =>
+            done()
 
-      it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', 'pear_bc'
+      it 'should get a message', ->
+        expect(@message).to.deep.equal that: 'would never happen to me!'
 
     describe 'all kinds', ->
-      beforeEach ->
-        @sut.start()
-        @sut.subscribe 'pear', ['broadcast', 'sent', 'received']
+      beforeEach (done) ->
+        @sut.once 'message', (@message) =>
+        @sut.subscribe 'heart', ['broadcast', 'sent', 'received'], undefined, done
 
-      it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', 'pear'
+      describe 'receiving a broadcast message', ->
+        beforeEach (done) ->
+          @redis.publish 'test:broadcast:heart', JSON.stringify(couldBe: 'The 80s band'), =>
+            done()
 
-      it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', 'pear_sent'
+        it 'should get a broadcast message', ->
+          expect(@message).to.deep.equal couldBe: 'The 80s band'
 
-      it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'subscribe', 'pear_bc'
+      describe 'receiving a received message', ->
+        beforeEach (done) ->
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
+            done()
+
+        it 'should get a received message', ->
+          expect(@message).to.deep.equal couldBe: 'lovesick?'
+
+      describe 'receiving a received message', ->
+        beforeEach (done) ->
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
+            done()
+
+        it 'should get a received message', ->
+          expect(@message).to.deep.equal couldBe: 'lovesick?'
+
+    describe 'no kinds', ->
+      beforeEach (done) ->
+        @sut.once 'message', (@message) =>
+        @sut.subscribe 'heart', undefined, undefined, done
+
+      describe 'receiving a broadcast message', ->
+        beforeEach (done) ->
+          @redis.publish 'test:broadcast:heart', JSON.stringify(couldBe: 'The 80s band'), =>
+            done()
+
+        it 'should get a broadcast message', ->
+          expect(@message).to.deep.equal couldBe: 'The 80s band'
+
+      describe 'receiving a received message', ->
+        beforeEach (done) ->
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
+            done()
+
+        it 'should get a received message', ->
+          expect(@message).to.deep.equal couldBe: 'lovesick?'
+
+      describe 'receiving a received message', ->
+        beforeEach (done) ->
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
+            done()
+
+        it 'should get a received message', ->
+          expect(@message).to.deep.equal couldBe: 'lovesick?'
 
   describe 'unsubscribe', ->
     describe 'received only', ->
-      beforeEach ->
-        @sut.start()
-        @sut.unsubscribe 'banana', ['received']
+      beforeEach (done) ->
+        @onMessage = sinon.spy()
+        @sut.once 'message', @onMessage
+        @sut.subscribe 'apple', ['received'], undefined, =>
+          @sut.unsubscribe 'apple', ['received'], =>
+            @redis.publish 'test:received:apple', JSON.stringify(dehydration: 'WATER you DOING?'), =>
+              done()
 
-      it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', 'banana'
+      it 'should not get a message', ->
+        expect(@onMessage).not.to.have.been.called
 
     describe 'sent only', ->
-      beforeEach ->
-        @sut.start()
-        @sut.unsubscribe 'watermelon', ['sent']
+      beforeEach (done) ->
+        @onMessage = sinon.spy()
+        @sut.once 'message', @onMessage
+        @sut.subscribe 'hubris', ['sent'], undefined, =>
+          @sut.unsubscribe 'hubris', ['sent'], =>
+            @redis.publish 'test:sent:hubris', JSON.stringify(that: 'would never happen to me!'), =>
+              done()
 
-      it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', 'watermelon_sent'
+      it 'should not get a message', ->
+        expect(@onMessage).not.to.have.been.called
 
     describe 'broadcast only', ->
-      beforeEach ->
-        @sut.start()
-        @sut.unsubscribe 'coffee', ['broadcast']
+      beforeEach (done) ->
+        @onMessage = sinon.spy()
+        @sut.once 'message', @onMessage
+        @sut.subscribe 'hubris', ['broadcast'], undefined, =>
+          @sut.unsubscribe 'hubris', ['broadcast'], =>
+            @redis.publish 'test:broadcast:hubris', JSON.stringify(that: 'would never happen to me!'), =>
+              done()
 
-      it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', 'coffee_bc'
+      it 'should not get a message', ->
+        expect(@onMessage).not.to.have.been.called
 
     describe 'all kinds', ->
-      beforeEach ->
-        @sut.start()
-        @sut.unsubscribe 'apple', ['broadcast', 'sent', 'received']
+      beforeEach (done) ->
+        @onMessage = sinon.spy()
+        @sut.once 'message', @onMessage
+        @sut.subscribe 'heart', ['broadcast', 'sent', 'received'], undefined, =>
+          @sut.unsubscribe 'heart', ['broadcast', 'sent', 'received'], done
 
-      it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', 'apple'
+      describe 'receiving a broadcast message', ->
+        beforeEach (done) ->
+          @redis.publish 'test:broadcast:heart', JSON.stringify(couldBe: 'The 80s band'), =>
+            done()
 
-      it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', 'apple_sent'
+        it 'should not get any', ->
+          expect(@onMessage).not.to.have.been.called
 
-      it 'should call emit on socketIOClient', ->
-        expect(@socketIOClient.emit).to.have.been.calledWith 'unsubscribe', 'apple_bc'
+      describe 'receiving a received message', ->
+        beforeEach (done) ->
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
+            done()
+
+        it 'should not get any', ->
+          expect(@onMessage).not.to.have.been.called
+
+      describe 'receiving a received message', ->
+        beforeEach (done) ->
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
+            done()
+
+        it 'should not get any', ->
+          expect(@onMessage).not.to.have.been.called
+
+    describe 'no kinds', ->
+      beforeEach (done) ->
+        @onMessage = sinon.spy()
+        @sut.once 'message', @onMessage
+        @sut.subscribe 'heart', undefined, undefined, =>
+          @sut.unsubscribe 'heart', undefined, done
+
+      describe 'receiving a broadcast message', ->
+        beforeEach (done) ->
+          @redis.publish 'test:broadcast:heart', JSON.stringify(couldBe: 'The 80s band'), =>
+            done()
+
+        it 'should not get any', ->
+          expect(@onMessage).not.to.have.been.called
+
+      describe 'receiving a received message', ->
+        beforeEach (done) ->
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
+            done()
+
+        it 'should not get any', ->
+          expect(@onMessage).not.to.have.been.called
+
+      describe 'receiving a received message', ->
+        beforeEach (done) ->
+          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?'), =>
+            done()
+
+        it 'should not get any', ->
+          expect(@onMessage).not.to.have.been.called

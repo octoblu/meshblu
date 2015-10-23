@@ -7,19 +7,20 @@ describe 'updateIfAuthorized', ->
       @sut = updateIfAuthorized
 
       @toDevice     = {uuid: 'to-device', configureWhitelist: ['from-device']}
-      @getDevice    = sinon.stub().yields null, @toDevice
       @canConfigure = sinon.stub()
-      @clearCache = sinon.stub().yields null
 
-      @device = update: sinon.stub()
+      @device =
+        update: sinon.stub()
+        fetch: sinon.stub()
+
       @Device = sinon.spy => @device
-      @sendConfigActivity = sinon.spy()
 
-      @dependencies = getDevice: @getDevice, securityImpl: {canConfigure: @canConfigure}, Device: @Device, clearCache: @clearCache, sendConfigActivity: @sendConfigActivity
+      @dependencies = securityImpl: {canConfigure: @canConfigure}, Device: @Device
 
       @callback = sinon.spy()
       @sut {uuid: 'from-device'}, {uuid: 'to-device', token: 'token'}, {$inc: {magic: 1}}, @callback, @dependencies
 
+      @device.fetch.yield null, @toDevice
 
     it 'should call canConfigure with the fromDevice, the toDevice and the query', ->
       expect(@canConfigure).to.have.been.calledWith {uuid: 'from-device'}, @toDevice, {uuid: 'to-device', token: 'token'}
@@ -53,22 +54,12 @@ describe 'updateIfAuthorized', ->
       it 'should not have called the callback yet', ->
         expect(@callback).to.have.not.been.called #yet
 
-      it 'should call clearCache with the uuid', ->
-        expect(@clearCache).to.have.been.calledWith 'to-device'
-
       it 'should instantiate a Device', ->
         expect(@Device).to.have.been.calledWithNew
         expect(@Device).to.have.been.calledWith uuid: 'to-device'
 
       it 'should call update on the device', ->
         expect(@device.update).to.have.been.calledWith {$inc: {magic: 1}}
-
-      describe 'when update yields no error', ->
-        beforeEach ->
-          @device.update.yield null
-
-        it 'should call sendConfigActivity', ->
-          expect(@sendConfigActivity).to.have.been.calledWith 'to-device'
 
       describe 'when update yields an error', ->
         beforeEach ->
@@ -86,14 +77,16 @@ describe 'updateIfAuthorized', ->
       @sut = updateIfAuthorized
 
       @toDevice     = {uuid: 'uuid', configureWhitelist: ['from-device']}
-      @getDevice    = sinon.stub().yields null, @toDevice
       @canConfigure = sinon.stub()
-      @clearCache = sinon.stub().yields null
 
-      @device = update: sinon.spy()
+      @device =
+        update: sinon.spy()
+        fetch: sinon.stub()
+
+      @device.fetch.yields null, @toDevice
       @Device = sinon.spy => @device
 
-      @dependencies = getDevice: @getDevice, securityImpl: {canConfigure: @canConfigure}, Device: @Device, clearCache: @clearCache
+      @dependencies = securityImpl: {canConfigure: @canConfigure}, Device: @Device
 
       callback = (@error) =>
       @sut {uuid: 'from-device'}, {uuid: 'uuid', token: 'token'}, null, callback, @dependencies

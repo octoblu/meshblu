@@ -6,7 +6,6 @@ module.exports = (sendMessage, fromDevice, toDeviceUuid, params, callback=_.noop
   dataDB = dependencies.dataDB ? require('./database').data
   logEvent = dependencies.logEvent ? require './logEvent'
   moment = dependencies.moment ? require 'moment'
-  sendConfigActivity = dependencies.sendConfigActivity ? require './sendConfigActivity'
 
   getDevice toDeviceUuid, (error, toDevice) =>
     return callback new Error(error.error.message) if error?

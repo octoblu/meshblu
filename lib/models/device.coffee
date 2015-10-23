@@ -3,6 +3,9 @@ async  = require 'async'
 bcrypt = require 'bcrypt'
 crypto = require 'crypto'
 debug  = require('debug')('meshblu:model:device')
+Publisher = require '../Publisher'
+
+publisher = new Publisher
 
 class Device
   constructor: (attributes={}, dependencies={}) ->
@@ -209,6 +212,7 @@ class Device
       @clearCache @uuid, =>
         @fetch.cache = null
         @_hashDevice (error) =>
+          @_sendConfig()
           return callback @sanitizeError(error) if error?
           callback()
 
@@ -238,6 +242,10 @@ class Device
     hasher.update @uuid
     hasher.update @config.token
     hasher.digest 'base64'
+
+  _sendConfig: =>
+    @fetch (error, attributes) =>
+      publisher.publish 'config', @uuid, attributes
 
   _storeTokenInCache: (token, callback=->) =>
     return callback null, false unless @redis?.sadd?

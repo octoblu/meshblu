@@ -226,7 +226,7 @@ describe 'MeshbluWebsocketHandler', ->
         expect(@sut.sendFrame).to.have.been.calledWith 'ready', uuid: '1234', token: 'abcd', status: 200
 
       it 'should emit subscribe to my uuid received and broadcast', ->
-        expect(@messageIOClient.subscribe).to.have.been.calledWith '1234', ['received']
+        expect(@messageIOClient.subscribe).to.have.been.calledWith '1234', ['received', 'config', 'data']
 
   describe 'status', ->
     beforeEach ->
@@ -297,7 +297,7 @@ describe 'MeshbluWebsocketHandler', ->
         @sut.subscribe uuid: '5431'
 
       it 'should call subscribe _bc', ->
-        expect(@messageIOClient.subscribe).to.have.been.calledWith '5431', ["broadcast", "received", "sent"]
+        expect(@messageIOClient.subscribe).to.have.been.calledWith '5431', ["broadcast", "received", "sent", "config", "data"]
 
   describe 'unsubscribe', ->
     describe 'when called', ->

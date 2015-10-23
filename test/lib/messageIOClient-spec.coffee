@@ -8,6 +8,70 @@ describe 'MessageIOClient', ->
     @redis = createClient()
     @sut = new MessageIOClient namespace: 'test'
 
+  describe 'emitting config events', ->
+    beforeEach ->
+      @onConfig = sinon.spy()
+      @onMessage = sinon.spy()
+      @sut.once 'config', @onConfig
+      @sut.once 'message', @onMessage
+
+    describe 'when subscribed to config and sent events', ->
+      beforeEach (done) ->
+        @sut.subscribe 'uuid', ['config','sent'], undefined, done
+
+      describe 'when redis pubs a config event', ->
+        beforeEach (done) ->
+          @sut.once 'config', => done()
+          @redis.publish 'test:config:uuid', JSON.stringify(uneven: 'carpet')
+
+        it 'should emit the config event', ->
+          expect(@onConfig).to.have.been.calledWith uneven: 'carpet'
+
+        it 'should not emit the message event', ->
+          expect(@onMessage).not.to.have.been.called
+
+      describe 'when redis pubs a sent event', ->
+        beforeEach ->
+          @redis.publish 'test:sent:uuid', JSON.stringify(uneven: 'carpet')
+
+        beforeEach (done) ->
+          setTimeout done, 100
+
+        it 'should not emit the config event', ->
+          expect(@onConfig).not.to.have.been.called
+
+  describe 'emitting data events', ->
+    beforeEach ->
+      @onConfig = sinon.spy()
+      @onMessage = sinon.spy()
+      @sut.once 'data', @onConfig
+      @sut.once 'message', @onMessage
+
+    describe 'when subscribed to data and sent events', ->
+      beforeEach (done) ->
+        @sut.subscribe 'uuid', ['data','sent'], undefined, done
+
+      describe 'when redis pubs a data event', ->
+        beforeEach (done) ->
+          @sut.once 'data', => done()
+          @redis.publish 'test:data:uuid', JSON.stringify(uneven: 'carpet')
+
+        it 'should emit the data event', ->
+          expect(@onConfig).to.have.been.calledWith uneven: 'carpet'
+
+        it 'should not emit the message event', ->
+          expect(@onMessage).not.to.have.been.called
+
+      describe 'when redis pubs a sent event', ->
+        beforeEach ->
+          @redis.publish 'test:sent:uuid', JSON.stringify(uneven: 'carpet')
+
+        beforeEach (done) ->
+          setTimeout done, 100
+
+        it 'should not emit the data event', ->
+          expect(@onConfig).not.to.have.been.called
+
   describe 'topic filtering onMessage', ->
     beforeEach ->
       @onMessage = sinon.spy()
@@ -407,3 +471,7 @@ describe 'MessageIOClient', ->
 
         it 'should not get any', ->
           expect(@onMessage).not.to.have.been.called
+
+  describe 'close', ->
+    it 'should be a function', ->
+      @sut.close()

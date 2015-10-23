@@ -5,6 +5,7 @@ if ((process.env.USE_APP_DYNAMICS || 'false').toLowerCase() === 'true') {
   require('./lib/appdynamics');
 }
 
+
 var program = require('commander');
 var pjson = require('./package.json');
 var config = require('./config');

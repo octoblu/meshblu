@@ -1,12 +1,15 @@
 {EventEmitter2} = require 'eventemitter2'
+{createClient}  = require './redis'
 
 class Subscriber extends EventEmitter2
-  constructor: ({@namespace}, {@client}={}) ->
-    {createClient} = require './redis'
-    @client ?= createClient()
+  constructor: ({@namespace}) ->
+    @client = createClient()
 
     @client.on 'message', (channel, message) =>
       @emit 'message', channel, JSON.parse message
+
+  close: =>
+    @client.quit()
 
   subscribe: (type, uuid, callback) =>
     channel = @_channel type, uuid

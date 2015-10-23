@@ -21,16 +21,19 @@ describe 'SocketLogic Events', ->
     @meshblu.once 'ready', (@device) => done()
     @meshblu.on 'notReady', done
 
+  afterEach ->
+    @eventForwarder.removeAllListeners()
+
   it 'should get here', ->
     expect(true).to.be.true
 
   describe 'EVENT devices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'devices'
         @meshblu.devices {}, (data) =>
           return done new Error(data.error) if data.error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
@@ -41,9 +44,9 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'devices-error'
         @meshblu.devices {uuid: 'invalid-uuid'}, =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
@@ -57,10 +60,10 @@ describe 'SocketLogic Events', ->
   describe 'EVENT device', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'devices'
         @meshblu.device {uuid: @device.uuid}, (data) =>
           return done new Error(data.error) if data.error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
@@ -72,10 +75,11 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'devices-error'
+
         @meshblu.device {uuid: 'invalid-uuid'}, (data) =>
           return done new Error(data.error) if data.error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
@@ -89,10 +93,10 @@ describe 'SocketLogic Events', ->
   describe 'EVENT whoami', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'whoami'
         @meshblu.whoami {}, (data) =>
           return done new Error(data.error) if data.error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send a "whoami" message', ->
         expect(@message.topic).to.deep.equal 'whoami'
@@ -104,10 +108,11 @@ describe 'SocketLogic Events', ->
   describe 'EVENT update', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'update'
+
         @meshblu.update uuid: @device.uuid, foo: 'bar', (data) =>
           return done new Error(data.error) if data.error?
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send a "update" message', ->
         expect(@message.topic).to.deep.equal 'update'
@@ -120,9 +125,9 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'update-error'
         @meshblu.update uuid: 'invalid-uuid', foo: 'bar', (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send an "update-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
@@ -137,9 +142,9 @@ describe 'SocketLogic Events', ->
   describe 'EVENT localdevices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.localdevices (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'localdevices'
+        @meshblu.localdevices =>
 
       it 'should send a "localdevices" message', ->
         expect(@message.topic).to.deep.equal 'localdevices'
@@ -152,9 +157,9 @@ describe 'SocketLogic Events', ->
   describe 'EVENT unclaimeddevices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'unclaimeddevices'
         @meshblu.unclaimeddevices {}, (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send a "unclaimeddevices" message', ->
         expect(@message.topic).to.deep.equal 'unclaimeddevices'
@@ -166,9 +171,10 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'unclaimeddevices-error'
+
         @meshblu.unclaimeddevices {uuid: 'invalid-uuid'}, (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send an "unclaimeddevices-error" message', ->
         expect(@message.topic).to.deep.equal 'unclaimeddevices-error'
@@ -183,14 +189,15 @@ describe 'SocketLogic Events', ->
   describe 'EVENT claimdevice', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'claimdevice'
+
         @meshblu.register configWhitelist: ['*'], (data) =>
           return done new Error data.error if data.error?
 
           @newDevice = data
           @meshblu.claimdevice uuid: @newDevice.uuid, (data) =>
             return done new Error data.error if data.error?
-            @eventForwarder.once 'message', (@message) =>
-              done()
 
       it 'should send a "claimdevice" message', ->
         expect(@message.topic).to.deep.equal 'claimdevice'
@@ -203,9 +210,10 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'claimdevice-error'
+
         @meshblu.claimdevice uuid: 'invalid-uuid', (data) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send an "claimdevice-error" message', ->
         expect(@message.topic).to.deep.equal 'claimdevice-error'
@@ -220,9 +228,10 @@ describe 'SocketLogic Events', ->
   describe 'EVENT getPublicKey', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'getpublickey'
+
         @meshblu.getPublicKey @config.uuid, (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send a "getpublickey" message', ->
         expect(@message.topic).to.deep.equal 'getpublickey'
@@ -233,9 +242,9 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'getpublickey-error'
         @meshblu.getPublicKey 'invalid-uuid', (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send an "getpublickey-error" message', ->
         expect(@message.topic).to.deep.equal 'getpublickey-error'
@@ -248,14 +257,14 @@ describe 'SocketLogic Events', ->
   describe 'EVENT resetToken', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'resettoken'
         @meshblu.register configWhitelist: ['*'], (data) =>
           return done new Error data.error if data.error?
 
           @newDevice = data
           @meshblu.resetToken @newDevice.uuid, (data) =>
             return done new Error data.error if data.error?
-            @eventForwarder.once 'message', (@message) =>
-              done()
 
       it 'should send a "resettoken" message', ->
         expect(@message.topic).to.deep.equal 'resettoken'
@@ -267,9 +276,10 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'resettoken-error'
+
         @meshblu.resetToken 'invalid-uuid', (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send an "resettoken-error" message', ->
         expect(@message.topic).to.deep.equal 'resettoken-error'
@@ -283,14 +293,14 @@ describe 'SocketLogic Events', ->
   describe 'EVENT generateAndStoreToken', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'generatetoken'
         @meshblu.register configWhitelist: ['*'], (data) =>
           return done new Error data.error if data.error?
 
           @newDevice = data
           @meshblu.generateAndStoreToken uuid: @newDevice.uuid, (data) =>
             return done new Error data.error if data.error?
-            @eventForwarder.once 'message', (@message) =>
-              done()
 
       it 'should send a "generatetoken" message', ->
         expect(@message.topic).to.deep.equal 'generatetoken'
@@ -302,9 +312,10 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'generatetoken-error'
+
         @meshblu.generateAndStoreToken uuid: 'invalid-uuid', (data) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send an "generatetoken-error" message', ->
         expect(@message.topic).to.deep.equal 'generatetoken-error'
@@ -318,14 +329,15 @@ describe 'SocketLogic Events', ->
   describe 'EVENT revokeToken', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'revoketoken'
+
         @meshblu.register configWhitelist: ['*'], (data) =>
           return done new Error data.error if data.error?
 
           @meshblu.generateAndStoreToken uuid: data.uuid, (device) =>
             @newDevice = device
             @meshblu.revokeToken @newDevice, =>
-              @eventForwarder.once 'message', (@message) =>
-                done()
 
       it 'should send a "revoketoken" message', ->
         expect(@message.topic).to.deep.equal 'revoketoken'
@@ -337,9 +349,10 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'revoketoken-error'
+
         @meshblu.revokeToken uuid: 'invalid-uuid', token: 'invalid-token', (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send an "revoketoken-error" message', ->
         expect(@message.topic).to.deep.equal 'revoketoken-error'
@@ -353,11 +366,11 @@ describe 'SocketLogic Events', ->
   describe 'EVENT register', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'register'
+
         @meshblu.register {}, (data) =>
           return done new Error data.error if data.error?
-
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send a "register" message', ->
         expect(@message.topic).to.deep.equal 'register'
@@ -368,9 +381,9 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'register-error'
         @meshblu.register uuid: 'not-allowed', (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send an "register-error" message', ->
         expect(@message.topic).to.deep.equal 'register-error'
@@ -384,14 +397,14 @@ describe 'SocketLogic Events', ->
   describe 'EVENT unregister', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'unregister'
         @meshblu.register {}, (data) =>
           return done new Error data.error if data.error?
 
           @newDevice = data
           @meshblu.unregister uuid: @newDevice.uuid, (data) =>
             return done new Error data.error if data.error?
-            @eventForwarder.once 'message', (@message) =>
-              done()
 
       it 'should send a "unregister" message', ->
         expect(@message.topic).to.deep.equal 'unregister'
@@ -402,9 +415,10 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'unregister-error'
+
         @meshblu.unregister uuid: 'invalid-uuid', (error) =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send an "unregister-error" message', ->
         expect(@message.topic).to.deep.equal 'unregister-error'
@@ -417,10 +431,11 @@ describe 'SocketLogic Events', ->
   describe 'EVENT mydevices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'devices'
+
         @meshblu.register owner: @device.uuid, =>
           @meshblu.mydevices {}, =>
-            @eventForwarder.once 'message', (@message) =>
-              done()
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
@@ -432,9 +447,9 @@ describe 'SocketLogic Events', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'devices-error'
         @meshblu.mydevices {uuid: 'invalid-uuid'}, =>
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
@@ -449,27 +464,24 @@ describe 'SocketLogic Events', ->
   describe 'EVENT subscribe', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'subscribe'
+
         @meshblu.subscribe {uuid: @device.uuid}, (data) =>
           return done new Error data.error if data.error?
 
-          @eventForwarder.once 'message', (@message) =>
-            done()
-
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
-        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-          fromUuid: @device.uuid
-          request:
-            uuid: @device.uuid
-        }
+        expect(@message.payload.fromUuid).to.deep.equal @device.uuid
+        expect(@message.payload.request.toUuid).to.deep.equal @device.uuid
 
     describe 'when called with a valid request with token', ->
       beforeEach (done) ->
+        @eventForwarder.on 'message', (@message) =>
+          done() if @message.topic == 'subscribe'
+
         @meshblu.subscribe {uuid: @device.uuid, token: @device.token}, (data) =>
           return done new Error data.error if data.error?
-
-          @eventForwarder.once 'message', (@message) =>
-            done()
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'

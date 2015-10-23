@@ -7,10 +7,17 @@ meshblu = require 'meshblu'
 request = require 'request'
 
 describe 'REST', ->
-  before ->
+  before (done) ->
     filename = path.join __dirname, 'meshblu.json'
     @config = new MeshbluConfig(filename: filename).toJSON()
     @meshblu = new MeshbluHTTP @config
+    @conx = meshblu.createConnection @config
+
+    @conx.on 'ready', => done()
+    @conx.on 'notReady', done
+
+  afterEach ->
+    @conx.removeAllListeners()
 
   it 'should get here', ->
     expect(true).to.be.true
@@ -118,257 +125,230 @@ describe 'REST', ->
       it 'should yeild devices', ->
         expect(@body[0].uuid).to.exist
 
-  # describe 'GET /v2/devices/:uuid', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'devices'
-  #
-  #       @meshblu.device @config.uuid, (error) =>
-  #         return done error if error?
-  #
-  #     it 'should send a "devices" message', ->
-  #       expect(@message.topic).to.deep.equal 'devices'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           uuid: @config.uuid
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'devices-error'
-  #       @meshblu.device 'invalid-uuid', (error) =>
-  #
-  #     it 'should send a "devices-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'devices-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         error: 'Devices not found'
-  #         request:
-  #           uuid: 'invalid-uuid'
-  #       }
-  #
-  # describe 'PATCH /v2/devices/:uuid', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'update'
-  #       @meshblu.update @config.uuid, foo: 'bar', (error) =>
-  #         return done error if error?
-  #
-  #     it 'should send a "update" message', ->
-  #       expect(@message.topic).to.deep.equal 'update'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           query: {uuid: @config.uuid}
-  #           params: {$set: {foo: 'bar'}}
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'update-error'
-  #       @meshblu.update @config.uuid, {$foo: 'bar'}, (error) =>
-  #
-  #     it 'should send an "update-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'update-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         error: "The dollar ($) prefixed field '$foo' in '$foo' is not valid for storage."
-  #         request:
-  #           query: {uuid: @config.uuid}
-  #           params: {$set: {"$foo": 'bar'}}
-  #       }
-  #
-  # describe 'PUT /v2/devices/:uuid', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'update'
-  #       @meshblu.updateDangerously @config.uuid, {$unset: {foo: 1}}, (error) =>
-  #         return done error if error?
-  #
-  #     it 'should send a "update" message', ->
-  #       expect(@message.topic).to.deep.equal 'update'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           query: {uuid: @config.uuid}
-  #           params: {$unset: {foo: 1}}
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'update-error'
-  #       @meshblu.update @config.uuid, {$foo: 'bar'}, (error) =>
-  #
-  #     it 'should send an "update-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'update-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         error: "The dollar ($) prefixed field '$foo' in '$foo' is not valid for storage."
-  #         request:
-  #           query: {uuid: @config.uuid}
-  #           params: {$set: {"$foo": 'bar'}}
-  #       }
-  #
-  # describe 'GET /localdevices', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/localdevices"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'localdevices'
-  #       request.get uri, auth: auth,  (error) =>
-  #         return done error if error?
-  #
-  #     it 'should send a "localdevices" message', ->
-  #       expect(@message.topic).to.deep.equal 'localdevices'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromIp: '127.0.0.1'
-  #         fromUuid: @config.uuid
-  #         request: {}
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "localdevices"
-  #       query = uuid: 'invalid-uuid'
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'localdevices-error'
-  #       request.get uri, auth: auth, qs: query,  (error) =>
-  #         return done error if error?
-  #
-  #     it 'should send a "localdevices-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'localdevices-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         fromIp: "127.0.0.1"
-  #         error: "Devices not found"
-  #         request:
-  #           uuid: 'invalid-uuid'
-  #       }
-  #
-  # describe 'GET /unclaimeddevices', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/unclaimeddevices"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'localdevices'
-  #       request.get uri, auth: auth,  (error) =>
-  #         return done error if error?
-  #
-  #     it 'should send a "localdevices" message', ->
-  #       expect(@message.topic).to.deep.equal 'localdevices'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromIp: '127.0.0.1'
-  #         fromUuid: @config.uuid
-  #         request: {}
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/unclaimeddevices"
-  #       query = uuid: 'invalid-uuid'
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'localdevices-error'
-  #       request.get uri, auth: auth, qs: query,  (error) =>
-  #         return done error if error?
-  #
-  #     it 'should send a "localdevices-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'localdevices-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         fromIp: "127.0.0.1"
-  #         error: "Devices not found"
-  #         request:
-  #           uuid: 'invalid-uuid'
-  #       }
-  #
-  # describe 'PUT /claimdevice/:uuid', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'claimdevice'
-  #
-  #       @meshblu.register configWhitelist: ['*'], (error, device) =>
-  #         return done error if error?
-  #
-  #         @device = device
-  #         pathname = "/claimdevice/#{@device.uuid}"
-  #         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #         auth = user: @config.uuid, pass: @config.token
-  #         request.put uri, auth: auth,  (error) =>
-  #           return done error if error?
-  #
-  #     it 'should send a "claimdevice" message', ->
-  #       expect(@message.topic).to.deep.equal 'claimdevice'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         fromIp:   "127.0.0.1"
-  #         request:
-  #           uuid: @device.uuid
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/claimdevice/invalid-uuid"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'claimdevice-error'
-  #       request.put uri, auth: auth,  (error) =>
-  #         return done error if error?
-  #
-  #     it 'should send an "claimdevice-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'claimdevice-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         fromIp:   '127.0.0.1'
-  #         error:    'Device not found'
-  #         request:
-  #           uuid: 'invalid-uuid'
-  #       }
-  #
-  # describe 'GET /devices/:uuid/publickey', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'getpublickey'
-  #       @meshblu.publicKey @config.uuid, (error) =>
-  #         return done error if error?
-  #
-  #     it 'should send a "getpublickey" message', ->
-  #       expect(@message.topic).to.deep.equal 'getpublickey'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         request:
-  #           uuid: @config.uuid
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'getpublickey-error'
-  #       @meshblu.publicKey 'invalid-uuid', (error) =>
-  #
-  #     it 'should send an "getpublickey-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'getpublickey-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         error: 'Device not found'
-  #         request:
-  #           uuid: 'invalid-uuid'
-  #       }
+  describe 'GET /v2/devices/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.device @config.uuid, (@error, @device) => done()
+
+      it 'should not yeild an error', ->
+        expect(@error).to.not.exist
+
+      it 'should yeild a device', ->
+        expect(@device.uuid).to.deep.equal @config.uuid
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.device 'invalid-uuid', (@error, @device) => done()
+
+      it 'should yeild an error', ->
+        expect(@error).to.exist
+
+      it 'should not yeild a device', ->
+        expect(@device).to.not.exist
+
+  describe 'PATCH /v2/devices/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @conx.on 'config', (@device) =>
+          done()
+        @meshblu.update @config.uuid, foorer: 'bar-awesome', (@error) =>
+
+      it 'should not yeild an error', ->
+        expect(@error).to.not.exist
+
+      it 'should yeild a config event with the updated property', ->
+        expect(@device.foorer).to.deep.equal 'bar-awesome'
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.update @config.uuid, {$foo: 'bar'}, (@error) => done()
+
+      it 'should not yeild a updated device', ->
+        expect(@device).to.not.exist
+
+      it 'should yeild an error', ->
+        expect(@error).to.exist
+
+  describe 'PUT /v2/devices/:uuid', ->
+    describe 'when called with a valid request to delete a property', ->
+      beforeEach (done) ->
+        @conx.on 'config', (@device) =>
+          done()
+        @meshblu.updateDangerously @config.uuid, {$unset: {foomer: 'bar-great'}}, (error) =>
+          return done error if error?
+
+      it 'should yeild a config event without the deleted property', ->
+        expect(@device.foomer).to.not.exist
+
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @conx.on 'config', (@device) =>
+          done()
+        @meshblu.updateDangerously @config.uuid, {$set: {fooest: 'awesome-bar'}}, (error) =>
+          return done error if error?
+
+      it 'should yeild a config event with the updated property', ->
+        expect(@device.fooest).to.deep.equal 'awesome-bar'
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.updateDangerously @config.uuid, {$set: { $$cheese: 'awesome-bar'}}, (@error) => done()
+
+      it 'should yeild an error', ->
+        expect(@error).to.exist
+
+  describe 'GET /localdevices', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/localdevices"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.get uri, auth: auth, json: true, (@error, @response, @body) => done()
+
+      it 'should not yeild an error', ->
+        expect(@error).to.not.exist
+
+      it 'should have a statusCode of 200', ->
+        expect(@response.statusCode).to.equal 200
+
+      it 'should yeild devices', ->
+        expect(@body.devices).not.to.be.empty
+
+      it 'should yeild a device with a uuid', ->
+        expect(@body.devices[0].uuid).to.exist
+
+      it 'should yeild a device without a token', ->
+        expect(@body.devices[0].token).to.not.exist
+
+      it 'should yeild a device without tokens', ->
+        expect(@body.devices[0].tokens).to.not.exist
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        pathname = "localdevices"
+        query = uuid: 'invalid-uuid'
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.get uri, auth: auth, qs: query, json: true, (@error, @response, @body) => done()
+
+      it 'should not yeild an error', ->
+        expect(@error).to.not.exist
+
+      it 'should have a statusCode of 404', ->
+        expect(@response.statusCode).to.equal 404
+
+      it 'should have a body', ->
+        expect(@body.message).to.deep.equal "Devices not found"
+
+  describe 'GET /unclaimeddevices', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/unclaimeddevices"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.get uri, auth: auth, json: true, (@error, @response, @body) => done()
+
+      it 'should not yeild an error', ->
+        expect(@error).to.not.exist
+
+      it 'should have a statusCode of 200', ->
+        expect(@response.statusCode).to.equal 200
+
+      it 'should yeild devices', ->
+        expect(@body.devices).not.to.be.empty
+
+      it 'should yeild a device with a uuid', ->
+        expect(@body.devices[0].uuid).to.exist
+
+      it 'should yeild a device without a token', ->
+        expect(@body.devices[0].token).to.not.exist
+
+      it 'should yeild a device without tokens', ->
+        expect(@body.devices[0].tokens).to.not.exist
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        pathname = "unclaimeddevices"
+        query = uuid: 'invalid-uuid'
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.get uri, auth: auth, qs: query, json: true, (@error, @response, @body) => done()
+
+      it 'should not yeild an error', ->
+        expect(@error).to.not.exist
+
+      it 'should have a statusCode of 404', ->
+        expect(@response.statusCode).to.equal 404
+
+      it 'should have a body', ->
+        expect(@body.message).to.deep.equal "Devices not found"
+
+  describe 'PUT /claimdevice/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.register configWhitelist: ['*'], (error, device) =>
+          return done error if error?
+          @device = device
+          pathname = "/claimdevice/#{@device.uuid}"
+          uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+          auth = user: @config.uuid, pass: @config.token
+          request.put uri, auth: auth, json: true, (@error, @response, @body) => done()
+
+      it 'should be not have an error', ->
+        expect(@error).to.not.exist
+
+      it 'should have a statusCode of 200', ->
+        expect(@response.statusCode).to.equal 200
+
+      it 'should yeild a device', ->
+        expect(@body.uuid).to.exist
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        pathname = "/claimdevice/invalid-uuid"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.put uri, auth: auth, json: true, (@error, @response, @body) => done()
+
+      it 'should not have error', ->
+        expect(@error).to.not.exist
+
+      it 'should have a statusCode of 404', ->
+        expect(@response.statusCode).to.equal 400
+
+      it 'should have an in the body', ->
+        expect(@body).to.deep.equal "Device not found"
+
+  describe 'GET /devices/:uuid/publickey', ->
+    describe 'when called with a valid request with no publicKey', ->
+      beforeEach (done) ->
+        @meshblu.publicKey @config.uuid, (error, @result) => done error
+
+      it 'should yeild a result with a publicKey', ->
+        expect(@result.publicKey).to.exist
+
+    describe 'when called with a valid request without a publicKey', ->
+      beforeEach (done) ->
+        @meshblu.register {}, (error, device) =>
+          return done error if error?
+          @meshblu.publicKey device.uuid, (error, @result) => done error
+
+      it 'should yeild a result with a publicKey', ->
+        expect(@result.publicKey).to.be.null
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'getpublickey-error'
+        @meshblu.publicKey 'invalid-uuid', (error) =>
+
+      it 'should send an "getpublickey-error" message', ->
+        expect(@message.topic).to.deep.equal 'getpublickey-error'
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
+          error: 'Device not found'
+          request:
+            uuid: 'invalid-uuid'
+        }
   #
   # describe 'POST /devices/:uuid/token', ->
   #   describe 'when called with a valid request', ->

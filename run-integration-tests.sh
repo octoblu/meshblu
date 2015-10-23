@@ -4,6 +4,7 @@ MESHBLU_LOG=.startmeshblu.log
 MESHBLU_PID=""
 FORWARD_EVENT_DEVICES=""
 INTEGRATION_DIR='./integration'
+PORT='3000'
 
 function get-forward-uuid {
   cat $INTEGRATION_DIR/meshblu.json 2>/dev/null | jq --raw-output '.uuid'
@@ -29,6 +30,7 @@ function start-meshblu {
   export FORWARD_EVENT_DEVICES=$(get-forward-uuid)
   export UUID='yes-go'
   export TOKEN='yes-go-token'
+  export PORT
   npm start 2>&1 > $MESHBLU_LOG &
   MESHBLU_PID=$!
   echo "** Checking if meshblu started..."
@@ -57,7 +59,8 @@ else
   start-meshblu
 
   echo "** Registering fowarder..."
-  meshblu-util register -o -s localhost:3000 -t device:forwarder > $INTEGRATION_DIR/meshblu.json
+  meshblu-util register -o -s localhost:$PORT -t device:forwarder > $INTEGRATION_DIR/meshblu.json
+  meshblu-util keygen $INTEGRATION_DIR/meshblu.json
   node $INTEGRATION_DIR/add-extra-properties-to-meshblu-json.js
 fi
 

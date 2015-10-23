@@ -6,7 +6,11 @@ FORWARD_EVENT_DEVICES=""
 INTEGRATION_DIR='./integration'
 
 function get-forward-uuid {
-  cat $INTEGRATION_DIR/meshblu.json | jq --raw-output '.uuid'
+  cat $INTEGRATION_DIR/meshblu.json 2>/dev/null | jq --raw-output '.uuid'
+}
+
+function get-meshblu-pids {
+  ps ax | grep 'node server.js --http' | grep -v grep | awk '{print $1}'
 }
 
 function terminate-meshblu {
@@ -14,7 +18,7 @@ function terminate-meshblu {
   if [ -n "$MESHBLU_PID" ]; then
     kill $MESHBLU_PID > /dev/null 2>&1
   fi
-  ps ax | grep 'node server.js --http' | grep -v grep | awk '{print $1}' | xargs kill
+  get-meshblu-pids | xargs kill > /dev/null 2>&1
   sleep 1
 }
 
@@ -23,6 +27,8 @@ function start-meshblu {
   echo "" > $MESHBLU_LOG
   terminate-meshblu
   export FORWARD_EVENT_DEVICES=$(get-forward-uuid)
+  export UUID='yes-go'
+  export TOKEN='yes-go-token'
   npm start 2>&1 > $MESHBLU_LOG &
   MESHBLU_PID=$!
   echo "** Checking if meshblu started..."
@@ -60,7 +66,7 @@ start-meshblu
 
 echo "** Running tests"
 
-mocha $INTEGRATION_DIR/$1
+mocha $1 $INTEGRATION_DIR/$2
 
 echo "** Script done"
 

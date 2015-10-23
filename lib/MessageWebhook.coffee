@@ -38,7 +38,7 @@ class MessageWebhook
 
   doRequest: (options, message={}, callback) =>
     deviceOptions = _.omit @options, 'generateAndForwardMeshbluCredentials', 'signRequest'
-    options = _.extend json: message, deviceOptions, options
+    options = _.defaults json: message, deviceOptions, options
     @request options, (error, response) =>
       return callback error if error?
       return callback new Error "HTTP Status: #{response.statusCode}" unless _.inRange response.statusCode, 200, 300

@@ -20,15 +20,19 @@ describe 'REST', ->
     @conx.on 'ready', => done()
     @conx.on 'notReady', done
 
+  afterEach ->
+    @conx.removeAllListeners()
+
   it 'should get here', ->
     expect(true).to.be.true
 
   describe 'GET /devices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'devices'
+
         @meshblu.devices {}, =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
@@ -58,8 +62,8 @@ describe 'REST', ->
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
         @meshblu.devices {uuid: 'invalid-uuid'}, =>
-          @conx.once 'message', (@message) =>
-            done()
+          @conx.on 'message', (@message) =>
+            done() if @message.topic == 'devices-error'
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
@@ -76,10 +80,11 @@ describe 'REST', ->
         pathname = "/devices/#{@config.uuid}"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'devices'
+
         request.get uri, auth: auth,  (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
@@ -94,10 +99,10 @@ describe 'REST', ->
         pathname = "/devices/invalid-uuid"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'devices-error'
         request.get uri, auth: auth,  (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
@@ -111,10 +116,10 @@ describe 'REST', ->
   describe 'GET /v2/whoami', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'whoami'
         @meshblu.whoami (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "whoami" message', ->
         expect(@message.topic).to.deep.equal 'whoami'
@@ -130,11 +135,11 @@ describe 'REST', ->
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
         query = {foo: 'bar'}
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'devices'
         request.get uri, auth: auth, qs: query, (error, response, body) =>
           return done error if error?
           return done body unless response.statusCode == 200
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
@@ -147,10 +152,11 @@ describe 'REST', ->
   describe 'GET /v2/devices/:uuid', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'devices'
+
         @meshblu.device @config.uuid, (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
@@ -162,9 +168,9 @@ describe 'REST', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'devices-error'
         @meshblu.device 'invalid-uuid', (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
@@ -178,10 +184,10 @@ describe 'REST', ->
   describe 'PATCH /v2/devices/:uuid', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'update'
         @meshblu.update @config.uuid, foo: 'bar', (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "update" message', ->
         expect(@message.topic).to.deep.equal 'update'
@@ -194,9 +200,9 @@ describe 'REST', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'update-error'
         @meshblu.update @config.uuid, {$foo: 'bar'}, (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send an "update-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
@@ -211,10 +217,10 @@ describe 'REST', ->
   describe 'PUT /v2/devices/:uuid', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'update'
         @meshblu.updateDangerously @config.uuid, {$unset: {foo: 1}}, (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "update" message', ->
         expect(@message.topic).to.deep.equal 'update'
@@ -227,9 +233,9 @@ describe 'REST', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'update-error'
         @meshblu.update @config.uuid, {$foo: 'bar'}, (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send an "update-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
@@ -247,10 +253,10 @@ describe 'REST', ->
         pathname = "/localdevices"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'localdevices'
         request.get uri, auth: auth,  (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "localdevices" message', ->
         expect(@message.topic).to.deep.equal 'localdevices'
@@ -266,10 +272,10 @@ describe 'REST', ->
         query = uuid: 'invalid-uuid'
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'localdevices-error'
         request.get uri, auth: auth, qs: query,  (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "localdevices-error" message', ->
         expect(@message.topic).to.deep.equal 'localdevices-error'
@@ -287,10 +293,10 @@ describe 'REST', ->
         pathname = "/unclaimeddevices"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'localdevices'
         request.get uri, auth: auth,  (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "localdevices" message', ->
         expect(@message.topic).to.deep.equal 'localdevices'
@@ -306,10 +312,10 @@ describe 'REST', ->
         query = uuid: 'invalid-uuid'
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'localdevices-error'
         request.get uri, auth: auth, qs: query,  (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "localdevices-error" message', ->
         expect(@message.topic).to.deep.equal 'localdevices-error'
@@ -324,6 +330,9 @@ describe 'REST', ->
   describe 'PUT /claimdevice/:uuid', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'claimdevice'
+
         @meshblu.register configWhitelist: ['*'], (error, device) =>
           return done error if error?
 
@@ -333,8 +342,6 @@ describe 'REST', ->
           auth = user: @config.uuid, pass: @config.token
           request.put uri, auth: auth,  (error) =>
             return done error if error?
-            @conx.once 'message', (@message) =>
-              done()
 
       it 'should send a "claimdevice" message', ->
         expect(@message.topic).to.deep.equal 'claimdevice'
@@ -350,10 +357,10 @@ describe 'REST', ->
         pathname = "/claimdevice/invalid-uuid"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'claimdevice-error'
         request.put uri, auth: auth,  (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send an "claimdevice-error" message', ->
         expect(@message.topic).to.deep.equal 'claimdevice-error'
@@ -368,10 +375,10 @@ describe 'REST', ->
   describe 'GET /devices/:uuid/publickey', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'getpublickey'
         @meshblu.publicKey @config.uuid, (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "getpublickey" message', ->
         expect(@message.topic).to.deep.equal 'getpublickey'
@@ -382,9 +389,9 @@ describe 'REST', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'getpublickey-error'
         @meshblu.publicKey 'invalid-uuid', (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send an "getpublickey-error" message', ->
         expect(@message.topic).to.deep.equal 'getpublickey-error'
@@ -397,14 +404,14 @@ describe 'REST', ->
   describe 'POST /devices/:uuid/token', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'resettoken'
         @meshblu.register configWhitelist: ['*'], (error, device) =>
           return done error if error?
 
           @device = device
           @meshblu.resetToken @device.uuid, (error) =>
             return done error if error?
-            @conx.once 'message', (@message) =>
-              done()
 
       it 'should send a "resettoken" message', ->
         expect(@message.topic).to.deep.equal 'resettoken'
@@ -416,9 +423,9 @@ describe 'REST', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'resettoken-error'
         @meshblu.resetToken 'invalid-uuid', (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send an "resettoken-error" message', ->
         expect(@message.topic).to.deep.equal 'resettoken-error'
@@ -432,14 +439,14 @@ describe 'REST', ->
   describe 'POST /devices/:uuid/tokens', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'generatetoken'
         @meshblu.register configWhitelist: ['*'], (error, device) =>
           return done error if error?
 
           @device = device
           @meshblu.generateAndStoreToken @device.uuid, (error) =>
             return done error if error?
-            @conx.once 'message', (@message) =>
-              done()
 
       it 'should send a "generatetoken" message', ->
         expect(@message.topic).to.deep.equal 'generatetoken'
@@ -451,9 +458,9 @@ describe 'REST', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'generatetoken-error'
         @meshblu.generateAndStoreToken 'invalid-uuid', (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send an "generatetoken-error" message', ->
         expect(@message.topic).to.deep.equal 'generatetoken-error'
@@ -467,6 +474,9 @@ describe 'REST', ->
   describe 'DELETE /devices/:uuid/tokens/:token', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'revoketoken'
+
         @meshblu.register configWhitelist: ['*'], (error, device) =>
           return done error if error?
 
@@ -476,8 +486,6 @@ describe 'REST', ->
             @device = device
             @meshblu.revokeToken @device.uuid, @device.token, (error) =>
               return callback done error if error?
-              @conx.once 'message', (@message) =>
-                done()
 
       it 'should send a "revoketoken" message', ->
         expect(@message.topic).to.deep.equal 'revoketoken'
@@ -489,9 +497,9 @@ describe 'REST', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'revoketoken-error'
         @meshblu.revokeToken 'invalid-uuid', 'invalid-token', (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send an "revoketoken-error" message', ->
         expect(@message.topic).to.deep.equal 'revoketoken-error'
@@ -505,11 +513,10 @@ describe 'REST', ->
   describe 'POST /devices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'register'
         @meshblu.register {}, (error, device) =>
           return done error if error?
-
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "register" message', ->
         expect(@message.topic).to.deep.equal 'register'
@@ -520,9 +527,9 @@ describe 'REST', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'register-error'
         @meshblu.register uuid: 'not-allowed', (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send an "register-error" message', ->
         expect(@message.topic).to.deep.equal 'register-error'
@@ -539,10 +546,10 @@ describe 'REST', ->
         pathname = "/devices/#{@config.uuid}"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'update'
         request.put uri, auth: auth, json: {foo: 'bar'},  (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "update" message', ->
         expect(@message.topic).to.deep.equal 'update'
@@ -558,10 +565,10 @@ describe 'REST', ->
         pathname = "/devices/invalid-uuid"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'update-error'
         request.put uri, auth: auth, json: {foo: 'bar'},  (error) =>
           return done error if error?
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "update-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
@@ -576,14 +583,13 @@ describe 'REST', ->
   describe 'DELETE /devices/:uuid', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'unregister'
         @meshblu.register {}, (error, device) =>
           return done error if error?
-
           @device = device
           @meshblu.unregister uuid: @device.uuid, (error) =>
             return done error if error?
-            @conx.once 'message', (@message) =>
-              done()
 
       it 'should send a "unregister" message', ->
         expect(@message.topic).to.deep.equal 'unregister'
@@ -595,9 +601,9 @@ describe 'REST', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'unregister-error'
         @meshblu.unregister uuid: 'invalid-uuid', (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send an "unregister-error" message', ->
         expect(@message.topic).to.deep.equal 'unregister-error'
@@ -611,9 +617,9 @@ describe 'REST', ->
   describe 'GET /mydevices', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'devices'
         @meshblu.mydevices {}, =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "devices" message', ->
         expect(@message.topic).to.deep.equal 'devices'
@@ -625,9 +631,9 @@ describe 'REST', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'devices-error'
         @meshblu.mydevices {uuid: 'invalid-uuid'}, =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'
@@ -645,10 +651,9 @@ describe 'REST', ->
         pathname = "/subscribe/#{@config.uuid}"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
-
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'subscribe'
         request.get uri, auth: auth, timeout: 10, =>
-        @conx.once 'message', (@message) =>
-          done()
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
@@ -664,10 +669,9 @@ describe 'REST', ->
         pathname = "/subscribe/#{@config.uuid}/broadcast"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
-
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'subscribe'
         request.get uri, auth: auth, timeout: 10, =>
-        @conx.once 'message', (@message) =>
-          done()
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
@@ -684,10 +688,10 @@ describe 'REST', ->
         pathname = "/subscribe/#{@config.uuid}/received"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
-
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'subscribe'
         request.get uri, auth: auth, timeout: 10, =>
-        @conx.once 'message', (@message) =>
-          done()
+
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
@@ -704,10 +708,9 @@ describe 'REST', ->
         pathname = "/subscribe/#{@config.uuid}/sent"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
-
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'subscribe'
         request.get uri, auth: auth, timeout: 10, =>
-        @conx.once 'message', (@message) =>
-          done()
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
@@ -725,9 +728,9 @@ describe 'REST', ->
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
 
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'subscribe'
         request.get uri, auth: auth, timeout: 10, =>
-        @conx.once 'message', (@message) =>
-          done()
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'
@@ -743,9 +746,9 @@ describe 'REST', ->
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
 
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'identity'
         request.get uri, json: {token: @config.token}, (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "identity" message', ->
         expect(@message.topic).to.deep.equal 'identity'
@@ -759,10 +762,9 @@ describe 'REST', ->
         pathname = "/authenticate/#{@config.uuid}"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
-
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'identity-error'
         request.get uri, (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "identity-error" message', ->
         expect(@message.topic).to.deep.equal 'identity-error'
@@ -775,9 +777,9 @@ describe 'REST', ->
   describe 'POST /messages', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'message'
         @meshblu.message {devices: ['some-uuid']}, =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "message" message', ->
         expect(@message.topic).to.deep.equal 'message'
@@ -789,9 +791,9 @@ describe 'REST', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'message-error'
         @meshblu.message {}, =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "message-error" message', ->
         expect(@message.topic).to.deep.equal 'message-error'
@@ -807,10 +809,9 @@ describe 'REST', ->
         pathname = "/data/#{@config.uuid}"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
-
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'data'
         request.post uri, auth: auth, json: {value: 1}, (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "data" message', ->
         expect(@message.topic).to.deep.equal 'data'
@@ -825,10 +826,9 @@ describe 'REST', ->
         pathname = "/data/invalid-uuid"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
-
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'data-error'
         request.post uri, auth: auth, json: {value: 1}, (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "data-error" message', ->
         expect(@message.topic).to.deep.equal 'data-error'
@@ -845,10 +845,9 @@ describe 'REST', ->
         pathname = "/data/#{@config.uuid}"
         uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
         auth = user: @config.uuid, pass: @config.token
-
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'subscribe'
         request.get uri, auth: auth, (error) =>
-          @conx.once 'message', (@message) =>
-            done()
 
       it 'should send a "subscribe" message', ->
         expect(@message.topic).to.deep.equal 'subscribe'

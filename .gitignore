@@ -17,3 +17,5 @@ v8.log
 coverage
 .idea
 meshblu.json
+
+.startmeshblu.log

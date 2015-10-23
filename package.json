@@ -57,6 +57,7 @@
   ],
   "scripts": {
     "start": "node ${NODE_FLAGS} server.js --http --mqtt",
+    "integration-test": "./run-integration-tests.sh",
     "test": "istanbul cover _mocha -- -R spec"
   },
   "main": "server.js",

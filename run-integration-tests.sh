@@ -70,7 +70,10 @@ start-meshblu
 echo "** Running tests"
 
 mocha $1 $INTEGRATION_DIR/$2
+TEST_EXIT_CODE=$?
 
 echo "** Script done"
 
 terminate-meshblu
+
+exit $TEST_EXIT_CODE

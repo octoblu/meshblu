@@ -188,13 +188,9 @@ describe 'REST Forwarder Events', ->
 
       it 'should send an "update-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
-        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-          fromUuid: @config.uuid
-          error: "The dollar ($) prefixed field '$foo' in '$foo' is not valid for storage."
-          request:
-            query: {uuid: @config.uuid}
-            params: {$set: {"$foo": 'bar'}}
-        }
+        expect(@message.payload.fromUuid).to.equal @config.uuid
+        expect(@message.payload.request.query.uuid).to.equal @config.uuid
+        expect(@message.payload.request.params.$set.$foo).to.equal 'bar'
 
   describe 'PUT /v2/devices/:uuid', ->
     describe 'when called with a valid request', ->
@@ -221,13 +217,9 @@ describe 'REST Forwarder Events', ->
 
       it 'should send an "update-error" message', ->
         expect(@message.topic).to.deep.equal 'update-error'
-        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-          fromUuid: @config.uuid
-          error: "The dollar ($) prefixed field '$foo' in '$foo' is not valid for storage."
-          request:
-            query: {uuid: @config.uuid}
-            params: {$set: {"$foo": 'bar'}}
-        }
+        expect(@message.payload.fromUuid).to.equal @config.uuid
+        expect(@message.payload.request.query.uuid).to.equal @config.uuid
+        expect(@message.payload.request.params.$set.$foo).to.equal 'bar'
 
   describe 'GET /localdevices', ->
     describe 'when called with a valid request', ->

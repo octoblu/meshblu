@@ -317,7 +317,7 @@ describe 'REST', ->
         expect(@response.statusCode).to.equal 400
 
       it 'should have an in the body', ->
-        expect(@body).to.deep.equal "Device not found"
+        expect(@body.error).to.deep.equal "Device not found"
 
   describe 'GET /devices/:uuid/publickey', ->
     describe 'when called with a valid request with no publicKey', ->
@@ -338,88 +338,62 @@ describe 'REST', ->
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
-        @conx.on 'message', (@message) =>
-          done() if @message.topic == 'getpublickey-error'
-        @meshblu.publicKey 'invalid-uuid', (error) =>
+        @meshblu.publicKey 'invalid-uuid', (@error, @result) => done()
 
-      it 'should send an "getpublickey-error" message', ->
-        expect(@message.topic).to.deep.equal 'getpublickey-error'
-        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-          error: 'Device not found'
-          request:
-            uuid: 'invalid-uuid'
-        }
-  #
-  # describe 'POST /devices/:uuid/token', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'resettoken'
-  #       @meshblu.register configWhitelist: ['*'], (error, device) =>
-  #         return done error if error?
-  #
-  #         @device = device
-  #         @meshblu.resetToken @device.uuid, (error) =>
-  #           return done error if error?
-  #
-  #     it 'should send a "resettoken" message', ->
-  #       expect(@message.topic).to.deep.equal 'resettoken'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           uuid: @device.uuid
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'resettoken-error'
-  #       @meshblu.resetToken 'invalid-uuid', (error) =>
-  #
-  #     it 'should send an "resettoken-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'resettoken-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         error:    'invalid device'
-  #         request:
-  #           uuid: 'invalid-uuid'
-  #       }
-  #
-  # describe 'POST /devices/:uuid/tokens', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'generatetoken'
-  #       @meshblu.register configWhitelist: ['*'], (error, device) =>
-  #         return done error if error?
-  #
-  #         @device = device
-  #         @meshblu.generateAndStoreToken @device.uuid, (error) =>
-  #           return done error if error?
-  #
-  #     it 'should send a "generatetoken" message', ->
-  #       expect(@message.topic).to.deep.equal 'generatetoken'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           uuid: @device.uuid
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'generatetoken-error'
-  #       @meshblu.generateAndStoreToken 'invalid-uuid', (error) =>
-  #
-  #     it 'should send an "generatetoken-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'generatetoken-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         error:    'Device not found'
-  #         request:
-  #           uuid: 'invalid-uuid'
-  #       }
-  #
+      it 'should have an error', ->
+        expect(@error).to.be.an.error
+
+      it 'should not have a result', ->
+        expect(@result).to.not.exist
+
+  describe 'POST /devices/:uuid/token', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        # Oh hello there, you may be wondering this madness is? Well it makes sure the token is different. Crazily. Sorry bro.
+        @meshblu.register configWhitelist: ['*'], (error, device) =>
+          return done error if error?
+          @conx.subscribe uuid: device.uuid, (error) =>
+            @conx.once 'config', (@device) =>
+              @conx.once 'config', (@updatedDevice) =>
+                done() if @updatedDevice.uuid == @device.uuid
+              @meshblu.resetToken device.uuid, (error) =>
+                return done error if error?
+            @meshblu.update device.uuid, ya: 'sweet'
+
+      it 'should change the token', ->
+        expect(@updatedDevice.token).to.not.equal @device.token
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.resetToken 'invalid-uuid', (@error) => done()
+
+      it 'should have an error', ->
+        expect(@error).to.exist
+
+  describe 'POST /devices/:uuid/tokens', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.register configWhitelist: ['*'], (error, @device) =>
+          return done error if error?
+          @meshblu.generateAndStoreToken @device.uuid, (error, @updatedDevice) =>
+            return done error if error?
+            done()
+
+      it 'should have a different token', ->
+        expect(@device.token).to.exist
+        expect(@updatedDevice.token).to.exist
+        expect(@device.token).to.not.deep.equal @updatedDevice.token
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.generateAndStoreToken 'invalid-uuid', (@error, @device) => done()
+
+      it 'should be an error', ->
+        expect(@error.message).to.equal "Device not found"
+
+      it 'should not have a device', ->
+        expect(@device).to.not.exist
+
   # describe 'DELETE /devices/:uuid/tokens/:token', ->
   #   describe 'when called with a valid request', ->
   #     beforeEach (done) ->

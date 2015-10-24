@@ -20,7 +20,6 @@ function terminate-meshblu {
     kill $MESHBLU_PID > /dev/null 2>&1
   fi
   get-meshblu-pids | xargs kill > /dev/null 2>&1
-  sleep 1
 }
 
 function start-meshblu {

@@ -14,7 +14,6 @@ describe 'WebSocket Forwarder Events', ->
     @eventForwarder = new MeshbluWebsocket @config
     @eventForwarder.connect =>
       @eventForwarder.subscribe @config.uuid
-      console.log 'calling done...'
       done()
 
   before (done) ->

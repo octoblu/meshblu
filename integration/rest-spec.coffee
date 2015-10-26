@@ -394,115 +394,85 @@ describe 'REST', ->
       it 'should not have a device', ->
         expect(@device).to.not.exist
 
-  # describe 'DELETE /devices/:uuid/tokens/:token', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'revoketoken'
-  #
-  #       @meshblu.register configWhitelist: ['*'], (error, device) =>
-  #         return done error if error?
-  #
-  #         @meshblu.generateAndStoreToken device.uuid, (error, device) =>
-  #           return done error if error?
-  #
-  #           @device = device
-  #           @meshblu.revokeToken @device.uuid, @device.token, (error) =>
-  #             return callback done error if error?
-  #
-  #     it 'should send a "revoketoken" message', ->
-  #       expect(@message.topic).to.deep.equal 'revoketoken'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           uuid: @device.uuid
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'revoketoken-error'
-  #       @meshblu.revokeToken 'invalid-uuid', 'invalid-token', (error) =>
-  #
-  #     it 'should send an "revoketoken-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'revoketoken-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         error:    'Device not found'
-  #         request:
-  #           uuid: 'invalid-uuid'
-  #       }
-  #
-  # describe 'POST /devices', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'register'
-  #       @meshblu.register {}, (error, device) =>
-  #         return done error if error?
-  #
-  #     it 'should send a "register" message', ->
-  #       expect(@message.topic).to.deep.equal 'register'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         request:
-  #           ipAddress: '127.0.0.1'
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'register-error'
-  #       @meshblu.register uuid: 'not-allowed', (error) =>
-  #
-  #     it 'should send an "register-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'register-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         error:  'Device not updated'
-  #         request:
-  #           uuid: 'not-allowed'
-  #           ipAddress: '127.0.0.1'
-  #       }
-  #
-  # describe 'PUT /devices/:uuid', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/devices/#{@config.uuid}"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'update'
-  #       request.put uri, auth: auth, json: {foo: 'bar'},  (error) =>
-  #         return done error if error?
-  #
-  #     it 'should send a "update" message', ->
-  #       expect(@message.topic).to.deep.equal 'update'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           query: {uuid: @config.uuid}
-  #           params: {foo: 'bar'}
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/devices/invalid-uuid"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'update-error'
-  #       request.put uri, auth: auth, json: {foo: 'bar'},  (error) =>
-  #         return done error if error?
-  #
-  #     it 'should send a "update-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'update-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         error: "Device not found"
-  #         request:
-  #           query: {uuid: 'invalid-uuid'}
-  #           params: {foo: 'bar'}
-  #       }
-  #
+  describe 'DELETE /devices/:uuid/tokens/:token', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.register configWhitelist: ['*'], (error, device) =>
+          return done error if error?
+
+          @meshblu.generateAndStoreToken device.uuid, (error, @device) =>
+            return done error if error?
+
+            @meshblu.revokeToken @device.uuid, @device.token, (error) =>
+              return done error if error?
+              done()
+
+        it 'should not blow up', ->
+          expect(true).to.be.true
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.revokeToken 'invalid-uuid', 'invalid-token', (@error) => done()
+
+      it 'should have an error', ->
+        expect(@error).to.exist
+
+  describe 'POST /devices', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.register {}, (error, @device) =>
+          return done error if error?
+          done()
+
+      it 'should create device with uuid and token', ->
+        expect(@device.uuid).to.exist
+        expect(@device.token).to.exist
+
+      it 'should set an ipAddress', ->
+        expect(@device.ipAddress).to.equal '127.0.0.1'
+
+      it 'should set online to false', ->
+        expect(@device.online).to.be.false
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.register uuid: 'not-allowed', (@error, @result) =>
+          done()
+
+      it 'should have an error', ->
+        expect(@error.message).to.deep.equal 'Device not updated'
+
+  describe 'PUT /devices/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/devices/#{@config.uuid}"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.put uri, auth: auth, json: {foomo: 'barmo'},  (error, @response, @body) =>
+          return done error if error?
+          done()
+
+      it 'should have the correct statusCode', ->
+        expect(@response.statusCode).to.equal 200
+
+      it 'should have the correct body', ->
+        expect(@body.foomo).to.deep.equal 'barmo'
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        pathname = "/devices/invalid-uuid"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.put uri, auth: auth, json: {foomar: 'barmar'},  (error, @response, @body) =>
+          return done error if error?
+          done()
+
+      it 'should have the correct statusCode', ->
+        expect(@response.statusCode).to.equal 404
+
+      it 'should have the correct body', ->
+        expect(@body.message).to.equal 'Device not found'
+
   # describe 'DELETE /devices/:uuid', ->
   #   describe 'when called with a valid request', ->
   #     beforeEach (done) ->
@@ -524,18 +494,11 @@ describe 'REST', ->
   #
   #   describe 'when called with an invalid request', ->
   #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'unregister-error'
-  #       @meshblu.unregister uuid: 'invalid-uuid', (error) =>
+  #       @meshblu.unregister uuid: 'invalid-uuid', (@error) =>
+  #         done()
   #
-  #     it 'should send an "unregister-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'unregister-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         error:  'invalid device to unregister'
-  #         fromUuid: @config.uuid
-  #         request:
-  #           uuid: 'invalid-uuid'
-  #       }
+  #     it 'should have an error', ->
+  #       expect(@error).to.equal "Device not found"
   #
   # describe 'GET /mydevices', ->
   #   describe 'when called with a valid request', ->

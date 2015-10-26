@@ -71,7 +71,7 @@
     "mocha-istanbul": "^0.2.0",
     "sinon": "^1.16.1",
     "sinon-chai": "^2.8.0",
-    "meshblu-http": "^3.5.6",
+    "meshblu-http": "^3.5.8",
     "meshblu-mqtt": "^3.1.0",
     "meshblu-socket.io": "^3.1.0",
     "meshblu-websocket": "^2.0.4"

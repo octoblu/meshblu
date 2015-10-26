@@ -20,7 +20,7 @@ describe 'WebSocket Events', ->
         done error
 
   beforeEach (done) ->
-    _.delay done, 50
+    _.delay done, 100
 
   afterEach ->
     @meshblu.removeAllListeners()

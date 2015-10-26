@@ -473,273 +473,153 @@ describe 'REST', ->
       it 'should have the correct body', ->
         expect(@body.message).to.equal 'Device not found'
 
-  # describe 'DELETE /devices/:uuid', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'unregister'
-  #       @meshblu.register {}, (error, device) =>
-  #         return done error if error?
-  #         @device = device
-  #         @meshblu.unregister uuid: @device.uuid, (error) =>
-  #           return done error if error?
-  #
-  #     it 'should send a "unregister" message', ->
-  #       expect(@message.topic).to.deep.equal 'unregister'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           uuid: @device.uuid
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       @meshblu.unregister uuid: 'invalid-uuid', (@error) =>
-  #         done()
-  #
-  #     it 'should have an error', ->
-  #       expect(@error).to.equal "Device not found"
-  #
-  # describe 'GET /mydevices', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'devices'
-  #       @meshblu.mydevices {}, =>
-  #
-  #     it 'should send a "devices" message', ->
-  #       expect(@message.topic).to.deep.equal 'devices'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           owner: @config.uuid
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'devices-error'
-  #       @meshblu.mydevices {uuid: 'invalid-uuid'}, =>
-  #
-  #     it 'should send a "devices-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'devices-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         error: "Devices not found"
-  #         request:
-  #           owner: @config.uuid
-  #           uuid: 'invalid-uuid'
-  #       }
-  #
-  # describe 'GET /subscribe/:uuid', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/subscribe/#{@config.uuid}"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'subscribe'
-  #       request.get uri, auth: auth, timeout: 10, =>
-  #
-  #     it 'should send a "subscribe" message', ->
-  #       expect(@message.topic).to.deep.equal 'subscribe'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           uuid: @config.uuid
-  #       }
-  #
-  # describe 'GET /subscribe/:uuid/broadcast', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/subscribe/#{@config.uuid}/broadcast"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'subscribe'
-  #       request.get uri, auth: auth, timeout: 10, =>
-  #
-  #     it 'should send a "subscribe" message', ->
-  #       expect(@message.topic).to.deep.equal 'subscribe'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           type: 'broadcast'
-  #           uuid: @config.uuid
-  #       }
-  #
-  # describe 'GET /subscribe/:uuid/received', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/subscribe/#{@config.uuid}/received"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'subscribe'
-  #       request.get uri, auth: auth, timeout: 10, =>
-  #
-  #
-  #     it 'should send a "subscribe" message', ->
-  #       expect(@message.topic).to.deep.equal 'subscribe'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           type: 'received'
-  #           uuid: @config.uuid
-  #       }
-  #
-  # describe 'GET /subscribe/:uuid/sent', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/subscribe/#{@config.uuid}/sent"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'subscribe'
-  #       request.get uri, auth: auth, timeout: 10, =>
-  #
-  #     it 'should send a "subscribe" message', ->
-  #       expect(@message.topic).to.deep.equal 'subscribe'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           type: 'sent'
-  #           uuid: @config.uuid
-  #       }
-  #
-  # describe 'GET /subscribe', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/subscribe"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'subscribe'
-  #       request.get uri, auth: auth, timeout: 10, =>
-  #
-  #     it 'should send a "subscribe" message', ->
-  #       expect(@message.topic).to.deep.equal 'subscribe'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request: {}
-  #       }
-  #
-  # describe 'GET /authenticate/:uuid', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/authenticate/#{@config.uuid}"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'identity'
-  #       request.get uri, json: {token: @config.token}, (error) =>
-  #
-  #     it 'should send a "identity" message', ->
-  #       expect(@message.topic).to.deep.equal 'identity'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         request:
-  #           uuid: @config.uuid
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/authenticate/#{@config.uuid}"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'identity-error'
-  #       request.get uri, (error) =>
-  #
-  #     it 'should send a "identity-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'identity-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         error: "Device not found or token not valid"
-  #         request:
-  #           uuid: @config.uuid
-  #       }
-  #
-  # describe 'POST /messages', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'message'
-  #       @meshblu.message {devices: ['some-uuid']}, =>
-  #
-  #     it 'should send a "message" message', ->
-  #       expect(@message.topic).to.deep.equal 'message'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           devices: ['some-uuid']
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'message-error'
-  #       @meshblu.message {}, =>
-  #
-  #     it 'should send a "message-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'message-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         error: "Invalid Message Format"
-  #         request: {}
-  #       }
-  #
-  # describe 'POST /data/:uuid', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/data/#{@config.uuid}"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'data'
-  #       request.post uri, auth: auth, json: {value: 1}, (error) =>
-  #
-  #     it 'should send a "data" message', ->
-  #       expect(@message.topic).to.deep.equal 'data'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           value: 1
-  #       }
-  #
-  #   describe 'when called with an invalid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/data/invalid-uuid"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'data-error'
-  #       request.post uri, auth: auth, json: {value: 1}, (error) =>
-  #
-  #     it 'should send a "data-error" message', ->
-  #       expect(@message.topic).to.deep.equal 'data-error'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         error: "Device not found"
-  #         request:
-  #           value: 1
-  #       }
-  #
-  # describe 'GET /data/:uuid', ->
-  #   describe 'when called with a valid request', ->
-  #     beforeEach (done) ->
-  #       pathname = "/data/#{@config.uuid}"
-  #       uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-  #       auth = user: @config.uuid, pass: @config.token
-  #       @conx.on 'message', (@message) =>
-  #         done() if @message.topic == 'subscribe'
-  #       request.get uri, auth: auth, (error) =>
-  #
-  #     it 'should send a "subscribe" message', ->
-  #       expect(@message.topic).to.deep.equal 'subscribe'
-  #       expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-  #         fromUuid: @config.uuid
-  #         request:
-  #           type: 'data'
-  #           uuid: @config.uuid
-  #       }
+  describe 'DELETE /devices/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'unregister'
+        @meshblu.register {}, (error, device) =>
+          return done error if error?
+          @device = device
+          @meshblu.unregister uuid: @device.uuid, (error) =>
+            return done error if error?
+
+      it 'should send a "unregister" message', ->
+        expect(@message.topic).to.deep.equal 'unregister'
+        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
+          fromUuid: @config.uuid
+          request:
+            uuid: @device.uuid
+        }
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.unregister uuid: 'invalid-uuid', (@error) =>
+          done()
+
+      it 'should have an error', ->
+        expect(@error.message).to.equal "invalid device to unregister"
+
+  describe 'GET /mydevices', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @meshblu.mydevices {}, (error, @result) =>
+          done error if error?
+          done()
+
+      it 'should have devices', ->
+        expect(@result.devices).to.not.be.empty
+
+      it 'the first device should have a uuid', ->
+        expect(_.first(@result.devices).uuid).to.exist
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.mydevices {uuid: 'invalid-uuid'}, (@error, @result) => done()
+
+      it 'should have an error', ->
+        expect(@error).to.exist
+
+      it 'should not have a result', ->
+        expect(@result).to.not.eixst
+
+  describe 'GET /subscribe/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/subscribe/#{@config.uuid}"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.get uri, auth: auth, timeout: 10, => done()
+
+      it 'should not blow up', ->
+        expect(true).to.be.true
+
+  describe 'GET /subscribe/:uuid/broadcast', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/subscribe/#{@config.uuid}/broadcast"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.get uri, auth: auth, timeout: 10, => done()
+
+      it 'should not blow up', ->
+        expect(true).to.be.true
+
+  describe 'GET /subscribe/:uuid/received', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/subscribe/#{@config.uuid}/received"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.get uri, auth: auth, timeout: 10, => done()
+
+      it 'should not blow up', ->
+        expect(true).to.be.true
+
+  describe 'GET /subscribe/:uuid/sent', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/subscribe/#{@config.uuid}/sent"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.get uri, auth: auth, timeout: 10, => done()
+
+      it 'should not blow up', ->
+        expect(true).to.be.true
+
+  describe 'GET /subscribe', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/subscribe"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.get uri, auth: auth, timeout: 10, => done()
+
+      it 'should not blow up', ->
+        expect(true).to.be.true
+
+  describe 'GET /authenticate/:uuid', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        pathname = "/authenticate/#{@config.uuid}"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.get uri, json: {token: @config.token}, (error, @response, @body) => done error
+
+      it 'should have the correct statusCode', ->
+        expect(@response.statusCode).to.equal 200
+
+      it 'should have the correct uuid', ->
+        expect(@body.uuid).to.equal @config.uuid
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        pathname = "/authenticate/#{@config.uuid}"
+        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
+        auth = user: @config.uuid, pass: @config.token
+        request.get uri, (@error, @response, @body) => done()
+
+      it 'should not have an error', ->
+        expect(@error).to.not.exist
+
+      it 'have the the correct statusCode', ->
+        expect(@response.statusCode).to.equal 404
+
+  describe 'POST /messages', ->
+    describe 'when called with a valid request', ->
+      beforeEach (done) ->
+        @conx.on 'message', (@message) =>
+          done() if @message.topic == 'im-awesome'
+        @meshblu.message {devices: [@config.uuid], topic: 'im-awesome', payload: 'peter'}, =>
+
+      it 'should have recieve the correct message', ->
+        expect(@message.topic).to.equal 'im-awesome'
+        expect(@message.devices).to.deep.equal [@config.uuid]
+        expect(@message.payload).to.deep.equal 'peter'
+
+    describe 'when called with an invalid request', ->
+      beforeEach (done) ->
+        @meshblu.message {}, (@error) => done()
+
+      it 'should have an error', ->
+        expect(@error).to.exist

@@ -79,7 +79,6 @@ describe 'SocketLogic Forwarder Events', ->
           done() if @message.topic == 'devices-error'
 
         @meshblu.device {uuid: 'invalid-uuid'}, (data) =>
-          return done new Error(data.error) if data.error?
 
       it 'should send a "devices-error" message', ->
         expect(@message.topic).to.deep.equal 'devices-error'

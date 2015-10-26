@@ -5,7 +5,7 @@ MeshbluConfig = require 'meshblu-config'
 MeshbluMQTT = require 'meshblu-mqtt'
 MeshbluHTTP = require 'meshblu-http'
 
-describe 'SocketLogic Forwarder Events', ->
+describe 'MQTT Forwarder Events', ->
   before (done) ->
     filename = path.join __dirname, 'meshblu.json'
     @config = new MeshbluConfig(filename: filename).toJSON()

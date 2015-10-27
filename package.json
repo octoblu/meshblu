@@ -1,7 +1,7 @@
 {
   "name": "meshblu-server",
   "description": "communications platform and api for iot",
-  "version": "1.11.4",
+  "version": "1.11.5",
   "author": "Octoblu, Inc.",
   "dependencies": {
     "JSONStream": "~0.9.0",

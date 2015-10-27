@@ -55,6 +55,13 @@ deploy:
   on:
     branch: staging
     condition: $USE_MONGO = true
+- provider: npm
+  email: serveradmin@octoblu.com
+  api_key:
+    secure: "kr1RI5QLSKlqrDvhGBMIigy+OTAPtaeCcbHlkrnKQEq70rI4Pmgirh4yMfHUQootuMyIyN4TJesqIfVr5HZGUIz9uJa6hEXYshkDrwUdeuOZ+F3105ECiz8ddOCfkUCbOSHz2ttTNT8SRH8v5dD5qSLRQQ3Y86HcqidGLJnTJ8Y="
+  on:
+    tags: true
+    branches: true
 addons:
   code_climate:
     repo_token: 8e3f39fe338fe8465f0400555fcbf8a2a3293f9c586b64588e8ce198e64bda58

@@ -4,8 +4,8 @@ bcrypt = require 'bcrypt'
 debug  = require('debug')('meshblu:authDevice')
 
 module.exports = (uuid, token, callback=(->), dependencies={}) ->
-  @Device = dependencies.Device ? require './models/device'
-  device = new @Device uuid: uuid
+  Device = dependencies.Device ? require './models/device'
+  device = new Device {uuid: uuid}, {config: dependencies.config}
   device.verifyToken token, (error, verified) =>
     return callback error if error?
     return callback new Error('Unable to find valid device') unless verified

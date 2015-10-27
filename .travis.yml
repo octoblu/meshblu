@@ -58,7 +58,7 @@ deploy:
 - provider: npm
   email: serveradmin@octoblu.com
   api_key:
-    secure: "kr1RI5QLSKlqrDvhGBMIigy+OTAPtaeCcbHlkrnKQEq70rI4Pmgirh4yMfHUQootuMyIyN4TJesqIfVr5HZGUIz9uJa6hEXYshkDrwUdeuOZ+F3105ECiz8ddOCfkUCbOSHz2ttTNT8SRH8v5dD5qSLRQQ3Y86HcqidGLJnTJ8Y="
+    secure: "VZ8QsaPZEWhRaEQM7Az6p8UcKzG2Ew7BF4tuZe2pD56zeV0orr9Fn8i9wz4NAc1DB0fW0LaKAw3qCWOJ0gK6uL0zzRE4+faQERIsRKef6XqOteKbvb9oNffWMBCR1N4FNEK2LVIkmzkMcAPIhHHkmvWxjjZVuMGY5PJ+Oo1ZUw0="
   on:
     tags: true
     branches: true

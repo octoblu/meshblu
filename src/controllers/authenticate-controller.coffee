@@ -1,4 +1,4 @@
-redis             = require 'redis'
+redis             = require '../../lib/redis'
 Authenticator     = require '../models/authenticator'
 MeshbluAuthParser = require '../helpers/meshblu-auth-parser'
 debug = require('debug')('meshblu-http-server:authenticate-controller')
@@ -8,7 +8,7 @@ class AuthenticateController
     {@authenticator} = dependencies
 
     @authenticator ?= new Authenticator
-      client: redis.createClient process.env.REDIS_URI
+      client: redis.createClient()
 
     @authParser = new MeshbluAuthParser
 

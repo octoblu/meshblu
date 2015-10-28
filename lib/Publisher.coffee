@@ -1,5 +1,7 @@
 class Publisher
-  constructor: ({@namespace}={}, {@client}={}) ->
+  constructor: (options={}, dependencies={}) ->
+    {@namespace} = options
+    {@client} = dependencies
     @namespace ?= 'meshblu'
     {createClient} = require './redis'
     @client ?= createClient()

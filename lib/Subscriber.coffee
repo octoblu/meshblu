@@ -5,8 +5,7 @@ class Subscriber extends EventEmitter2
   constructor: ({@namespace}) ->
     @client = createClient()
 
-    @client.on 'message', (channel, message) =>
-      @emit 'message', channel, JSON.parse message
+    @client.on 'message', @_onMessage
 
   close: =>
     @client.quit()
@@ -21,5 +20,12 @@ class Subscriber extends EventEmitter2
 
   _channel: (type, uuid) =>
     "#{@namespace}:#{type}:#{uuid}"
+
+  _onMessage: (channel, messageStr) =>
+    try
+      message = JSON.parse messageStr
+    catch
+      return
+    @emit 'message', channel, message
 
 module.exports = Subscriber

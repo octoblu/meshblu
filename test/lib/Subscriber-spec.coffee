@@ -37,6 +37,15 @@ describe 'Subscriber', ->
         it 'should receive it from the correct channel', ->
           expect(@channel).to.deep.equal 'test:sent:bum-id'
 
+      describe 'when subscribing and redis emits invalid json', ->
+        beforeEach (done) ->
+          @sut.once 'message', => @error = new Error('received unexpected message')
+          @sut.subscribe 'sent', 'bum-id', =>
+            @redis.publish 'test:sent:bum-id', 'undefined', done
+
+        it 'should receive it', ->
+          expect(@error).not.to.exist
+
     describe '->unsubscribe', ->
       describe 'when subscribed', ->
         beforeEach (done) ->

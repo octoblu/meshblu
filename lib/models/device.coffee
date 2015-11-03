@@ -211,10 +211,10 @@ class Device
 
       @clearCache @uuid, =>
         @fetch.cache = null
-        @_hashDevice (error) =>
-          @_sendConfig()
-          return callback @sanitizeError(error) if error?
-          callback()
+        @_hashDevice (hashDeviceError) =>
+          @_sendConfig (sendConfigError) =>
+            return callback @sanitizeError(hashDeviceError) if hashDeviceError?
+            callback sendConfigError
 
   _clearTokenCache: (callback=->) =>
     return callback null, false unless @redis?.del?
@@ -243,9 +243,9 @@ class Device
     hasher.update @config.token
     hasher.digest 'base64'
 
-  _sendConfig: =>
+  _sendConfig: (callback) =>
     @fetch (error, attributes) =>
-      publisher.publish 'config', @uuid, attributes
+      publisher.publish 'config', @uuid, attributes, callback
 
   _storeTokenInCache: (token, callback=->) =>
     return callback null, false unless @redis?.sadd?

@@ -17,12 +17,16 @@ connectMessageIO = (response, payloadOnly=false) ->
   readStream = new Readable
   readStream._read = _.noop
   readStream.pipe response
+
   messageIOClient.on 'message', (message) ->
     debug 'onMessage', message
     if payloadOnly
       message = message?.payload
 
     readStream.push JSON.stringify(message) + '\n'
+
+  response.on 'close', ->
+    messageIOClient.close()
 
   return messageIOClient
 

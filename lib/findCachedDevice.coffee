@@ -12,7 +12,7 @@ findCachedDevice = (uuid, callback) ->
 
   debug 'checking redis cache', cachedKey
   redis.get cachedKey, (error, data) ->
-    return callback error if error?
+    return callback null if error? # do not send the redis error forward
     data = JSON.parse data if data
     debug 'cache results', data?.uuid
     callback null, data

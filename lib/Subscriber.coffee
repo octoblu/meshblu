@@ -8,7 +8,7 @@ class Subscriber extends EventEmitter2
     @client.on 'message', @_onMessage
 
   close: =>
-    @client.quit()
+    @client.end true
 
   subscribe: (type, uuid, callback) =>
     channel = @_channel type, uuid

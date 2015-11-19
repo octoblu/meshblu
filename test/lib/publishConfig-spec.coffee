@@ -58,7 +58,7 @@ describe 'PublishConfig', ->
       subscriber.subscribe 'config', 'uuid-interested-device', =>
         @sut.publish()
 
-    it "should publish it's config to a device in to it", ->
+    it "should publish its config to a device in to it", ->
       expect(@config).to.deep.equal foo: 'bar'
 
   describe "when forwarding a config to a device that doesn't want it", ->
@@ -101,3 +101,33 @@ describe 'PublishConfig', ->
 
     it 'should break free from the infinite loop and get here', ->
       expect(@configEvent).to.have.been.calledOnce
+
+  describe "when another device is in the configForward list many times", ->
+    beforeEach (done) ->
+      query = {uuid: 'uuid-device-being-configged'}
+      update = {$set: 'meshblu.configForward': [
+        {uuid: 'uuid-interested-device'}
+        {uuid: 'uuid-interested-device'}
+        {uuid: 'uuid-interested-device'}
+      ]}
+
+      @database.devices.update query, update, done
+
+    beforeEach (done) ->
+      @database.devices.insert
+        uuid: 'uuid-interested-device'
+        sendWhitelist: ['uuid-device-being-configged']
+      , done
+
+    beforeEach (done) ->
+      @subscriber = new Subscriber namespace: 'meshblu'
+      @subscriber.on 'message', @onMessage = sinon.spy()
+
+      @subscriber.subscribe 'config', 'uuid-interested-device', =>
+        @sut.publish done
+
+    afterEach ->
+      @subscriber.removeAllListeners()
+
+    it "should publish its 3 times", ->
+      expect(@onMessage).to.have.been.calledThrice

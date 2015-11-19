@@ -21,7 +21,7 @@ class PublishConfig
         async.eachSeries configForward, @forwardPublish, callback
 
   # Private(ish) methods
-  canSend: ({fromUuid, toUuid}, callback) =>
+  shouldSend: ({fromUuid, toUuid}, callback) =>
     return callback null, false if _.contains @forwardedFor, toUuid
 
     @fetchToAndFromDevice {fromUuid, toUuid}, (error, {fromDevice, toDevice}={}) =>
@@ -45,7 +45,7 @@ class PublishConfig
     toUuid   = uuid
     fromUuid = @uuid
 
-    @canSend {fromUuid, toUuid}, (error, canSend) =>
+    @shouldSend {fromUuid, toUuid}, (error, canSend) =>
       return callback error if error?
       return callback() unless canSend
 

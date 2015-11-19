@@ -29,22 +29,26 @@ class PublishConfig
     toUuid = uuid
     return callback() if _.contains @forwardedFor, toUuid
 
-    @fetchDevice @uuid, (error, fromDevice) =>
+    @fetchToAndFromDevice @uuid, toUuid, (error, fromDevice, toDevice) =>
+      simpleAuth = new SimpleAuth
+      simpleAuth.canSend fromDevice, toDevice, {}, (error, canSend)=>
+        return callback error if error?
+        return callback() unless canSend
+
+        publishConfig = new PublishConfig
+          uuid: toUuid
+          config: @config
+          database: @database
+          forwardedFor: @forwardedFor
+        publishConfig.publish callback
+
+  fetchToAndFromDevice: (fromUuid, toUuid, callback) =>
+    @fetchDevice fromUuid, (error, fromDevice) =>
       return callback error if error?
 
       @fetchDevice toUuid, (error, toDevice) =>
         return callback error if error?
+        callback null, fromDevice, toDevice
 
-        simpleAuth = new SimpleAuth
-        simpleAuth.canSend fromDevice, toDevice, {}, (error, canSend)=>
-          return callback error if error?
-          return callback() unless canSend
-
-          publishConfig = new PublishConfig
-            uuid: toUuid
-            config: @config
-            database: @database
-            forwardedFor: @forwardedFor
-          publishConfig.publish callback
 
   module.exports = PublishConfig

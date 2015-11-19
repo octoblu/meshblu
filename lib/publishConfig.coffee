@@ -1,7 +1,7 @@
 _ = require 'lodash'
 async = require 'async'
 Publisher = require './Publisher'
-SimpleAuth = require './SimpleAuth'
+SimpleAuth = require './simpleAuth'
 
 PUBLISHER = new Publisher namespace: 'meshblu'
 

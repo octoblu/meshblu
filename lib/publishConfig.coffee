@@ -20,16 +20,26 @@ class PublishConfig
         configForward = device?.meshblu?.configForward ? []
         async.eachSeries configForward, @forwardPublish, callback
 
+  # Private(ish) methods
+  # canSend: ({fromDevice, toDevice}, callback) =>
+
   fetchDevice: (uuid, callback) =>
-    device = new Device {uuid: uuid}, database: @database
+    device = new Device {uuid}, {@database}
     device.fetch (error, result) =>
       callback null, result # ignore errors, cause why not?
 
+  fetchToAndFromDevice: ({fromUuid, toUuid}, callback) =>
+    async.parallel {
+      fromDevice: async.apply @fetchDevice, fromUuid
+      toDevice:   async.apply @fetchDevice, toUuid
+    }, callback
+
   forwardPublish: ({uuid}, callback) =>
     toUuid = uuid
+    fromUuid = @uuid
     return callback() if _.contains @forwardedFor, toUuid
 
-    @fetchToAndFromDevice @uuid, toUuid, (error, fromDevice, toDevice) =>
+    @fetchToAndFromDevice {fromUuid, toUuid}, (error, {fromDevice, toDevice}={}) =>
       simpleAuth = new SimpleAuth
       simpleAuth.canSend fromDevice, toDevice, {}, (error, canSend)=>
         return callback error if error?
@@ -41,14 +51,5 @@ class PublishConfig
           database: @database
           forwardedFor: @forwardedFor
         publishConfig.publish callback
-
-  fetchToAndFromDevice: (fromUuid, toUuid, callback) =>
-    @fetchDevice fromUuid, (error, fromDevice) =>
-      return callback error if error?
-
-      @fetchDevice toUuid, (error, toDevice) =>
-        return callback error if error?
-        callback null, fromDevice, toDevice
-
 
   module.exports = PublishConfig

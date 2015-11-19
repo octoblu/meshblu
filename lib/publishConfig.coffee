@@ -2,6 +2,7 @@ _ = require 'lodash'
 async = require 'async'
 Publisher = require './Publisher'
 SimpleAuth = require './simpleAuth'
+MessageWebhook = require './MessageWebhook'
 
 PUBLISHER = new Publisher namespace: 'meshblu'
 
@@ -12,9 +13,20 @@ class PublishConfig
     @forwardedFor = _.union @forwardedFor, [@uuid]
 
   publish: (callback) =>
-    async.series [@doPublish, @forwardPublishToDevices], callback
+    async.series [@doPublish, @callWebhooks, @forwardPublishToDevices], callback
 
   # Private(ish) methods
+  callWebhooks: (callback) =>
+    @fetchDevice @uuid, (error, device) =>
+      return callback() unless device? && device.meshblu?
+      hooks = device.meshblu.configHooks ? []
+      async.each hooks, @callWebhook, callback
+
+  callWebhook: (hook, callback) =>
+    messageWebhook = new MessageWebhook @uuid, hook
+    messageWebhook.send @config, (error) =>
+      callback() # if error, move on
+
   doPublish: (callback) =>
     PUBLISHER.publish 'config', @uuid, @config, callback
 

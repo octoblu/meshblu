@@ -1,4 +1,5 @@
 async = require 'async'
+http = require 'http'
 PublishConfig = require '../../lib/publishConfig'
 Subscriber = require '../../lib/Subscriber'
 Database = require '../test-database'
@@ -174,3 +175,75 @@ describe 'PublishConfig', ->
 
       it 'should call onMessage', ->
         expect(@onMessage).to.have.been.calledOnce
+
+  describe 'when emitter forwards config through a middleman to a webhook', ->
+    beforeEach (done) ->
+      emitter =
+        uuid: 'uuid-emitter'
+        meshblu:
+          configForward: [{uuid: 'uuid-middleman'}]
+
+      @database.devices.insert emitter, done
+
+    beforeEach (done) ->
+      middleman =
+        uuid: 'uuid-middleman'
+        sendWhitelist: ['uuid-emitter']
+        meshblu:
+          configHooks: [{url: "http://localhost:38234", method: 'POST'}]
+
+      @database.devices.insert middleman, done
+
+    beforeEach (done) ->
+      @onRequest = sinon.spy (req,res) =>
+        res.writeHead(204)
+        res.end()
+      @server = http.createServer @onRequest
+      @server.listen 38234, done
+
+    afterEach (done) ->
+      @server.close done
+
+    describe 'when the emitter emits a config', ->
+      beforeEach (done) ->
+        @sut = new PublishConfig
+          uuid: 'uuid-emitter'
+          config: {foo: 'bar'}
+          database: @database
+
+        @sut.publish (error) =>
+          return done error if error?
+          setTimeout done, 100
+
+      it 'should call onRequest', ->
+        expect(@onRequest).to.have.been.calledOnce
+
+  describe 'when emitter forwards config through a middleman to a webhook that isnt listening', ->
+    beforeEach (done) ->
+      emitter =
+        uuid: 'uuid-emitter'
+        meshblu:
+          configForward: [{uuid: 'uuid-middleman'}]
+
+      @database.devices.insert emitter, done
+
+    beforeEach (done) ->
+      middleman =
+        uuid: 'uuid-middleman'
+        sendWhitelist: ['uuid-emitter']
+        meshblu:
+          configHooks: [{url: "http://localhost:38234", method: 'POST'}]
+
+      @database.devices.insert middleman, done
+
+    describe 'when the emitter emits a config', ->
+      beforeEach (done) ->
+        @sut = new PublishConfig
+          uuid: 'uuid-emitter'
+          config: {foo: 'bar'}
+          database: @database
+
+        @sut.publish done
+
+      it 'should get here within the timeout', ->
+        expect(true)

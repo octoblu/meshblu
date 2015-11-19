@@ -21,14 +21,6 @@ class PublishConfig
         async.eachSeries configForward, @forwardPublish, callback
 
   # Private(ish) methods
-  shouldSend: ({fromUuid, toUuid}, callback) =>
-    return callback null, false if _.contains @forwardedFor, toUuid
-
-    @fetchToAndFromDevice {fromUuid, toUuid}, (error, {fromDevice, toDevice}={}) =>
-      return callback error if error?
-      simpleAuth = new SimpleAuth
-      simpleAuth.canSend fromDevice, toDevice, {}, callback
-
   fetchDevice: (uuid, callback) =>
     device = new Device {uuid}, {@database}
     device.fetch (error, result) =>
@@ -55,5 +47,13 @@ class PublishConfig
         database: @database
         forwardedFor: @forwardedFor
       publishConfig.publish callback
+
+  shouldSend: ({fromUuid, toUuid}, callback) =>
+    return callback null, false if _.contains @forwardedFor, toUuid
+
+    @fetchToAndFromDevice {fromUuid, toUuid}, (error, {fromDevice, toDevice}={}) =>
+      return callback error if error?
+      simpleAuth = new SimpleAuth
+      simpleAuth.canSend fromDevice, toDevice, {}, callback
 
   module.exports = PublishConfig

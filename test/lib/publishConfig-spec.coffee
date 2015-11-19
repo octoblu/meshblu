@@ -172,5 +172,5 @@ describe 'PublishConfig', ->
         subscriber.subscribe 'config', 'uuid-subscriber', =>
           @sut.publish done
 
-      it.only 'should call onMessage', ->
+      it 'should call onMessage', ->
         expect(@onMessage).to.have.been.calledOnce

@@ -2,7 +2,7 @@ async = require 'async'
 Publisher = require './Publisher'
 SimpleAuth = require './SimpleAuth'
 
-Device = null
+Device = null #circular dependencies are awesome.
 
 class PublishConfig
   constructor: ({@uuid,@config,@database}) ->

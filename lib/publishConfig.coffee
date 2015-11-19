@@ -3,6 +3,7 @@ async = require 'async'
 Publisher = require './Publisher'
 SimpleAuth = require './SimpleAuth'
 
+PUBLISHER = new Publisher namespace: 'meshblu'
 Device = null #circular dependencies are awesome.
 
 class PublishConfig
@@ -12,15 +13,12 @@ class PublishConfig
     @forwardedFor = _.union @forwardedFor, [@uuid]
 
   publish: (callback) =>
-    publisher = new Publisher namespace: 'meshblu'
-    publisher.publish 'config', @uuid, @config, (error) =>
-      return callback error if error?
-      @fetchDevice @uuid, (error, device) =>
-        return callback error if error?
-        configForward = device?.meshblu?.configForward ? []
-        async.eachSeries configForward, @forwardPublish, callback
+    async.series [@doPublish, @forwardPublishToDevices], callback
 
   # Private(ish) methods
+  doPublish: (callback) =>
+    PUBLISHER.publish 'config', @uuid, @config, callback
+
   fetchDevice: (uuid, callback) =>
     device = new Device {uuid}, {@database}
     device.fetch (error, result) =>
@@ -47,6 +45,14 @@ class PublishConfig
         database: @database
         forwardedFor: @forwardedFor
       publishConfig.publish callback
+
+  forwardPublishToDevices: (callback) =>
+    @fetchDevice @uuid, (error, device) =>
+      return callback error if error?
+      return callback null unless device? and device.meshblu?
+      
+      configForward = device.meshblu.configForward ? []
+      async.eachSeries configForward, @forwardPublish, callback
 
   shouldSend: ({fromUuid, toUuid}, callback) =>
     return callback null, false if _.contains @forwardedFor, toUuid

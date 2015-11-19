@@ -4,7 +4,7 @@ Subscriber = require '../../lib/Subscriber'
 Database = require '../test-database'
 clearCache = require '../../lib/clearCache'
 
-describe.only 'PublishConfig', ->
+describe 'PublishConfig', ->
   beforeEach (done) ->
     uuids = [
       'uuid-device-being-configged'

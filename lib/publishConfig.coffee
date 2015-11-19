@@ -1,3 +1,4 @@
+_ = require 'lodash'
 async = require 'async'
 Publisher = require './Publisher'
 SimpleAuth = require './SimpleAuth'
@@ -5,8 +6,10 @@ SimpleAuth = require './SimpleAuth'
 Device = null #circular dependencies are awesome.
 
 class PublishConfig
-  constructor: ({@uuid,@config,@database}) ->
+  constructor: ({@uuid,@config,@database,@forwardedFor}) ->
     Device = require './models/device'
+    @forwardedFor ?= []
+    @forwardedFor = _.union @forwardedFor, [@uuid]
 
   publish: (callback) =>
     publisher = new Publisher namespace: 'meshblu'
@@ -24,17 +27,24 @@ class PublishConfig
 
   forwardPublish: ({uuid}, callback) =>
     toUuid = uuid
+    return callback() if _.contains @forwardedFor, toUuid
 
     @fetchDevice @uuid, (error, fromDevice) =>
       return callback error if error?
+
       @fetchDevice toUuid, (error, toDevice) =>
         return callback error if error?
+
         simpleAuth = new SimpleAuth
         simpleAuth.canSend fromDevice, toDevice, {}, (error, canSend)=>
           return callback error if error?
           return callback() unless canSend
 
-          publishConfig = new PublishConfig uuid: toUuid, config: @config, database: @database
+          publishConfig = new PublishConfig
+            uuid: toUuid
+            config: @config
+            database: @database
+            forwardedFor: @forwardedFor
           publishConfig.publish callback
 
   module.exports = PublishConfig

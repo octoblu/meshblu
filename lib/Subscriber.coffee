@@ -4,7 +4,6 @@
 class Subscriber extends EventEmitter2
   constructor: ({@namespace}) ->
     @client = createClient()
-
     @client.on 'message', @_onMessage
 
   close: =>

@@ -4,6 +4,7 @@ bcrypt = require 'bcrypt'
 crypto = require 'crypto'
 debug  = require('debug')('meshblu:model:device')
 Publisher = require '../Publisher'
+PublishConfig = require '../publishConfig'
 
 publisher = new Publisher
 
@@ -244,8 +245,10 @@ class Device
     hasher.digest 'base64'
 
   _sendConfig: (callback) =>
-    @fetch (error, attributes) =>
-      publisher.publish 'config', @uuid, attributes, callback
+    @fetch (error, config) =>
+      return callback error if error?
+      publishConfig = new PublishConfig uuid: @uuid, config: config
+      publishConfig.publish callback
 
   _storeTokenInCache: (token, callback=->) =>
     return callback null, false unless @redis?.sadd?

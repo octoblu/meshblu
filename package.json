@@ -62,7 +62,7 @@
   "scripts": {
     "start": "node ${NODE_FLAGS} server.js --http --mqtt",
     "integration-test": "./run-integration-tests.sh",
-    "test": "istanbul cover _mocha -- -R spec"
+    "test": "istanbul cover _mocha -- -R spec --require coffee-coverage/register-istanbul"
   },
   "main": "server.js",
   "devDependencies": {

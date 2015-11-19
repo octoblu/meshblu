@@ -2,4 +2,3 @@
 .kubernetes
 node_modules
 coverage
-test

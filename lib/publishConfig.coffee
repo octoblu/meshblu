@@ -21,12 +21,19 @@ class PublishConfig
         async.eachSeries configForward, @forwardPublish, callback
 
   # Private(ish) methods
-  # canSend: ({fromDevice, toDevice}, callback) =>
+  canSend: ({fromUuid, toUuid}, callback) =>
+    return callback null, false if _.contains @forwardedFor, toUuid
+
+    @fetchToAndFromDevice {fromUuid, toUuid}, (error, {fromDevice, toDevice}={}) =>
+      return callback error if error?
+      simpleAuth = new SimpleAuth
+      simpleAuth.canSend fromDevice, toDevice, {}, callback
 
   fetchDevice: (uuid, callback) =>
     device = new Device {uuid}, {@database}
     device.fetch (error, result) =>
-      callback null, result # ignore errors, cause why not?
+      # ignore errors, because not finding the device means we won't forward to them
+      callback null, result
 
   fetchToAndFromDevice: ({fromUuid, toUuid}, callback) =>
     async.parallel {
@@ -35,21 +42,18 @@ class PublishConfig
     }, callback
 
   forwardPublish: ({uuid}, callback) =>
-    toUuid = uuid
+    toUuid   = uuid
     fromUuid = @uuid
-    return callback() if _.contains @forwardedFor, toUuid
 
-    @fetchToAndFromDevice {fromUuid, toUuid}, (error, {fromDevice, toDevice}={}) =>
-      simpleAuth = new SimpleAuth
-      simpleAuth.canSend fromDevice, toDevice, {}, (error, canSend)=>
-        return callback error if error?
-        return callback() unless canSend
+    @canSend {fromUuid, toUuid}, (error, canSend) =>
+      return callback error if error?
+      return callback() unless canSend
 
-        publishConfig = new PublishConfig
-          uuid: toUuid
-          config: @config
-          database: @database
-          forwardedFor: @forwardedFor
-        publishConfig.publish callback
+      publishConfig = new PublishConfig
+        uuid: toUuid
+        config: @config
+        database: @database
+        forwardedFor: @forwardedFor
+      publishConfig.publish callback
 
   module.exports = PublishConfig

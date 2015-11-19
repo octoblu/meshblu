@@ -23,7 +23,8 @@ class PublishConfig
       async.each hooks, @callWebhook, callback
 
   callWebhook: (hook, callback) =>
-    messageWebhook = new MessageWebhook @uuid, hook
+    device = new @Device {@uuid}, {@database}
+    messageWebhook = new MessageWebhook @uuid, hook, device: device
     messageWebhook.send @config, (error) =>
       callback() # if error, move on
 

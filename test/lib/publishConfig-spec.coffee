@@ -10,6 +10,9 @@ describe 'PublishConfig', ->
       'uuid-device-being-configged'
       'uuid-interested-device'
       'uuid-uninterested-device'
+      'uuid-emitter'
+      'uuid-middleman'
+      'uuid-subscriber'
     ]
     async.each uuids, clearCache, done
 
@@ -131,3 +134,43 @@ describe 'PublishConfig', ->
 
     it "should publish its 3 times", ->
       expect(@onMessage).to.have.been.calledThrice
+
+  describe 'when emitter forwards config through a middleman to subscriber', ->
+    beforeEach (done) ->
+      emitter =
+        uuid: 'uuid-emitter'
+        meshblu:
+          configForward: [{uuid: 'uuid-middleman'}]
+
+      @database.devices.insert emitter, done
+
+    beforeEach (done) ->
+      middleman =
+        uuid: 'uuid-middleman'
+        sendWhitelist: ['uuid-emitter']
+        meshblu:
+          configForward: [{uuid: 'uuid-subscriber'}]
+
+      @database.devices.insert middleman, done
+
+    beforeEach (done) ->
+      subscriber =
+        uuid: 'uuid-subscriber'
+        sendWhitelist: ['uuid-middleman']
+
+      @database.devices.insert subscriber, done
+
+    describe 'when the emitter emits a config', ->
+      beforeEach (done) ->
+        @sut = new PublishConfig
+          uuid: 'uuid-emitter'
+          config: {foo: 'bar'}
+          database: @database
+
+        subscriber = new Subscriber namespace: 'meshblu'
+        subscriber.once 'message', @onMessage = sinon.spy()
+        subscriber.subscribe 'config', 'uuid-subscriber', =>
+          @sut.publish done
+
+      it.only 'should call onMessage', ->
+        expect(@onMessage).to.have.been.calledOnce

@@ -271,7 +271,9 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when authDevice yields a device', ->
       beforeEach ->
         @getDevice = sinon.stub().yields null, uuid: '5431'
-        @securityImpl = canReceive: sinon.stub().yields null, true
+        @securityImpl =
+          canReceive: sinon.stub().yields null, true
+          canReceiveAs: sinon.stub().yields null, false
         @sut = new MeshbluWebsocketHandler MessageIOClient: @MessageIOClient, securityImpl: @securityImpl, getDevice: @getDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.messageIOClient = @messageIOClient
         @sut.authedDevice = something: true
@@ -288,7 +290,9 @@ describe 'MeshbluWebsocketHandler', ->
     describe 'when the device is owned by the owner', ->
       beforeEach ->
         @getDevice = sinon.stub().yields null, uuid: '5431', owner: '1234'
-        @securityImpl = canReceive: sinon.stub().yields null, true
+        @securityImpl =
+          canReceive: sinon.stub().yields null, true
+          canReceiveAs: sinon.stub().yields null, true
         @sut = new MeshbluWebsocketHandler authDevice: @authDevice, MessageIOClient: @MessageIOClient, securityImpl: @securityImpl, getDevice: @getDevice, meshbluEventEmitter: @meshbluEventEmitter
         @sut.authedDevice = uuid: '1234'
         @sut.messageIOClient = @messageIOClient

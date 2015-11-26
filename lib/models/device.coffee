@@ -3,12 +3,11 @@ async  = require 'async'
 bcrypt = require 'bcrypt'
 crypto = require 'crypto'
 debug  = require('debug')('meshblu:model:device')
+UUIDAliasResolver = require '../../src/uuid-alias-resolver'
 Publisher = require '../Publisher'
 PublishConfig = require '../publishConfig'
 
 publisher = new Publisher
-
-UUID_REGEX = /[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}/i
 
 class Device
   constructor: (attributes={}, dependencies={}) ->
@@ -20,6 +19,7 @@ class Device
     @redis = dependencies.redis ? require '../redis'
     @findCachedDevice = dependencies.findCachedDevice ? require '../findCachedDevice'
     @cacheDevice = dependencies.cacheDevice ? require '../cacheDevice'
+    @uuidAliasResolver = new UUIDAliasResolver {}, {@redis}
     @set attributes
     {@uuid} = attributes
 
@@ -235,11 +235,7 @@ class Device
       @redis.del "tokens:#{uuid}", callback
 
   _lookupAlias: (alias, callback) =>
-    return callback null, alias if UUID_REGEX.test alias
-    @redis.get "alias:#{alias}", (error, uuid) =>
-      if UUID_REGEX.test uuid
-        return callback null, uuid
-      callback null, alias
+    @uuidAliasResolver.resolve alias, callback
 
   _hashDevice: (callback=->) =>
     # don't use @fetch to prevent side-effects

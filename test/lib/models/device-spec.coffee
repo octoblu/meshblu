@@ -15,10 +15,13 @@ describe 'Device', ->
       @findCachedDevice = sinon.stub().yields null
       @config = token: 'totally-secret-yo'
       @redis =
+        get: sinon.stub()
         del: sinon.stub()
         sadd: sinon.stub()
         srem: sinon.stub()
         sismember: sinon.stub()
+
+      @redis.get.yields null
 
       @dependencies =
         database: @database
@@ -648,27 +651,29 @@ describe 'Device', ->
 
   describe '->validate', ->
     describe 'when created with a different uuid', ->
-      beforeEach ->
+      beforeEach (done) ->
         @sut = new Device uuid: 'f853214e-69b9-4ca7-a11e-7ee7b1f8f5be', @dependencies
         @sut.set uuid: 'different-uuid'
-        @result = @sut.validate()
+        @sut.validate (@error, @result) =>
+          done()
 
-      it 'should return false', ->
+      it 'should yield false', ->
         expect(@result).to.be.false
 
-      it 'should set error on the device', ->
-        expect(@sut.error).to.exist
-        expect(@sut.error.message).to.equal 'Cannot modify uuid'
+      it 'should have an error', ->
+        expect(@error).to.exist
+        expect(@error.message).to.equal 'Cannot modify uuid'
 
     describe 'when updated with the same uuid', ->
-      beforeEach ->
+      beforeEach (done) ->
         @uuid = '758a080b-fd29-4413-8339-53cc5de3a649'
         @sut = new Device uuid: @uuid, @dependencies
         @sut.set uuid: @uuid
-        @result = @sut.validate()
+        @sut.validate (@error, @result) =>
+          done()
 
-      it 'should return true', ->
+      it 'should yield true', ->
         expect(@result).to.be.true
 
-      it 'should not set an error on the device', ->
-        expect(@sut.error).to.not.exist
+      it 'should not yield an error', ->
+        expect(@error).to.not.exist

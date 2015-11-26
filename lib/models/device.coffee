@@ -8,6 +8,8 @@ PublishConfig = require '../publishConfig'
 
 publisher = new Publisher
 
+UUID_REGEX = /[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}/i
+
 class Device
   constructor: (attributes={}, dependencies={}) ->
     @devices = dependencies.database?.devices ? require('../database').devices
@@ -53,17 +55,19 @@ class Device
   fetch: (callback=->) =>
     return _.defer callback, null, @fetch.cache if @fetch.cache?
 
-    @findCachedDevice @uuid, (error, device) =>
+    @_lookupAlias @uuid, (error, uuid) =>
       return callback error if error?
-      if device?
-        @fetch.cache = device
-        return callback null, device
+      @findCachedDevice uuid, (error, device) =>
+        return callback error if error?
+        if device?
+          @fetch.cache = device
+          return callback null, device
 
-      @devices.findOne uuid: @uuid, {_id: false}, (error, device) =>
-        @fetch.cache = device
-        return callback new Error('Device not found') unless device?
-        @cacheDevice device
-        callback null, @fetch.cache
+        @devices.findOne uuid: uuid, {_id: false}, (error, device) =>
+          @fetch.cache = device
+          return callback new Error('Device not found') unless device?
+          @cacheDevice device
+          callback null, @fetch.cache
 
   generateAndStoreTokenInCache: (callback=->)=>
     token = @generateToken()
@@ -75,7 +79,9 @@ class Device
   removeTokenFromCache: (token, callback=->) =>
     return callback null, false unless @redis?.srem?
     hashedToken = @_hashToken token
-    @redis.srem "tokens:#{@uuid}", hashedToken, callback
+    @_lookupAlias @uuid, (error, uuid) =>
+      return callback error if error?
+      @redis.srem "tokens:#{uuid}", hashedToken, callback
 
   resetToken: (callback) =>
     newToken = @generateToken()
@@ -112,15 +118,17 @@ class Device
     new Error message.replace("MongoError: ")
 
   save: (callback=->) =>
-    return callback @error unless @validate()
-    async.series [
-      @addGeo
-      @addHashedToken
-      @addOnlineSince
-    ], (error) =>
-      return callback error if error?
-      debug 'save', @attributes
-      @update $set: @attributes, callback
+    @validate (error, isValid) =>
+      return callback error unless isValid
+
+      async.series [
+        @addGeo
+        @addHashedToken
+        @addOnlineSince
+      ], (error) =>
+        return callback error if error?
+        debug 'save', @attributes
+        @update $set: @attributes, callback
 
   set: (attributes)=>
     @attributes ?= {}
@@ -141,12 +149,13 @@ class Device
       @_storeTokenInCache hashedToken
       @update $set: {"meshblu.tokens.#{hashedToken}" : tokenData}, callback
 
-  validate: =>
-    if @attributes.uuid? && @uuid != @attributes.uuid
-      @error = new Error('Cannot modify uuid')
-      return false
+  validate: (callback) =>
+    @_lookupAlias @uuid, (error, uuid) =>
+      return callback error if error?
+      if @attributes.uuid? && uuid != @attributes.uuid
+        return callback new Error('Cannot modify uuid'), false
 
-    return true
+      callback null, true
 
   verifyRootToken: (ogToken, callback=->) =>
     debug "verifyRootToken: ", ogToken
@@ -199,72 +208,98 @@ class Device
     params = _.cloneDeep params
     keys   = _.keys(params)
 
-    if _.all(keys, (key) -> _.startsWith key, '$')
-      params['$set'] ?= {}
-      params['$set'].uuid = @uuid
-    else
-      params.uuid = @uuid
+    @_lookupAlias @uuid, (error, uuid) =>
+      return callback error if error?
+      if _.all(keys, (key) -> _.startsWith key, '$')
+        params['$set'] ?= {}
+        params['$set'].uuid = uuid
+      else
+        params.uuid = uuid
 
-    debug 'update', @uuid, params
+      debug 'update', uuid, params
 
-    @devices.update uuid: @uuid, params, (error, result) =>
-      return callback @sanitizeError(error) if error?
+      @devices.update uuid: uuid, params, (error, result) =>
+        return callback @sanitizeError(error) if error?
 
-      @clearCache @uuid, =>
-        @fetch.cache = null
-        @_hashDevice (hashDeviceError) =>
-          @_sendConfig (sendConfigError) =>
-            return callback @sanitizeError(hashDeviceError) if hashDeviceError?
-            callback sendConfigError
+        @clearCache uuid, =>
+          @fetch.cache = null
+          @_hashDevice (hashDeviceError) =>
+            @_sendConfig (sendConfigError) =>
+              return callback @sanitizeError(hashDeviceError) if hashDeviceError?
+              callback sendConfigError
 
   _clearTokenCache: (callback=->) =>
     return callback null, false unless @redis?.del?
-    @redis.del "tokens:#{@uuid}", callback
+    @_lookupAlias @uuid, (error, uuid) =>
+      return callback error if error?
+      @redis.del "tokens:#{uuid}", callback
+
+  _lookupAlias: (alias, callback) =>
+    return callback null, alias if UUID_REGEX.test alias
+    @redis.get "alias:#{alias}", (error, uuid) =>
+      if UUID_REGEX.test uuid
+        return callback null, uuid
+      callback null, alias
 
   _hashDevice: (callback=->) =>
-    debug '_hashDevice', @uuid
-    @devices.findOne uuid: @uuid, (error, data) =>
+    # don't use @fetch to prevent side-effects
+    @_lookupAlias @uuid, (error, uuid) =>
       return callback error if error?
-      delete data.meshblu.hash if data?.meshblu?.hash
-      try
-        hashedToken = @_hashToken JSON.stringify(data)
-      catch error
-        return callback error
-      params = $set :
-        'meshblu.hash': hashedToken
-      debug 'updating hash', @uuid, params
-      @devices.update uuid: @uuid, params, callback
+      debug '_hashDevice', uuid
+      @devices.findOne uuid: uuid, (error, data) =>
+        return callback error if error?
+        delete data.meshblu.hash if data?.meshblu?.hash
+        try
+          hashedToken = @_hashToken JSON.stringify(data)
+        catch error
+          return callback error
+        params = $set :
+          'meshblu.hash': hashedToken
+        debug 'updating hash', uuid, params
+        @devices.update uuid: uuid, params, callback
 
   _hashToken: (token) =>
-    throw new Error 'Invalid Device UUID' unless @uuid?
+    @_lookupAlias @uuid, (error, uuid) =>
+      return callback error if error?
+      throw new Error 'Invalid Device UUID' unless uuid?
 
-    hasher = crypto.createHash 'sha256'
-    hasher.update token
-    hasher.update @uuid
-    hasher.update @config.token
-    hasher.digest 'base64'
+      hasher = crypto.createHash 'sha256'
+      hasher.update token
+      hasher.update uuid
+      hasher.update @config.token
+      hasher.digest 'base64'
 
   _sendConfig: (callback) =>
     @fetch (error, config) =>
       return callback error if error?
-      publishConfig = new PublishConfig uuid: @uuid, config: config
-      publishConfig.publish callback
+      @_lookupAlias @uuid, (error, uuid) =>
+        return callback error if error?
+        publishConfig = new PublishConfig uuid: uuid, config: config
+        publishConfig.publish callback
 
   _storeTokenInCache: (token, callback=->) =>
     return callback null, false unless @redis?.sadd?
-    @redis.sadd "tokens:#{@uuid}", token, callback
+    @_lookupAlias @uuid, (error, uuid) =>
+      return callback error if error?
+      @redis.sadd "tokens:#{uuid}", token, callback
 
   _storeInvalidTokenInBlacklist: (token, callback=->) =>
     return callback null, false unless @redis?.sadd?
-    @redis.sadd "tokens:blacklist:#{@uuid}", token, callback
+    @_lookupAlias @uuid, (error, uuid) =>
+      return callback error if error?
+      @redis.sadd "tokens:blacklist:#{uuid}", token, callback
 
   _verifyTokenInCache: (token, callback=->) =>
     return callback null, false unless @redis?.sismember?
     hashedToken = @_hashToken token
-    @redis.sismember "tokens:#{@uuid}", hashedToken, callback
+    @_lookupAlias @uuid, (error, uuid) =>
+      return callback error if error?
+      @redis.sismember "tokens:#{uuid}", hashedToken, callback
 
   _isTokenInBlacklist: (token, callback=->) =>
     return callback null, false unless @redis?.sismember?
-    @redis.sismember "tokens:blacklist:#{@uuid}", token, callback
+    @_lookupAlias @uuid, (error, uuid) =>
+      return callback error if error?
+      @redis.sismember "tokens:blacklist:#{uuid}", token, callback
 
 module.exports = Device

@@ -209,7 +209,7 @@ class MeshbluWebsocketHandler extends EventEmitter
       @securityImpl.canReceive @authedDevice, subscribedDevice, (error, permission) =>
         return callback error if error?
 
-        requestedSubscriptionTypes = data.types
+        requestedSubscriptionTypes = data.types ? ['broadcast', 'received', 'sent']
 
         authorizedSubscriptionTypes = []
         authorizedSubscriptionTypes.push 'broadcast' if permission
@@ -226,7 +226,6 @@ class MeshbluWebsocketHandler extends EventEmitter
 
           requestedSubscriptionTypes = requestedSubscriptionTypes ? authorizedSubscriptionTypes
           requestedSubscriptionTypes = _.union requestedSubscriptionTypes, ['config', 'data']
-          console.log requestedSubscriptionTypes, authorizedSubscriptionTypes
           subscriptionTypes = _.intersection(requestedSubscriptionTypes, authorizedSubscriptionTypes)
 
           @messageIOClient.subscribe subscribedDevice.uuid, subscriptionTypes

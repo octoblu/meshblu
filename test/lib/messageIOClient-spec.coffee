@@ -339,34 +339,6 @@ describe 'MessageIOClient', ->
         it 'should get a received message', ->
           expect(@message).to.deep.equal couldBe: 'lovesick?'
 
-    describe 'no kinds', ->
-      beforeEach (done) ->
-        @sut.subscribe 'heart', undefined, undefined, done
-
-      describe 'receiving a broadcast message', ->
-        beforeEach (done) ->
-          @sut.once 'message', (@message) => done()
-          @redis.publish 'test:broadcast:heart', JSON.stringify(couldBe: 'The 80s band')
-
-        it 'should get a broadcast message', ->
-          expect(@message).to.deep.equal couldBe: 'The 80s band'
-
-      describe 'receiving a received message', ->
-        beforeEach (done) ->
-          @sut.once 'message', (@message) => done()
-          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?')
-
-        it 'should get a received message', ->
-          expect(@message).to.deep.equal couldBe: 'lovesick?'
-
-      describe 'receiving a received message', ->
-        beforeEach (done) ->
-          @sut.once 'message', (@message) => done()
-          @redis.publish 'test:received:heart', JSON.stringify(couldBe: 'lovesick?')
-
-        it 'should get a received message', ->
-          expect(@message).to.deep.equal couldBe: 'lovesick?'
-
   describe 'unsubscribe', ->
     describe 'received only', ->
       beforeEach (done) ->

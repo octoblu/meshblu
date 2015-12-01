@@ -61,9 +61,9 @@ class UUIDAliasResolver
         return callback new Error 'Alias Not Found'
 
   _getReverseLookupOrCache: (uuid, callback) =>
-    @_getReverseLookupCache uuid, (error, aliases) =>
+    @_getReverseLookupCache uuid, (error, result) =>
       return callback error if error?
-      return callback null, aliases if aliases?
+      return callback null, result.aliases if result?
 
       @_getReverseLookup uuid, (error, aliases) =>
         return callback error if error?

@@ -8,3 +8,4 @@ global.expect = chai.expect
 global.sinon  = sinon
 
 process.env.TOKEN='test'
+delete process.env.ALIAS_SERVER_URI

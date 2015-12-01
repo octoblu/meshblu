@@ -20,8 +20,10 @@ describe 'Device', ->
         sadd: sinon.stub()
         srem: sinon.stub()
         sismember: sinon.stub()
+        setex: sinon.stub()
 
       @redis.get.yields null
+      @redis.setex.yields null
 
       @dependencies =
         database: @database
@@ -322,7 +324,7 @@ describe 'Device', ->
       beforeEach (done) ->
         @sut = new Device uuid: @uuid, @dependencies
         @sut.generateToken = sinon.stub().returns 'cheeseburger'
-        @sut._hashToken = sinon.stub().returns 'this-is-totally-a-secret'
+        @sut._hashToken = sinon.stub().yields null, 'this-is-totally-a-secret'
         @sut._storeTokenInCache = sinon.stub().yields null
         @sut.generateAndStoreTokenInCache (@error, @token) => done()
       it 'should call _storeTokenInCache', ->
@@ -334,7 +336,7 @@ describe 'Device', ->
       beforeEach (done) ->
         @sut = new Device uuid: @uuid, @dependencies
         @sut.generateToken = sinon.stub().returns 'california burger'
-        @sut._hashToken = sinon.stub().returns 'this-is-totally-a-different-secret'
+        @sut._hashToken = sinon.stub().yields null, 'this-is-totally-a-different-secret'
         @sut._storeTokenInCache = sinon.stub().yields null
         @sut.generateAndStoreTokenInCache (@error, @token) => done()
 
@@ -517,7 +519,7 @@ describe 'Device', ->
     describe 'when redis client is available', ->
       beforeEach (done) ->
         @sut = new Device uuid: 'a-uuid', @dependencies
-        @sut._hashToken = sinon.stub().returns 'hashed-foo'
+        @sut._hashToken = sinon.stub().yields null, 'hashed-foo'
         @sut.removeTokenFromCache 'foo', (@error, @result) => done()
         @redis.srem.yield null, 1
 
@@ -570,19 +572,19 @@ describe 'Device', ->
           expect(@result).to.equal 1
 
         it 'should call redis.sismember', ->
-          expect(@redis.sismember).to.have.been.calledWith 'tokens:a-uuid', @sut._hashToken('foo')
+          expect(@redis.sismember).to.have.been.calledWith 'tokens:a-uuid', 'DnN1cXdfiInpeLs9VjOXM+C/1ow2nGv46TGrevRN3a0='
 
       describe 'when the member is not available in the set', ->
         beforeEach (done) ->
           @sut = new Device uuid: 'a-uuid', @dependencies
-          @sut._verifyTokenInCache 'foo', (@error, @result) => done()
+          @sut._verifyTokenInCache 'foo', (@error, @result) => done @error
           @redis.sismember.yield null, 0
 
         it 'should return the result of sismember', ->
           expect(@result).to.equal 0
 
         it 'should call redis.sismember', ->
-          expect(@redis.sismember).to.have.been.calledWith 'tokens:a-uuid', @sut._hashToken('foo')
+          expect(@redis.sismember).to.have.been.calledWith 'tokens:a-uuid', 'DnN1cXdfiInpeLs9VjOXM+C/1ow2nGv46TGrevRN3a0='
 
   describe '-> _isTokenInBlacklist', ->
     describe 'when redis client is not available', ->

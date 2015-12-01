@@ -19,7 +19,7 @@ class Device
     @redis = dependencies.redis ? require '../redis'
     @findCachedDevice = dependencies.findCachedDevice ? require '../findCachedDevice'
     @cacheDevice = dependencies.cacheDevice ? require '../cacheDevice'
-    aliasServerUri = @config.aliasServer.uri
+    aliasServerUri = @config.aliasServer?.uri
     @uuidAliasResolver = new UUIDAliasResolver {}, {@redis, aliasServerUri}
     @set attributes
     {@uuid} = attributes
@@ -72,17 +72,19 @@ class Device
 
   generateAndStoreTokenInCache: (callback=->)=>
     token = @generateToken()
-    hashedToken = @_hashToken token
-    @_storeTokenInCache hashedToken, (error) =>
+    @_hashToken token, (error, hashedToken) =>
       return callback error if error?
-      callback null, token
+      @_storeTokenInCache hashedToken, (error) =>
+        return callback error if error?
+        callback null, token
 
   removeTokenFromCache: (token, callback=->) =>
     return callback null, false unless @redis?.srem?
-    hashedToken = @_hashToken token
     @_lookupAlias @uuid, (error, uuid) =>
       return callback error if error?
-      @redis.srem "tokens:#{uuid}", hashedToken, callback
+      @_hashToken token, (error, hashedToken) =>
+        return callback error if error?
+        @redis.srem "tokens:#{uuid}", hashedToken, callback
 
   resetToken: (callback) =>
     newToken = @generateToken()
@@ -96,13 +98,11 @@ class Device
     @fetch (error, attributes) =>
       return callback error if error?
 
-      try
-        hashedToken = @_hashToken token
-      catch error
-        return callback error
+      @_hashToken token, (error, hashedToken) =>
+        return callback error if error?
 
-      @removeTokenFromCache token
-      @update $unset : {"meshblu.tokens.#{hashedToken}"}, callback
+        @removeTokenFromCache token
+        @update $unset : {"meshblu.tokens.#{hashedToken}"}, callback
 
   sanitize: (params) =>
     return params unless _.isObject(params) || _.isArray(params)
@@ -140,15 +140,13 @@ class Device
     @fetch (error, attributes) =>
       return callback error if error?
 
-      try
-        hashedToken = @_hashToken token
-      catch error
-        return callback error
+      @_hashToken token, (error, hashedToken) =>
+        return callback error if error?
 
-      debug 'storeToken', token, hashedToken
-      tokenData = createdAt: new Date()
-      @_storeTokenInCache hashedToken
-      @update $set: {"meshblu.tokens.#{hashedToken}" : tokenData}, callback
+        debug 'storeToken', token, hashedToken
+        tokenData = createdAt: new Date()
+        @_storeTokenInCache hashedToken
+        @update $set: {"meshblu.tokens.#{hashedToken}" : tokenData}, callback
 
   validate: (callback) =>
     @_lookupAlias @uuid, (error, uuid) =>
@@ -167,21 +165,20 @@ class Device
       bcrypt.compare ogToken, attributes.token, (error, verified) =>
         return callback error if error?
         debug "verifyRootToken: bcrypt.compare results: #{error}, #{verified}"
-        @_storeTokenInCache @_hashToken(ogToken) if verified
-        callback null, verified
+        @_hashToken ogToken, (error, hashedToken) =>
+          return callback error if error?
+          @_storeTokenInCache hashedToken if verified
+          callback null, verified
 
   verifySessionToken: (token, callback=->) =>
-    try
-      hashedToken = @_hashToken token
-    catch error
-      return callback error
-
-    @fetch (error, attributes) =>
+    @_hashToken token, (error, hashedToken) =>
       return callback error if error?
+      @fetch (error, attributes) =>
+        return callback error if error?
 
-      verified = attributes?.meshblu?.tokens?[hashedToken]?
-      @_storeTokenInCache hashedToken if verified
-      callback null, verified
+        verified = attributes?.meshblu?.tokens?[hashedToken]?
+        @_storeTokenInCache hashedToken if verified
+        callback null, verified
 
   verifyToken: (token, callback=->) =>
     return callback new Error('No token provided') unless token?
@@ -246,25 +243,24 @@ class Device
       @devices.findOne uuid: uuid, (error, data) =>
         return callback error if error?
         delete data.meshblu.hash if data?.meshblu?.hash
-        try
-          hashedToken = @_hashToken JSON.stringify(data)
-        catch error
-          return callback error
-        params = $set :
-          'meshblu.hash': hashedToken
-        debug 'updating hash', uuid, params
-        @devices.update uuid: uuid, params, callback
+        @_hashToken JSON.stringify(data), (error, hashedToken) =>
+          return callback error if error
+          params = $set :
+            'meshblu.hash': hashedToken
+          debug 'updating hash', uuid, params
+          @devices.update uuid: uuid, params, callback
 
-  _hashToken: (token) =>
+  _hashToken: (token, callback) =>
     @_lookupAlias @uuid, (error, uuid) =>
       return callback error if error?
-      throw new Error 'Invalid Device UUID' unless uuid?
+      return callback new Error 'Invalid Device UUID' unless uuid?
 
       hasher = crypto.createHash 'sha256'
       hasher.update token
       hasher.update uuid
       hasher.update @config.token
-      hasher.digest 'base64'
+
+      callback null, hasher.digest 'base64'
 
   _sendConfig: (callback) =>
     @fetch (error, config) =>
@@ -288,10 +284,11 @@ class Device
 
   _verifyTokenInCache: (token, callback=->) =>
     return callback null, false unless @redis?.sismember?
-    hashedToken = @_hashToken token
     @_lookupAlias @uuid, (error, uuid) =>
       return callback error if error?
-      @redis.sismember "tokens:#{uuid}", hashedToken, callback
+      @_hashToken token, (error, hashedToken) =>
+        return callback error if error?
+        @redis.sismember "tokens:#{uuid}", hashedToken, callback
 
   _isTokenInBlacklist: (token, callback=->) =>
     return callback null, false unless @redis?.sismember?

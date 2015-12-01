@@ -110,6 +110,9 @@ module.exports = {
   yo: {
     token: process.env.YO_TOKEN
   },
+  aliasServer: {
+    uri: process.env.ALIAS_SERVER_URI
+  },
   skynet_override_token: process.env.OVERRIDE_TOKEN,
   useProxyProtocol: (process.env.USE_PROXY_PROTOCOL || "false").toLowerCase() == "true"
    ,

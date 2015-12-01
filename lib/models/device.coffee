@@ -19,7 +19,8 @@ class Device
     @redis = dependencies.redis ? require '../redis'
     @findCachedDevice = dependencies.findCachedDevice ? require '../findCachedDevice'
     @cacheDevice = dependencies.cacheDevice ? require '../cacheDevice'
-    @uuidAliasResolver = new UUIDAliasResolver {}, {@redis}
+    aliasServerUri = @config.aliasServer.uri
+    @uuidAliasResolver = new UUIDAliasResolver {}, {@redis, aliasServerUri}
     @set attributes
     {@uuid} = attributes
 

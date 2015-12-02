@@ -66,6 +66,7 @@ class Device
 
         @devices.findOne uuid: uuid, {_id: false}, (error, device) =>
           @fetch.cache = device
+          return callback error if error?
           return callback new Error('Device not found') unless device?
           @cacheDevice device
           callback null, @fetch.cache

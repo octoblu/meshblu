@@ -1,7 +1,7 @@
 {
   "name": "meshblu-server",
   "description": "communications platform and api for iot",
-  "version": "1.14.7",
+  "version": "1.14.8",
   "author": "Octoblu, Inc.",
   "dependencies": {
     "@octoblu/redis-ns": "^0.1.1",
@@ -67,7 +67,6 @@
   "main": "server.js",
   "devDependencies": {
     "chai": "^3.3.0",
-    "codeclimate-test-reporter": "^0.1.1",
     "coffee-coverage": "^0.6.3",
     "coffee-script": "^1.10.0",
     "fakeredis": "^0.3.4",

@@ -53,6 +53,7 @@ class MeshbluWebsocketHandler extends EventEmitter
       @rateLimit @socket.id, type, (error) =>
         return @closeWithError error, [type,data], 429 if error?
         return @emit type, data if type == 'identity'
+        return @emit type, data if type == 'register'
 
         @authDevice @uuid, @token, (error, authedDevice)=>
           return @sendError 'unauthorized', [type, data], 401 if error?

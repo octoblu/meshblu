@@ -73,7 +73,7 @@ Modify `config.js` with your MongoDB connection string. If you have MongoDB runn
 
 ```
 mongo: {
-  databaseUrl: mongodb://localhost:27017/skynet
+  databaseUrl: "mongodb://localhost:27017/skynet"
 },
 ```
 

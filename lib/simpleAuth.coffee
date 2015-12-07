@@ -12,8 +12,7 @@ class SimpleAuth
     @uuidAliasResolver = new UUIDAliasResolver {}, {@redis, aliasServerUri}
 
   asyncCallback: (error, result, callback) =>
-    # _.defer callback, error, result
-    callback error, result
+    _.defer callback, error, result
 
   _checkLists: (fromDevice, toDevice, whitelist, blacklist, openByDefault, callback) =>
     @_resolveList whitelist, (error, resolvedWhitelist) =>

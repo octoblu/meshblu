@@ -58,7 +58,7 @@ class Worker
 
   processJob: (job, benchmark, callback) =>
     debug 'processJob', benchmark.toString()
-    {auth,message,http} = job
+    {auth,message} = job
     {uuid,token} = auth
 
     @authDevice uuid, token, benchmark, (error, device) =>

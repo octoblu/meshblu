@@ -7,7 +7,7 @@ var meshbluJSON = {}
 try{
   meshbluJSON = JSON.parse(meshbluJSONStr);
 }catch(error){
-  console.error(error);
+  console.error(error.stack);
   return;
 }
 meshbluJSON.protocol = 'http';

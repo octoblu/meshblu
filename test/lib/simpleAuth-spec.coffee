@@ -82,9 +82,7 @@ describe 'simpleAuth', ->
         @toDevice = owner: 1234, uuid: 2222
 
       it 'should return true', (next)->
-        console.log 'going in'
         @sut.canDiscover @fromDevice, @toDevice, (error, permission) =>
-          console.log 'hi'
           expect(permission).to.be.true
           next error
 

@@ -14,4 +14,4 @@ COPY package.json /usr/src/app/
 RUN npm install --production
 COPY . /usr/src/app
 
-CMD [ "npm", "start" ]
+CMD [ "node", "--max-old-space-size=300", "server.js", "--http", "--coap", "--mqtt" ]

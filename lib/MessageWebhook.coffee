@@ -1,6 +1,5 @@
 _ = require 'lodash'
 config = require '../config'
-Device = require './models/device'
 
 class MessageWebhook
   @HTTP_SIGNATURE_OPTIONS:
@@ -12,7 +11,8 @@ class MessageWebhook
     {@uuid, @options, @type} = options
     {@request, @device} = dependencies
     @request ?= require 'request'
-    @device ?= new Device uuid: @uuid
+    Device = require './models/device'
+    @device ?= new Device {@uuid}
 
   generateAndForwardMeshbluCredentials: (callback=->) =>
     @device.generateAndStoreTokenInCache callback

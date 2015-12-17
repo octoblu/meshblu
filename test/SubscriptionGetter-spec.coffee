@@ -1,78 +1,48 @@
 SubscriptionGetter = require '../lib/SubscriptionGetter'
+TestDatabase = require './test-database'
 
 describe 'SubscriptionGetter', ->
-  beforeEach ->
-    @dependencies =
-      subscriptions:
-        find: sinon.stub()
-      simpleAuth:
-        canReceive: sinon.stub() # (fromDevice, toDevice, message, callback)
-      getDevice: sinon.stub()
-
-    @sut = new SubscriptionGetter {}, @dependencies
+  beforeEach (done) ->
+    TestDatabase.open (error, database) =>
+      {@devices,@subscriptions}  = database
+      @devices.find {}, (error, devices) =>
+        done error
 
   describe '->get', ->
     describe 'when given bad information', ->
       beforeEach (done) ->
-        @sut = new SubscriptionGetter emitterUuid: 'user-uuid', type: 'boogey-woogey', @dependencies
-        @dependencies.subscriptions.find.yields null, [{subscriberUuid: 'one-bad-uuid'}]
-        @dependencies.getDevice.withArgs('user-uuid').yields null, {first: 'object'}
-        @dependencies.getDevice.withArgs('one-bad-uuid').yields null, {second: 'object'}
-        @dependencies.simpleAuth.canReceive.yields null, false
+        @sut = new SubscriptionGetter emitterUuid: 'user-uuid', type: 'boogey-woogey', {@devices, @subscriptions, @simpleAuth}
         @sut.get (@error, @result) => done()
 
-      it 'should call find', ->
-        expect(@dependencies.subscriptions.find).to.have.been.calledWith
-          emitterUuid: 'user-uuid'
-          type: 'boogey-woogey'
+      it 'should have an error', ->
+        expect(@error).to.exist
 
-      it 'should call canReceive with the two devices', ->
-        expect(@dependencies.simpleAuth.canReceive).to.have.been.calledWith(
-          {second: 'object'}
-          {first: 'object'}
-        )
+    describe 'when given good information', ->
+      beforeEach (done) ->
+        @receiverUuid = 'dc8331b5-33b6-47b0-85db-2106930d0601'
+        record =
+          name: 'Receiver'
+          uuid: @receiverUuid
+        @devices.insert record, done
+
+      beforeEach (done) ->
+        @forwarderUuid = '9749b660-b6dc-4189-b248-1248e72ecb51'
+        record =
+          name: 'Forwarder'
+          uuid: @forwarderUuid
+          configureWhitelist: [ @receiverUuid ]
+        @devices.insert record, done
+
+      beforeEach (done) ->
+        record =
+          emitterUuid: @forwarderUuid
+          subscriberUuid: @receiverUuid
+          type: 'heart'
+        @subscriptions.insert record, done
+
+      beforeEach (done) ->
+        @sut = new SubscriptionGetter emitterUuid: @forwarderUuid, type: 'heart', {@devices, @subscriptions, @simpleAuth}
+        @sut.get (error, @result) => done error
 
       it 'should return an empty array', ->
-        expect(@result).to.deep.equal []
-
-    describe 'when getDevice yields an error', ->
-      beforeEach (done) ->
-        @sut = new SubscriptionGetter emitterUuid: 'the-uuid', type: 'broadcast', @dependencies
-        @dependencies.getDevice.yields new Error('oops')
-        @sut.get (@error, @result) => done()
-
-      it 'should yield an error', ->
-        expect(=> throw @error).to.throw 'oops'
-
-    describe 'when subscriptions yields an error', ->
-      beforeEach (done) ->
-        @sut = new SubscriptionGetter emitterUuid: 'the-uuid', type: 'broadcast', @dependencies
-        @dependencies.getDevice.yields null, {}
-        @dependencies.subscriptions.find.yields new Error('yikes!')
-        @sut.get (@error, @result) => done()
-
-      it 'should yield an error', ->
-        expect(=> throw @error).to.throw 'yikes!'
-
-    describe 'when the second getDevice yields an error', ->
-      beforeEach (done) ->
-        @sut = new SubscriptionGetter emitterUuid: 'the-uuid', type: 'broadcast', @dependencies
-        @dependencies.getDevice.onCall(0).yields null, {}
-        @dependencies.subscriptions.find.yields null, [{}]
-        @dependencies.getDevice.onCall(1).yields new Error 'ops'
-        @sut.get (@error, @result) => done()
-
-      it 'should yield an error', ->
-        expect(=> throw @error).to.throw 'ops'
-
-    describe 'when the canReceive yields an error', ->
-      beforeEach (done) ->
-        @sut = new SubscriptionGetter emitterUuid: 'the-uuid', type: 'broadcast', @dependencies
-        @dependencies.getDevice.onCall(0).yields null, {}
-        @dependencies.subscriptions.find.yields null, [{}]
-        @dependencies.getDevice.onCall(1).yields null, {}
-        @dependencies.simpleAuth.canReceive.yields new Error 'heyya!'
-        @sut.get (@error, @result) => done()
-
-      it 'should yield an error', ->
-        expect(=> throw @error).to.throw 'heyya!'
+        expect(@result).to.contain @receiverUuid

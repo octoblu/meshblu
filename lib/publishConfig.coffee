@@ -3,14 +3,13 @@ async = require 'async'
 Publisher = require './Publisher'
 SimpleAuth = require './simpleAuth'
 
-PUBLISHER = new Publisher namespace: 'meshblu'
-
 class PublishConfig
   constructor: ({@uuid,@config,@database,@forwardedFor}) ->
     @Device = require './models/device'
     @MessageWebhook = require './MessageWebhook'
     @forwardedFor ?= []
     @forwardedFor = _.union @forwardedFor, [@uuid]
+    @publisher = new Publisher {namespace: 'meshblu'}, {devices: @database?.devices, subscriptions: @database?.subscriptions}
 
   publish: (callback) =>
     async.series [@doPublish, @callWebhooks, @forwardPublishToDevices], callback
@@ -24,12 +23,12 @@ class PublishConfig
 
   callWebhook: (hook, callback) =>
     device = new @Device {@uuid}, {@database}
-    messageWebhook = new @MessageWebhook @uuid, hook, device: device
+    messageWebhook = new @MessageWebhook {@uuid, options: hook, type: 'config'}, {device: device}
     messageWebhook.send @config, (error) =>
       callback() # if error, move on
 
   doPublish: (callback) =>
-    PUBLISHER.publish 'config', @uuid, @config, callback
+    @publisher.publish 'config', @uuid, @config, callback
 
   fetchDevice: (uuid, callback) =>
     device = new @Device {uuid}, {@database}

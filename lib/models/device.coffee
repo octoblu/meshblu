@@ -268,7 +268,7 @@ class Device
       return callback error if error?
       @_lookupAlias @uuid, (error, uuid) =>
         return callback error if error?
-        publishConfig = new PublishConfig uuid: uuid, config: config
+        publishConfig = new PublishConfig {uuid, config, database: {@devices}}
         publishConfig.publish callback
 
   _storeTokenInCache: (token, callback=->) =>

@@ -22,7 +22,11 @@ describe 'doMessageHooks', ->
       @sut(@device, [name: 'Rufio'], payload: 'You got old', ignoreErrors, @dependencies)
 
     it 'should instantiate a MessageWebhook', ->
-      expect(@MessageWebhook).to.have.been.calledWith @device.uuid, name: 'Rufio'
+      options =
+        uuid: @device.uuid
+        options: name: 'Rufio'
+
+      expect(@MessageWebhook).to.have.been.calledWith options
       expect(@MessageWebhook).to.have.been.alwaysCalledWithNew
 
     it 'should call send on the messageWebhook', ->
@@ -37,8 +41,8 @@ describe 'doMessageHooks', ->
 
     it 'should instantiate a MessageWebhook(s)', ->
       expect(@MessageWebhook).to.have.been.alwaysCalledWithNew
-      expect(@MessageWebhook.firstCall.args[1]).to.deep.equal {uuid: 'hook', fromUuid: 'smee'}
-      expect(@MessageWebhook.secondCall.args[1]).to.deep.equal {uuid: 'toodles', fromUuid: 'smee'}
+      expect(@MessageWebhook.firstCall.args[0].options).to.deep.equal {uuid: 'hook', fromUuid: 'smee'}
+      expect(@MessageWebhook.secondCall.args[0].options).to.deep.equal {uuid: 'toodles', fromUuid: 'smee'}
 
     it 'should call send on the messageWebhook', ->
       expect(@messageWebhook.send).to.have.been.calledTwice

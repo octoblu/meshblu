@@ -11,6 +11,7 @@ class PublishForwarder
 
   forward: ({type, uuid, message}, callback) =>
     message ?= {}
+    message = _.clone message
     message.forwardedFor ?= []
     device = new @Device {uuid}, {database: {@devices}}
     device.fetch (error, attributes) =>

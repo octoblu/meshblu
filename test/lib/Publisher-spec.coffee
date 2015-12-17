@@ -37,22 +37,3 @@ describe 'Publisher', ->
 
       it 'should publish into the correct channel', ->
         expect(@channel).to.deep.equal 'test:received:mah-uuid'
-
-    describe 'when called again', ->
-      beforeEach (done) ->
-        @sut = new Publisher namespace: 'testy'
-        @redis.subscribe 'testy:sent:yer-id', done
-
-      beforeEach (done) ->
-        async.parallel [
-          (callback) => @redis.once 'message', (@channel, @message) => callback()
-          async.apply @sut.publish, 'sent', 'yer-id', carnivorousPlant: 'Feed me, Seymour!'
-        ], done
-
-      it 'should publish into redis', ->
-        expect(@message).to.exist
-        expect(JSON.parse @message).to.deep.equal carnivorousPlant: 'Feed me, Seymour!'
-
-      it 'should publish into the correct channel', ->
-        expect(@channel).to.exist
-        expect(@channel).to.deep.equal 'testy:sent:yer-id'

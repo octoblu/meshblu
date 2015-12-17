@@ -14,10 +14,16 @@ describe 'MessageWebhook', ->
 
   describe '->send', ->
     describe 'when instantiated with a url', ->
+      beforeEach ->
+        options =
+          uuid: @deviceRecord.uuid
+          options: url: 'http://google.com'
+
+        @sut = new MessageWebhook options, @dependencies
+
       describe 'when request fails', ->
         beforeEach ->
           @request.yields new Error
-          @sut = new MessageWebhook @deviceRecord.uuid, url: 'http://google.com', @dependencies
           @sut.send foo: 'bar', (@error) =>
 
         it 'should call request with whatever I want', ->
@@ -29,7 +35,6 @@ describe 'MessageWebhook', ->
       describe 'when request do not fails, but returns error that shouldnt happen', ->
         beforeEach ->
           @request.yields null, {statusCode: 103}, 'dont PUT that there'
-          @sut = new MessageWebhook @deviceRecord.uuid, url: 'http://google.com', @dependencies
           @sut.send foo: 'bar', (@error) =>
 
         it 'should call request with whatever I want', ->
@@ -42,7 +47,6 @@ describe 'MessageWebhook', ->
       describe 'when request do fails and it mah fault', ->
         beforeEach ->
           @request.yields null, {statusCode: 429}, 'chillax broham'
-          @sut = new MessageWebhook @deviceRecord.uuid, url: 'http://google.com', @dependencies
           @sut.send foo: 'bar', (@error) =>
 
         it 'should call request with whatever I want', ->
@@ -55,7 +59,6 @@ describe 'MessageWebhook', ->
       describe 'when request do fails and it yo fault', ->
         beforeEach ->
           @request.yields null, {statusCode: 506}, 'pay me mo moneys'
-          @sut = new MessageWebhook @deviceRecord.uuid, url: 'http://google.com', @dependencies
           @sut.send foo: 'bar', (@error) =>
 
         it 'should call request with whatever I want', ->
@@ -69,7 +72,10 @@ describe 'MessageWebhook', ->
         beforeEach ->
           @request.yields null, statusCode: 200, 'nothing wrong'
           @hook = url: 'http://facebook.com'
-          @sut = new MessageWebhook @deviceRecord.uuid, @hook, @dependencies
+          options =
+            uuid: @deviceRecord.uuid
+            options: @hook
+          @sut = new MessageWebhook options, @dependencies
           @sut.send czar: 'foo', (@error) =>
 
         it 'should get not error', ->
@@ -86,7 +92,10 @@ describe 'MessageWebhook', ->
           @request.yields null, statusCode: 200, 'nothing wrong'
           @hook = url: 'http://facebook.com', generateAndForwardMeshbluCredentials: true
           @deviceRecord = uuid: 'test'
-          @sut = new MessageWebhook @deviceRecord.uuid, @hook, @dependencies
+          options =
+            uuid: @deviceRecord.uuid
+            options: @hook
+          @sut = new MessageWebhook options, @dependencies
           @sut.generateAndForwardMeshbluCredentials = sinon.stub().yields null, 'gobbledegook'
           @sut.send czar: 'foo', (@error) =>
 
@@ -100,7 +109,10 @@ describe 'MessageWebhook', ->
         beforeEach ->
           @request.yields null, statusCode: 200, 'nothing wrong'
           @hook = url: 'http://facebook.com', generateAndForwardMeshbluCredentials: true, auth: 'basic'
-          @sut = new MessageWebhook @deviceRecord.uuid, @hook, @dependencies
+          options =
+            uuid: @deviceRecord.uuid
+            options: @hook
+          @sut = new MessageWebhook options, @dependencies
           @sut.generateAndForwardMeshbluCredentials = sinon.stub().yields null
           @sut.send czar: 'foo', (@error) =>
 
@@ -119,8 +131,11 @@ describe 'MessageWebhook', ->
         @request.yields null, statusCode: 200, 'nothing wrong'
         @hook = url: 'http://facebook.com', generateAndForwardMeshbluCredentials: true
         @deviceRecord = uuid: 'test'
+        options =
+          uuid: @deviceRecord.uuid
+          options: @hook
         @device.generateAndStoreTokenInCache.yields null, 'gobbledegook'
-        @sut = new MessageWebhook @deviceRecord.uuid, @hook, @dependencies
+        @sut = new MessageWebhook options, @dependencies
         @sut.generateAndForwardMeshbluCredentials (@error, @token) =>
 
       it 'should get not error', ->
@@ -134,7 +149,10 @@ describe 'MessageWebhook', ->
       beforeEach ->
         @hook = url: 'http://facebook.com', generateAndForwardMeshbluCredentials: true
         @deviceRecord = uuid: 'test'
-        @sut = new MessageWebhook @deviceRecord.uuid, @hook, @dependencies
+        options =
+          uuid: @deviceRecord.uuid
+          options: @hook
+        @sut = new MessageWebhook options, @dependencies
         @revokeToken.yields null
         @sut.removeToken 'test', (@error) =>
 

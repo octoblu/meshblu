@@ -8,9 +8,10 @@ class MessageWebhook
     key: config.privateKey
     headers: [ 'date', 'X-MESHBLU-UUID']
 
-  constructor: (@uuid, @options, dependencies={}) ->
-    @request = dependencies.request ? require 'request'
-    @device = dependencies.device
+  constructor: (options, dependencies={}) ->
+    {@uuid, @options, @type} = options
+    {@request, @device} = dependencies
+    @request ?= require 'request'
     @device ?= new Device uuid: @uuid
 
   generateAndForwardMeshbluCredentials: (callback=->) =>

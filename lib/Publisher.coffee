@@ -1,14 +1,15 @@
+_ = require 'lodash'
 async = require 'async'
 PublishForwarder = require '../src/publish-forwarder'
 
 class Publisher
   constructor: (options={}, dependencies={}) ->
     {@namespace} = options
-    {@client} = dependencies
+    {@client,@devices,@subscriptions} = dependencies
     @namespace ?= 'meshblu'
     {createClient} = require './redis'
-    @client ?= createClient()
-    @publishForwarder = new PublishForwarder publisher: @
+    @client ?= _.bindAll createClient()
+    @publishForwarder = new PublishForwarder {publisher: @}, {@devices, @subscriptions}
 
   publish: (type, uuid, message, callback) =>
     channel = "#{@namespace}:#{type}:#{uuid}"

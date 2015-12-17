@@ -2,8 +2,8 @@ async = require 'async'
 http = require 'http'
 PublishConfig = require '../../lib/publishConfig'
 Subscriber = require '../../lib/Subscriber'
-Database = require '../test-database'
 clearCache = require '../../lib/clearCache'
+TestDatabase = require '../test-database'
 
 describe 'PublishConfig', ->
   beforeEach (done) ->
@@ -18,10 +18,13 @@ describe 'PublishConfig', ->
     async.each uuids, clearCache, done
 
   beforeEach (done) ->
-    Database.open (error, @database) => done error
+    TestDatabase.open (error, database) =>
+      {@devices,@subscriptions}  = database
+      @devices.find {}, (error, devices) =>
+        done error
 
   beforeEach (done) ->
-    @database.devices.insert
+    @devices.insert
       uuid: 'uuid-device-being-configged'
       meshblu:
         configForward: [
@@ -34,22 +37,23 @@ describe 'PublishConfig', ->
     @sut = new PublishConfig
       uuid: 'uuid-device-being-configged'
       config: {foo: 'bar'}
-      database: @database
+      database: {@devices}
 
   describe 'when called', ->
     beforeEach (done)->
       subscriber = new Subscriber namespace: 'meshblu'
       subscriber.once 'message', (type, @message) =>
 
-      subscriber.subscribe 'config', 'uuid-device-being-configged', =>
-        @sut.publish done
+      subscriber.subscribe 'config', 'uuid-device-being-configged', (error) =>
+        @sut.publish (error, result) =>
+          done error, result
 
     it "should publish the config to 'uuid-device-being-configged'", ->
       expect(@message).to.deep.equal foo: 'bar'
 
   describe "when another device is in the configForward list", ->
     beforeEach (done) ->
-      @database.devices.insert
+      @devices.insert
         uuid: 'uuid-interested-device'
         sendWhitelist: ['uuid-device-being-configged']
       , done
@@ -63,11 +67,13 @@ describe 'PublishConfig', ->
         @sut.publish()
 
     it "should publish its config to a device in to it", ->
-      expect(@config).to.deep.equal foo: 'bar'
+      message =
+        foo: 'bar'
+      expect(@config).to.deep.equal message
 
   describe "when forwarding a config to a device that doesn't want it", ->
     beforeEach (done) ->
-      @database.devices.insert
+      @devices.insert
         uuid: 'uuid-uninterested-device'
         sendWhitelist: []
       , done
@@ -84,7 +90,7 @@ describe 'PublishConfig', ->
 
   describe "when forwarding the config to oneself", ->
     beforeEach (done) ->
-      @database.devices.insert
+      @devices.insert
         uuid: 'uuid-interested-device'
         sendWhitelist: ['uuid-device-being-configged', 'uuid-interested-device']
         meshblu:
@@ -115,10 +121,10 @@ describe 'PublishConfig', ->
         {uuid: 'uuid-interested-device'}
       ]}
 
-      @database.devices.update query, update, done
+      @devices.update query, update, done
 
     beforeEach (done) ->
-      @database.devices.insert
+      @devices.insert
         uuid: 'uuid-interested-device'
         sendWhitelist: ['uuid-device-being-configged']
       , done
@@ -143,7 +149,7 @@ describe 'PublishConfig', ->
         meshblu:
           configForward: [{uuid: 'uuid-middleman'}]
 
-      @database.devices.insert emitter, done
+      @devices.insert emitter, done
 
     beforeEach (done) ->
       middleman =
@@ -152,21 +158,21 @@ describe 'PublishConfig', ->
         meshblu:
           configForward: [{uuid: 'uuid-subscriber'}]
 
-      @database.devices.insert middleman, done
+      @devices.insert middleman, done
 
     beforeEach (done) ->
       subscriber =
         uuid: 'uuid-subscriber'
         sendWhitelist: ['uuid-middleman']
 
-      @database.devices.insert subscriber, done
+      @devices.insert subscriber, done
 
     describe 'when the emitter emits a config', ->
       beforeEach (done) ->
         @sut = new PublishConfig
           uuid: 'uuid-emitter'
           config: {foo: 'bar'}
-          database: @database
+          database: {@devices}
 
         subscriber = new Subscriber namespace: 'meshblu'
         subscriber.once 'message', @onMessage = sinon.spy()
@@ -183,7 +189,7 @@ describe 'PublishConfig', ->
         meshblu:
           configForward: [{uuid: 'uuid-middleman'}]
 
-      @database.devices.insert emitter, done
+      @devices.insert emitter, done
 
     beforeEach (done) ->
       middleman =
@@ -192,7 +198,7 @@ describe 'PublishConfig', ->
         meshblu:
           configHooks: [{url: "http://localhost:38234", method: 'POST'}]
 
-      @database.devices.insert middleman, done
+      @devices.insert middleman, done
 
     beforeEach (done) ->
       @onRequest = sinon.spy (req,res) =>
@@ -209,7 +215,7 @@ describe 'PublishConfig', ->
         @sut = new PublishConfig
           uuid: 'uuid-emitter'
           config: {foo: 'bar'}
-          database: @database
+          database: {@devices}
 
         @sut.publish (error) =>
           return done error if error?
@@ -225,7 +231,7 @@ describe 'PublishConfig', ->
         meshblu:
           configForward: [{uuid: 'uuid-middleman'}]
 
-      @database.devices.insert emitter, done
+      @devices.insert emitter, done
 
     beforeEach (done) ->
       middleman =
@@ -234,14 +240,14 @@ describe 'PublishConfig', ->
         meshblu:
           configHooks: [{url: "http://localhost:38234", method: 'POST'}]
 
-      @database.devices.insert middleman, done
+      @devices.insert middleman, done
 
     describe 'when the emitter emits a config', ->
       beforeEach (done) ->
         @sut = new PublishConfig
           uuid: 'uuid-emitter'
           config: {foo: 'bar'}
-          database: @database
+          database: {@devices}
 
         @sut.publish done
 

@@ -6,7 +6,11 @@ module.exports = (device, hooks, message, callback=_.noop, dependencies={}) ->
   hooks ?= []
 
   async.map hooks, (hook, cb=->) =>
-    messageWebhook = new MessageWebhook device.uuid, hook
+    options =
+      uuid: device.uuid
+      options: hook
+
+    messageWebhook = new MessageWebhook options
     messageWebhook.send message, (error) =>
       cb null, error
   , (error, errors) =>

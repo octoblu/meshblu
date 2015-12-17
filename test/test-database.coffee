@@ -20,8 +20,8 @@ class TestDatabase
   @open: (callback=->) =>
     if USE_MONGO
       async.parallel [
-        async.apply MONGO_DATABASE.devices.remove
-        async.apply MONGO_DATABASE.subscriptions.remove
+        (next) => MONGO_DATABASE.devices.remove next # REAL MONGO DOESN'T BIND ITS FUNCTIONS, NO async.apply
+        (next) => MONGO_DATABASE.subscriptions.remove next
       ], (error) =>
         callback error, MONGO_DATABASE
     else

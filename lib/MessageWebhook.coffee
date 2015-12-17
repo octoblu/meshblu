@@ -6,7 +6,7 @@ class MessageWebhook
   @HTTP_SIGNATURE_OPTIONS:
     keyId: 'meshblu-webhook-key'
     key: config.privateKey
-    headers: [ 'date', 'X-MESHBLU-UUID']
+    headers: [ 'date', 'X-MESHBLU-UUID' ]
 
   constructor: (options, dependencies={}) ->
     {@uuid, @options, @type} = options
@@ -40,6 +40,10 @@ class MessageWebhook
   doRequest: (options, message={}, callback) =>
     deviceOptions = _.omit @options, 'generateAndForwardMeshbluCredentials', 'signRequest'
     options = _.defaults json: message, deviceOptions, options
+    options.headers ?= {}
+
+    options.headers['X-MESHBLU-MESSAGE-TYPE'] = @type
+
     @request options, (error, response) =>
       return callback error if error?
       return callback new Error "HTTP Status: #{response.statusCode}" unless _.inRange response.statusCode, 200, 300

@@ -7,10 +7,10 @@ describe 'MessageWebhook', ->
       generateToken: sinon.stub()
       removeTokenFromCache: sinon.stub()
       generateAndStoreTokenInCache: sinon.stub()
-    @request = sinon.stub()
+    @request               = sinon.stub()
     @generateAndStoreToken = sinon.stub()
-    @revokeToken = sinon.stub()
-    @dependencies = request: @request, generateAndStoreToken: @generateAndStoreToken, revokeToken: @revokeToken, device: @device
+    @revokeToken           = sinon.stub()
+    @dependencies = {@request, @generateAndStoreToken, @revokeToken, @device}
 
   describe '->send', ->
     describe 'when instantiated with a url', ->
@@ -18,6 +18,7 @@ describe 'MessageWebhook', ->
         options =
           uuid: @deviceRecord.uuid
           options: url: 'http://google.com'
+          type: 'received'
 
         @sut = new MessageWebhook options, @dependencies
 
@@ -27,7 +28,11 @@ describe 'MessageWebhook', ->
           @sut.send foo: 'bar', (@error) =>
 
         it 'should call request with whatever I want', ->
-          expect(@request).to.have.been.calledWith url: 'http://google.com', json: {foo: 'bar'}
+          expect(@request).to.have.been.calledWith
+            url: 'http://google.com'
+            headers:
+              'X-MESHBLU-MESSAGE-TYPE': 'received'
+            json: {foo: 'bar'}
 
         it 'should get error', ->
           expect(@error).to.exist
@@ -38,7 +43,11 @@ describe 'MessageWebhook', ->
           @sut.send foo: 'bar', (@error) =>
 
         it 'should call request with whatever I want', ->
-          expect(@request).to.have.been.calledWith url: 'http://google.com', json: {foo: 'bar'}
+          expect(@request).to.have.been.calledWith
+            url: 'http://google.com'
+            json: {foo: 'bar'}
+            headers:
+              'X-MESHBLU-MESSAGE-TYPE': 'received'
 
         it 'should get error', ->
           expect(@error).to.exist
@@ -50,7 +59,11 @@ describe 'MessageWebhook', ->
           @sut.send foo: 'bar', (@error) =>
 
         it 'should call request with whatever I want', ->
-          expect(@request).to.have.been.calledWith url: 'http://google.com', json: {foo: 'bar'}
+          expect(@request).to.have.been.calledWith
+            url: 'http://google.com'
+            json: {foo: 'bar'}
+            headers:
+              'X-MESHBLU-MESSAGE-TYPE': 'received'
 
         it 'should get error', ->
           expect(@error).to.exist
@@ -62,7 +75,11 @@ describe 'MessageWebhook', ->
           @sut.send foo: 'bar', (@error) =>
 
         it 'should call request with whatever I want', ->
-          expect(@request).to.have.been.calledWith url: 'http://google.com', json: {foo: 'bar'}
+          expect(@request).to.have.been.calledWith
+            url: 'http://google.com'
+            json: {foo: 'bar'}
+            headers:
+              'X-MESHBLU-MESSAGE-TYPE': 'received'
 
         it 'should get error', ->
           expect(@error).to.exist
@@ -75,6 +92,7 @@ describe 'MessageWebhook', ->
           options =
             uuid: @deviceRecord.uuid
             options: @hook
+            type: 'received'
           @sut = new MessageWebhook options, @dependencies
           @sut.send czar: 'foo', (@error) =>
 
@@ -82,7 +100,11 @@ describe 'MessageWebhook', ->
           expect(@error).not.to.exist
 
         it 'should call request with whatever else I want', ->
-          expect(@request).to.have.been.calledWith url: 'http://facebook.com', json: {czar: 'foo'}
+          expect(@request).to.have.been.calledWith
+            url: 'http://facebook.com'
+            json: {czar: 'foo'}
+            headers:
+              'X-MESHBLU-MESSAGE-TYPE': 'received'
 
         it 'should not mutate my webhook', ->
           expect(@hook).to.deep.equal url: 'http://facebook.com'
@@ -95,6 +117,7 @@ describe 'MessageWebhook', ->
           options =
             uuid: @deviceRecord.uuid
             options: @hook
+            type: 'received'
           @sut = new MessageWebhook options, @dependencies
           @sut.generateAndForwardMeshbluCredentials = sinon.stub().yields null, 'gobbledegook'
           @sut.send czar: 'foo', (@error) =>
@@ -103,7 +126,12 @@ describe 'MessageWebhook', ->
           expect(@error).not.to.exist
 
         it 'should call request and add my auth', ->
-          expect(@request).to.have.been.calledWith url: 'http://facebook.com', json: {czar: 'foo'}, auth: {bearer: 'dGVzdDpnb2JibGVkZWdvb2s='}
+          expect(@request).to.have.been.calledWith
+            url: 'http://facebook.com'
+            auth: {bearer: 'dGVzdDpnb2JibGVkZWdvb2s='}
+            json: {czar: 'foo'}
+            headers:
+              'X-MESHBLU-MESSAGE-TYPE': 'received'
 
       describe 'when using a crazy scheme to get meshblu credentials forwarded but I already put in my own auth', ->
         beforeEach ->
@@ -112,6 +140,7 @@ describe 'MessageWebhook', ->
           options =
             uuid: @deviceRecord.uuid
             options: @hook
+            type: 'received'
           @sut = new MessageWebhook options, @dependencies
           @sut.generateAndForwardMeshbluCredentials = sinon.stub().yields null
           @sut.send czar: 'foo', (@error) =>
@@ -123,7 +152,12 @@ describe 'MessageWebhook', ->
           expect(@sut.generateAndForwardMeshbluCredentials).to.have.been.called
 
         it 'should not override my auth', ->
-          expect(@request).to.have.been.calledWith url: 'http://facebook.com', json: {czar: 'foo'}, auth: 'basic'
+          expect(@request).to.have.been.calledWith
+            url: 'http://facebook.com'
+            auth: 'basic'
+            json: {czar: 'foo'}
+            headers:
+              'X-MESHBLU-MESSAGE-TYPE': 'received'
 
   describe '->generateAndForwardMeshbluCredentials', ->
     describe 'when using a crazy scheme to get meshblu credentials forwarded', ->
@@ -134,6 +168,7 @@ describe 'MessageWebhook', ->
         options =
           uuid: @deviceRecord.uuid
           options: @hook
+          type: 'received'
         @device.generateAndStoreTokenInCache.yields null, 'gobbledegook'
         @sut = new MessageWebhook options, @dependencies
         @sut.generateAndForwardMeshbluCredentials (@error, @token) =>
@@ -152,6 +187,7 @@ describe 'MessageWebhook', ->
         options =
           uuid: @deviceRecord.uuid
           options: @hook
+          type: 'received'
         @sut = new MessageWebhook options, @dependencies
         @revokeToken.yields null
         @sut.removeToken 'test', (@error) =>

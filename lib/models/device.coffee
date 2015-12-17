@@ -80,12 +80,12 @@ class Device
         callback null, token
 
   removeTokenFromCache: (token, callback=->) =>
-    return callback null, false unless @redis?.srem?
+    return callback null, false unless @redis?.del?
     @_lookupAlias @uuid, (error, uuid) =>
       return callback error if error?
       @_hashToken token, (error, hashedToken) =>
         return callback error if error?
-        @redis.srem "tokens:#{uuid}", hashedToken, callback
+        @redis.del "meshblu-token-cache:#{uuid}:#{hashedToken}", callback
 
   resetToken: (callback) =>
     newToken = @generateToken()
@@ -271,30 +271,30 @@ class Device
         publishConfig = new PublishConfig {uuid, config, database: {@devices}}
         publishConfig.publish callback
 
-  _storeTokenInCache: (token, callback=->) =>
-    return callback null, false unless @redis?.sadd?
+  _storeTokenInCache: (hashedToken, callback=->) =>
+    return callback null, false unless @redis?.set?
     @_lookupAlias @uuid, (error, uuid) =>
       return callback error if error?
-      @redis.sadd "tokens:#{uuid}", token, callback
+      @redis.set "meshblu-token-cache:#{uuid}:#{hashedToken}", '', callback
 
   _storeInvalidTokenInBlacklist: (token, callback=->) =>
-    return callback null, false unless @redis?.sadd?
+    return callback null, false unless @redis?.set?
     @_lookupAlias @uuid, (error, uuid) =>
       return callback error if error?
-      @redis.sadd "tokens:blacklist:#{uuid}", token, callback
+      @redis.set "meshblu-token-black-list:#{uuid}:#{token}", '', callback
 
   _verifyTokenInCache: (token, callback=->) =>
-    return callback null, false unless @redis?.sismember?
+    return callback null, false unless @redis?.exists?
     @_lookupAlias @uuid, (error, uuid) =>
       return callback error if error?
       @_hashToken token, (error, hashedToken) =>
         return callback error if error?
-        @redis.sismember "tokens:#{uuid}", hashedToken, callback
+        @redis.exists "meshblu-token-cache:#{uuid}:#{hashedToken}", callback
 
   _isTokenInBlacklist: (token, callback=->) =>
-    return callback null, false unless @redis?.sismember?
+    return callback null, false unless @redis?.exists?
     @_lookupAlias @uuid, (error, uuid) =>
       return callback error if error?
-      @redis.sismember "tokens:blacklist:#{uuid}", token, callback
+      @redis.exists "meshblu-token-black-list:#{uuid}:#{token}", callback
 
 module.exports = Device

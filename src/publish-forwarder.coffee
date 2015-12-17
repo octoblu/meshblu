@@ -41,6 +41,9 @@ class PublishForwarder
   _handleSubsriptions: ({type, uuid, message}, callback) =>
     subscriptionGetter = new SubscriptionGetter {emitterUuid: uuid, type: type}, {@devices, @subscriptions}
     subscriptionGetter.get (error, toUuids) =>
+      return callback error if error?
+      return callback null unless _.isArray toUuids
+      
       async.each toUuids, (toUuid, next) =>
         @publisher.publish type, toUuid, message, next
       , callback

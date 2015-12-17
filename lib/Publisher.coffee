@@ -14,7 +14,7 @@ class Publisher
   publish: (type, uuid, message, callback) =>
     channel = "#{@namespace}:#{type}:#{uuid}"
     return callback new Error 'Invalid message' unless message?
-    async.parallel [
+    async.series [
       async.apply @client.publish, channel, JSON.stringify(message)
       async.apply @publishForwarder.forward, {type, uuid, message}
     ], callback

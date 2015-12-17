@@ -20,13 +20,14 @@ class TestDatabase
   @open: (callback=->) =>
     if USE_MONGO
       async.parallel [
-        (cb=->) => MONGO_DATABASE.devices.remove cb
-        (cb=->) => MONGO_DATABASE.subscriptions.remove cb
-      ], (error) => callback error, MONGO_DATABASE
+        async.apply MONGO_DATABASE.devices.remove
+        async.apply MONGO_DATABASE.subscriptions.remove
+      ], (error) =>
+        callback error, MONGO_DATABASE
     else
       async.parallel
-        devices:       (cb=->) => @createNedbCollection 'devices', cb
-        subscriptions: (cb=->) => @createNedbCollection 'subscriptions', cb
+        devices:       async.apply @createNedbCollection, 'devices'
+        subscriptions: async.apply @createNedbCollection, 'subscriptions'
       , callback
 
 module.exports = TestDatabase

@@ -1,6 +1,5 @@
 _ = require 'lodash'
 async = require 'async'
-messageIOEmitter = require('./createMessageIOEmitter')()
 debug = require('debug')('meshblu:doMessageForward')
 
 module.exports = (forwarders=[], message, fromUuid, callback=_.noop, dependencies={}) ->

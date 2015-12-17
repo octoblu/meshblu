@@ -269,7 +269,8 @@ class Device
       @_lookupAlias @uuid, (error, uuid) =>
         return callback error if error?
         publishConfig = new PublishConfig {uuid, config, database: {@devices}}
-        publishConfig.publish callback
+        publishConfig.publish => # don't wait for the publisher
+        callback()
 
   _storeTokenInCache: (hashedToken, callback=->) =>
     return callback null, false unless @redis?.set?

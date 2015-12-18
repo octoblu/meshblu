@@ -1,5 +1,6 @@
 async = require 'async'
 http = require 'http'
+Publisher = require '../../lib/Publisher'
 PublishConfig = require '../../lib/publishConfig'
 Subscriber = require '../../lib/Subscriber'
 clearCache = require '../../lib/clearCache'
@@ -34,10 +35,12 @@ describe 'PublishConfig', ->
     , done
 
   beforeEach ->
+    @publisher = new Publisher namespace: 'meshblu', {@devices, @subscriptions}
     @sut = new PublishConfig
       uuid: 'uuid-device-being-configged'
       config: {foo: 'bar'}
       database: {@devices}
+    , {@publisher}
 
   describe 'when called', ->
     beforeEach (done)->
@@ -169,10 +172,12 @@ describe 'PublishConfig', ->
 
     describe 'when the emitter emits a config', ->
       beforeEach (done) ->
+        @publisher = new Publisher namespace: 'meshblu', {@devices, @subscriptions}
         @sut = new PublishConfig
           uuid: 'uuid-emitter'
           config: {foo: 'bar'}
           database: {@devices}
+        , {@publisher}
 
         subscriber = new Subscriber namespace: 'meshblu'
         subscriber.once 'message', @onMessage = sinon.spy()
@@ -212,10 +217,12 @@ describe 'PublishConfig', ->
 
     describe 'when the emitter emits a config', ->
       beforeEach (done) ->
+        @publisher = new Publisher namespace: 'meshblu', {@devices, @subscriptions}
         @sut = new PublishConfig
           uuid: 'uuid-emitter'
           config: {foo: 'bar'}
           database: {@devices}
+        , {@publisher}
 
         @sut.publish (error) =>
           return done error if error?
@@ -244,10 +251,12 @@ describe 'PublishConfig', ->
 
     describe 'when the emitter emits a config', ->
       beforeEach (done) ->
+        @publisher = new Publisher namespace: 'meshblu', {@devices, @subscriptions}
         @sut = new PublishConfig
           uuid: 'uuid-emitter'
           config: {foo: 'bar'}
           database: {@devices}
+        , {@publisher}
 
         @sut.publish done
 

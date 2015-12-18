@@ -1,11 +1,11 @@
 _ = require 'lodash'
 async = require 'async'
 debug = require('debug')('meshblu:publish-forwarder')
-SubscriptionGetter = require '../lib/SubscriptionGetter'
 
 class PublishForwarder
   constructor: ({@publisher}, dependencies={}) ->
     {@devices,@subscriptions,@MessageWebhook,@Device} = dependencies
+    @SubscriptionGetter = require '../lib/SubscriptionGetter'
     @Device         ?= require '../lib/models/device'
     @MessageWebhook ?= require '../lib/MessageWebhook'
 
@@ -39,11 +39,11 @@ class PublishForwarder
       callback() # if error, move on
 
   _handleSubsriptions: ({type, uuid, message}, callback) =>
-    subscriptionGetter = new SubscriptionGetter {emitterUuid: uuid, type: type}, {@devices, @subscriptions}
+    subscriptionGetter = new @SubscriptionGetter {emitterUuid: uuid, type: type}, {@devices, @subscriptions}
     subscriptionGetter.get (error, toUuids) =>
       return callback error if error?
       return callback null unless _.isArray toUuids
-      
+
       async.each toUuids, (toUuid, next) =>
         @publisher.publish type, toUuid, message, next
       , callback

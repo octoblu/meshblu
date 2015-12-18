@@ -5,9 +5,8 @@ crypto = require 'crypto'
 debug  = require('debug')('meshblu:model:device')
 UUIDAliasResolver = require '../../src/uuid-alias-resolver'
 Publisher = require '../Publisher'
-PublishConfig = require '../publishConfig'
 
-publisher = new Publisher
+publisher = new Publisher namespace: 'meshblu'
 
 class Device
   constructor: (attributes={}, dependencies={}) ->
@@ -21,6 +20,7 @@ class Device
     @cacheDevice = dependencies.cacheDevice ? require '../cacheDevice'
     aliasServerUri = @config.aliasServer?.uri
     @uuidAliasResolver = new UUIDAliasResolver {}, {@redis, aliasServerUri}
+    @PublishConfig = require '../publishConfig'
     @set attributes
     {@uuid} = attributes
 
@@ -268,7 +268,7 @@ class Device
       return callback error if error?
       @_lookupAlias @uuid, (error, uuid) =>
         return callback error if error?
-        publishConfig = new PublishConfig {uuid, config, database: {@devices}}
+        publishConfig = new @PublishConfig {uuid, config, database: {@devices}}
         publishConfig.publish => # don't wait for the publisher
         callback()
 

@@ -226,9 +226,6 @@ describe 'SocketLogic Events', ->
       it 'should have a token', ->
         expect(@result.token).to.exist
 
-      it 'should have a ipAddress', ->
-        expect(@result.ipAddress).to.equal '127.0.0.1'
-
       it 'should have online = false', ->
         expect(@result.online).to.be.false
 

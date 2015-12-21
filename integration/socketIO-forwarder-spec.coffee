@@ -36,8 +36,8 @@ describe 'SocketLogic Forwarder Events', ->
         @meshblu.update {uuid: @device.uuid}, {foo: 'bar'}, (error) =>
           return done error if error?
 
-          @eventForwarder.once 'message', (@message) =>
-            done()
+          @eventForwarder.on 'message', (@message) =>
+            done() if @message.topic == 'update'
 
       it 'should send an "update" message', ->
         expect(@message.topic).to.deep.equal 'update'
@@ -96,7 +96,7 @@ describe 'SocketLogic Forwarder Events', ->
       it 'should send a "identity-error" message', ->
         expect(@message.topic).to.deep.equal 'identity-error'
         expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-          error: "Device not found"
+          error: "Invalid Device UUID"
           request:
             uuid: 'invalid-uuid'
         }

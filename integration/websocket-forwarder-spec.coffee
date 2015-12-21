@@ -299,7 +299,7 @@ describe 'WebSocket Forwarder Events', ->
       it 'should send a "identity-error" message', ->
         expect(@message.topic).to.deep.equal 'identity-error'
         expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-          error: "Device not found"
+          error: "Invalid Device UUID"
           fromUuid: 'invalid-uuid'
           request:
             uuid: 'invalid-uuid'

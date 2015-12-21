@@ -234,8 +234,7 @@ describe 'REST Forwarder Events', ->
 
       it 'should send a "localdevices" message', ->
         expect(@message.topic).to.deep.equal 'localdevices'
-        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-          fromIp: '127.0.0.1'
+        expect(_.omit @message.payload, ['_timestamp', 'fromIp']).to.deep.equal {
           fromUuid: @config.uuid
           request: {}
         }
@@ -253,9 +252,8 @@ describe 'REST Forwarder Events', ->
 
       it 'should send a "localdevices-error" message', ->
         expect(@message.topic).to.deep.equal 'localdevices-error'
-        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
+        expect(_.omit @message.payload, ['_timestamp', 'fromIp']).to.deep.equal {
           fromUuid: @config.uuid
-          fromIp: "127.0.0.1"
           error: "Devices not found"
           request:
             uuid: 'invalid-uuid'
@@ -274,8 +272,7 @@ describe 'REST Forwarder Events', ->
 
       it 'should send a "localdevices" message', ->
         expect(@message.topic).to.deep.equal 'localdevices'
-        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-          fromIp: '127.0.0.1'
+        expect(_.omit @message.payload, ['_timestamp', 'fromIp']).to.deep.equal {
           fromUuid: @config.uuid
           request: {}
         }
@@ -293,9 +290,8 @@ describe 'REST Forwarder Events', ->
 
       it 'should send a "localdevices-error" message', ->
         expect(@message.topic).to.deep.equal 'localdevices-error'
-        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
+        expect(_.omit @message.payload, ['_timestamp', 'fromIp']).to.deep.equal {
           fromUuid: @config.uuid
-          fromIp: "127.0.0.1"
           error: "Devices not found"
           request:
             uuid: 'invalid-uuid'
@@ -319,9 +315,8 @@ describe 'REST Forwarder Events', ->
 
       it 'should send a "claimdevice" message', ->
         expect(@message.topic).to.deep.equal 'claimdevice'
-        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
+        expect(_.omit @message.payload, ['_timestamp', 'fromIp']).to.deep.equal {
           fromUuid: @config.uuid
-          fromIp:   "127.0.0.1"
           request:
             uuid: @device.uuid
         }
@@ -338,9 +333,8 @@ describe 'REST Forwarder Events', ->
 
       it 'should send an "claimdevice-error" message', ->
         expect(@message.topic).to.deep.equal 'claimdevice-error'
-        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
+        expect(_.omit @message.payload, ['_timestamp', 'fromIp']).to.deep.equal {
           fromUuid: @config.uuid
-          fromIp:   '127.0.0.1'
           error:    'Device not found'
           request:
             uuid: 'invalid-uuid'
@@ -494,10 +488,6 @@ describe 'REST Forwarder Events', ->
 
       it 'should send a "register" message', ->
         expect(@message.topic).to.deep.equal 'register'
-        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-          request:
-            ipAddress: '127.0.0.1'
-        }
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
@@ -507,12 +497,7 @@ describe 'REST Forwarder Events', ->
 
       it 'should send an "register-error" message', ->
         expect(@message.topic).to.deep.equal 'register-error'
-        expect(_.omit @message.payload, '_timestamp').to.deep.equal {
-          error:  'Device not updated'
-          request:
-            uuid: 'not-allowed'
-            ipAddress: '127.0.0.1'
-        }
+        expect(@message.payload.error).to.deep.equal 'Device not updated'
 
   describe 'PUT /devices/:uuid', ->
     describe 'when called with a valid request', ->

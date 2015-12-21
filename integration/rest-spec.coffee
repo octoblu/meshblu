@@ -125,7 +125,7 @@ describe 'REST', ->
       it 'should yield devices', ->
         expect(@body[0].uuid).to.exist
 
-  describe.only 'GET /v2/devices/:uuid', ->
+  describe 'GET /v2/devices/:uuid', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
         @meshblu.device @config.uuid, (@error, @device) => done()
@@ -146,7 +146,7 @@ describe 'REST', ->
       it 'should not yield a device', ->
         expect(@device).to.not.exist
 
-    describe 'when called with an x-forwarded-for header', ->
+    xdescribe 'when called with an x-forwarded-for header', ->
       beforeEach (done) ->
         @meshblu.register discoverAsWhitelist: [@config.uuid], (error, @discovererDevice) =>
           @meshblu.register discoverWhitelist: [@discovererDevice.uuid], (error, @discovereeDevice) =>
@@ -168,8 +168,6 @@ describe 'REST', ->
 
       it 'should yield a device', ->
         expect(@body.uuid).to.deep.equal @discoveree.uuid
-
-
 
   describe 'PATCH /v2/devices/:uuid', ->
     describe 'when called with a valid request', ->
@@ -452,9 +450,6 @@ describe 'REST', ->
       it 'should create device with uuid and token', ->
         expect(@device.uuid).to.exist
         expect(@device.token).to.exist
-
-      it 'should set an ipAddress', ->
-        expect(@device.ipAddress).to.equal '127.0.0.1'
 
       it 'should set online to false', ->
         expect(@device.online).to.be.false

@@ -1,4 +1,3 @@
-util = require "./util"
 async = require 'async'
 bcrypt = require "bcrypt"
 _ = require "lodash"
@@ -53,10 +52,7 @@ class SimpleAuth
 
       return @asyncCallback(null, true, callback) if fromDevice.uuid == toDevice.uuid
 
-      if toDevice.owner?
-        return @asyncCallback(null, true, callback) if toDevice.owner == fromDevice.uuid
-      else
-        return @asyncCallback(null, true, callback) if util.sameLAN(fromDevice.ipAddress, toDevice.ipAddress)
+      return @asyncCallback(null, true, callback) if toDevice.owner == fromDevice.uuid if toDevice.owner?
 
       if message?.token
         return @authDevice(

@@ -670,17 +670,6 @@ describe 'simpleAuth', ->
           expect(permission).to.be.true
           next error
 
-    describe 'when a device is unclaimed, and exists on the same lan as the configuring device', ->
-      beforeEach ->
-        @fromDevice = uuid: 1
-        @toDevice = uuid: 2
-        util.sameLAN = sinon.stub().returns true
-
-      it 'should return true', (next) ->
-        @sut.canConfigure @fromDevice, @toDevice, (error, permission) =>
-          expect(permission).to.be.true
-          next error
-
     describe 'when a device is in the configureWhitelist', ->
       beforeEach (next) ->
         @fromDevice = uuid: 1
@@ -720,18 +709,3 @@ describe 'simpleAuth', ->
 
       it 'should call checkLists', ->
         expect(@sut._checkLists).to.have.been.calledWith @fromDevice, @toDevice, @toDevice.configureWhitelist, @toDevice.configureBlacklist, false
-
-    describe 'when a device is unclaimed, and exists on a different lan than the configuring device', ->
-      beforeEach (next) ->
-        @fromDevice = uuid: 1, ipAddress: '127.0.0.1'
-        @toDevice = uuid: 2, ipAddress: '192.168.0.1'
-        util.sameLAN = sinon.stub().returns false
-        @sut.canConfigure @fromDevice, @toDevice, (error, permission) =>
-          @result = permission
-          next error
-
-      it 'should return false', ->
-        expect(@result).to.be.false
-
-      it 'should call sameLan with the ipAddresses of both devices', ->
-        expect(util.sameLAN).to.have.been.calledWith '127.0.0.1', '192.168.0.1'

@@ -116,7 +116,7 @@ describe 'SocketLogic Events', ->
   describe 'EVENT claimdevice', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.register configWhitelist: ['*'], (data) =>
+        @meshblu.register configureWhitelist: ['*'], (data) =>
           return done new Error data.error if data.error?
 
           @newDevice = data
@@ -155,7 +155,7 @@ describe 'SocketLogic Events', ->
   describe 'EVENT resetToken', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.register configWhitelist: ['*'], (@newDevice) =>
+        @meshblu.register configureWhitelist: ['*'], (@newDevice) =>
           return done new Error @newDevice.error if @newDevice.error?
           @meshblu.resetToken @newDevice.uuid, (@result) =>
             return done new Error @result.error if @result.error?
@@ -174,7 +174,7 @@ describe 'SocketLogic Events', ->
   describe 'EVENT generateAndStoreToken', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.register configWhitelist: ['*'], (data) =>
+        @meshblu.register configureWhitelist: ['*'], (data) =>
           return done new Error data.error if data.error?
 
           @newDevice = data
@@ -195,7 +195,7 @@ describe 'SocketLogic Events', ->
   describe 'EVENT revokeToken', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.register configWhitelist: ['*'], (data) =>
+        @meshblu.register configureWhitelist: ['*'], (data) =>
           return done new Error data.error if data.error?
 
           @meshblu.generateAndStoreToken uuid: data.uuid, (device) =>

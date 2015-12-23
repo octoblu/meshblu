@@ -23,6 +23,7 @@ class Worker
 
     @_sendMessage = sendMessageCreator createMessageIOEmitter messageIO.io
     @redis = new RedisNS NAMESPACE, redis.createClient()
+    @logClient = new RedisNS 'meshblu', redis.createClient()
 
   run: =>
     async.whilst @true, @popMessage, (error) =>
@@ -75,7 +76,15 @@ class Worker
     debug 'sendMessage', benchmark.toString()
     @_sendMessage device, message, 'message', =>
       debug 'sentMessage', benchmark.toString()
-      callback()
+
+      jobStr = JSON.stringify
+        index: 'meshblu_worker'
+        type: 'message'
+        body:
+          elapsedTime: benchmark.elapsed()
+          devices: [message.devices]
+
+      @logClient.lpush 'job-log', jobStr, callback
 
 worker = new Worker()
 worker.run()

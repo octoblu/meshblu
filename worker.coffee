@@ -83,6 +83,7 @@ class Worker
         body:
           elapsedTime: benchmark.elapsed()
           devices: [message.devices]
+          fromUuid: device.uuid
 
       @logClient.lpush 'job-log', jobStr, callback
 

@@ -165,6 +165,7 @@ describe 'MQTT Forwarder Events', ->
 
           @newDevice = device
           @meshblu.generateAndStoreToken uuid: @newDevice.uuid, (error, data) =>
+            return done new Error error if error?
             return done new Error error.message if data.error?
             @eventForwarder.once 'message', (@message) =>
               done()

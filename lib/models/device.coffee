@@ -137,7 +137,8 @@ class Device
     @attributes = _.extend {}, @attributes, @sanitize(attributes)
     @attributes.online = !!@attributes.online if @attributes.online?
 
-  storeToken: (token, callback=_.noop)=>
+  storeToken: (tokenOptions, callback=_.noop)=>
+    {token, tag} = tokenOptions
     @fetch (error, attributes) =>
       return callback error if error?
 
@@ -146,6 +147,7 @@ class Device
 
         debug 'storeToken', token, hashedToken
         tokenData = createdAt: new Date()
+        tokenData.tag = tag if tag?
         @_storeTokenInCache hashedToken
         @update $set: {"meshblu.tokens.#{hashedToken}" : tokenData}, callback
 

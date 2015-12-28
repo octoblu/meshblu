@@ -297,7 +297,7 @@ describe 'Device', ->
 
       describe 'when called with token mystery-token', ->
         beforeEach (done) ->
-          @sut.storeToken 'mystery-token', (error) =>
+          @sut.storeToken {token: 'mystery-token'}, (error) =>
             return done error if error
             @sut.fetch (error, attributes) =>
               @updatedDevice = attributes
@@ -310,6 +310,31 @@ describe 'Device', ->
 
         it 'should add a timestamp to the token', ->
           expect(@token.createdAt?.getTime()).to.be.closeTo Date.now(), 1000
+
+        it 'should store the token in the database', (done) ->
+          @devices.findOne uuid: @uuid, (error, device) =>
+            return done error if error?
+            token = @updatedDevice.meshblu?.tokens?[@hashedToken]
+            expect(token).to.exist
+            done()
+
+      describe 'when called with token mystery-token and a tag', ->
+        beforeEach (done) ->
+          @sut.storeToken {token: 'mystery-token', tag: 'mystery'}, (error) =>
+            return done error if error
+            @sut.fetch (error, attributes) =>
+              @updatedDevice = attributes
+              @token = @updatedDevice.meshblu?.tokens?[@hashedToken]
+              done(error)
+
+        it 'should hash the token and add it to the attributes', ->
+          expect(@updatedDevice.meshblu?.tokens).to.include.keys @hashedToken
+
+        it 'should add a timestamp to the token', ->
+          expect(@token.createdAt?.getTime()).to.be.closeTo Date.now(), 1000
+
+        it 'should add a tag to the token', ->
+          expect(@token.tag).to.equal 'mystery'
 
         it 'should store the token in the database', (done) ->
           @devices.findOne uuid: @uuid, (error, device) =>

@@ -220,96 +220,10 @@ describe 'REST', ->
       it 'should yield an error', ->
         expect(@error).to.exist
 
-  describe 'GET /localdevices', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        pathname = "/localdevices"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        request.get uri, auth: auth, json: true, (@error, @response, @body) => done()
-
-      it 'should not yield an error', ->
-        expect(@error).to.not.exist
-
-      it 'should have a statusCode of 200', ->
-        expect(@response.statusCode).to.equal 200
-
-      it 'should yield devices', ->
-        expect(@body.devices).not.to.be.empty
-
-      it 'should yield a device with a uuid', ->
-        expect(@body.devices[0].uuid).to.exist
-
-      it 'should yield a device without a token', ->
-        expect(@body.devices[0].token).to.not.exist
-
-      it 'should yield a device without tokens', ->
-        expect(@body.devices[0].tokens).to.not.exist
-
-    describe 'when called with an invalid request', ->
-      beforeEach (done) ->
-        pathname = "localdevices"
-        query = uuid: 'invalid-uuid'
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        request.get uri, auth: auth, qs: query, json: true, (@error, @response, @body) => done()
-
-      it 'should not yield an error', ->
-        expect(@error).to.not.exist
-
-      it 'should have a statusCode of 404', ->
-        expect(@response.statusCode).to.equal 404
-
-      it 'should have a body', ->
-        expect(@body.message).to.deep.equal "Devices not found"
-
-  describe 'GET /unclaimeddevices', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        pathname = "/unclaimeddevices"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        request.get uri, auth: auth, json: true, (@error, @response, @body) => done()
-
-      it 'should not yield an error', ->
-        expect(@error).to.not.exist
-
-      it 'should have a statusCode of 200', ->
-        expect(@response.statusCode).to.equal 200
-
-      it 'should yield devices', ->
-        expect(@body.devices).not.to.be.empty
-
-      it 'should yield a device with a uuid', ->
-        expect(@body.devices[0].uuid).to.exist
-
-      it 'should yield a device without a token', ->
-        expect(@body.devices[0].token).to.not.exist
-
-      it 'should yield a device without tokens', ->
-        expect(@body.devices[0].tokens).to.not.exist
-
-    describe 'when called with an invalid request', ->
-      beforeEach (done) ->
-        pathname = "unclaimeddevices"
-        query = uuid: 'invalid-uuid'
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        request.get uri, auth: auth, qs: query, json: true, (@error, @response, @body) => done()
-
-      it 'should not yield an error', ->
-        expect(@error).to.not.exist
-
-      it 'should have a statusCode of 404', ->
-        expect(@response.statusCode).to.equal 404
-
-      it 'should have a body', ->
-        expect(@body.message).to.deep.equal "Devices not found"
-
   describe 'PUT /claimdevice/:uuid', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.register configWhitelist: ['*'], (error, device) =>
+        @meshblu.register configureWhitelist: ['*'], (error, device) =>
           return done error if error?
           @device = device
           pathname = "/claimdevice/#{@device.uuid}"
@@ -373,7 +287,7 @@ describe 'REST', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
         # Oh hello there, you may be wondering this madness is? Well it makes sure the token is different. Crazily. Sorry bro.
-        @meshblu.register configWhitelist: ['*'], (error, device) =>
+        @meshblu.register configureWhitelist: ['*'], (error, device) =>
           return done error if error?
           @conx.subscribe uuid: device.uuid, (error) =>
             @conx.once 'config', (@device) =>
@@ -396,7 +310,7 @@ describe 'REST', ->
   describe 'POST /devices/:uuid/tokens', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.register configWhitelist: ['*'], (error, @device) =>
+        @meshblu.register configureWhitelist: ['*'], (error, @device) =>
           return done error if error?
           @meshblu.generateAndStoreToken @device.uuid, (error, @updatedDevice) =>
             return done error if error?
@@ -405,6 +319,20 @@ describe 'REST', ->
       it 'should have a different token', ->
         expect(@device.token).to.exist
         expect(@updatedDevice.token).to.exist
+        expect(@device.token).to.not.deep.equal @updatedDevice.token
+
+    describe 'when called with a valid tag request', ->
+      beforeEach (done) ->
+        @meshblu.register configureWhitelist: ['*'], (error, @device) =>
+          return done error if error?
+          @meshblu.generateAndStoreTokenWithOptions @device.uuid, {tag: 'some-tag'}, (error, @updatedDevice) =>
+            return done error if error?
+            done()
+
+      it 'should have a different token', ->
+        expect(@device.token).to.exist
+        expect(@updatedDevice.token).to.exist
+        expect(@updatedDevice.tag).to.equal 'some-tag'
         expect(@device.token).to.not.deep.equal @updatedDevice.token
 
     describe 'when called with an invalid request', ->
@@ -420,7 +348,7 @@ describe 'REST', ->
   describe 'DELETE /devices/:uuid/tokens/:token', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
-        @meshblu.register configWhitelist: ['*'], (error, device) =>
+        @meshblu.register configureWhitelist: ['*'], (error, device) =>
           return done error if error?
 
           @meshblu.generateAndStoreToken device.uuid, (error, @device) =>
@@ -498,7 +426,7 @@ describe 'REST', ->
       beforeEach (done) ->
         @conx.on 'message', (@message) =>
           done() if @message.topic == 'unregister'
-        @meshblu.register {}, (error, device) =>
+        @meshblu.register {configureWhitelist: ['*']}, (error, device) =>
           return done error if error?
           @device = device
           @meshblu.unregister uuid: @device.uuid, (error) =>

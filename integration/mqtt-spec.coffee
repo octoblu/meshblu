@@ -65,7 +65,7 @@ describe 'MQTT Events', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
         meshbluHTTP = new MeshbluHTTP _.pick @config, 'server', 'port'
-        meshbluHTTP.register configWhitelist: ['*'], (error, @newDevice) =>
+        meshbluHTTP.register configureWhitelist: ['*'], (error, @newDevice) =>
           return done error if error?
           @meshblu.resetToken uuid: @newDevice.uuid, (error, @newTokenDevice) =>
             return done new Error error.message if error?
@@ -78,14 +78,29 @@ describe 'MQTT Events', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
         meshbluHTTP = new MeshbluHTTP _.pick @config, 'server', 'port'
-        meshbluHTTP.register configWhitelist: ['*'], (error, @newDevice) =>
+        meshbluHTTP.register configureWhitelist: ['*'], (error, @newDevice) =>
           return done error if error?
-          @meshblu.generateAndStoreToken uuid: @newDevice.uuid, (error, @data) =>
+          @meshblu.generateAndStoreToken uuid: @newDevice.uuid, (error, @result) =>
             return done new Error error.message if error?
             done()
 
       it 'should have a new token', ->
-        expect(@data.token).to.exist
+        expect(@result.token).to.exist
+
+    describe 'when called with a valid tag request', ->
+      beforeEach (done) ->
+        meshbluHTTP = new MeshbluHTTP _.pick @config, 'server', 'port'
+        meshbluHTTP.register configureWhitelist: ['*'], (error, @newDevice) =>
+          return done error if error?
+          @meshblu.generateAndStoreToken uuid: @newDevice.uuid, tag: 'some-tag', (error, @result) =>
+            return done new Error error.message if error?
+            done()
+
+      it 'should have a new token', ->
+        expect(@result.token).to.exist
+
+      it 'should have a new token', ->
+        expect(@result.tag).to.equal 'some-tag'
 
   describe 'EVENT message', ->
     describe 'when called with a valid request', ->

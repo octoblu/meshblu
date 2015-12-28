@@ -221,89 +221,13 @@ describe 'REST Forwarder Events', ->
         expect(@message.payload.request.query.uuid).to.equal @config.uuid
         expect(@message.payload.request.params.$set.$foo).to.equal 'bar'
 
-  describe 'GET /localdevices', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        pathname = "/localdevices"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        @conx.on 'message', (@message) =>
-          done() if @message.topic == 'localdevices'
-        request.get uri, auth: auth,  (error) =>
-          return done error if error?
-
-      it 'should send a "localdevices" message', ->
-        expect(@message.topic).to.deep.equal 'localdevices'
-        expect(_.omit @message.payload, ['_timestamp', 'fromIp']).to.deep.equal {
-          fromUuid: @config.uuid
-          request: {}
-        }
-
-    describe 'when called with an invalid request', ->
-      beforeEach (done) ->
-        pathname = "localdevices"
-        query = uuid: 'invalid-uuid'
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        @conx.on 'message', (@message) =>
-          done() if @message.topic == 'localdevices-error'
-        request.get uri, auth: auth, qs: query,  (error) =>
-          return done error if error?
-
-      it 'should send a "localdevices-error" message', ->
-        expect(@message.topic).to.deep.equal 'localdevices-error'
-        expect(_.omit @message.payload, ['_timestamp', 'fromIp']).to.deep.equal {
-          fromUuid: @config.uuid
-          error: "Devices not found"
-          request:
-            uuid: 'invalid-uuid'
-        }
-
-  describe 'GET /unclaimeddevices', ->
-    describe 'when called with a valid request', ->
-      beforeEach (done) ->
-        pathname = "/unclaimeddevices"
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        @conx.on 'message', (@message) =>
-          done() if @message.topic == 'localdevices'
-        request.get uri, auth: auth,  (error) =>
-          return done error if error?
-
-      it 'should send a "localdevices" message', ->
-        expect(@message.topic).to.deep.equal 'localdevices'
-        expect(_.omit @message.payload, ['_timestamp', 'fromIp']).to.deep.equal {
-          fromUuid: @config.uuid
-          request: {}
-        }
-
-    describe 'when called with an invalid request', ->
-      beforeEach (done) ->
-        pathname = "/unclaimeddevices"
-        query = uuid: 'invalid-uuid'
-        uri = url.format protocol: @config.protocol, hostname: @config.server, port: @config.port, pathname: pathname
-        auth = user: @config.uuid, pass: @config.token
-        @conx.on 'message', (@message) =>
-          done() if @message.topic == 'localdevices-error'
-        request.get uri, auth: auth, qs: query,  (error) =>
-          return done error if error?
-
-      it 'should send a "localdevices-error" message', ->
-        expect(@message.topic).to.deep.equal 'localdevices-error'
-        expect(_.omit @message.payload, ['_timestamp', 'fromIp']).to.deep.equal {
-          fromUuid: @config.uuid
-          error: "Devices not found"
-          request:
-            uuid: 'invalid-uuid'
-        }
-
   describe 'PUT /claimdevice/:uuid', ->
     describe 'when called with a valid request', ->
       beforeEach (done) ->
         @conx.on 'message', (@message) =>
           done() if @message.topic == 'claimdevice'
 
-        @meshblu.register configWhitelist: ['*'], (error, device) =>
+        @meshblu.register configureWhitelist: ['*'], (error, device) =>
           return done error if error?
 
           @device = device
@@ -374,7 +298,7 @@ describe 'REST Forwarder Events', ->
       beforeEach (done) ->
         @conx.on 'message', (@message) =>
           done() if @message.topic == 'resettoken'
-        @meshblu.register configWhitelist: ['*'], (error, device) =>
+        @meshblu.register configureWhitelist: ['*'], (error, device) =>
           return done error if error?
 
           @device = device
@@ -409,7 +333,7 @@ describe 'REST Forwarder Events', ->
       beforeEach (done) ->
         @conx.on 'message', (@message) =>
           done() if @message.topic == 'generatetoken'
-        @meshblu.register configWhitelist: ['*'], (error, device) =>
+        @meshblu.register configureWhitelist: ['*'], (error, device) =>
           return done error if error?
 
           @device = device
@@ -445,7 +369,7 @@ describe 'REST Forwarder Events', ->
         @conx.on 'message', (@message) =>
           done() if @message.topic == 'revoketoken'
 
-        @meshblu.register configWhitelist: ['*'], (error, device) =>
+        @meshblu.register configureWhitelist: ['*'], (error, device) =>
           return done error if error?
 
           @meshblu.generateAndStoreToken device.uuid, (error, device) =>
@@ -544,7 +468,7 @@ describe 'REST Forwarder Events', ->
       beforeEach (done) ->
         @conx.on 'message', (@message) =>
           done() if @message.topic == 'unregister'
-        @meshblu.register {}, (error, device) =>
+        @meshblu.register { configureWhitelist: ['*'] }, (error, device) =>
           return done error if error?
           @device = device
           @meshblu.unregister uuid: @device.uuid, (error) =>

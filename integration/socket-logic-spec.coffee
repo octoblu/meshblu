@@ -76,6 +76,9 @@ describe 'SocketLogic Events', ->
       it 'should have return the updated device', ->
         expect(@result.uuid).to.exist
 
+      it 'should not have the from device on the result', ->
+        expect(@result.from).to.not.exist
+
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
         @meshblu.update uuid: 'invalid-uuid', foo: 'bar', (@result) => done()
@@ -233,7 +236,6 @@ describe 'SocketLogic Events', ->
 
       it 'should have the correct result', ->
         expect(@result.fromUuid).to.equal @config.uuid
-        expect(@result.from).to.exist
 
     describe 'when called with an invalid request', ->
       beforeEach (done) ->

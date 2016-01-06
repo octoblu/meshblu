@@ -209,6 +209,23 @@ describe 'REST Forwarder Events', ->
             params: {$unset: {foo: 1}}
         }
 
+    # describe 'when called with a valid request with a x-meshblu-forwarded-for header', ->
+    #   beforeEach (done) ->
+    #     @conx.on 'message', (@message) =>
+    #       done() if @message.topic == 'update'
+    #     @meshblu.updateDangerously @config.uuid, {$unset: {foo: 1}}, (error) =>
+    #       return done error if error?
+    #
+    #   it 'should send a "update" message', ->
+    #     expect(@message.topic).to.deep.equal 'update'
+    #     expect(_.omit @message.payload, '_timestamp').to.deep.equal {
+    #       fromUuid: @config.uuid
+    #       request:
+    #         query: {uuid: @config.uuid}
+    #         params: {$unset: {foo: 1}}
+    #     }
+
+
     describe 'when called with an invalid request', ->
       beforeEach (done) ->
         @conx.on 'message', (@message) =>

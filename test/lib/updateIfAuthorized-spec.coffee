@@ -98,3 +98,31 @@ describe 'updateIfAuthorized', ->
       it 'should instantiate a Device', ->
         expect(@Device).to.have.been.calledWithNew
         expect(@Device).to.have.been.calledWith uuid: 'uuid'
+
+  describe 'when called with a device and a list of uuids the config is forwarded for', ->
+    beforeEach ->
+      @forwardedFor = ['Fred', 'Barney']
+      @sut = updateIfAuthorized
+      @toDevice     = {uuid: 'to-device', configureWhitelist: ['from-device']}
+      @canConfigure = sinon.stub().yields null, true
+
+      @device =
+        update: sinon.stub().yields null
+        fetch: sinon.stub().yields null, @toDevice
+
+      @Device = sinon.spy => @device
+
+      @dependencies = securityImpl: {canConfigure: @canConfigure}, Device: @Device
+
+      @callback = sinon.spy()
+      fromDevice = {uuid: 'from-device'}
+      query = {uuid: 'to-device', token: 'token'}
+      update = {$inc: {magic: 1}}
+      options = {forwardedFor: @forwardedFor}
+
+      @sut(fromDevice, query, update, options, @callback, @dependencies)
+
+      @device.fetch.yield null, @toDevice
+
+    it 'should call update on the device with options containing the uuids the config was forwarded for', ->
+      expect(@device.update).to.have.been.calledWith {$inc: {magic: 1}}, forwardedFor: @forwardedFor

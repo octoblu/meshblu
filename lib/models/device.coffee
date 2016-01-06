@@ -205,7 +205,11 @@ class Device
             @_storeInvalidTokenInBlacklist token
             return callback null, false
 
-  update: (params, callback=->) =>
+  update: (params, rest...) =>
+    [callback] = rest
+    [options, callback] = rest if _.isPlainObject(rest[0])
+    options ?= {}
+
     params = _.cloneDeep params
     keys   = _.keys(params)
 
@@ -225,7 +229,7 @@ class Device
         @clearCache uuid, =>
           @fetch.cache = null
           @_hashDevice (hashDeviceError) =>
-            @_sendConfig (sendConfigError) =>
+            @_sendConfig options, (sendConfigError) =>
               return callback @sanitizeError(hashDeviceError) if hashDeviceError?
               callback sendConfigError
 
@@ -265,12 +269,14 @@ class Device
 
       callback null, hasher.digest 'base64'
 
-  _sendConfig: (callback) =>
+  _sendConfig: (options, callback) =>
+    {forwardedFor} = options
+    
     @fetch (error, config) =>
       return callback error if error?
       @_lookupAlias @uuid, (error, uuid) =>
         return callback error if error?
-        publishConfig = new @PublishConfig {uuid, config, database: {@devices}}
+        publishConfig = new @PublishConfig {uuid, config, forwardedFor, database: {@devices}}
         publishConfig.publish => # don't wait for the publisher
         callback()
 

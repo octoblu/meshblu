@@ -84,6 +84,7 @@ class Worker
           elapsedTime: benchmark.elapsed()
           devices: [message.devices]
           fromUuid: device.uuid
+          date: benchmark.startTime
 
       @logClient.lpush 'job-log', jobStr, callback
 

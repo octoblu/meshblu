@@ -18,6 +18,7 @@ class MessageWebhook
     @device.generateAndStoreTokenInCache callback
 
   send: (message, callback=->) =>
+    return callback new Error 'Invalid webhook configuration: type is required' unless @type?
     if @options.signRequest && config.privateKey?
       options =
         headers:

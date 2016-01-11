@@ -13,6 +13,19 @@ describe 'MessageWebhook', ->
     @dependencies = {@request, @generateAndStoreToken, @revokeToken, @device}
 
   describe '->send', ->
+    describe 'when instantiated without a type', ->
+      beforeEach ->
+        options =
+          uuid: @deviceRecord.uuid
+          options: url: 'http://google.com'
+
+        @sut = new MessageWebhook options, @dependencies
+        @sut.send foo: 'bar', (@error) =>
+
+      it 'should get error', ->
+        expect(@error).to.exist
+        expect(@error.message).to.deep.equal 'Invalid webhook configuration: type is required'
+
     describe 'when instantiated with a url', ->
       beforeEach ->
         options =
@@ -36,54 +49,6 @@ describe 'MessageWebhook', ->
 
         it 'should get error', ->
           expect(@error).to.exist
-
-      describe 'when request do not fails, but returns error that shouldnt happen', ->
-        beforeEach ->
-          @request.yields null, {statusCode: 103}, 'dont PUT that there'
-          @sut.send foo: 'bar', (@error) =>
-
-        it 'should call request with whatever I want', ->
-          expect(@request).to.have.been.calledWith
-            url: 'http://google.com'
-            json: {foo: 'bar'}
-            headers:
-              'X-MESHBLU-MESSAGE-TYPE': 'received'
-
-        it 'should get error', ->
-          expect(@error).to.exist
-          expect(@error.message).to.deep.equal 'HTTP Status: 103'
-
-      describe 'when request do fails and it mah fault', ->
-        beforeEach ->
-          @request.yields null, {statusCode: 429}, 'chillax broham'
-          @sut.send foo: 'bar', (@error) =>
-
-        it 'should call request with whatever I want', ->
-          expect(@request).to.have.been.calledWith
-            url: 'http://google.com'
-            json: {foo: 'bar'}
-            headers:
-              'X-MESHBLU-MESSAGE-TYPE': 'received'
-
-        it 'should get error', ->
-          expect(@error).to.exist
-          expect(@error.message).to.deep.equal 'HTTP Status: 429'
-
-      describe 'when request do fails and it yo fault', ->
-        beforeEach ->
-          @request.yields null, {statusCode: 506}, 'pay me mo moneys'
-          @sut.send foo: 'bar', (@error) =>
-
-        it 'should call request with whatever I want', ->
-          expect(@request).to.have.been.calledWith
-            url: 'http://google.com'
-            json: {foo: 'bar'}
-            headers:
-              'X-MESHBLU-MESSAGE-TYPE': 'received'
-
-        it 'should get error', ->
-          expect(@error).to.exist
-          expect(@error.message).to.deep.equal 'HTTP Status: 506'
 
       describe 'when request dont fails', ->
         beforeEach ->

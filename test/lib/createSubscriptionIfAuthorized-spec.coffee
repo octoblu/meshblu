@@ -18,7 +18,7 @@ describe 'createSubscriptionIfAuthorized', ->
 
     it 'should yield an error', ->
       expect(@error).to.be.an.instanceOf Error
-      expect(@error.message).to.deep.equal 'Type must be one of ["event", "broadcast"]'
+      expect(@error.message).to.deep.equal 'Type must be one of ["broadcast", "config", "received", "sent"]'
 
   describe 'when called with an valid type', ->
     beforeEach (done) ->
@@ -42,7 +42,7 @@ describe 'createSubscriptionIfAuthorized', ->
         params = {
           subscriberUuid: @open_device.uuid
           emitterUuid: @closed_device.uuid
-          type: 'event'
+          type: 'broadcast'
         }
 
         @dependencies.getDevice = sinon.stub().yields null, @open_device
@@ -59,7 +59,7 @@ describe 'createSubscriptionIfAuthorized', ->
         @database.subscriptions.findOne {}, (error, subscription) =>
           return done error if error?
           subscription = _.omit subscription, '_id'
-          expect(subscription).to.deep.equal subscriberUuid: @open_device.uuid, emitterUuid: @closed_device.uuid, type: 'event'
+          expect(subscription).to.deep.equal subscriberUuid: @open_device.uuid, emitterUuid: @closed_device.uuid, type: 'broadcast'
           done()
 
       describe 'if we call it again', ->
@@ -67,7 +67,7 @@ describe 'createSubscriptionIfAuthorized', ->
           params = {
             subscriberUuid: @open_device.uuid
             emitterUuid: @closed_device.uuid
-            type: 'event'
+            type: 'broadcast'
           }
 
           @dependencies.getDevice = sinon.stub().yields null, @open_device
@@ -87,7 +87,7 @@ describe 'createSubscriptionIfAuthorized', ->
         params = {
           subscriberUuid: @closed_device.uuid
           emitterUuid: @open_device.uuid
-          type: 'event'
+          type: 'broadcast'
         }
 
         @dependencies.getDevice = sinon.stub().yields null, @closed_device

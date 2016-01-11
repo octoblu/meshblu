@@ -6,7 +6,7 @@ createSubscriptionIfAuthorized = (authedDevice, params, callback=_.noop, depende
   getDevice = dependencies.getDevice ? require './getDevice'
 
   unless _.contains ['broadcast', 'config', 'received', 'sent'], params.type
-    return callback new Error 'Type must be one of ["broadcast", "config", "received", "sent"]]'
+    return callback new Error 'Type must be one of ["broadcast", "config", "received", "sent"]'
 
   getDevice params.subscriberUuid, (error, toDevice) =>
     return callback error if error?

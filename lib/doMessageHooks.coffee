@@ -1,5 +1,6 @@
 _ = require 'lodash'
 async = require 'async'
+debug = require('debug')('meshblu:doMessageHooks')
 
 module.exports = (device, hooks, message, callback=_.noop, dependencies={}) ->
   MessageWebhook = dependencies.MessageWebhook ? require './MessageWebhook'
@@ -9,6 +10,8 @@ module.exports = (device, hooks, message, callback=_.noop, dependencies={}) ->
     options =
       uuid: device.uuid
       options: hook
+
+    debug('messageHook', options)
 
     messageWebhook = new MessageWebhook options
     messageWebhook.send message, (error) =>

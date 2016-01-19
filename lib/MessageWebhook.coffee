@@ -18,7 +18,6 @@ class MessageWebhook
     @device.generateAndStoreTokenInCache callback
 
   send: (message, callback=->) =>
-    return callback new Error 'Invalid webhook configuration: type is required' unless @type?
     if @options.signRequest && config.privateKey?
       options =
         headers:
@@ -43,7 +42,7 @@ class MessageWebhook
     options = _.defaults json: message, deviceOptions, options
     options.headers ?= {}
 
-    options.headers['X-MESHBLU-MESSAGE-TYPE'] = @type
+    options.headers['X-MESHBLU-MESSAGE-TYPE'] = @type if @type?
 
     @request options, (error, response) =>
       return callback error if error?

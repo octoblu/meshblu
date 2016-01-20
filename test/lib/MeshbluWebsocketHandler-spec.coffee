@@ -359,7 +359,7 @@ describe 'MeshbluWebsocketHandler', ->
   describe 'devices', ->
     describe 'when getDevices yields devices', ->
       beforeEach ->
-        @getDevices = sinon.stub().yields [{uuid: '5431', color: 'green'}, {uuid: '1234', color: 'green'}]
+        @getDevices = sinon.stub().yields null, [{uuid: '5431', color: 'green'}, {uuid: '1234', color: 'green'}]
         @sut = new MeshbluWebsocketHandler getDevices: @getDevices, meshbluEventEmitter: @meshbluEventEmitter
         @sut.authedDevice = {}
         @sut.sendFrame = sinon.spy()
@@ -371,7 +371,7 @@ describe 'MeshbluWebsocketHandler', ->
   describe 'mydevices', ->
     describe 'when called with a query', ->
       beforeEach ->
-        @getDevices = sinon.stub().yields devices: [{uuid: '5431', color: 'green', owner: '5555'}, {uuid: '1234', color: 'green', owner: '5555'}]
+        @getDevices = sinon.stub().yields null, devices: [{uuid: '5431', color: 'green', owner: '5555'}, {uuid: '1234', color: 'green', owner: '5555'}]
         @sut = new MeshbluWebsocketHandler getDevices: @getDevices, meshbluEventEmitter: @meshbluEventEmitter
         @sut.sendFrame = sinon.spy()
         @sut.authedDevice = {}

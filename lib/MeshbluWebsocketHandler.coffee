@@ -75,7 +75,7 @@ class MeshbluWebsocketHandler extends EventEmitter
 
   devices: (data) =>
     debug 'devices', data
-    @getDevices @authedDevice, data, null, (foundDevices) =>
+    @getDevices @authedDevice, data, null, (error, foundDevices) =>
       @log 'devices', foundDevices.error?, request: data, error: foundDevices.error?.message, fromUuid: @authedDevice.uuid
       @sendFrame 'devices', foundDevices
 
@@ -96,7 +96,7 @@ class MeshbluWebsocketHandler extends EventEmitter
 
   mydevices: (data={}) =>
     data.owner = @uuid
-    @getDevices @authedDevice, data, null, (result) =>
+    @getDevices @authedDevice, data, null, (error, result) =>
       {error,devices} = result
 
       error = null if error?.message == "Devices not found"

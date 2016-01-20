@@ -13,19 +13,6 @@ describe 'MessageWebhook', ->
     @dependencies = {@request, @generateAndStoreToken, @revokeToken, @device}
 
   describe '->send', ->
-    describe 'when instantiated without a type', ->
-      beforeEach ->
-        options =
-          uuid: @deviceRecord.uuid
-          options: url: 'http://google.com'
-
-        @sut = new MessageWebhook options, @dependencies
-        @sut.send foo: 'bar', (@error) =>
-
-      it 'should get error', ->
-        expect(@error).to.exist
-        expect(@error.message).to.deep.equal 'Invalid webhook configuration: type is required'
-
     describe 'when instantiated with a url', ->
       beforeEach ->
         options =

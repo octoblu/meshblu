@@ -95,3 +95,8 @@ if (program.mqtt) {
   var mqttServer = require('./lib/mqttServer')(config, parentConnection);
   console.log(' done.');
 }
+
+process.on('SIGTERM', function(){
+  console.log('SIGTERM caught, exiting');
+  process.exit(0);
+})

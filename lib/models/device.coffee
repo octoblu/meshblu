@@ -24,6 +24,12 @@ class Device
     @set attributes
     {@uuid} = attributes
 
+  fatalIfNoPrimary: (error) =>
+    return unless error?
+    return unless /ECONNREFUSED/.test(error.message) || /no primary server available/.test(error.message)
+    console.error 'FATAL: database error', error
+    process.exit 1
+
   addGeo: (callback=->) =>
     return _.defer callback unless @attributes.ipAddress?
 
@@ -65,6 +71,7 @@ class Device
           return callback null, device
 
         @devices.findOne uuid: uuid, {_id: false}, (error, device) =>
+          @fatalIfNoPrimary error
           @fetch.cache = device
           return callback error if error?
           return callback new Error('Device not found') unless device?
@@ -224,6 +231,7 @@ class Device
       debug 'update', uuid, params
 
       @devices.update uuid: uuid, params, (error, result) =>
+        @fatalIfNoPrimary error
         return callback @sanitizeError(error) if error?
 
         @clearCache uuid, =>
@@ -248,6 +256,7 @@ class Device
       return callback error if error?
       debug '_hashDevice', uuid
       @devices.findOne uuid: uuid, (error, data) =>
+        @fatalIfNoPrimary error
         return callback error if error?
         delete data.meshblu.hash if data?.meshblu?.hash
         @_hashToken JSON.stringify(data), (error, hashedToken) =>
@@ -255,7 +264,9 @@ class Device
           params = $set :
             'meshblu.hash': hashedToken
           debug 'updating hash', uuid, params
-          @devices.update uuid: uuid, params, callback
+          @devices.update uuid: uuid, params, (error) =>
+            @fatalIfNoPrimary error
+            callback arguments...
 
   _hashToken: (token, callback) =>
     @_lookupAlias @uuid, (error, uuid) =>
@@ -271,7 +282,7 @@ class Device
 
   _sendConfig: (options, callback) =>
     {forwardedFor} = options
-    
+
     @fetch (error, config) =>
       return callback error if error?
       @_lookupAlias @uuid, (error, uuid) =>

@@ -1,7 +1,7 @@
 {
   "name": "meshblu-server",
   "description": "communications platform and api for iot",
-  "version": "1.17.13",
+  "version": "1.18.0",
   "author": "Octoblu, Inc.",
   "dependencies": {
     "@octoblu/redis-ns": "^0.1.1",

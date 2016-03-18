@@ -1,3 +1,0 @@
-proxy=http://172.17.0.6:80/
-https-proxy=http://172.17.0.6:80/
-strict-ssl=false

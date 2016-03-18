@@ -1,0 +1,14 @@
+FROM node:0.10
+MAINTAINER Octoblu, Inc. <docker@octoblu.com>
+
+EXPOSE 80
+ENV NODE_TLS_REJECT_UNAUTHORIZED 0
+#ADD npmrc-dev /root/.npmrc
+WORKDIR /usr/src/app
+
+ADD package.json /usr/src/app/
+RUN npm install --production --silent
+
+ADD . /usr/src/app
+
+CMD node --max-old-space-size=300 server.js --http

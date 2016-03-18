@@ -477,8 +477,8 @@ describe 'Device', ->
             done()
 
       describe 'when called with an increment operator', ->
-        beforeEach ->
-          @sut.update $inc: {pigeonCount: 1}
+        beforeEach (done) ->
+          @sut.update $inc: {pigeonCount: 1}, done
 
         it 'should increment the pigeon count', (done) ->
           @devices.findOne uuid: 'my-device', (error, device) =>

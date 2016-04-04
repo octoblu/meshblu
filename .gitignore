@@ -22,3 +22,4 @@ meshblu.json
 test-forwarded-for.sh
 # dev files
 .*-dev
+*.dockerfile-dev

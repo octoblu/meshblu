@@ -16,6 +16,8 @@ In order to run a barebones meshblu-core cluster, you'll need the following repo
 1. [meshblu-core-worker-webhook](https://github.com/octoblu/meshblu-core-worker-webhook)
 1. [meshblu-core-protocol-adapter-http](https://github.com/octoblu/meshblu-core-protocol-adapter-http)
 
+For development use, you can run the bundled barebones cluster, run `node command.js --help`. See `./test-start.sh` in this repository for example usage.
+
 We require `mongodb` and `redis` to run `meshblu-core`.
 
 ## Documentation

@@ -1,0 +1,21 @@
+{
+  "name": "meshblu",
+  "version": "1.0.0",
+  "description": "A bundled version of meshblu-core",
+  "main": "command.js",
+  "repository": {
+    "url": "git@github.com:octoblu/meshblu.git",
+    "type": "git"
+  },
+  "author": "Octoblu, Inc <npm@octoblu.com>",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.1.2",
+    "dashdash": "^1.14.0",
+    "debug": "^2.3.2",
+    "meshblu-core-dispatcher": "^10.7.0",
+    "meshblu-core-protocol-adapter-http": "^3.22.0",
+    "meshblu-core-worker-webhook": "^3.2.1",
+    "sigterm-handler": "^2.0.0"
+  }
+}

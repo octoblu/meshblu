@@ -14,6 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "async": "^2.1.2",
+    "coffee-script": "^1.11.1",
     "dashdash": "^1.14.0",
     "debug": "^2.3.2",
     "meshblu-core-dispatcher": "^10.7.0",

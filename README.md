@@ -50,14 +50,7 @@ node command.js --help
 env \
   PRIVATE_KEY_BASE64="..." \
   PUBLIC_KEY_BASE64="..." \
-  NAMESPACE='meshblu-test' \
-  FIREHOSE_REDIS_URI='localhost:6379' \
   TOKEN='meshblu-test-pepper' \
-  REDIS_URI='localhost:6379' \
-  JOB_LOG_REDIS_URI='localhost:6379' \
-  JOB_LOG_QUEUE='meshblu-core-log' \
-  JOB_LOG_SAMPLE_RATE='1.00' \
-  MONGODB_URI='meshblu-test-db' \
   MESHBLU_HTTP_PORT='3000' \
   node command.js
 ```

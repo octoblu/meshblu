@@ -36,19 +36,22 @@ options = [
     name: 'redis-uri'
     type: 'string'
     help: 'URI for Redis'
-    env: 'REDIS_URI'
+    env: 'REDIS_URI',
+    default: 'redis://localhost:6379'
   }
   {
     name: 'firehose-redis-uri'
     type: 'string'
     help: 'URI for Firehose redis'
     env: 'FIREHOSE_REDIS_URI'
+    default: 'redis://localhost:6379'
   }
   {
     name: 'mongodb-uri'
     type: 'string'
     help: 'URI for MongoDB'
     env: 'MONGODB_URI'
+    default: 'mongodb://localhost:27017/meshblu-test'
   }
   {
     name: 'pepper'
@@ -73,18 +76,21 @@ options = [
     type: 'string'
     help: 'URI for job log Redis'
     env: 'JOB_LOG_REDIS_URI'
+    default: 'redis://localhost:6379'
   }
   {
     name: 'job-log-queue'
     type: 'string'
     help: 'Job log queue name'
     env: 'JOB_LOG_QUEUE'
+    default: 'meshblu-core-log'
   }
   {
     name: 'job-log-sample-rate'
     type: 'number'
     help: 'Job log sample rate (0.00 to 1.00)'
     env: 'JOB_LOG_SAMPLE_RATE'
+    default: '0.00'
   }
   {
     name: 'job-timeout-seconds'

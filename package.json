@@ -7,6 +7,9 @@
     "url": "git@github.com:octoblu/meshblu.git",
     "type": "git"
   },
+  "scripts": {
+    "start": "node command.js"
+  },
   "author": "Octoblu, Inc <npm@octoblu.com>",
   "license": "MIT",
   "dependencies": {

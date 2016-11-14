@@ -6,19 +6,82 @@ Meshblu is a cross-protocol IoT machine-to-machine messaging system.
 
 ## Deprecation Notice
 
-We have completely re-written Meshblu into many small components and we no longer support this repository.
+We have completely re-written Meshblu into many small components and we no longer support this repository for production use.
 
 All of the new Meshblu components are prefixed with `meshblu-core`. See a list [here](https://github.com/octoblu?utf8=%E2%9C%93&query=meshblu-core).
 
-In order to run a barebones meshblu-core cluster, you'll need the following repositories.
+Meshblu is dependent on `node`, `redis`, `mongodb`, and either `npm` or `yarn`.
+
+### Production
+
+In order to run a barebones `meshblu-core` cluster, you'll need the following repositories.
 
 1. [meshblu-core-dispatcher](https://github.com/octoblu/meshblu-core-dispatcher)
 1. [meshblu-core-worker-webhook](https://github.com/octoblu/meshblu-core-worker-webhook)
 1. [meshblu-core-protocol-adapter-http](https://github.com/octoblu/meshblu-core-protocol-adapter-http)
 
-For development use, you can run the bundled barebones cluster, run `node command.js --help`. See `./test-start.sh` in this repository for example usage.
+All `meshblu-core` services and workers have a `Dockerfile`.
 
-We require `mongodb` and `redis` to run `meshblu-core`.
+### Development
+
+For development use, you can run the bundled barebones cluster:
+
+#### Installation
+
+```bash
+git clone https://github.com/octoblu/meshblu
+cd meshblu
+yarn install
+```
+
+#### See Usage
+
+```bash
+node command.js --help
+```
+
+#### Basic Example
+
+```bash
+#!/bin/bash
+
+# For development usage only
+
+env \
+  PRIVATE_KEY_BASE64="..." \
+  PUBLIC_KEY_BASE64="..." \
+  NAMESPACE='meshblu-test' \
+  FIREHOSE_REDIS_URI='localhost:6379' \
+  TOKEN='meshblu-test-pepper' \
+  REDIS_URI='localhost:6379' \
+  JOB_LOG_REDIS_URI='localhost:6379' \
+  JOB_LOG_QUEUE='meshblu-core-log' \
+  JOB_LOG_SAMPLE_RATE='1.00' \
+  MONGODB_URI='meshblu-test-db' \
+  MESHBLU_HTTP_PORT='3000' \
+  node command.js
+```
+
+See `./test-start.sh`
+
+#### Debug Mode
+
+It is normal not see any debug output by default. If you want to see debug output, use the environment `DEBUG=*`, or something more specific, like `DEBUG=meshblu*`.
+
+#### Using it
+
+```bash
+# Install the meshblu cli utility
+npm install --global meshblu-util
+# Register a device
+meshblu-util register -U http://localhost:3000 > meshblu.json
+# Fetch the device
+meshblu-util get
+# Update the device
+meshblu-util update -d '{"type": "some-device"}'
+# Fetch the updated device
+meshblu-util get
+```
 
 ## Documentation
 

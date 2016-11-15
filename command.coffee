@@ -182,7 +182,8 @@ meshbluConfig =
   port:     opts.meshblu_http_port
   protocol: 'http'
 
-opts.pepper ?= process.env.TOKEN
+opts.pepper ||= process.env.TOKEN
+
 options = {
   dispatcherWorker:
     namespace:           opts.namespace

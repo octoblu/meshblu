@@ -96,7 +96,7 @@ You can register a new IoT device by running:
 curl -X POST http://localhost:3000/devices
 ````
 
-You should see Meshblu 2.0 respond with a UUID and Token like this:
+You should see Meshblu 2.0 respond with an authentication UUID and Token as well as the device's security whitelist settings like this:
 
 ````
 { online: false,

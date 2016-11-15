@@ -40,7 +40,7 @@ yarn install
 node command.js --help
 ```
 
-#### Basic Example
+#### Basic Example w/ env
 
 ```bash
 #!/bin/bash
@@ -50,12 +50,26 @@ node command.js --help
 env \
   PRIVATE_KEY_BASE64="..." \
   PUBLIC_KEY_BASE64="..." \
-  TOKEN='meshblu-test-pepper' \
+  PEPPER='some-random-string' \
   MESHBLU_HTTP_PORT='3000' \
   node command.js
 ```
 
 See `./test-start.sh`
+
+#### Basic Example w/ args
+
+```bash
+#!/bin/bash
+
+# For development usage only
+
+node command.js \
+  --private-key-base64 '...' \
+  --public-key-base64 '...' \
+  --pepper 'some-other-random-string' \
+  --meshblu-http-port 3000
+```
 
 #### Debug Mode
 

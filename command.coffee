@@ -57,7 +57,7 @@ options = [
     name: 'pepper'
     type: 'string'
     help: 'Pepper for encryption'
-    env: 'TOKEN'
+    env: 'PEPPER'
   }
   {
     name: 'alias-server-uri'
@@ -182,6 +182,7 @@ meshbluConfig =
   port:     opts.meshblu_http_port
   protocol: 'http'
 
+opts.pepper ?= process.env.TOKEN
 options = {
   dispatcherWorker:
     namespace:           opts.namespace

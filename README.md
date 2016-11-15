@@ -6,7 +6,7 @@ Meshblu is a cross-protocol IoT machine-to-machine messaging system.
 
 ## Welcome to Meshblu 2.0
 
-We have completely re-written Meshblu into many small components and we no longer support this repository for production use.
+We have completely re-written Meshblu into many small components or micro-services. This Meshblu 1.0 repository is being preserved for historical reference.
 
 All of the new Meshblu components are prefixed with `meshblu-core`. See a list [here](https://github.com/octoblu?utf8=%E2%9C%93&query=meshblu-core).
 
@@ -33,7 +33,7 @@ For development use, you can run the bundled barebones cluster:
 ```bash
 git clone https://github.com/octoblu/meshblu
 cd meshblu
-yarn install
+npm install
 ```
 
 #### See Usage

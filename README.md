@@ -1,16 +1,16 @@
 # Meshblu
 
-Meshblu is a cross-protocol IoT machine-to-machine messaging system.
+Meshblu is a cross-protocol IoT machine-to-machine instant messaging system. It is the core messaging system for Citrix's [Octoblu](https://octoblu.com) IoT platform.
 
-**Supported Protocols:** HTTP, Socket.io, Websocket, MQTT, AMQP, and XMPP.
+**Supported Protocols:** HTTP, Socket.io, Websocket, MQTT, CoAP, AMQP, and XMPP.
 
-## Welcome to Meshblu 2.0
+## Version 2.0
 
 We have completely re-written Meshblu into many small components or micro-services. This Meshblu 1.0 repository is being preserved for historical reference.
 
 All of the new Meshblu components are prefixed with `meshblu-core`. See a list [here](https://github.com/octoblu?utf8=%E2%9C%93&query=meshblu-core).
 
-Meshblu is dependent on `node`, `redis`, `mongodb`, and either `npm` or `yarn`.
+Meshblu is dependent on `node.js`, `redis`, `mongodb`, and either `npm` or `yarn`.
 
 ### Production
 
@@ -22,7 +22,7 @@ In order to run a barebones `meshblu-core` cluster, you'll need the following re
 
 All `meshblu-core` services and workers have a `Dockerfile`.
 
-A production Meshblu cluster will consist of many services and workers. We currently don't have documentation for running a complex cluster.
+A production Meshblu cluster will consist of many services and workers. We currently don't have documentation for running a complex cluster but we are working on it.
 
 ### Development
 
@@ -77,7 +77,49 @@ node command.js \
 
 It is normal not see any debug output by default. If you want to see debug output, use the environment `DEBUG=*`, or something more specific, like `DEBUG=meshblu*`.
 
-#### Using it
+#### It's Alive!
+
+To verify that Meshblu 2.0 is alive and well, open [http://localhost:3000/status](http://localhost:3000/status) in a web browser or open a new terminal tab and run:
+
+````
+curl http://localhost:3000/status
+````
+You should see Meshblu 2.0 respond with:
+
+````
+{"meshblu":"online"}
+````
+
+You can register a new IoT device by running:
+
+````
+curl -X POST http://localhost:3000/devices
+````
+
+You should see Meshblu 2.0 respond with a UUID and Token like this:
+
+````
+{ online: false,
+  discoverWhitelist: [ '*' ],
+  configureWhitelist: [ '*' ],
+  sendWhitelist: [ '*' ],
+  receiveWhitelist: [ '*' ],
+  uuid: 'b112c941-7973-4e2b-8dbe-b7bba27ae199',
+  meshblu:
+   { createdAt: '2016-11-15T16:07:07.801Z',
+     hash: 'Dy5NlIlmygrrnhp0Cln+zb77nHlYdobc+HwbRVzWdPs=' },
+  _id: '582b32ab67899618f48c2e1b',
+  token: 'd5bcf1a57f4ccefa0ecdc672c7090e7949cc8244' }
+````
+
+#### Meshblu API Documentation
+
+Checkout our [developer docs](http://developer.octoblu.com) for more information on our HTTP REST API as well as documentation for all other protocol APIs, security whitelists and blacklists, connectors, data forwarders, and overall Meshblu architecture.
+
+
+#### Introducing the Meshblu CLI
+
+We have a convenient command line interface for simplifying the interaction with the Meshblu API.
 
 ```bash
 # Install the meshblu cli utility
@@ -92,9 +134,6 @@ meshblu-util update -d '{"type": "some-device"}'
 meshblu-util get
 ```
 
-## Documentation
-
-See our [Developer Hub](https://developer.octoblu.com).
 
 ## List of `meshblu-core` components
 
@@ -256,6 +295,6 @@ See our [Developer Hub](https://developer.octoblu.com).
 
 1. [meshblu-util](https://github.com/octoblu/meshblu-util)
 
-## Legacy Meshblu
+## Legacy Meshblu 1.x
 
 View it [here](https://github.com/octoblu/meshblu/blob/legacy-meshblu/README.md)

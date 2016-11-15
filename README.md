@@ -4,7 +4,7 @@ Meshblu is a cross-protocol IoT machine-to-machine messaging system.
 
 **Supported Protocols:** HTTP, Socket.io, Websocket, MQTT, AMQP, and XMPP.
 
-## Deprecation Notice
+## Welcome to Meshblu 2.0
 
 We have completely re-written Meshblu into many small components and we no longer support this repository for production use.
 
@@ -21,6 +21,8 @@ In order to run a barebones `meshblu-core` cluster, you'll need the following re
 1. [meshblu-core-protocol-adapter-http](https://github.com/octoblu/meshblu-core-protocol-adapter-http)
 
 All `meshblu-core` services and workers have a `Dockerfile`.
+
+A production Meshblu cluster will consist of many services and workers. We currently don't have documentation for running a complex cluster.
 
 ### Development
 

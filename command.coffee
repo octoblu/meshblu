@@ -1,4 +1,5 @@
 dashdash          = require 'dashdash'
+UUID              = require 'uuid'
 MeshbluCoreRunner = require './src/meshblu-core-runner'
 packageJSON       = require './package.json'
 SigtermHandler    = require 'sigterm-handler'
@@ -22,6 +23,20 @@ options = [
     env: 'NAMESPACE'
   }
   {
+    names: ['request-queue-name']
+    type: 'string'
+    help: 'request queue namespace'
+    default: 'v2:request:queue'
+    env: 'REQUEST_QUEUE_NAME'
+  }
+  {
+    names: ['response-queue-base-name']
+    type: 'string'
+    help: 'response queue base namespace'
+    default: 'v2:response:queue'
+    env: 'RESPONSE_QUEUE_BASE_NAME'
+  }
+  {
     names: ['single-run', 's']
     type: 'bool'
     help: 'perform only one job, then exit'
@@ -37,6 +52,13 @@ options = [
     type: 'string'
     help: 'URI for Redis'
     env: 'REDIS_URI',
+    default: 'redis://localhost:6379'
+  }
+  {
+    name: 'cache-redis-uri'
+    type: 'string'
+    help: 'Cache URI for Redis'
+    env: 'CACHE_REDIS_URI',
     default: 'redis://localhost:6379'
   }
   {
@@ -187,8 +209,10 @@ opts.pepper ||= process.env.TOKEN
 options = {
   dispatcherWorker:
     namespace:           opts.namespace
+    requestQueueName:    opts.request_queue_name
     timeoutSeconds:      opts.timeout
     redisUri:            opts.redis_uri
+    cacheRedisUri:       opts.cache_redis_uri
     firehoseRedisUri:    opts.firehose_redis_uri
     mongoDBUri:          opts.mongodb_uri
     pepper:              opts.pepper
@@ -201,14 +225,18 @@ options = {
     publicKey:           publicKey
     singleRun:           opts.single_run
   meshbluHttp:
-    redisUri:            opts.redis_uri
-    namespace:           opts.namespace
-    jobLogRedisUri:      opts.job_log_redis_uri
-    jobLogQueue:         opts.job_log_queue
-    jobLogSampleRate:    opts.job_log_sample_rate
-    jobTimeoutSeconds:   opts.job_timeout_seconds
-    maxConnections:      opts.max_connections
-    port:                opts.meshblu_http_port
+    redisUri:              opts.redis_uri
+    cacheRedisUri:         opts.cache_redis_uri
+    requestQueueName:      opts.request_queue_name
+    responseQueueName:     "#{opts.responseQueueBaseName}:#{UUID.v1()}"
+    responseQueueBaseName: opts.response_queue_base_name
+    namespace:             opts.namespace
+    jobLogRedisUri:        opts.job_log_redis_uri
+    jobLogQueue:           opts.job_log_queue
+    jobLogSampleRate:      opts.job_log_sample_rate
+    jobTimeoutSeconds:     opts.job_timeout_seconds
+    maxConnections:        opts.max_connections
+    port:                  opts.meshblu_http_port
   webhookWorker:
     namespace:           opts.webhook_namespace
     redisUri:            opts.redis_uri

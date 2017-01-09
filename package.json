@@ -1,6 +1,6 @@
 {
   "name": "meshblu",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A bundled version of meshblu-core",
   "main": "command.js",
   "repository": {
@@ -17,9 +17,9 @@
     "coffee-script": "^1.11.1",
     "dashdash": "^1.14.0",
     "debug": "^2.3.2",
-    "meshblu-core-dispatcher": "^10.7.0",
-    "meshblu-core-protocol-adapter-http": "^3.22.0",
-    "meshblu-core-worker-webhook": "^3.2.1",
+    "meshblu-core-dispatcher": "^13.0.0",
+    "meshblu-core-protocol-adapter-http": "^5.3.1",
+    "meshblu-core-worker-webhook": "^4.0.1",
     "sigterm-handler": "^2.0.0"
   }
 }

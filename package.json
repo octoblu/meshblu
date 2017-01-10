@@ -1,6 +1,6 @@
 {
   "name": "meshblu-server",
-  "version": "3.1.3",
+  "version": "3.1.4",
   "description": "A bundled version of meshblu-core",
   "main": "index.js",
   "repository": {

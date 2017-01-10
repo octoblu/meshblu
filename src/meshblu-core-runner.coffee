@@ -15,17 +15,25 @@ class MeshbluCoreRunner extends EventEmitter
     debug '->catchErrors'
     @dispatcherWorker.catchErrors()
 
-  reportError: =>
-    debug '->reportError'
-    @dispatcherWorker.reportError arguments...
+  destroy: (callback) =>
+    debug '->destroy'
+    async.parallel [
+      @meshbluHttp.destroy,
+      @dispatcherWorker.stop
+      @webhookWorker.stop
+    ], callback
 
   prepare: (callback) =>
     debug '->prepare'
     @dispatcherWorker.prepare(callback)
 
+  reportError: =>
+    debug '->reportError'
+    @dispatcherWorker.reportError arguments...
+
   stop: (callback) =>
     debug '->stop'
-    async.series [
+    async.parallel [
       @meshbluHttp.stop,
       @dispatcherWorker.stop
       @webhookWorker.stop

@@ -1,10 +1,6 @@
 language: node_js
 node_js:
 - '7'
-before_install:
-- npm install --global yarn
-install:
-- yarn install
 deploy:
   provider: npm
   email: serveradmin@octoblu.com

@@ -1,15 +1,19 @@
 {
-  "name": "meshblu",
-  "version": "3.1.0",
+  "name": "meshblu-server",
+  "version": "3.1.1",
   "description": "A bundled version of meshblu-core",
   "main": "index.js",
   "repository": {
     "url": "git@github.com:octoblu/meshblu.git",
     "type": "git"
   },
+  "bin": {
+    "meshblu": "./command.js"
+  },
   "scripts": {
     "start": "node command.js",
-    "start:profile": "node --trace-sync-io command.js"
+    "start:profile": "node --trace-sync-io command.js",
+    "test": "echo 'No Tests :-('"
   },
   "author": "Octoblu, Inc <npm@octoblu.com>",
   "license": "MIT",

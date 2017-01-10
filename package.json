@@ -1,8 +1,8 @@
 {
   "name": "meshblu",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "A bundled version of meshblu-core",
-  "main": "command.js",
+  "main": "index.js",
   "repository": {
     "url": "git@github.com:octoblu/meshblu.git",
     "type": "git"

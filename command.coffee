@@ -256,7 +256,7 @@ sigtermHandler = new SigtermHandler({ events: ['SIGTERM', 'SIGINT'] })
 sigtermHandler.register meshbluCoreRunner.stop
 
 meshbluCoreRunner.catchErrors()
-
+meshbluCoreRunner.on 'error', (error) -> throw error
 meshbluCoreRunner.prepare (error) =>
   if error
     meshbluCoreRunner.reportError error
@@ -268,4 +268,3 @@ meshbluCoreRunner.prepare (error) =>
       meshbluCoreRunner.reportError error
       console.error error.stack
       process.exit 1
-    process.exit 0

@@ -1,10 +1,11 @@
 async            = require('async')
+{EventEmitter}   = require 'events'
 DispatcherWorker = require('meshblu-core-dispatcher')
 MeshbluHttp      = require('meshblu-core-protocol-adapter-http')
 WebhookWorker    = require('meshblu-core-worker-webhook')
 debug            = require('debug')('meshblu:meshblu-core-runner')
 
-class MeshbluCoreRunner
+class MeshbluCoreRunner extends EventEmitter
   constructor: (options) ->
     @dispatcherWorker = new DispatcherWorker options.dispatcherWorker
     @meshbluHttp      = new MeshbluHttp options.meshbluHttp
@@ -32,10 +33,12 @@ class MeshbluCoreRunner
 
   run: (callback) =>
     debug '->run'
-    async.parallel [
-      @meshbluHttp.run,
-      @dispatcherWorker.run,
-      @webhookWorker.run,
-    ], callback
+    @dispatcherWorker.run (error) =>
+      @emit 'error', error if error?
+
+    @webhookWorker.run (error) =>
+      @emit 'error', error if error?
+
+    @meshbluHttp.run callback
 
 module.exports = MeshbluCoreRunner

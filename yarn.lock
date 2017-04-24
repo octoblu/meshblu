@@ -19,6 +19,13 @@ accepts@~1.3.3:
     mime-types "~2.1.11"
     negotiator "0.6.1"
 
+ajv@^4.9.1:
+  version "4.11.7"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-4.11.7.tgz#8655a5d86d0824985cc471a1d913fb6729a0ec48"
+  dependencies:
+    co "^4.6.0"
+    json-stable-stringify "^1.0.1"
+
 align-text@^0.1.1, align-text@^0.1.3:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/align-text/-/align-text-0.1.4.tgz#0cd90a561093f35d0a99256c22b7069433fad117"
@@ -95,13 +102,13 @@ async@1.x, async@^1.4.0, async@^1.4.2, async@^1.5.0, async@^1.5.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
 
-async@2.0.0-rc.6:
-  version "2.0.0-rc.6"
-  resolved "https://registry.yarnpkg.com/async/-/async-2.0.0-rc.6.tgz#978fc4155d1fc30b8b58fc3f020102b2da02f2a4"
+async@^2.0.0-rc.2, async@^2.0.0-rc.3, async@^2.2.0, async@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/async/-/async-2.3.0.tgz#1013d1051047dd320fe24e494d5c66ecaf6147d9"
   dependencies:
-    lodash "^4.8.0"
+    lodash "^4.14.0"
 
-async@^2.0.0-rc.2, async@^2.0.0-rc.3, async@^2.0.0-rc.5, async@^2.0.1, async@^2.1.2, async@^2.1.4:
+async@^2.0.0-rc.5, async@^2.0.1:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/async/-/async-2.1.4.tgz#2d2160c7788032e4dd6cbe2502f1f9a2c8f6cde4"
   dependencies:
@@ -197,9 +204,9 @@ balanced-match@^0.4.1:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-0.4.2.tgz#cb3f3e3c732dc0f01ee70b403f302e61d7709838"
 
-basic-auth@~1.0.3:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/basic-auth/-/basic-auth-1.0.4.tgz#030935b01de7c9b94a824b29f3fccb750d3a5290"
+basic-auth@~1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/basic-auth/-/basic-auth-1.1.0.tgz#45221ee429f7ee1e5035be3f51533f1cdfd29884"
 
 bcrypt-pbkdf@^1.0.0:
   version "1.0.0"
@@ -222,20 +229,20 @@ bluebird@^3.3.4:
   version "3.4.7"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.4.7.tgz#f72d760be09b7f76d08ed8fae98b289a8d05fab3"
 
-body-parser@^1.15.2:
-  version "1.15.2"
-  resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.15.2.tgz#d7578cf4f1d11d5f6ea804cef35dc7a7ff6dae67"
+body-parser@^1.17.0:
+  version "1.17.1"
+  resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.17.1.tgz#75b3bc98ddd6e7e0d8ffe750dfaca5c66993fa47"
   dependencies:
     bytes "2.4.0"
     content-type "~1.0.2"
-    debug "~2.2.0"
+    debug "2.6.1"
     depd "~1.1.0"
-    http-errors "~1.5.0"
-    iconv-lite "0.4.13"
+    http-errors "~1.6.1"
+    iconv-lite "0.4.15"
     on-finished "~2.3.0"
-    qs "6.2.0"
-    raw-body "~2.1.7"
-    type-is "~1.6.13"
+    qs "6.4.0"
+    raw-body "~2.2.0"
+    type-is "~1.6.14"
 
 boom@2.x.x:
   version "2.10.1"
@@ -298,6 +305,10 @@ caseless@~0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.11.0.tgz#715b96ea9841593cc33067923f5ec60ebda4f7d7"
 
+caseless@~0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
+
 center-align@^0.1.1:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/center-align/-/center-align-0.1.3.tgz#aa0d32629b6ee972200411cbd4461c907bc2b7ad"
@@ -347,6 +358,10 @@ cluster-key-slot@^1.0.6:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/cluster-key-slot/-/cluster-key-slot-1.0.8.tgz#7654556085a65330932a2e8b5976f8e2d0b3e414"
 
+co@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
+
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
@@ -364,6 +379,10 @@ coffee-coverage@^1.0.1:
 coffee-script@>=1.6.2, coffee-script@^1.10.0, coffee-script@^1.11.1, coffee-script@^1.12.2, coffee-script@^1.9.1, coffee-script@^1.9.2:
   version "1.12.2"
   resolved "https://registry.yarnpkg.com/coffee-script/-/coffee-script-1.12.2.tgz#0d4cbdee183f650da95419570c4929d08ef91376"
+
+coffee-script@^1.12.4, coffee-script@^1.12.5:
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/coffee-script/-/coffee-script-1.12.5.tgz#809f4585419112bbfe46a073ad7543af18c27346"
 
 colors@^1.1.2:
   version "1.1.2"
@@ -414,9 +433,9 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
 
-content-disposition@0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/content-disposition/-/content-disposition-0.5.1.tgz#87476c6a67c8daa87e32e87616df883ba7fb071b"
+content-disposition@0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/content-disposition/-/content-disposition-0.5.2.tgz#0cf68bb9ddf5f2be7961c3a85178cb85dba78cb4"
 
 content-type@~1.0.2:
   version "1.0.2"
@@ -483,7 +502,19 @@ debug@2.2.0, debug@~2.2.0:
   dependencies:
     ms "0.7.1"
 
-debug@^2.1.3, debug@^2.2.0, debug@^2.3.2, debug@^2.3.3, debug@^2.5.1, debug@^2.6.0:
+debug@2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.1.tgz#79855090ba2c4e3115cc7d8769491d58f0491351"
+  dependencies:
+    ms "0.7.2"
+
+debug@2.6.4, debug@^2.6.4:
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.4.tgz#7586a9b3c39741c0282ae33445c4e8ac74734fe0"
+  dependencies:
+    ms "0.7.3"
+
+debug@^2.1.3, debug@^2.2.0, debug@^2.5.1:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.0.tgz#bc596bcabe7617f11d9fa15361eded5608b8499b"
   dependencies:
@@ -513,7 +544,7 @@ delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
 
-depd@~1.1.0:
+depd@1.1.0, depd@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.0.tgz#e1bd82c6aab6ced965b97b88b17ed3e528ca18c3"
 
@@ -559,6 +590,13 @@ error-ex@^1.2.0:
   dependencies:
     is-arrayish "^0.2.1"
 
+errorhandler@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/errorhandler/-/errorhandler-1.5.0.tgz#eaba64ca5d542a311ac945f582defc336165d9f4"
+  dependencies:
+    accepts "~1.3.3"
+    escape-html "~1.0.3"
+
 es6-promise@3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-3.2.1.tgz#ec56233868032909207170c39448e24449dd1fc4"
@@ -594,9 +632,9 @@ esutils@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.2.tgz#0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
 
-etag@~1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/etag/-/etag-1.7.0.tgz#03d30b5f67dd6e632d2945d30d6652731a34d5d8"
+etag@~1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.0.tgz#6f631aef336d6c46362b51764044ce216be3c051"
 
 expand-brackets@^0.1.4:
   version "0.1.5"
@@ -616,20 +654,20 @@ express-meshblu-healthcheck@^1.0.1:
   dependencies:
     coffee-script "^1.9.1"
 
-express-octoblu@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/express-octoblu/-/express-octoblu-2.0.0.tgz#0229e904b03849abe028681ab5b06fcc8d91eaa4"
+express-octoblu@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/express-octoblu/-/express-octoblu-3.0.1.tgz#fb3afb3a2fa58efe3f380f2f419943d9f4d11f60"
   dependencies:
-    body-parser "^1.15.2"
-    coffee-script "^1.12.2"
+    body-parser "^1.17.0"
+    coffee-script "^1.12.4"
     compression "^1.6.2"
     cors "^2.8.0"
-    express "^4.14.0"
+    express "^4.15.0"
     express-meshblu-healthcheck "^1.0.1"
     express-package-version "0.0.2"
-    morgan "^1.7.0"
-    octoblu-raven "^4.1.0"
-    serve-favicon "^2.3.0"
+    morgan "^1.8.1"
+    octoblu-raven "^5.0.0"
+    serve-favicon "^2.4.1"
 
 express-package-version@0.0.2:
   version "0.0.2"
@@ -637,34 +675,36 @@ express-package-version@0.0.2:
   dependencies:
     own-version "0.0.2"
 
-express@^4.14.0:
-  version "4.14.0"
-  resolved "https://registry.yarnpkg.com/express/-/express-4.14.0.tgz#c1ee3f42cdc891fb3dc650a8922d51ec847d0d66"
+express@^4.15.0:
+  version "4.15.2"
+  resolved "https://registry.yarnpkg.com/express/-/express-4.15.2.tgz#af107fc148504457f2dca9a6f2571d7129b97b35"
   dependencies:
     accepts "~1.3.3"
     array-flatten "1.1.1"
-    content-disposition "0.5.1"
+    content-disposition "0.5.2"
     content-type "~1.0.2"
     cookie "0.3.1"
     cookie-signature "1.0.6"
-    debug "~2.2.0"
+    debug "2.6.1"
     depd "~1.1.0"
     encodeurl "~1.0.1"
     escape-html "~1.0.3"
-    etag "~1.7.0"
-    finalhandler "0.5.0"
-    fresh "0.3.0"
+    etag "~1.8.0"
+    finalhandler "~1.0.0"
+    fresh "0.5.0"
     merge-descriptors "1.0.1"
     methods "~1.1.2"
     on-finished "~2.3.0"
     parseurl "~1.3.1"
     path-to-regexp "0.1.7"
-    proxy-addr "~1.1.2"
-    qs "6.2.0"
+    proxy-addr "~1.1.3"
+    qs "6.4.0"
     range-parser "~1.2.0"
-    send "0.14.1"
-    serve-static "~1.11.1"
-    type-is "~1.6.13"
+    send "0.15.1"
+    serve-static "1.12.1"
+    setprototypeof "1.0.3"
+    statuses "~1.3.1"
+    type-is "~1.6.14"
     utils-merge "1.0.0"
     vary "~1.1.0"
 
@@ -700,14 +740,16 @@ fill-range@^2.1.0:
     repeat-element "^1.1.2"
     repeat-string "^1.5.2"
 
-finalhandler@0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/finalhandler/-/finalhandler-0.5.0.tgz#e9508abece9b6dba871a6942a1d7911b91911ac7"
+finalhandler@~1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/finalhandler/-/finalhandler-1.0.2.tgz#d0e36f9dbc557f2de14423df6261889e9d60c93a"
   dependencies:
-    debug "~2.2.0"
+    debug "2.6.4"
+    encodeurl "~1.0.1"
     escape-html "~1.0.3"
     on-finished "~2.3.0"
-    statuses "~1.3.0"
+    parseurl "~1.3.1"
+    statuses "~1.3.1"
     unpipe "~1.0.0"
 
 find-cache-dir@^0.1.1:
@@ -768,9 +810,9 @@ forwarded@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.0.tgz#19ef9874c4ae1c297bcf078fde63a09b66a84363"
 
-fresh@0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.3.0.tgz#651f838e22424e7566de161d8358caa199f83d4f"
+fresh@0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.0.tgz#f474ca5e6a9246d6fd8e0953cfa9b9c805afa78e"
 
 fs-cson@^0.3.2:
   version "0.3.2"
@@ -803,9 +845,9 @@ generate-object-property@^1.1.0:
   dependencies:
     is-property "^1.0.0"
 
-generic-pool@3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/generic-pool/-/generic-pool-3.1.4.tgz#38816268c374fd3aa731d5a1b9bde8fec4bcef92"
+generic-pool@^3.1.7:
+  version "3.1.7"
+  resolved "https://registry.yarnpkg.com/generic-pool/-/generic-pool-3.1.7.tgz#dac22b2c7a7a04e41732f7d8d2d25a303c88f662"
 
 get-caller-file@^1.0.1:
   version "1.0.2"
@@ -884,6 +926,10 @@ handlebars@^4.0.1, handlebars@^4.0.3:
   optionalDependencies:
     uglify-js "^2.6"
 
+har-schema@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/har-schema/-/har-schema-1.0.5.tgz#d263135f43307c02c602afc8fe95970c0151369e"
+
 har-validator@~2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/har-validator/-/har-validator-2.0.6.tgz#cdcbc08188265ad119b6a5a7c8ab70eecfb5d27d"
@@ -892,6 +938,13 @@ har-validator@~2.0.6:
     commander "^2.9.0"
     is-my-json-valid "^2.12.4"
     pinkie-promise "^2.0.0"
+
+har-validator@~4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/har-validator/-/har-validator-4.2.1.tgz#33481d0f1bbff600dd203d75812a6a5fba002e2a"
+  dependencies:
+    ajv "^4.9.1"
+    har-schema "^1.0.5"
 
 has-ansi@^2.0.0:
   version "2.0.0"
@@ -927,12 +980,13 @@ hosted-git-info@^2.1.4:
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.1.5.tgz#0ba81d90da2e25ab34a332e6ec77936e1598118b"
 
-http-errors@~1.5.0:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.5.1.tgz#788c0d2c1de2c81b9e6e8c01843b6b97eb920750"
+http-errors@~1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.6.1.tgz#5f8b8ed98aca545656bf572997387f904a722257"
   dependencies:
+    depd "1.1.0"
     inherits "2.0.3"
-    setprototypeof "1.0.2"
+    setprototypeof "1.0.3"
     statuses ">= 1.3.1 < 2"
 
 http-signature@~1.1.0:
@@ -947,9 +1001,9 @@ http@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/http/-/http-0.0.0.tgz#86e6326d29c5d039de9fac584a45689f929f4f72"
 
-iconv-lite@0.4.13:
-  version "0.4.13"
-  resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.13.tgz#1f88aba4ab0b1508e8312acc39345f36e992e2f2"
+iconv-lite@0.4.15:
+  version "0.4.15"
+  resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.15.tgz#fe265a218ac6a57cfe854927e9d04c19825eddeb"
 
 imurmurhash@^0.1.4:
   version "0.1.4"
@@ -980,7 +1034,7 @@ invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
 
-ioredis@^2.4.0, ioredis@^2.4.3, ioredis@^2.5.0:
+ioredis@^2.4.3, ioredis@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-2.5.0.tgz#fb6fdf0a1a7e0974614c67b6e5e11308a8cf95b9"
   dependencies:
@@ -993,9 +1047,9 @@ ioredis@^2.4.0, ioredis@^2.4.3, ioredis@^2.5.0:
     redis-commands "^1.2.0"
     redis-parser "^1.3.0"
 
-ipaddr.js@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.1.1.tgz#c791d95f52b29c1247d5df80ada39b8a73647230"
+ipaddr.js@1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.3.0.tgz#1e03a52fdad83a8bbb2b25cbf4998b4cffcd3dec"
 
 is-arrayish@^0.2.1:
   version "0.2.1"
@@ -1287,7 +1341,7 @@ lodash@^3.10.1, lodash@^3.7.0, lodash@^3.9.1:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
-lodash@^4.0.0, lodash@^4.0.1, lodash@^4.11.1, lodash@^4.11.2, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.14.1, lodash@^4.14.2, lodash@^4.15.0, lodash@^4.16.0, lodash@^4.16.4, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.6.1, lodash@^4.7.0, lodash@^4.8.0, lodash@^4.8.2:
+lodash@^4.0.0, lodash@^4.0.1, lodash@^4.11.1, lodash@^4.11.2, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.14.1, lodash@^4.14.2, lodash@^4.15.0, lodash@^4.16.0, lodash@^4.16.4, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.6.1, lodash@^4.7.0, lodash@^4.8.2:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -1359,7 +1413,7 @@ meshblu-core-cache@^1.9.1:
     coffee-script "^1.10.0"
     lodash "^3.10.1"
 
-meshblu-core-datastore@^4.5.0, meshblu-core-datastore@^4.6.0, meshblu-core-datastore@^4.6.1, meshblu-core-datastore@^4.9.0:
+meshblu-core-datastore@^4.5.0, meshblu-core-datastore@^4.6.0, meshblu-core-datastore@^4.6.1:
   version "4.9.0"
   resolved "https://registry.yarnpkg.com/meshblu-core-datastore/-/meshblu-core-datastore-4.9.0.tgz#871469e5ffac74a049d7d398514e13b2ce964769"
   dependencies:
@@ -1368,23 +1422,32 @@ meshblu-core-datastore@^4.5.0, meshblu-core-datastore@^4.6.0, meshblu-core-datas
     json-stable-stringify "^1.0.1"
     lodash "^4.11.1"
 
-meshblu-core-dispatcher@^13.0.1:
-  version "13.0.1"
-  resolved "https://registry.yarnpkg.com/meshblu-core-dispatcher/-/meshblu-core-dispatcher-13.0.1.tgz#4e7b7687e7fbf27c2bccbc0f0474d98436f4002b"
+meshblu-core-datastore@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/meshblu-core-datastore/-/meshblu-core-datastore-5.1.0.tgz#ba8e126285aa2d8275909f1e391cc9527b8b2440"
+  dependencies:
+    async "^2.0.0-rc.3"
+    coffee-script "^1.10.0"
+    json-stable-stringify "^1.0.1"
+    lodash "^4.11.1"
+
+meshblu-core-dispatcher@^18.2.4:
+  version "18.2.4"
+  resolved "https://registry.yarnpkg.com/meshblu-core-dispatcher/-/meshblu-core-dispatcher-18.2.4.tgz#3d2b6a37e6f822315ec2813ee6f9baf21ab4ff55"
   dependencies:
     "@octoblu/redis-ns" "^1.3.1"
-    async "^2.0.1"
-    coffee-script "^1.12.2"
+    async "^2.3.0"
+    coffee-script "^1.12.5"
     dashdash "^1.14.0"
-    debug "^2.6.0"
+    debug "^2.6.4"
     fs-cson "^0.3.2"
     ioredis "^2.5.0"
     job-logger "^4.3.0"
     lodash "^4.17.4"
     meshblu-core-cache "^1.9.1"
-    meshblu-core-datastore "^4.9.0"
-    meshblu-core-job-manager "^9.2.5"
-    meshblu-core-manager-token "^6.1.0"
+    meshblu-core-datastore "^5.1.0"
+    meshblu-core-job-manager "^10.1.2"
+    meshblu-core-manager-token "^7.6.0"
     meshblu-core-task-black-list-token "^1.0.0"
     meshblu-core-task-check-broadcast-received-whitelist "^1.0.1"
     meshblu-core-task-check-broadcast-sent-whitelist "^1.1.1"
@@ -1401,7 +1464,7 @@ meshblu-core-dispatcher@^13.0.1:
     meshblu-core-task-check-send-whitelist "^2.0.0"
     meshblu-core-task-check-token "^3.0.3"
     meshblu-core-task-check-token-black-list "^2.0.1"
-    meshblu-core-task-check-token-cache "^1.1.2"
+    meshblu-core-task-check-token-cache "^1.1.3"
     meshblu-core-task-check-update-device-is-valid "^2.0.0"
     meshblu-core-task-check-whitelist-broadcast-as "^2.0.1"
     meshblu-core-task-check-whitelist-broadcast-received "^3.0.0"
@@ -1418,12 +1481,12 @@ meshblu-core-dispatcher@^13.0.1:
     meshblu-core-task-check-whitelist-message-sent "^3.0.0"
     meshblu-core-task-create-session-token "^3.0.2"
     meshblu-core-task-create-subscription "^2.0.3"
-    meshblu-core-task-deliver-webhook "^6.0.0"
+    meshblu-core-task-deliver-webhook "^7.0.1"
     meshblu-core-task-enforce-message-rate-limit "^1.1.0"
-    meshblu-core-task-enqueue-deprecated-webhooks "^3.0.3"
-    meshblu-core-task-enqueue-jobs-for-forward-broadcast-received "^1.1.0"
-    meshblu-core-task-enqueue-jobs-for-forward-configure-received "^1.0.0"
-    meshblu-core-task-enqueue-jobs-for-forward-unregister-received "^1.0.0"
+    meshblu-core-task-enqueue-deprecated-webhooks "^4.0.0"
+    meshblu-core-task-enqueue-jobs-for-forward-broadcast-received "^1.1.3"
+    meshblu-core-task-enqueue-jobs-for-forward-configure-received "^1.0.2"
+    meshblu-core-task-enqueue-jobs-for-forward-unregister-received "^1.0.2"
     meshblu-core-task-enqueue-jobs-for-subscriptions-broadcast-received "^5.0.1"
     meshblu-core-task-enqueue-jobs-for-subscriptions-broadcast-sent "^4.0.1"
     meshblu-core-task-enqueue-jobs-for-subscriptions-configure-received "^3.0.1"
@@ -1440,7 +1503,7 @@ meshblu-core-dispatcher@^13.0.1:
     meshblu-core-task-enqueue-jobs-for-webhooks-message-sent "^2.1.0"
     meshblu-core-task-enqueue-jobs-for-webhooks-unregister-received "^1.0.0"
     meshblu-core-task-enqueue-jobs-for-webhooks-unregister-sent "^1.2.0"
-    meshblu-core-task-enqueue-webhooks "^3.0.2"
+    meshblu-core-task-enqueue-webhooks "^4.0.0"
     meshblu-core-task-find-and-update-device "^1.0.6"
     meshblu-core-task-forbidden "^1.0.0"
     meshblu-core-task-get-authorized-subscription-types "^1.0.2"
@@ -1451,40 +1514,72 @@ meshblu-core-dispatcher@^13.0.1:
     meshblu-core-task-get-status "^2.0.0"
     meshblu-core-task-get-subscriptions "^3.0.0"
     meshblu-core-task-mark-all-subscribed-subscriptions-as-deleted "^2.0.0"
-    meshblu-core-task-migrate-root-token "^1.1.1"
+    meshblu-core-task-migrate-root-token "^1.1.2"
     meshblu-core-task-no-content "^1.0.1"
     meshblu-core-task-protect-your-as "^1.0.4"
     meshblu-core-task-publish-broadcast-received "^4.0.0"
     meshblu-core-task-publish-configure-received "^4.0.0"
-    meshblu-core-task-publish-deprecated-subscriptions "^3.0.3"
+    meshblu-core-task-publish-deprecated-subscriptions "^3.0.5"
     meshblu-core-task-publish-message "^2.0.0"
     meshblu-core-task-publish-message-received "^7.0.0"
-    meshblu-core-task-publish-subscriptions "^4.0.0"
+    meshblu-core-task-publish-subscriptions "^4.0.2"
     meshblu-core-task-publish-unregister-received "^1.0.0"
     meshblu-core-task-register-device "^3.0.0"
     meshblu-core-task-reject-your-as "^1.0.0"
     meshblu-core-task-remove-device-cache "^2.0.2"
     meshblu-core-task-remove-root-session-token "^1.0.0"
     meshblu-core-task-remove-subscription "^2.0.1"
-    meshblu-core-task-remove-token-cache "^1.1.1"
+    meshblu-core-task-remove-token-cache "^1.1.2"
     meshblu-core-task-reset-token "^4.0.1"
     meshblu-core-task-revoke-all-tokens "^2.0.3"
     meshblu-core-task-revoke-session-token "^3.0.1"
     meshblu-core-task-revoke-token-by-query "^3.0.1"
-    meshblu-core-task-search-device "^3.0.4"
+    meshblu-core-task-search-device "^4.0.0"
     meshblu-core-task-search-token "^1.0.0"
-    meshblu-core-task-send-message "^2.2.0"
-    meshblu-core-task-send-message-2 "^1.1.0"
+    meshblu-core-task-send-message "^2.2.2"
+    meshblu-core-task-send-message-2 "^1.1.2"
     meshblu-core-task-unregister-device "^2.2.0"
-    meshblu-core-task-update-device "^4.2.1"
+    meshblu-core-task-update-device "^5.0.1"
     meshblu-core-task-update-message-rate "^1.0.4"
     meshblu-uuid-alias-resolver "^1.0.1"
-    moment "^2.16.0"
+    moment "^2.18.1"
     mongojs "^2.4.0"
-    octoblu-raven "^4.1.0"
-    request "^2.78.0"
+    octoblu-raven "^5.0.0"
+    request "^2.81.0"
     sigterm-handler "^2.0.0"
     simple-benchmark "^1.0.11"
+  optionalDependencies:
+    hiredis "^0.5.0"
+
+meshblu-core-job-manager@^10.1.2:
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/meshblu-core-job-manager/-/meshblu-core-job-manager-10.1.2.tgz#cf5aed36dc62079a7c827856a8d2b74b2abd409c"
+  dependencies:
+    async "^2.3.0"
+    coffee-script "^1.12.5"
+    debug "^2.6.4"
+    generic-pool "^3.1.7"
+    ioredis "^2.5.0"
+    lodash "^4.17.2"
+    moment "^2.18.1"
+    uuid "^3.0.0"
+    when "^3.7.8"
+  optionalDependencies:
+    hiredis "^0.5.0"
+
+meshblu-core-job-manager@^11.0.1:
+  version "11.0.2"
+  resolved "https://registry.yarnpkg.com/meshblu-core-job-manager/-/meshblu-core-job-manager-11.0.2.tgz#ad8f558e13c41246541c8eec278aee464b3f2da7"
+  dependencies:
+    async "^2.3.0"
+    coffee-script "^1.12.5"
+    debug "^2.6.4"
+    generic-pool "^3.1.7"
+    ioredis "^2.5.0"
+    lodash "^4.17.2"
+    moment "^2.18.1"
+    uuid "^3.0.0"
+    when "^3.7.8"
   optionalDependencies:
     hiredis "^0.5.0"
 
@@ -1506,22 +1601,6 @@ meshblu-core-job-manager@^6.1.2:
     lodash "^4.11.1"
     uuid "^2.0.1"
 
-meshblu-core-job-manager@^9.2.5:
-  version "9.2.5"
-  resolved "https://registry.yarnpkg.com/meshblu-core-job-manager/-/meshblu-core-job-manager-9.2.5.tgz#b6449bc3cd2c763bd1fe872ef8d9fe41a955bec0"
-  dependencies:
-    async "^2.1.2"
-    coffee-script "^1.11.1"
-    debug "^2.3.3"
-    generic-pool "3.1.4"
-    ioredis "^2.4.0"
-    lodash "^4.17.2"
-    moment "^2.17.1"
-    uuid "^3.0.0"
-    when "^3.7.7"
-  optionalDependencies:
-    hiredis "^0.5.0"
-
 meshblu-core-manager-device@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/meshblu-core-manager-device/-/meshblu-core-manager-device-2.5.0.tgz#dedede9652e9c6c37cf06282064912d54139d322"
@@ -1534,9 +1613,21 @@ meshblu-core-manager-device@^2.5.0:
     moment "^2.13.0"
     uuid "^2.0.1"
 
-meshblu-core-manager-device@^3.0.1, meshblu-core-manager-device@^3.1.0, meshblu-core-manager-device@^3.3.0, meshblu-core-manager-device@^3.4.1, meshblu-core-manager-device@^3.5.3:
+meshblu-core-manager-device@^3.0.1, meshblu-core-manager-device@^3.1.0, meshblu-core-manager-device@^3.4.1:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/meshblu-core-manager-device/-/meshblu-core-manager-device-3.5.3.tgz#148dee0b8f7ace021c04a2ae8bd4c752ffff1552"
+  dependencies:
+    async "^1.5.2"
+    bcrypt "^0.8.5"
+    coffee-script "^1.10.0"
+    lodash "^4.13.1"
+    meshblu-core-manager-root-token "^1.0.0"
+    moment "^2.13.0"
+    uuid "^2.0.1"
+
+meshblu-core-manager-device@^4.0.0, meshblu-core-manager-device@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/meshblu-core-manager-device/-/meshblu-core-manager-device-4.2.1.tgz#5520fb17c9d6b484c7e99ab4cad34d01e3a10326"
   dependencies:
     async "^1.5.2"
     bcrypt "^0.8.5"
@@ -1554,7 +1645,7 @@ meshblu-core-manager-root-token@^1.0.0, meshblu-core-manager-root-token@^1.0.2:
     coffee-script "^1.10.0"
     meshblu-core-datastore "^4.5.0"
 
-meshblu-core-manager-subscription@^3.0.0, meshblu-core-manager-subscription@^3.1.1, meshblu-core-manager-subscription@^3.2.0, meshblu-core-manager-subscription@^3.2.1, meshblu-core-manager-subscription@^3.4.0:
+meshblu-core-manager-subscription@^3.1.1, meshblu-core-manager-subscription@^3.2.0, meshblu-core-manager-subscription@^3.2.1, meshblu-core-manager-subscription@^3.4.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/meshblu-core-manager-subscription/-/meshblu-core-manager-subscription-3.5.0.tgz#4528918a1eb76710d209e9a8ae063b52ac955daa"
 
@@ -1577,33 +1668,21 @@ meshblu-core-manager-token@^4.4.1:
     meshblu-core-datastore "^4.5.0"
     uuid "^2.0.1"
 
-meshblu-core-manager-token@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/meshblu-core-manager-token/-/meshblu-core-manager-token-5.1.0.tgz#0a987cb9c4d459be9a044c7cc820183dbb98adac"
-  dependencies:
-    async "2.0.0-rc.6"
-    bcrypt "^0.8.7"
-    coffee-script "^1.10.0"
-    lodash "^4.11.2"
-    meshblu-core-datastore "^4.5.0"
-    uuid "^2.0.1"
-
-meshblu-core-manager-token@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/meshblu-core-manager-token/-/meshblu-core-manager-token-6.1.0.tgz#7c9f8fb1e37d9dc6a7dd73470543df2fbece226e"
-  dependencies:
-    async "2.0.0-rc.6"
-    bcrypt "^0.8.7"
-    coffee-script "^1.10.0"
-    lodash "^4.11.2"
-    meshblu-core-datastore "^4.5.0"
-    uuid "^2.0.1"
-
 meshblu-core-manager-token@^7.2.0, meshblu-core-manager-token@^7.3.0, meshblu-core-manager-token@^7.4.1, meshblu-core-manager-token@^7.4.2, meshblu-core-manager-token@^7.5.0:
   version "7.5.2"
   resolved "https://registry.yarnpkg.com/meshblu-core-manager-token/-/meshblu-core-manager-token-7.5.2.tgz#f4eff1e0c47ad827493d80b7e99a17d6f1784651"
   dependencies:
     bcrypt "^0.8.7"
+    chai-subset "^1.3.0"
+    coffee-script "^1.10.0"
+    lodash "^4.11.2"
+    meshblu-core-datastore "^4.6.1"
+    mongojs "^2.4.0"
+
+meshblu-core-manager-token@^7.6.0:
+  version "7.6.0"
+  resolved "https://registry.yarnpkg.com/meshblu-core-manager-token/-/meshblu-core-manager-token-7.6.0.tgz#407109dd838df19e21f5baeba850e07f6372583d"
+  dependencies:
     chai-subset "^1.3.0"
     coffee-script "^1.10.0"
     lodash "^4.11.2"
@@ -1636,22 +1715,22 @@ meshblu-core-manager-whitelist@^4.0.0, meshblu-core-manager-whitelist@^4.3.0:
     meshblu-device-transmogrifier "^2.1.0"
     meshblu-list-checker "^2.0.0"
 
-meshblu-core-protocol-adapter-http@^5.4.0:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/meshblu-core-protocol-adapter-http/-/meshblu-core-protocol-adapter-http-5.4.0.tgz#37ae4c446e159fa8f7afb33c1d925c8ede023529"
+meshblu-core-protocol-adapter-http@^5.4.8:
+  version "5.4.8"
+  resolved "https://registry.yarnpkg.com/meshblu-core-protocol-adapter-http/-/meshblu-core-protocol-adapter-http-5.4.8.tgz#b71c33a5e5ed64219ba2c61480f7c6cc09a171fb"
   dependencies:
     "@octoblu/redis-ns" "^1.3.1"
-    async "^2.1.4"
-    coffee-script "^1.12.2"
+    async "^2.3.0"
+    coffee-script "^1.12.5"
     colors "^1.1.2"
-    debug "^2.6.0"
-    express-octoblu "^2.0.0"
+    debug "^2.6.4"
+    express-octoblu "^3.0.1"
     ioredis "^2.5.0"
     job-logger "^4.3.1"
     lodash "^4.17.4"
-    meshblu-core-job-manager "^9.2.5"
+    meshblu-core-job-manager "^11.0.1"
     meshblu-core-rate-limit-checker "^1.0.1"
-    request "^2.79.0"
+    request "^2.81.0"
     server-destroy "^1.0.1"
     simple-benchmark "^1.0.11"
     uuid "^3.0.1"
@@ -1758,11 +1837,11 @@ meshblu-core-task-check-token-black-list@^2.0.1:
   dependencies:
     coffee-script "^1.10.0"
 
-meshblu-core-task-check-token-cache@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-check-token-cache/-/meshblu-core-task-check-token-cache-1.1.2.tgz#9221c7c76bd80c3fe54ea6ac3cb84c3f0c0f78f8"
+meshblu-core-task-check-token-cache@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-check-token-cache/-/meshblu-core-task-check-token-cache-1.1.3.tgz#6b58320debd2622b03282d07dcb1138c04f664a5"
   dependencies:
-    meshblu-core-manager-token "^5.1.0"
+    meshblu-core-manager-token "^7.6.0"
 
 meshblu-core-task-check-token@^3.0.3:
   version "3.0.3"
@@ -1897,9 +1976,9 @@ meshblu-core-task-create-subscription@^2.0.3:
     lodash "^4.6.1"
     meshblu-core-manager-subscription "^3.4.0"
 
-meshblu-core-task-deliver-webhook@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-deliver-webhook/-/meshblu-core-task-deliver-webhook-6.0.0.tgz#feeee009eac4b773ace984081044c73c2080045c"
+meshblu-core-task-deliver-webhook@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-deliver-webhook/-/meshblu-core-task-deliver-webhook-7.0.1.tgz#e7f85397c7b8b91fc5cdd9c4ecf531335753d879"
   dependencies:
     coffee-script "^1.10.0"
     lodash "^4.13.1"
@@ -1915,35 +1994,35 @@ meshblu-core-task-enforce-message-rate-limit@^1.1.0:
     lodash "^4.14.1"
     meshblu-core-rate-limit-checker "^1.0.0"
 
-meshblu-core-task-enqueue-deprecated-webhooks@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-enqueue-deprecated-webhooks/-/meshblu-core-task-enqueue-deprecated-webhooks-3.0.3.tgz#a3447ff88296725287bc97ae832ee13d0764b178"
+meshblu-core-task-enqueue-deprecated-webhooks@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-enqueue-deprecated-webhooks/-/meshblu-core-task-enqueue-deprecated-webhooks-4.0.0.tgz#98bfd1d239ca432a6e32996f0e1cc2774f93d501"
   dependencies:
     coffee-script "^1.10.0"
     lodash "^3.10.1"
     meshblu-core-manager-device "^3.0.1"
     uuid "^2.0.1"
 
-meshblu-core-task-enqueue-jobs-for-forward-broadcast-received@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-enqueue-jobs-for-forward-broadcast-received/-/meshblu-core-task-enqueue-jobs-for-forward-broadcast-received-1.1.0.tgz#aee87cd7e8e9fb0a2f63c53f54036cc7e885e0a3"
+meshblu-core-task-enqueue-jobs-for-forward-broadcast-received@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-enqueue-jobs-for-forward-broadcast-received/-/meshblu-core-task-enqueue-jobs-for-forward-broadcast-received-1.1.3.tgz#1ee61d21b7d204d139aa18a7693e4ae07c4409f6"
   dependencies:
     async "^2.0.0-rc.3"
     coffee-script "^1.10.0"
     lodash "^4.6.1"
 
-meshblu-core-task-enqueue-jobs-for-forward-configure-received@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-enqueue-jobs-for-forward-configure-received/-/meshblu-core-task-enqueue-jobs-for-forward-configure-received-1.0.0.tgz#54fe0d552c9641cdee7bc6cc0b049dbec5e61989"
+meshblu-core-task-enqueue-jobs-for-forward-configure-received@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-enqueue-jobs-for-forward-configure-received/-/meshblu-core-task-enqueue-jobs-for-forward-configure-received-1.0.2.tgz#b33d2ca5cbd42aae163c4b89c05655530a763097"
   dependencies:
     async "^2.0.1"
     coffee-script "^1.10.0"
     http "0.0.0"
     lodash "^4.14.2"
 
-meshblu-core-task-enqueue-jobs-for-forward-unregister-received@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-enqueue-jobs-for-forward-unregister-received/-/meshblu-core-task-enqueue-jobs-for-forward-unregister-received-1.0.0.tgz#f3ceccb1a6a8a6c61623af1f977425ca1d637d83"
+meshblu-core-task-enqueue-jobs-for-forward-unregister-received@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-enqueue-jobs-for-forward-unregister-received/-/meshblu-core-task-enqueue-jobs-for-forward-unregister-received-1.0.2.tgz#9a16a094f293460ee4ca955c45b83bcf61f7ef27"
   dependencies:
     async "^2.0.1"
     coffee-script "^1.10.0"
@@ -2090,14 +2169,14 @@ meshblu-core-task-enqueue-jobs-for-webhooks-unregister-sent@^1.2.0:
     lodash "^4.6.1"
     meshblu-core-manager-webhook "^2.0.0"
 
-meshblu-core-task-enqueue-webhooks@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-enqueue-webhooks/-/meshblu-core-task-enqueue-webhooks-3.0.2.tgz#bf2935a19e9e8b822ef0983d6db6e676d806999f"
+meshblu-core-task-enqueue-webhooks@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-enqueue-webhooks/-/meshblu-core-task-enqueue-webhooks-4.0.0.tgz#46a38150de3991b096d0e8ac4fb9bc48110d9596"
   dependencies:
     coffee-script "^1.10.0"
-    lodash "^3.10.1"
-    meshblu-core-manager-device "^2.5.0"
-    uuid "^2.0.1"
+    lodash "^4.17.4"
+    meshblu-core-manager-device "^4.0.0"
+    uuid "^3.0.1"
 
 meshblu-core-task-find-and-update-device@^1.0.6:
   version "1.0.6"
@@ -2170,9 +2249,9 @@ meshblu-core-task-mark-all-subscribed-subscriptions-as-deleted@^2.0.0:
     lodash "^4.6.1"
     meshblu-core-manager-subscription "^5.1.0"
 
-meshblu-core-task-migrate-root-token@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-migrate-root-token/-/meshblu-core-task-migrate-root-token-1.1.1.tgz#0db87c390c1fca66ab352e346e5bc7aaf5b5df42"
+meshblu-core-task-migrate-root-token@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-migrate-root-token/-/meshblu-core-task-migrate-root-token-1.1.2.tgz#e9ea831a69388500d4dc03ea74d81348256ae2b4"
   dependencies:
     coffee-script "^1.10.0"
     lodash "^4.6.1"
@@ -2202,15 +2281,15 @@ meshblu-core-task-publish-configure-received@^4.0.0:
     coffee-script "^1.10.0"
     lodash "^4.6.1"
 
-meshblu-core-task-publish-deprecated-subscriptions@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-publish-deprecated-subscriptions/-/meshblu-core-task-publish-deprecated-subscriptions-3.0.3.tgz#667124fb06725e69d0fa85e5343b8ee611bf071c"
+meshblu-core-task-publish-deprecated-subscriptions@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-publish-deprecated-subscriptions/-/meshblu-core-task-publish-deprecated-subscriptions-3.0.5.tgz#d4bb5304e84d21881b68a3a6c1ef609ad6fb5b98"
   dependencies:
-    async "^1.5.2"
+    async "^2.2.0"
     coffee-script "^1.10.0"
-    lodash "^3.10.1"
-    meshblu-core-manager-device "^3.0.1"
-    uuid "^2.0.1"
+    lodash "^4.17.4"
+    meshblu-core-manager-device "^4.0.0"
+    uuid "^3.0.1"
 
 meshblu-core-task-publish-message-received@^7.0.0:
   version "7.0.0"
@@ -2223,15 +2302,15 @@ meshblu-core-task-publish-message@^2.0.0:
     coffee-script "^1.10.0"
     lodash "^3.10.1"
 
-meshblu-core-task-publish-subscriptions@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-publish-subscriptions/-/meshblu-core-task-publish-subscriptions-4.0.0.tgz#d216d4180f1f61d31f56dc9645cf6303ba52d172"
+meshblu-core-task-publish-subscriptions@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-publish-subscriptions/-/meshblu-core-task-publish-subscriptions-4.0.2.tgz#cd3f7417374f800b3e86c79925a59a6989bcf63a"
   dependencies:
-    async "^1.5.2"
+    async "^2.2.0"
     coffee-script "^1.10.0"
-    lodash "^3.10.1"
-    meshblu-core-manager-subscription "^3.0.0"
-    uuid "^2.0.1"
+    lodash "^4.17.4"
+    meshblu-core-manager-subscription "^5.1.0"
+    uuid "^3.0.1"
 
 meshblu-core-task-publish-unregister-received@^1.0.0:
   version "1.0.0"
@@ -2276,11 +2355,11 @@ meshblu-core-task-remove-subscription@^2.0.1:
     lodash "^4.6.1"
     meshblu-core-manager-subscription "^3.2.1"
 
-meshblu-core-task-remove-token-cache@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-remove-token-cache/-/meshblu-core-task-remove-token-cache-1.1.1.tgz#9f8a67399727c892f046b62230d16dae6e66bf92"
+meshblu-core-task-remove-token-cache@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-remove-token-cache/-/meshblu-core-task-remove-token-cache-1.1.2.tgz#f9a102ba29b2d081eb3a98c65cec06265e5bde84"
   dependencies:
-    meshblu-core-manager-token "^5.1.0"
+    meshblu-core-manager-token "^7.6.0"
 
 meshblu-core-task-reset-token@^4.0.1:
   version "4.0.1"
@@ -2320,13 +2399,13 @@ meshblu-core-task-revoke-token-by-query@^3.0.1:
   dependencies:
     meshblu-core-manager-token "^7.2.0"
 
-meshblu-core-task-search-device@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-search-device/-/meshblu-core-task-search-device-3.0.4.tgz#1be6fe0972e55957a45192caaaa7d8f5135168ae"
+meshblu-core-task-search-device@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-search-device/-/meshblu-core-task-search-device-4.0.0.tgz#61ad8e0fc6fbb48d7256a439408b94d1b5fbf011"
   dependencies:
     coffee-script "^1.10.0"
     lodash "^3.10.1"
-    meshblu-core-manager-device "^3.5.3"
+    meshblu-core-manager-device "^4.0.0"
 
 meshblu-core-task-search-token@^1.0.0:
   version "1.0.0"
@@ -2336,9 +2415,9 @@ meshblu-core-task-search-token@^1.0.0:
     lodash "^4.15.0"
     meshblu-core-manager-token "^7.5.0"
 
-meshblu-core-task-send-message-2@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-send-message-2/-/meshblu-core-task-send-message-2-1.1.0.tgz#77448fdda8e4aa9ff313379d7507a4759931428b"
+meshblu-core-task-send-message-2@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-send-message-2/-/meshblu-core-task-send-message-2-1.1.2.tgz#92274b895271c6e6ea7c3db88c313b783e471036"
   dependencies:
     async "^2.0.0-rc.2"
     coffee-script "^1.10.0"
@@ -2346,9 +2425,9 @@ meshblu-core-task-send-message-2@^1.1.0:
     meshblu-core-job-manager "^3.2.0"
     uuid "^2.0.1"
 
-meshblu-core-task-send-message@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-send-message/-/meshblu-core-task-send-message-2.2.0.tgz#1b913150779e5947fdee00b4acba46943ef9a141"
+meshblu-core-task-send-message@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-send-message/-/meshblu-core-task-send-message-2.2.2.tgz#7a3cca476bd1435d91480ac2067eb0d31fb38e41"
   dependencies:
     async "^1.5.2"
     coffee-script "^1.10.0"
@@ -2363,14 +2442,14 @@ meshblu-core-task-unregister-device@^2.2.0:
     lodash "^4.6.1"
     meshblu-core-manager-device "^3.1.0"
 
-meshblu-core-task-update-device@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-update-device/-/meshblu-core-task-update-device-4.2.1.tgz#1e933bf67c6bb5364cbc5088eb0d99a6f1205fcb"
+meshblu-core-task-update-device@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-update-device/-/meshblu-core-task-update-device-5.0.1.tgz#9e58ebc526affef9a5f842d64521109bfb4c38c4"
   dependencies:
     async "^1.5.0"
     lodash "^3.10.1"
     meshblu-core-job-manager "^6.1.2"
-    meshblu-core-manager-device "^3.3.0"
+    meshblu-core-manager-device "^4.2.1"
     moment "^2.10.6"
     uuid "^2.0.1"
 
@@ -2486,11 +2565,21 @@ micromatch@^2.3.11:
   version "1.25.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.25.0.tgz#c18dbd7c73a5dbf6f44a024dc0d165a1e7b1c392"
 
-mime-types@^2.1.12, mime-types@~2.1.11, mime-types@~2.1.13, mime-types@~2.1.7:
+mime-db@~1.27.0:
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.27.0.tgz#820f572296bbd20ec25ed55e5b5de869e5436eb1"
+
+mime-types@^2.1.12, mime-types@~2.1.11, mime-types@~2.1.7:
   version "2.1.13"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.13.tgz#e07aaa9c6c6b9a7ca3012c69003ad25a39e92a88"
   dependencies:
     mime-db "~1.25.0"
+
+mime-types@~2.1.15:
+  version "2.1.15"
+  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.15.tgz#a4ebf5064094569237b8cf70046776d09fc92aed"
+  dependencies:
+    mime-db "~1.27.0"
 
 mime@1.3.4:
   version "1.3.4"
@@ -2544,9 +2633,13 @@ mocha@^2.5.3:
     supports-color "1.2.0"
     to-iso-string "0.0.2"
 
-moment@^2.10.6, moment@^2.11.1, moment@^2.13.0, moment@^2.16.0, moment@^2.17.1:
+moment@^2.10.6, moment@^2.11.1, moment@^2.13.0:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.17.1.tgz#fed9506063f36b10f066c8b59a144d7faebe1d82"
+
+moment@^2.18.1:
+  version "2.18.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
 mongodb-core@2.1.4:
   version "2.1.4"
@@ -2576,12 +2669,12 @@ mongojs@^2.0.0, mongojs@^2.4.0:
     to-mongodb-core "^2.0.0"
     xtend "^4.0.0"
 
-morgan@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.7.0.tgz#eb10ca8e50d1abe0f8d3dad5c0201d052d981c62"
+morgan@^1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.8.1.tgz#f93023d3887bd27b78dfd6023cea7892ee27a4b1"
   dependencies:
-    basic-auth "~1.0.3"
-    debug "~2.2.0"
+    basic-auth "~1.1.0"
+    debug "2.6.1"
     depd "~1.1.0"
     on-finished "~2.3.0"
     on-headers "~1.0.1"
@@ -2593,6 +2686,14 @@ ms@0.7.1:
 ms@0.7.2:
   version "0.7.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.2.tgz#ae25cf2512b3885a1d95d7f037868d8431124765"
+
+ms@0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.3.tgz#708155a5e44e33f5fd0fc53e81d0d40a91be1fff"
+
+ms@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ms/-/ms-1.0.0.tgz#59adcd22edc543f7b5381862d31387b1f4bc9473"
 
 nan@2.3.5:
   version "2.3.5"
@@ -2688,12 +2789,23 @@ object.omit@^2.0.0:
     for-own "^0.1.4"
     is-extendable "^0.1.1"
 
-octoblu-raven@^4.0.3, octoblu-raven@^4.1.0:
+octoblu-raven@^4.0.3:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/octoblu-raven/-/octoblu-raven-4.1.0.tgz#d0a1143fc143654d7e9fde6a84f10f67ab8aa8fb"
   dependencies:
     coffee-script "^1.11.1"
     debug "^2.2.0"
+    lodash "^4.16.4"
+    on-finished "^2.3.0"
+    raven "~0.12.1"
+
+octoblu-raven@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/octoblu-raven/-/octoblu-raven-5.0.0.tgz#f6bfd44254e352a25cf73cab7b5b57b71fc765eb"
+  dependencies:
+    coffee-script "^1.11.1"
+    debug "^2.2.0"
+    errorhandler "^1.5.0"
     lodash "^4.16.4"
     on-finished "^2.3.0"
     raven "~0.12.1"
@@ -2795,6 +2907,10 @@ path-type@^1.0.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
+performance-now@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-0.2.0.tgz#33ef30c5c77d4ea21c5a53869d91b56d8f2555e5"
+
 pify@^2.0.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"
@@ -2831,12 +2947,12 @@ process-nextick-args@~1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
 
-proxy-addr@~1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/proxy-addr/-/proxy-addr-1.1.2.tgz#b4cc5f22610d9535824c123aef9d3cf73c40ba37"
+proxy-addr@~1.1.3:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/proxy-addr/-/proxy-addr-1.1.4.tgz#27e545f6960a44a627d9b44467e35c1b6b4ce2f3"
   dependencies:
     forwarded "~0.1.0"
-    ipaddr.js "1.1.1"
+    ipaddr.js "1.3.0"
 
 pseudomap@^1.0.1:
   version "1.0.2"
@@ -2846,9 +2962,9 @@ punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-qs@6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.2.0.tgz#3b7848c03c2dece69a9522b0fae8c4126d745f3b"
+qs@6.4.0, qs@~6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
 
 qs@~6.3.0:
   version "6.3.0"
@@ -2875,12 +2991,12 @@ raven@~0.12.1:
     stack-trace "0.0.9"
     uuid "3.0.0"
 
-raw-body@~2.1.7:
-  version "2.1.7"
-  resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.1.7.tgz#adfeace2e4fb3098058014d08c072dcc59758774"
+raw-body@~2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.2.0.tgz#994976cf6a5096a41162840492f0bdc5d6e7fb96"
   dependencies:
     bytes "2.4.0"
-    iconv-lite "0.4.13"
+    iconv-lite "0.4.15"
     unpipe "1.0.0"
 
 read-pkg-up@^1.0.1:
@@ -2955,7 +3071,7 @@ repeating@^2.0.0:
   dependencies:
     is-finite "^1.0.0"
 
-request@^2.69.0, request@^2.72.0, request@^2.78.0, request@^2.79.0:
+request@^2.69.0, request@^2.72.0, request@^2.78.0:
   version "2.79.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.79.0.tgz#4dfe5bf6be8b8cdc37fcf93e04b65577722710de"
   dependencies:
@@ -2978,6 +3094,33 @@ request@^2.69.0, request@^2.72.0, request@^2.78.0, request@^2.79.0:
     stringstream "~0.0.4"
     tough-cookie "~2.3.0"
     tunnel-agent "~0.4.1"
+    uuid "^3.0.0"
+
+request@^2.81.0:
+  version "2.81.0"
+  resolved "https://registry.yarnpkg.com/request/-/request-2.81.0.tgz#c6928946a0e06c5f8d6f8a9333469ffda46298a0"
+  dependencies:
+    aws-sign2 "~0.6.0"
+    aws4 "^1.2.1"
+    caseless "~0.12.0"
+    combined-stream "~1.0.5"
+    extend "~3.0.0"
+    forever-agent "~0.6.1"
+    form-data "~2.1.1"
+    har-validator "~4.2.1"
+    hawk "~3.1.3"
+    http-signature "~1.1.0"
+    is-typedarray "~1.0.0"
+    isstream "~0.1.2"
+    json-stringify-safe "~5.0.1"
+    mime-types "~2.1.7"
+    oauth-sign "~0.8.1"
+    performance-now "^0.2.0"
+    qs "~6.4.0"
+    safe-buffer "^5.0.1"
+    stringstream "~0.0.4"
+    tough-cookie "~2.3.0"
+    tunnel-agent "^0.6.0"
     uuid "^3.0.0"
 
 require-directory@^2.1.1:
@@ -3015,6 +3158,10 @@ rimraf@^2.2.8, rimraf@^2.3.3, rimraf@^2.4.3, rimraf@^2.4.4, rimraf@^2.5.4:
   dependencies:
     glob "^7.0.5"
 
+safe-buffer@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.0.1.tgz#d263ca54696cd8a306b5ca6551e92de57918fbe7"
+
 samsam@1.1.2, samsam@~1.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/samsam/-/samsam-1.1.2.tgz#bec11fdc83a9fda063401210e40176c3024d1567"
@@ -3023,41 +3170,41 @@ samsam@1.1.2, samsam@~1.1:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.3.0.tgz#9b2ce5d3de02d17c6012ad326aa6b4d0cf54f94f"
 
-send@0.14.1:
-  version "0.14.1"
-  resolved "https://registry.yarnpkg.com/send/-/send-0.14.1.tgz#a954984325392f51532a7760760e459598c89f7a"
+send@0.15.1:
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/send/-/send-0.15.1.tgz#8a02354c26e6f5cca700065f5f0cdeba90ec7b5f"
   dependencies:
-    debug "~2.2.0"
+    debug "2.6.1"
     depd "~1.1.0"
     destroy "~1.0.4"
     encodeurl "~1.0.1"
     escape-html "~1.0.3"
-    etag "~1.7.0"
-    fresh "0.3.0"
-    http-errors "~1.5.0"
+    etag "~1.8.0"
+    fresh "0.5.0"
+    http-errors "~1.6.1"
     mime "1.3.4"
-    ms "0.7.1"
+    ms "0.7.2"
     on-finished "~2.3.0"
     range-parser "~1.2.0"
-    statuses "~1.3.0"
+    statuses "~1.3.1"
 
-serve-favicon@^2.3.0:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/serve-favicon/-/serve-favicon-2.3.2.tgz#dd419e268de012ab72b319d337f2105013f9381f"
+serve-favicon@^2.4.1:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/serve-favicon/-/serve-favicon-2.4.2.tgz#aed1d8de67d5b83192cf31fdf53d2ea29464363e"
   dependencies:
-    etag "~1.7.0"
-    fresh "0.3.0"
-    ms "0.7.2"
+    etag "~1.8.0"
+    fresh "0.5.0"
+    ms "1.0.0"
     parseurl "~1.3.1"
 
-serve-static@~1.11.1:
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/serve-static/-/serve-static-1.11.1.tgz#d6cce7693505f733c759de57befc1af76c0f0805"
+serve-static@1.12.1:
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/serve-static/-/serve-static-1.12.1.tgz#7443a965e3ced647aceb5639fa06bf4d1bbe0039"
   dependencies:
     encodeurl "~1.0.1"
     escape-html "~1.0.3"
     parseurl "~1.3.1"
-    send "0.14.1"
+    send "0.15.1"
 
 server-destroy@^1.0.1:
   version "1.0.1"
@@ -3067,9 +3214,9 @@ set-blocking@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
 
-setprototypeof@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/setprototypeof/-/setprototypeof-1.0.2.tgz#81a552141ec104b88e89ce383103ad5c66564d08"
+setprototypeof@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/setprototypeof/-/setprototypeof-1.0.3.tgz#66567e37043eeb4f04d91bd658c0cbefb55b8e04"
 
 sigmund@~1.0.0:
   version "1.0.1"
@@ -3185,7 +3332,7 @@ stack-trace@0.0.9:
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/stack-trace/-/stack-trace-0.0.9.tgz#a8f6eaeca90674c333e7c43953f275b451510695"
 
-"statuses@>= 1.3.1 < 2", statuses@~1.3.0:
+"statuses@>= 1.3.1 < 2", statuses@~1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.3.1.tgz#faf51b9eb74aaef3b3acf4ad5f61abf24cb7b93e"
 
@@ -3263,6 +3410,12 @@ tough-cookie@~2.3.0:
   dependencies:
     punycode "^1.4.1"
 
+tunnel-agent@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/tunnel-agent/-/tunnel-agent-0.6.0.tgz#27a5dea06b36b04a0a9966774b290868f0fc40fd"
+  dependencies:
+    safe-buffer "^5.0.1"
+
 tunnel-agent@~0.4.1:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/tunnel-agent/-/tunnel-agent-0.4.3.tgz#6373db76909fe570e08d73583365ed828a74eeeb"
@@ -3285,12 +3438,12 @@ type-detect@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-1.0.0.tgz#762217cc06db258ec48908a1298e8b95121e8ea2"
 
-type-is@~1.6.13:
-  version "1.6.14"
-  resolved "https://registry.yarnpkg.com/type-is/-/type-is-1.6.14.tgz#e219639c17ded1ca0789092dd54a03826b817cb2"
+type-is@~1.6.14:
+  version "1.6.15"
+  resolved "https://registry.yarnpkg.com/type-is/-/type-is-1.6.15.tgz#cab10fb4909e441c82842eafe1ad646c81804410"
   dependencies:
     media-typer "0.3.0"
-    mime-types "~2.1.13"
+    mime-types "~2.1.15"
 
 uglify-js@^2.6:
   version "2.7.5"
@@ -3356,9 +3509,9 @@ verror@1.3.6:
   dependencies:
     extsprintf "1.0.2"
 
-when@^3.7.7:
-  version "3.7.7"
-  resolved "https://registry.yarnpkg.com/when/-/when-3.7.7.tgz#aba03fc3bb736d6c88b091d013d8a8e590d84718"
+when@^3.7.8:
+  version "3.7.8"
+  resolved "https://registry.yarnpkg.com/when/-/when-3.7.8.tgz#c7130b6a7ea04693e842cdc9e7a1f2aa39a39f82"
 
 which-module@^1.0.0:
   version "1.0.0"

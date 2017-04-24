@@ -48,6 +48,13 @@ options = [
     default: 15
   }
   {
+    names: ['concurrency', 'c']
+    type: 'positiveInteger'
+    help: 'number of concurrent jobs to process'
+    default: 3
+    env: 'CONCURRENCY'
+  }
+  {
     name: 'redis-uri'
     type: 'string'
     help: 'URI for Redis'
@@ -224,6 +231,7 @@ options = {
     privateKey:          privateKey
     publicKey:           publicKey
     singleRun:           opts.single_run
+    concurrency:         opts.concurrency
   meshbluHttp:
     redisUri:              opts.redis_uri
     cacheRedisUri:         opts.cache_redis_uri

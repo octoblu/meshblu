@@ -1,6 +1,6 @@
 {
   "name": "meshblu-server",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "A bundled version of meshblu-core",
   "main": "index.js",
   "repository": {
@@ -18,12 +18,12 @@
   "author": "Octoblu, Inc <npm@octoblu.com>",
   "license": "MIT",
   "dependencies": {
-    "async": "^2.1.2",
-    "coffee-script": "^1.11.1",
+    "async": "^2.3.0",
+    "coffee-script": "^1.12.5",
     "dashdash": "^1.14.0",
-    "debug": "^2.3.2",
-    "meshblu-core-dispatcher": "^13.0.1",
-    "meshblu-core-protocol-adapter-http": "^5.4.0",
+    "debug": "^2.6.4",
+    "meshblu-core-dispatcher": "^18.2.4",
+    "meshblu-core-protocol-adapter-http": "^5.4.8",
     "meshblu-core-worker-webhook": "^4.0.2",
     "sigterm-handler": "^2.0.0",
     "uuid": "^3.0.1"

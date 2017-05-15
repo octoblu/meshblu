@@ -44,7 +44,7 @@ class MeshbluCoreRunner extends EventEmitter
     @dispatcherWorker.run (error) =>
       @emit 'error', error if error?
 
-    @webhookWorker.run (error) =>
+    @webhookWorker.start (error) =>
       @emit 'error', error if error?
 
     @meshbluHttp.run callback

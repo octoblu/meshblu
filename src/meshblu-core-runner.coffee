@@ -19,18 +19,9 @@ class MeshbluCoreRunner extends EventEmitter
   destroy: (callback) =>
     debug '->destroy'
     tasks = []
-    tasks.push (next) =>
-      @meshbluHttp.destroy (error) =>
-        next error
-    tasks.push (next) =>
-      next()
-      @dispatcherWorker.stop (error) =>
-        throw error if error?
-     tasks.push (next) =>
-      return next() unless @webhookWorker?
-      @webhookWorker.stop (error) =>
-        next error
-
+    tasks.push @meshbluHttp.destroy
+    tasks.push @dispatcherWorker.stop
+    tasks.push @webhookWorker.stop if @webhookWorker?
     async.parallel tasks, callback
 
   prepare: (callback) =>

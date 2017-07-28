@@ -181,6 +181,13 @@ options = [
     env: 'WEBHOOK_NAMESPACE'
     default: 'meshblu-webhooks'
     help: 'Redis namespace for webhooks'
+  },
+  {
+    name: 'disable-webhook-worker'
+    type: 'bool'
+    env: 'DISABLE_WEBHOOK_WORKER'
+    default: false
+    help: 'option for disabling webhook worker.'
   }
 ]
 
@@ -246,6 +253,7 @@ options = {
     maxConnections:        opts.max_connections
     port:                  opts.meshblu_http_port
   webhookWorker:
+    disable:             opts.disable_webhook_worker
     namespace:           opts.webhook_namespace
     redisUri:            opts.redis_uri
     queueName:           opts.webhook_queue_name

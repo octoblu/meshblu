@@ -9,7 +9,8 @@ class MeshbluCoreRunner extends EventEmitter
   constructor: (options) ->
     @dispatcherWorker = new DispatcherWorker options.dispatcherWorker
     @meshbluHttp      = new MeshbluHttp options.meshbluHttp
-    @webhookWorker    = new WebhookWorker options.webhookWorker
+    unless options.webhookWorker.disable
+      @webhookWorker    = new WebhookWorker options.webhookWorker
 
   catchErrors: =>
     debug '->catchErrors'
@@ -17,15 +18,24 @@ class MeshbluCoreRunner extends EventEmitter
 
   destroy: (callback) =>
     debug '->destroy'
-    async.parallel [
-      @meshbluHttp.destroy,
-      @dispatcherWorker.stop
-      @webhookWorker.stop
-    ], callback
+    tasks = []
+    tasks.push (next) =>
+      @meshbluHttp.destroy (error) =>
+        next error
+    tasks.push (next) =>
+      next()
+      @dispatcherWorker.stop (error) =>
+        throw error if error?
+     tasks.push (next) =>
+      return next() unless @webhookWorker?
+      @webhookWorker.stop (error) =>
+        next error
+
+    async.parallel tasks, callback
 
   prepare: (callback) =>
     debug '->prepare'
-    @dispatcherWorker.prepare(callback)
+    @dispatcherWorker.prepare callback
 
   reportError: =>
     debug '->reportError'
@@ -33,18 +43,18 @@ class MeshbluCoreRunner extends EventEmitter
 
   stop: (callback) =>
     debug '->stop'
-    async.parallel [
-      @meshbluHttp.stop,
-      @dispatcherWorker.stop
-      @webhookWorker.stop
-    ], callback
+    tasks = []
+    tasks.push @meshbluHttp.stop
+    tasks.push @dispatcherWorker.stop
+    tasks.push @webhookWorker.stop if @webhookWorker?
+    async.parallel tasks, callback
 
   run: (callback) =>
     debug '->run'
     @dispatcherWorker.run (error) =>
       @emit 'error', error if error?
 
-    @webhookWorker.start (error) =>
+    @webhookWorker?.start (error) =>
       @emit 'error', error if error?
 
     @meshbluHttp.run callback

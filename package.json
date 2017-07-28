@@ -1,6 +1,6 @@
 {
   "name": "meshblu-server",
-  "version": "5.0.3",
+  "version": "5.1.0",
   "description": "A bundled version of meshblu-core",
   "main": "index.js",
   "repository": {
@@ -19,7 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "async": "^2.5.0",
-    "coffee-script": "^1.12.6",
+    "coffee-script": "^1.12.7",
     "dashdash": "^1.14.0",
     "debug": "^2.6.8",
     "meshblu-core-dispatcher": "^20.0.5",

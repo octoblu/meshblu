@@ -1,8 +1,8 @@
 {
   "name": "meshblu-server",
-  "version": "5.1.1",
+  "version": "5.1.2",
   "description": "A bundled version of meshblu-core",
-  "main": "index.js",
+  "main": "dist/meshblu-core-runner.js",
   "repository": {
     "url": "git@github.com:octoblu/meshblu.git",
     "type": "git"
@@ -13,7 +13,8 @@
   "scripts": {
     "start": "node command.js",
     "start:profile": "node --trace-sync-io command.js",
-    "test": "echo 'No Tests :-('"
+    "test": "echo 'No Tests :-('",
+    "build": "coffee --compile --output dist/ --map src/*.coffee"
   },
   "author": "Octoblu, Inc <npm@octoblu.com>",
   "license": "MIT",

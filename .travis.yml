@@ -6,6 +6,7 @@ before_deploy:
 deploy:
   provider: npm
   email: serveradmin@octoblu.com
+  skip_cleanup: true
   api_key:
     secure: XmrfhODbEycUQ05QlsuGedpO8nc2vLZaoOjdrUGP8AZulv/f2maC2JTF3JoVSfzm6PJjToMXMav2UXLZpoOM11cHrfCrUyVIxD1rgxbFohDdMoxJUcLVcA+iaPQubexodluwcc5Na8cPDisq8QplgTmFN+EJLHgFPvZCXeKYWNw=
   on:

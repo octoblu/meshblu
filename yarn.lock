@@ -635,11 +635,11 @@ escape-html@~1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
 
-escape-string-regexp@1.0.2, escape-string-regexp@^1.0.2:
+escape-string-regexp@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.2.tgz#4dbc2fe674e71949caf3fb2695ce7f2dc1d9a8d1"
 
-escape-string-regexp@^1.0.5:
+escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
 
@@ -1505,9 +1505,9 @@ meshblu-core-datastore@^5.1.0:
     json-stable-stringify "^1.0.1"
     lodash "^4.11.1"
 
-meshblu-core-dispatcher@^20.0.6:
-  version "20.0.6"
-  resolved "https://registry.yarnpkg.com/meshblu-core-dispatcher/-/meshblu-core-dispatcher-20.0.6.tgz#7419949d693519324bc156d76e0d2bc3277f1b5a"
+meshblu-core-dispatcher@^20.0.7:
+  version "20.0.7"
+  resolved "https://registry.yarnpkg.com/meshblu-core-dispatcher/-/meshblu-core-dispatcher-20.0.7.tgz#96306239b9ff5e666988b936ef2fdb44c986439f"
   dependencies:
     "@octoblu/redis-ns" "^1.3.1"
     async "^2.5.0"
@@ -1598,7 +1598,7 @@ meshblu-core-dispatcher@^20.0.6:
     meshblu-core-task-publish-message-received "^7.0.0"
     meshblu-core-task-publish-subscriptions "^4.0.2"
     meshblu-core-task-publish-unregister-received "^1.0.0"
-    meshblu-core-task-register-device "^3.0.0"
+    meshblu-core-task-register-device "^3.0.1"
     meshblu-core-task-reject-your-as "^1.0.0"
     meshblu-core-task-remove-device-cache "^2.0.2"
     meshblu-core-task-remove-root-session-token "^1.0.0"
@@ -1618,7 +1618,7 @@ meshblu-core-dispatcher@^20.0.6:
     meshblu-uuid-alias-resolver "^1.0.1"
     moment "^2.18.1"
     mongojs "^2.4.0"
-    octoblu-raven "^6.0.1"
+    octoblu-raven "^6.0.2"
     request "^2.81.0"
     sigterm-handler "^2.0.0"
     simple-benchmark "^1.1.1"
@@ -1685,6 +1685,18 @@ meshblu-core-manager-device@^3.0.1, meshblu-core-manager-device@^3.1.0, meshblu-
 meshblu-core-manager-device@^4.0.0, meshblu-core-manager-device@^4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/meshblu-core-manager-device/-/meshblu-core-manager-device-4.2.1.tgz#5520fb17c9d6b484c7e99ab4cad34d01e3a10326"
+  dependencies:
+    async "^1.5.2"
+    bcrypt "^0.8.5"
+    coffee-script "^1.10.0"
+    lodash "^4.13.1"
+    meshblu-core-manager-root-token "^1.0.0"
+    moment "^2.13.0"
+    uuid "^2.0.1"
+
+meshblu-core-manager-device@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/meshblu-core-manager-device/-/meshblu-core-manager-device-4.2.2.tgz#dd45d8e3902059efa73228a114f9ecbe54ed3a00"
   dependencies:
     async "^1.5.2"
     bcrypt "^0.8.5"
@@ -2363,13 +2375,13 @@ meshblu-core-task-publish-unregister-received@^1.0.0:
     coffee-script "^1.10.0"
     lodash "^4.6.1"
 
-meshblu-core-task-register-device@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/meshblu-core-task-register-device/-/meshblu-core-task-register-device-3.0.0.tgz#a3c0c5d84e9434e1db94efa59efec968bd5733e4"
+meshblu-core-task-register-device@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/meshblu-core-task-register-device/-/meshblu-core-task-register-device-3.0.1.tgz#9d4c0607cf1c3d0914fc0a9764d0274b7c4509b8"
   dependencies:
     coffee-script "^1.10.0"
     lodash "^4.6.1"
-    meshblu-core-manager-device "^3.0.1"
+    meshblu-core-manager-device "^4.2.2"
 
 meshblu-core-task-reject-your-as@^1.0.0:
   version "1.0.0"
@@ -2848,6 +2860,16 @@ octoblu-raven@^6.0.1:
     lodash "^4.16.4"
     raven "^2.1.1"
 
+octoblu-raven@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/octoblu-raven/-/octoblu-raven-6.0.2.tgz#4a9cbaa0b9e9ef9ed08498cc51c891be92ab40b4"
+  dependencies:
+    coffee-script "^1.12.7"
+    debug "^2.6.8"
+    errorhandler "^1.5.0"
+    lodash "^4.16.4"
+    raven "^2.1.1"
+
 on-finished@~2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/on-finished/-/on-finished-2.3.0.tgz#20f1336481b083cd75337992a16971aa2d906947"
@@ -3223,15 +3245,15 @@ right-align@^0.1.1:
   dependencies:
     align-text "^0.1.1"
 
-rimraf@^2.2.8, rimraf@^2.3.3, rimraf@^2.5.4:
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.5.4.tgz#96800093cbf1a0c86bd95b4625467535c29dfa04"
+rimraf@^2.2.8, rimraf@^2.3.3, rimraf@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.1.tgz#c2338ec643df7a1b7fe5c54fa86f57428a55f33d"
   dependencies:
     glob "^7.0.5"
 
-rimraf@^2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.1.tgz#c2338ec643df7a1b7fe5c54fa86f57428a55f33d"
+rimraf@^2.5.4:
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.5.4.tgz#96800093cbf1a0c86bd95b4625467535c29dfa04"
   dependencies:
     glob "^7.0.5"
 

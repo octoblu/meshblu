@@ -1,6 +1,6 @@
 {
   "name": "meshblu-server",
-  "version": "5.1.7",
+  "version": "5.2.0",
   "description": "A bundled version of meshblu-core",
   "main": "dist/meshblu-core-runner.js",
   "repository": {
@@ -24,6 +24,7 @@
     "dashdash": "^1.14.0",
     "debug": "^2.6.8",
     "meshblu-core-dispatcher": "^20.0.7",
+    "meshblu-core-firehose-socket.io": "^2.0.0",
     "meshblu-core-protocol-adapter-http": "^6.0.3",
     "meshblu-core-worker-webhook": "^4.1.4",
     "sigterm-handler": "^2.0.0",

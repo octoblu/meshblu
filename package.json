@@ -1,6 +1,6 @@
 {
   "name": "meshblu-server",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "description": "A bundled version of meshblu-core",
   "main": "dist/meshblu-core-runner.js",
   "repository": {
@@ -22,10 +22,10 @@
     "async": "^2.5.0",
     "coffee-script": "^1.12.7",
     "dashdash": "^1.14.0",
-    "debug": "^2.6.8",
-    "meshblu-core-dispatcher": "^20.0.7",
+    "debug": "^3.0.1",
+    "meshblu-core-dispatcher": "^20.1.0",
     "meshblu-core-firehose-socket.io": "^2.0.0",
-    "meshblu-core-protocol-adapter-http": "^6.0.3",
+    "meshblu-core-protocol-adapter-http": "^6.1.0",
     "meshblu-core-worker-webhook": "^4.1.4",
     "sigterm-handler": "^2.0.0",
     "uuid": "^3.1.0"

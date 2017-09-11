@@ -1,6 +1,6 @@
 {
   "name": "meshblu-server",
-  "version": "5.3.2",
+  "version": "5.3.3",
   "description": "A bundled version of meshblu-core",
   "main": "dist/meshblu-core-runner.js",
   "repository": {
@@ -13,7 +13,7 @@
   "scripts": {
     "start": "node command.js",
     "start:profile": "node --trace-sync-io command.js",
-    "test": "echo 'No Tests :-('",
+    "test": "./test-start.sh --test-start",
     "build": "coffee --compile --output dist/ --map src/*.coffee"
   },
   "author": "Octoblu, Inc <npm@octoblu.com>",

@@ -9,11 +9,11 @@ debug            = require('debug')('meshblu:meshblu-core-runner')
 class MeshbluCoreRunner extends EventEmitter
   constructor: (options) ->
     @dispatcherWorker = new DispatcherWorker options.dispatcherWorker
-    @meshbluHttp      = new MeshbluHttp options.meshbluHttp
-    unless options.meshbluFirehose.disable
-      @meshbluFirehose  = new MeshbluFirehose options.meshbluFirehose
-    unless options.webhookWorker.disable
-      @webhookWorker    = new WebhookWorker options.webhookWorker
+    @meshbluHttp = new MeshbluHttp options.meshbluHttp
+    if @_isFirehoseEnabled options
+      @meshbluFirehose = new MeshbluFirehose options.meshbluFirehose
+    if @_isWebhookWorkerEnabled options
+      @webhookWorker = new WebhookWorker options.webhookWorker
 
   catchErrors: =>
     debug '->catchErrors'
@@ -57,5 +57,13 @@ class MeshbluCoreRunner extends EventEmitter
       @emit 'error', error if error?
 
     @meshbluHttp.run callback
+
+  _isFirehoseEnabled: (options) =>
+    return false unless options.meshbluFirehose?
+    return !options.meshbluFirehose.disable
+
+  _isWebhookWorkerEnabled: (options) =>
+    return false unless options.webhookWorker?
+    return !options.webhookWorker.disable
 
 module.exports = MeshbluCoreRunner

@@ -1,6 +1,12 @@
 language: node_js
 node_js:
 - '8'
+branches:
+  only:
+  - "/^v[0-9]/"
+services:
+- redis
+- mongodb
 before_deploy:
 - npm run build
 deploy:
@@ -12,6 +18,3 @@ deploy:
   on:
     tags: true
     branches: true
-branches:
-  only:
-  - "/^v[0-9]/"

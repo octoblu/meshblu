@@ -16,6 +16,11 @@ options = [
     help: 'Print this help and exit.'
   }
   {
+    names: ['test-start']
+    type: 'bool'
+    help: 'Verify start and then die. (used for testing)'
+  }
+  {
     names: ['namespace', 'n']
     type: 'string'
     help: 'request/response queue namespace'
@@ -74,6 +79,27 @@ options = [
     help: 'URI for Firehose redis'
     env: 'FIREHOSE_REDIS_URI'
     default: 'redis://localhost:6379'
+  }
+  {
+    name: 'firehose-port'
+    type: 'number'
+    help: 'Port for firehose service'
+    env: 'FIREHOSE_PORT'
+    default: 3080
+  }
+  {
+    name: 'disable-firehose'
+    type: 'bool'
+    help: 'Flag to disabled firehose'
+    env: 'FIREHOSE_DISABLED'
+    default: false
+  }
+  {
+    name: 'firehose-namespace'
+    type: 'string'
+    help: 'Namespace for firehose'
+    env: 'FIREHOSE_HOSE'
+    default: 'messages'
   }
   {
     name: 'mongodb-uri'
@@ -222,23 +248,23 @@ opts.pepper ||= process.env.TOKEN
 
 options = {
   dispatcherWorker:
-    namespace:           opts.namespace
-    requestQueueName:    opts.request_queue_name
-    timeoutSeconds:      opts.timeout
-    redisUri:            opts.redis_uri
-    cacheRedisUri:       opts.cache_redis_uri
-    firehoseRedisUri:    opts.firehose_redis_uri
-    mongoDBUri:          opts.mongodb_uri
-    pepper:              opts.pepper
-    workerName:          opts.worker_name
-    aliasServerUri:      opts.alias_server_uri
-    jobLogRedisUri:      opts.job_log_redis_uri
-    jobLogQueue:         opts.job_log_queue
-    jobLogSampleRate:    opts.job_log_sample_rate
-    privateKey:          privateKey
-    publicKey:           publicKey
-    singleRun:           opts.single_run
-    concurrency:         opts.concurrency
+    namespace:        opts.namespace
+    requestQueueName: opts.request_queue_name
+    timeoutSeconds:   opts.timeout
+    redisUri:         opts.redis_uri
+    cacheRedisUri:    opts.cache_redis_uri
+    firehoseRedisUri: opts.firehose_redis_uri
+    mongoDBUri:       opts.mongodb_uri
+    pepper:           opts.pepper
+    workerName:       opts.worker_name
+    aliasServerUri:   opts.alias_server_uri
+    jobLogRedisUri:   opts.job_log_redis_uri
+    jobLogQueue:      opts.job_log_queue
+    jobLogSampleRate: opts.job_log_sample_rate
+    privateKey:       privateKey
+    publicKey:        publicKey
+    singleRun:        opts.single_run
+    concurrency:      opts.concurrency
   meshbluHttp:
     redisUri:              opts.redis_uri
     cacheRedisUri:         opts.cache_redis_uri
@@ -253,17 +279,23 @@ options = {
     maxConnections:        opts.max_connections
     port:                  opts.meshblu_http_port
   webhookWorker:
-    disable:             opts.disable_webhook_worker
-    namespace:           opts.webhook_namespace
-    redisUri:            opts.redis_uri
-    queueName:           opts.webhook_queue_name
-    queueTimeout:        opts.webhook_queue_timeout
-    requestTimeout:      opts.webhook_request_timeout
-    jobLogRedisUri:      opts.job_log_redis_uri
-    jobLogQueue:         opts.job_log_queue
-    jobLogSampleRate:    opts.job_log_sample_rate
-    privateKey:          privateKey
-    meshbluConfig:       meshbluConfig
+    disable:          opts.disable_webhook_worker
+    namespace:        opts.webhook_namespace
+    redisUri:         opts.redis_uri
+    queueName:        opts.webhook_queue_name
+    queueTimeout:     opts.webhook_queue_timeout
+    requestTimeout:   opts.webhook_request_timeout
+    jobLogRedisUri:   opts.job_log_redis_uri
+    jobLogQueue:      opts.job_log_queue
+    jobLogSampleRate: opts.job_log_sample_rate
+    privateKey:       privateKey
+    meshbluConfig:    meshbluConfig
+  meshbluFirehose:
+    disable:          opts.disable_firehose
+    namespace:        opts.firehose_namespace
+    redisUri:         opts.redis_uri
+    firehoseRedisUri: opts.firehose_redis_uri
+    port:             opts.firehose_port
 }
 
 meshbluCoreRunner = new MeshbluCoreRunner options
@@ -284,3 +316,5 @@ meshbluCoreRunner.prepare (error) =>
       meshbluCoreRunner.reportError error
       console.error error.stack
       process.exit 1
+    if opts.test_start
+      return process.exit(0)

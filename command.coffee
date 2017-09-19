@@ -296,6 +296,7 @@ options = {
     redisUri:         opts.redis_uri
     firehoseRedisUri: opts.firehose_redis_uri
     port:             opts.firehose_port
+    meshbluConfig:    meshbluConfig
 }
 
 meshbluCoreRunner = new MeshbluCoreRunner options

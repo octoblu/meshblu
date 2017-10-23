@@ -580,6 +580,12 @@ debug@^3.0.0, debug@^3.0.1:
   dependencies:
     ms "2.0.0"
 
+debug@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
+  dependencies:
+    ms "2.0.0"
+
 decamelize@^1.0.0, decamelize@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
@@ -1590,9 +1596,9 @@ meshblu-core-datastore@^5.1.0:
     json-stable-stringify "^1.0.1"
     lodash "^4.11.1"
 
-meshblu-core-dispatcher@^20.1.2:
-  version "20.1.2"
-  resolved "https://registry.yarnpkg.com/meshblu-core-dispatcher/-/meshblu-core-dispatcher-20.1.2.tgz#976fde58744a0f8d92581582f9717dedde608778"
+meshblu-core-dispatcher@^20.1.5:
+  version "20.1.5"
+  resolved "https://registry.yarnpkg.com/meshblu-core-dispatcher/-/meshblu-core-dispatcher-20.1.5.tgz#3ed1776cea6cb1883be21dff2d1dde55da93b875"
   dependencies:
     "@octoblu/redis-ns" "^1.3.1"
     async "^2.5.0"
@@ -1709,9 +1715,9 @@ meshblu-core-dispatcher@^20.1.2:
     sigterm-handler "^2.0.0"
     simple-benchmark "^1.1.1"
 
-meshblu-core-firehose-socket.io@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/meshblu-core-firehose-socket.io/-/meshblu-core-firehose-socket.io-2.0.0.tgz#e8c26570d532c738d4c662c38dca4546f63e90b7"
+meshblu-core-firehose-socket.io@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/meshblu-core-firehose-socket.io/-/meshblu-core-firehose-socket.io-2.0.1.tgz#42b127b7fb464c1b588d2b6e8dca32091d075522"
   dependencies:
     "@octoblu/redis-ns" "^1.3.1"
     coffee-script "^1.12.5"
@@ -1907,9 +1913,9 @@ meshblu-core-manager-whitelist@^4.0.0, meshblu-core-manager-whitelist@^4.3.0:
     meshblu-device-transmogrifier "^2.1.0"
     meshblu-list-checker "^2.0.0"
 
-meshblu-core-protocol-adapter-http@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/meshblu-core-protocol-adapter-http/-/meshblu-core-protocol-adapter-http-6.1.0.tgz#8d859e6e576fe0d35db9d816c42a313f61d8a846"
+meshblu-core-protocol-adapter-http@^6.1.3:
+  version "6.1.3"
+  resolved "https://registry.yarnpkg.com/meshblu-core-protocol-adapter-http/-/meshblu-core-protocol-adapter-http-6.1.3.tgz#6207f1b4b3be2e1ab3e59b4e2ff3366adf69f03a"
   dependencies:
     "@octoblu/redis-ns" "^1.3.1"
     async "^2.5.0"
@@ -2651,9 +2657,9 @@ meshblu-core-task-update-message-rate@^1.0.4:
     coffee-script "^1.10.0"
     lodash "^4.14.0"
 
-meshblu-core-worker-webhook@^4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/meshblu-core-worker-webhook/-/meshblu-core-worker-webhook-4.1.4.tgz#2dc1e1c375a96423580cb54fc97f7f86d1612c72"
+meshblu-core-worker-webhook@^4.1.8:
+  version "4.1.8"
+  resolved "https://registry.yarnpkg.com/meshblu-core-worker-webhook/-/meshblu-core-worker-webhook-4.1.8.tgz#75daa8ba70b293542f8dc52880b91fae8c2052b0"
   dependencies:
     "@octoblu/redis-ns" "^1.3.1"
     async "^2.5.0"

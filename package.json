@@ -19,7 +19,7 @@
   "author": "Octoblu, Inc <npm@octoblu.com>",
   "license": "MIT",
   "dependencies": {
-    "async": "^2.5.0",
+    "async": "^3.2.2",
     "coffee-script": "^1.12.7",
     "dashdash": "^1.14.0",
     "debug": "^3.1.0",
